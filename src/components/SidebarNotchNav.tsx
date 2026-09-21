@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { Mail, Volume2, VolumeX } from "lucide-react";
 import { useSoundEngine } from "./portfolio/nav";
 
@@ -17,24 +18,71 @@ interface SidebarNotchNavProps {
   onOpenContact?: () => void;
 }
 
-/* Half of the notch height (SVG viewBox is 76 tall) — used to clamp the
-   indicator strictly within the sidebar's top and bottom bounds. */
-const HALF_NOTCH = 38;
+/* ------------------------------------------------------------------
+   NOTCH GEOMETRY — a circular "bite" with tangent S-curve fillets,
+   clipped out of the white glass surface so the raw page background
+   shows through (a notch of the background sitting on the white
+   navbar, exactly like the reference image).
+
+   Construction (y-down, rail right edge at x = W):
+   • Bite circle  — center (W, cy), radius R
+   • Fillet circle — radius m, tangent to the right edge at
+     (W, cy ∓ k) and tangent to the bite circle, where
+     k = √(R² + 2Rm). This yields a fully tangent-continuous
+     wave-shaped cutout — no sharp corners anywhere.
+   ------------------------------------------------------------------ */
+
+interface NotchGeometry {
+  R: number; // bite radius
+  m: number; // fillet radius
+  k: number; // edge tangency offset from the item center
+}
+
+function notchGeometryFor(w: number): NotchGeometry {
+  const R = Math.min(24, Math.max(15, w * 0.31));
+  const m = Math.min(10, Math.max(6.5, w * 0.125));
+  return { R, m, k: Math.sqrt(R * R + 2 * R * m) };
+}
 
 /**
- * SidebarNotchNav — vertical glassmorphic sidebar navigation.
+ * Border-box clip path: the full rail rectangle minus the notch.
+ * Always emits the same command structure (M H V A A A V H Z) so
+ * browsers can smoothly interpolate between positions.
+ */
+function buildNotchPath(w: number, h: number, cy: number, g: NotchGeometry): string {
+  const { R, m, k } = g;
+  const top = cy - k;
+  const bottom = cy + k;
+  const jx = w - (R * m) / (R + m); // fillet ↔ bite join, x
+  const jy = (R * k) / (R + m); // fillet ↔ bite join, |y offset|
+  const f = (n: number) => Number(n.toFixed(2)).toString();
+  return [
+    "M0 0",
+    `H${f(w)}`,
+    `V${f(top)}`,
+    `A${f(m)} ${f(m)} 0 0 1 ${f(jx)} ${f(cy - jy)}`,
+    `A${f(R)} ${f(R)} 0 0 0 ${f(jx)} ${f(cy + jy)}`,
+    `A${f(m)} ${f(m)} 0 0 1 ${f(w)} ${f(bottom)}`,
+    `V${f(h)}`,
+    "H0",
+    "Z",
+  ].join(" ");
+}
+
+/**
+ * SidebarNotchNav — full-height WHITE frosted-glass navbar.
  *
- * • Glass shell: rgba(255,255,255,.08) + 1px rgba(255,255,255,.14) right
- *   border + backdrop blur(20px), fixed narrow rail (54→74px responsive).
- * • Sliding curved SVG notch: a transparent cutout path on the right border
- *   with a glowing white 1.6px stroke and a white target dot (cx 6, cy 38,
- *   r 3) that glides vertically to the active category. Position is measured
- *   dynamically via useLayoutEffect + getBoundingClientRect + ResizeObserver
- *   and animated with a 0.38s cubic-bezier(0.25, 1, 0.5, 1) top transition.
- * • Vertical category labels: writing-mode vertical-rl rotated 180° —
- *   inactive white/60, active brand-gold with offset + glow.
- * • Actions: 4-dot brand grid on top, sound toggle + quick-contact button
- *   with a live badge counter at the bottom. Visible on mobile too (54px).
+ * • White glass shell (blur + saturate) with rounded right corners and
+ *   a warm directional depth shadow cast onto the content.
+ * • Background notch: the surface is clipped with a tangent-continuous
+ *   S-curve bite that glides to the active section — the fiery page
+ *   gradient shows through the cutout with a small white target dot,
+ *   so it reads as the background biting into the white bar.
+ * • Vertical category labels (bottom-to-top) — warm ink, brand-red
+ *   when active. Position measured via layout effects +
+ *   ResizeObserver + font-ready, animated with a 0.45s ease.
+ * • Actions: brand tile (back to top), sound toggle, quick-contact.
+ *   Visible on mobile (54px) through desktop (74px).
  */
 export function SidebarNotchNav({
   categories,
@@ -43,136 +91,127 @@ export function SidebarNotchNav({
   savedCount = 0,
   onOpenContact,
 }: SidebarNotchNavProps) {
-  const [notchTop, setNotchTop] = useState<number | null>(null);
+  const [notch, setNotch] = useState<{ w: number; h: number; cy: number } | null>(null);
+  const asideRef = useRef<HTMLAsideElement>(null);
   const navContainerRef = useRef<HTMLDivElement>(null);
   const sideItemRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const { soundOn, toggle } = useSoundEngine();
+  const reduceMotion = useReducedMotion();
 
-  /* Dynamically calculate the active item position for the sliding notch */
+  /* Measure the active item's center relative to the rail box */
   const updateNotchPosition = useCallback(() => {
+    const asideEl = asideRef.current;
     const activeEl = sideItemRefs.current[activeIndex];
-    const containerEl = navContainerRef.current;
-    if (!activeEl || !containerEl) return;
+    if (!asideEl || !activeEl) return;
 
+    const asideRect = asideEl.getBoundingClientRect();
     const itemRect = activeEl.getBoundingClientRect();
-    const containerRect = containerEl.getBoundingClientRect();
-    if (containerRect.height === 0) return;
+    if (asideRect.width === 0 || asideRect.height === 0) return;
 
-    let relativeTop = itemRect.top - containerRect.top + itemRect.height / 2;
+    const g = notchGeometryFor(asideRect.width);
+    const raw = itemRect.top - asideRect.top + itemRect.height / 2;
+    // Keep the notch strictly inside the rail's rounded corners
+    const cy = Math.max(g.k + 18, Math.min(raw, asideRect.height - g.k - 18));
 
-    // Keep notch clamped strictly within sidebar top and bottom bounds
-    const minTop = HALF_NOTCH;
-    const maxTop = Math.max(minTop, containerRect.height - HALF_NOTCH);
-    relativeTop = Math.max(minTop, Math.min(relativeTop, maxTop));
-
-    setNotchTop(relativeTop);
+    setNotch((prev) => {
+      if (
+        prev &&
+        Math.abs(prev.w - asideRect.width) < 0.5 &&
+        Math.abs(prev.h - asideRect.height) < 0.5 &&
+        Math.abs(prev.cy - cy) < 0.5
+      ) {
+        return prev;
+      }
+      return { w: asideRect.width, h: asideRect.height, cy };
+    });
   }, [activeIndex]);
 
+  /* Sync measure before paint — no first-frame flash */
   useLayoutEffect(() => {
-    // rAF keeps the post-layout measure out of the synchronous effect body
-    const raf = requestAnimationFrame(updateNotchPosition);
-    return () => cancelAnimationFrame(raf);
-  }, [updateNotchPosition, activeIndex, categories.length]);
+    updateNotchPosition();
+  }, [updateNotchPosition, categories.length]);
 
   useEffect(() => {
-    const container = navContainerRef.current;
-    if (!container) return;
+    const asideEl = asideRef.current;
+    if (!asideEl) return;
 
-    const resizeObserver = new ResizeObserver(() => {
-      updateNotchPosition();
-    });
-    resizeObserver.observe(container);
+    const ro = new ResizeObserver(updateNotchPosition);
+    ro.observe(asideEl);
+    if (navContainerRef.current) ro.observe(navContainerRef.current);
     window.addEventListener("resize", updateNotchPosition);
+    // Vertical label heights settle once webfonts load
+    document.fonts?.ready.then(updateNotchPosition).catch(() => {});
 
     return () => {
-      resizeObserver.disconnect();
+      ro.disconnect();
       window.removeEventListener("resize", updateNotchPosition);
     };
   }, [updateNotchPosition]);
 
+  const geometry = notch ? notchGeometryFor(notch.w) : null;
+  const notchPath = notch && geometry ? buildNotchPath(notch.w, notch.h, notch.cy, geometry) : null;
+  const EASE = "cubic-bezier(0.25, 1, 0.5, 1)";
+  const slide = reduceMotion ? "none" : `0.45s ${EASE}`;
+
   return (
-    <aside
+    <motion.aside
       id="portfolio-sidebar"
-      className="fixed inset-y-0 left-0 z-30 flex w-[54px] shrink-0 flex-col items-center overflow-visible py-4 select-none sm:w-[62px] md:w-[74px]"
-      style={{
-        background: "rgba(255, 255, 255, 0.08)",
-        borderRight: "1px solid rgba(255, 255, 255, 0.14)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-      }}
+      ref={asideRef}
+      initial={reduceMotion ? false : { x: -28, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+      className="fixed inset-y-0 left-0 z-30 flex w-[54px] shrink-0 select-none flex-col items-center py-4 sm:w-[62px] md:w-[74px]"
     >
-      {/* Top Brand Grid Button */}
+      {/* Depth shadow twin — kept unclipped so the cast shadow survives the notch */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 rounded-r-[16px] shadow-[22px_0_54px_-30px_rgba(84,12,0,0.55)] sm:rounded-r-[18px] md:rounded-r-[22px]"
+      />
+
+      {/* White glass surface — the background bites in through the notch clip */}
+      <div
+        aria-hidden="true"
+        className="glass-rail-white pointer-events-none absolute inset-0 rounded-r-[16px] sm:rounded-r-[18px] md:rounded-r-[22px]"
+        style={{
+          borderRight: "1px solid rgba(255, 255, 255, 0.72)",
+          clipPath: notchPath ? `path("${notchPath}")` : undefined,
+          transition: `clip-path ${slide}`,
+          willChange: "clip-path",
+        }}
+      />
+
+      {/* Target dot — floats inside the background notch */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute z-[2] h-[7px] w-[7px] rounded-full bg-white shadow-[0_1px_6px_rgba(122,32,0,0.5)]"
+        style={{
+          right: geometry ? Math.max(6, geometry.R / 2 - 3.5) : 8,
+          top: notch ? notch.cy : "50%",
+          opacity: notch ? 1 : 0,
+          transform: "translateY(-50%)",
+          transition: `top ${slide}, opacity 0.3s ease`,
+        }}
+      />
+
+      {/* Brand tile → back to top */}
       <button
         id="sidebar-brand-btn"
         type="button"
         onClick={() => onSelectCategory(0)}
         title="Scroll to Top / Home"
-        className="group relative mb-2 shrink-0 cursor-pointer p-1.5 outline-none focus-visible:ring-1 focus-visible:ring-[#ffc46b]"
+        aria-label="Blue Nile — back to top"
+        className="relative z-[2] mb-3 flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-[14px] bg-gradient-to-br from-[#8f1d0c] via-[#a62a08] to-[#c2410c] text-[13px] font-black tracking-tight text-[#fff7ee] shadow-[0_10px_22px_-10px_rgba(124,26,6,0.65)] outline-none transition-transform duration-300 hover:scale-105 focus-visible:ring-2 focus-visible:ring-[#7c1a06]/40 active:scale-95"
       >
-        <div className="grid grid-cols-2 gap-1 rounded-lg border border-white/20 bg-white/10 p-1.5 transition-all group-hover:border-[#ffc46b]/70 group-hover:shadow-[0_0_12px_rgba(255,196,107,0.4)]">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#ffc46b]" />
-          <span className="h-1.5 w-1.5 rounded-full bg-white/60 group-hover:bg-white" />
-          <span className="h-1.5 w-1.5 rounded-full bg-white/60 group-hover:bg-white" />
-          <span className="h-1.5 w-1.5 rounded-full bg-[#ffc46b]" />
-          <span className="h-1.5 w-1.5 rounded-full bg-white/60 group-hover:bg-white" />
-          <span className="h-1.5 w-1.5 rounded-full bg-[#ffc46b]" />
-        </div>
+        BN
       </button>
 
-      {/* Vertical Navigation Labels Container with Sliding Transparent Notch */}
+      <span aria-hidden="true" className="relative z-[2] mb-1 h-px w-7 shrink-0 bg-[#53301f]/15" />
+
+      {/* Vertical navigation labels */}
       <div
         ref={navContainerRef}
-        className="relative flex w-full flex-1 flex-col items-stretch justify-around overflow-visible py-2"
+        className="relative z-[2] flex w-full flex-1 flex-col items-stretch justify-around overflow-visible py-2"
       >
-        {/* Custom SVG Sliding Curved Notch */}
-        <svg
-          id="active-category-notch"
-          viewBox="0 0 24 76"
-          preserveAspectRatio="none"
-          className="pointer-events-none absolute right-[-1px] z-[1] h-[76px] w-[26px] overflow-visible sm:w-[30px] md:w-[34px]"
-          style={{
-            top: notchTop !== null ? `${notchTop}px` : "50%",
-            transform: "translateY(-50%)",
-            transition: "top 0.38s cubic-bezier(0.25, 1, 0.5, 1)",
-            willChange: "top",
-          }}
-        >
-          {/* Notch Cutout Path (Transparent to show page background) */}
-          <path
-            id="active-category-notch-path"
-            d="M24,0
-               L20,0
-               C20,9 16,13 9,19
-               C3,24 0,31 0,38
-               C0,45 3,52 9,57
-               C16,63 20,67 20,76
-               L24,76
-               Z"
-            fill="transparent"
-            shapeRendering="geometricPrecision"
-          />
-          {/* Glowing White Notch Border */}
-          <path
-            d="M20,0
-               C20,9 16,13 9,19
-               C3,24 0,31 0,38
-               C0,45 3,52 9,57
-               C16,63 20,67 20,76"
-            fill="none"
-            stroke="#ffffff"
-            strokeWidth="1.6"
-            filter="drop-shadow(0 0 6px rgba(255,255,255,0.7))"
-          />
-          {/* Glowing White Indicator Target Dot */}
-          <circle
-            cx="6"
-            cy="38"
-            r="3"
-            fill="#ffffff"
-            filter="drop-shadow(0 0 6px #ffffff)"
-          />
-        </svg>
-
         {categories.map((cat, idx) => {
           const isActive = idx === activeIndex;
           return (
@@ -189,20 +228,18 @@ export function SidebarNotchNav({
                 onSelectCategory(idx);
               }}
               aria-current={isActive ? "page" : undefined}
-              className="relative z-[2] flex w-full cursor-pointer items-center justify-center rounded border-0 bg-transparent py-2.5 px-0 outline-none focus-visible:ring-1 focus-visible:ring-[#ffc46b] group"
+              title={cat.label}
+              className="group relative z-[2] flex w-full cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent px-0 py-2.5 outline-none focus-visible:ring-1 focus-visible:ring-[#7c1a06]/35"
             >
-              {/* Vertical Text Label */}
+              {/* Vertical Text Label — Tailwind v4 translate/scale compose
+                  with the standalone `rotate` property (no transform clash) */}
               <span
-                className={`pointer-events-none relative z-[2] text-[9.5px] font-bold whitespace-nowrap uppercase transition-all duration-300 ease-out sm:text-[10.5px] md:text-[11px] sm:tracking-[1.6px] tracking-[1.4px] ${
+                className={`pointer-events-none relative whitespace-nowrap text-[9.5px] font-bold uppercase transition-all duration-300 ease-out tracking-[1.4px] sm:text-[10.5px] sm:tracking-[1.6px] md:text-[11px] ${
                   isActive
-                    ? "-translate-x-[7px] scale-105 text-[#ffd894] drop-shadow-[0_0_8px_rgba(255,196,107,0.6)] sm:-translate-x-[9px]"
-                    : "translate-x-0 text-white/60 group-hover:text-white"
+                    ? "-translate-x-[5px] scale-105 text-[#7c1a06] sm:-translate-x-[7px]"
+                    : "translate-x-0 text-[#53301f]/55 group-hover:text-[#53301f]"
                 }`}
-                style={{
-                  writingMode: "vertical-rl",
-                  transform: "rotate(180deg)",
-                  fontFamily: "sans-serif",
-                }}
+                style={{ writingMode: "vertical-rl", rotate: "180deg" }}
               >
                 {cat.label}
               </span>
@@ -212,24 +249,27 @@ export function SidebarNotchNav({
       </div>
 
       {/* Bottom Action Controls */}
-      <div className="mt-auto flex shrink-0 flex-col items-center gap-2 pt-2">
+      <div className="relative z-[2] mt-auto flex shrink-0 flex-col items-center gap-2 pt-2">
         <button
           id="sound-toggle-btn"
+          type="button"
           aria-label={soundOn ? "Mute sounds" : "Unmute sounds"}
+          aria-pressed={soundOn}
           onClick={toggle}
-          className="flex h-[30px] w-[30px] items-center justify-center rounded-full border border-white/20 bg-white/10 text-white/80 backdrop-blur-sm transition-all hover:bg-white/20 hover:text-white active:scale-90 sm:h-[34px] sm:w-[34px]"
+          className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[#53301f]/10 bg-white/70 text-[#53301f]/75 shadow-[0_2px_8px_-2px_rgba(84,12,0,0.18)] backdrop-blur-sm transition-all duration-300 hover:border-[#7c1a06]/25 hover:bg-white hover:text-[#7c1a06] active:scale-90"
         >
-          {soundOn ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
+          {soundOn ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
         </button>
 
         {onOpenContact && (
           <button
             id="quick-contact-btn"
+            type="button"
             aria-label="Contact"
             onClick={onOpenContact}
-            className="relative flex h-[30px] w-[30px] items-center justify-center rounded-full bg-gradient-to-b from-[#ffd894] to-[#ff9f2e] text-[#7c1a06] shadow-[0_0_12px_rgba(255,159,46,0.35)] transition-all hover:brightness-105 hover:shadow-[0_0_18px_rgba(255,159,46,0.6)] active:scale-90 sm:h-[34px] sm:w-[34px]"
+            className="relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-gradient-to-b from-[#ffb45e] to-[#f45118] text-white shadow-[0_8px_18px_-8px_rgba(244,81,24,0.65)] transition-all duration-300 hover:brightness-105 active:scale-90"
           >
-            <Mail className="h-3.5 w-3.5" />
+            <Mail className="h-4 w-4" />
             {savedCount > 0 && (
               <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 animate-bounce items-center justify-center rounded-full bg-[#ff453a] text-[8.5px] font-extrabold text-white shadow-md">
                 {savedCount}
@@ -238,6 +278,6 @@ export function SidebarNotchNav({
           </button>
         )}
       </div>
-    </aside>
+    </motion.aside>
   );
 }

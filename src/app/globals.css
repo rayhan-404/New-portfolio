@@ -252,37 +252,20 @@
     0 24px 60px -22px rgba(84, 12, 0, 0.5);
 }
 
-/* Full-height side rails — Apple sidebar glass (left + right) */
-@utility glass-rail-l {
-  background:
-    linear-gradient(rgba(56, 10, 2, 0.32), rgba(56, 10, 2, 0.32)),
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.16) 0%,
-      rgba(255, 255, 255, 0.06) 42%,
-      rgba(255, 255, 255, 0.12) 100%
-    );
-  -webkit-backdrop-filter: blur(36px) saturate(190%);
-  backdrop-filter: blur(36px) saturate(190%);
-  border-right: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    26px 0 60px -34px rgba(84, 12, 0, 0.55);
-}
-
-@utility glass-rail-r {
+/* White frosted rail — Apple sidebar glass over the ember field.
+   Used by both full-height side bars (left navbar + right utility rail). */
+@utility glass-rail-white {
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.13) 0%,
-    rgba(255, 255, 255, 0.07) 58%,
-    rgba(255, 255, 255, 0.18) 100%
+    rgba(255, 255, 255, 0.94) 0%,
+    rgba(255, 255, 255, 0.86) 45%,
+    rgba(255, 255, 255, 0.9) 100%
   );
-  -webkit-backdrop-filter: blur(32px) saturate(190%);
-  backdrop-filter: blur(32px) saturate(190%);
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(28px) saturate(170%);
+  backdrop-filter: blur(28px) saturate(170%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.28),
-    -26px 0 60px -34px rgba(84, 12, 0, 0.5);
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.6);
 }
 
 /* Hide scrollbars while keeping scroll (slim rails) */

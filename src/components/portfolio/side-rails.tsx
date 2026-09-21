@@ -45,16 +45,17 @@ function RailDivider() {
   return (
     <span
       aria-hidden="true"
-      className="h-px w-8 bg-gradient-to-r from-transparent via-white/25 to-transparent"
+      className="h-px w-8 bg-gradient-to-r from-transparent via-[#53301f]/20 to-transparent"
     />
   );
 }
 
 /**
- * RIGHT RAIL — full-height (100svh) liquid-glass utility sidebar.
+ * RIGHT RAIL — full-height white frosted-glass utility sidebar,
+ * mirroring the white left navbar (rounded left corners, warm ink,
+ * gold scroll-progress seam on the inner edge).
  * Availability pulse → vertical social links → brand wordmark →
- * "start a project" CTA, plus a scroll-progress seam on the inner edge.
- * (Primary navigation lives in SidebarNotchNav on the left.)
+ * "start a project" CTA. (Primary navigation lives in the left rail.)
  */
 export function SideRailRight() {
   const reduce = useReducedMotion();
@@ -71,12 +72,25 @@ export function SideRailRight() {
       initial={reduce ? false : { x: 84, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.9, ease: EASE, delay: 0.15 }}
-      className="glass-rail-r fixed inset-y-0 right-0 z-40 hidden w-[76px] flex-col items-center md:flex"
+      className="fixed inset-y-0 right-0 z-40 hidden w-[76px] flex-col items-center md:flex"
     >
+      {/* Depth shadow twin — cast onto the content side */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 rounded-l-[22px] shadow-[-22px_0_54px_-30px_rgba(84,12,0,0.5)]"
+      />
+
+      {/* White glass surface */}
+      <div
+        aria-hidden="true"
+        className="glass-rail-white pointer-events-none absolute inset-0 rounded-l-[22px]"
+        style={{ borderLeft: "1px solid rgba(255, 255, 255, 0.72)" }}
+      />
+
       {/* Scroll progress seam (inner edge) */}
       <div
         aria-hidden="true"
-        className="absolute inset-y-0 left-0 w-[2px] overflow-hidden bg-white/10"
+        className="absolute inset-y-0 left-0 z-[1] w-[2px] overflow-hidden bg-[#53301f]/10"
       >
         <motion.div
           style={{ scaleY: progress }}
@@ -85,14 +99,14 @@ export function SideRailRight() {
       </div>
 
       {/* Availability pulse */}
-      <div className="pt-5">
-        <div className="glass-chip group relative flex h-10 w-10 items-center justify-center rounded-full">
+      <div className="relative z-[1] pt-5">
+        <div className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-[#53301f]/10 bg-white/70 shadow-[0_2px_8px_-2px_rgba(84,12,0,0.18)]">
           <span className="status-dot" aria-hidden="true" />
           <RailTip label="Available for projects" side="left" />
         </div>
       </div>
 
-      <div className="my-4">
+      <div className="relative z-[1] my-4">
         <RailDivider />
       </div>
 
@@ -100,7 +114,7 @@ export function SideRailRight() {
       <ul
         role="list"
         aria-label="Social links"
-        className="no-scrollbar flex min-h-0 flex-1 flex-col items-center justify-center gap-2 overflow-y-auto py-2"
+        className="relative z-[1] flex min-h-0 flex-1 flex-col items-center justify-center gap-2 py-2"
       >
         {socials.map((s, i) => {
           const Icon = SOCIAL_ICONS[s.label];
@@ -116,7 +130,7 @@ export function SideRailRight() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={`${s.label} — ${s.handle}`}
-                className="group relative flex h-10 w-10 items-center justify-center rounded-full text-foreground/70 transition-all duration-300 hover:bg-white/15 hover:text-foreground active:scale-95"
+                className="group relative flex h-10 w-10 items-center justify-center rounded-full text-[#53301f]/65 transition-all duration-300 hover:bg-[#7c1a06]/10 hover:text-[#7c1a06] active:scale-95"
               >
                 <Icon className="h-[17px] w-[17px]" strokeWidth={1.8} />
                 <RailTip label={s.label} side="left" />
@@ -127,13 +141,13 @@ export function SideRailRight() {
       </ul>
 
       {/* Bottom: vertical wordmark + CTA */}
-      <div className="flex flex-col items-center gap-4 pb-5 pt-2">
+      <div className="relative z-[1] flex flex-col items-center gap-4 pb-5 pt-2">
         <div className="my-1">
           <RailDivider />
         </div>
         <p
           aria-hidden="true"
-          className="hidden max-h-40 overflow-hidden whitespace-nowrap font-tag text-[9px] tracking-[0.32em] text-white/40 [writing-mode:vertical-rl] lg:block"
+          className="hidden max-h-40 overflow-hidden whitespace-nowrap font-tag text-[9px] tracking-[0.32em] text-[#53301f]/40 [writing-mode:vertical-rl] lg:block"
         >
           Blue Nile
         </p>

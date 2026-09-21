@@ -231,3 +231,20 @@ Work Log:
 Stage Summary:
 - Navigation is now the user-specified SidebarNotchNav (glass rail + sliding curved notch + glowing target dot) at all breakpoints; right utility rail unchanged; mobile header/menu overlay retired from the tree.
 - Files: src/components/SidebarNotchNav.tsx (new), side-rails.tsx (slimmed), portfolio-app.tsx (rewired).
+
+---
+Task ID: 11 (White navbar + true background notch — reference match)
+Agent: Main agent
+Task: User (with reference screenshot): "navbar ta white koro, r navigator notch er colour ta background er moto color koro, jate white er upor background er ekta notch ache bole mone hoy, reference image er moto" — make the navbar WHITE and make the notch show the RAW page background, so the background looks like it bites into the white bar, exactly like the reference image.
+
+Work Log:
+- SidebarNotchNav.tsx (rewritten): white frosted-glass navbar (glass-rail-white utility: rgba(255,255,255,.94→.86→.9) gradient + blur(28px) saturate(170%)), rounded right corners (16/18/22px responsive), warm ink palette (inactive #53301f/55, active brand #7c1a06), BN brand tile (deep-red gradient, back-to-top), sound + mail buttons restyled as white/ember circles.
+  - TRUE background notch: replaced the old transparent-fill SVG overlay (which showed the blurred glass, not the background) with a clip-path cutout on the white surface itself — geometry = circular bite (R = clamp(w*.31, 15..24)) + tangent S-curve fillets (m = clamp(w*.125, 6.5..10)), k = √(R²+2Rm); path M0 0 Hw V(cy−k) A m m 0 0 1 … A R R 0 0 0 … A m m 0 0 1 w (cy+k) V h H0 Z — fully tangent-continuous, same command structure every frame so clip-path interpolates smoothly (0.45s cubic-bezier(0.25,1,0.5,1)); measured cy vs aside box via getBoundingClientRect (useLayoutEffect pre-paint → no first-frame flash) + ResizeObserver + fonts.ready; white 7px target dot glides in sync inside the notch; unclipped shadow twin keeps the depth shadow alive through the cutout.
+  - Fixed latent bug: old active-label translate/scale classes were dead (inline transform:rotate(180deg) overrode them) — now uses standalone CSS `rotate` property so Tailwind v4 translate/scale utilities compose.
+- side-rails.tsx: SideRailRight restyled to matching white glass (rounded left corners, mirrored shadow twin, warm-ink socials/wordmark, gold progress seam on #53301f/10 track). Fixed tooltips never painting: socials ul had overflow-y-auto which clipped the left-floating RailTip — removed overflow (4 icons never overflow a full-height rail).
+- globals.css: deleted glass-rail-l/glass-rail-r, added glass-rail-white.
+- Verification: lint 0 problems; Agent Browser 1440×900 — white rails render, notch at HOME shows raw fiery gradient + white dot; click PROJECTS → notch glides (mid-transition frame proves path interpolation); scroll to contact → scroll-spy follows (cy 694 at bottom); tooltip forced-visible renders (headless reports hover:none so real hover can't fire here — works on real desktops); sound toggle aria-pressed flips; brand tile scrolls to top; footer sits between rails; mobile 390×844 — 54px rail, scaled notch (R≈16.7), right rail hidden, tap nav works; console + page errors clean, dev.log 200s.
+
+Stage Summary:
+- Navbar is now white Apple frost with the page background genuinely biting into it at the active section (reference-faithful), right rail unified white, tooltip clipping fixed, label transform bug fixed.
+- Files: src/components/SidebarNotchNav.tsx, src/components/portfolio/side-rails.tsx, src/app/globals.css.
