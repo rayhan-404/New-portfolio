@@ -168,6 +168,7 @@ export function HeroSection() {
                 alt={`Portrait of ${person.name}`}
                 fill
                 priority
+                loading="eager"
                 sizes="(max-width: 1024px) 90vw, 400px"
                 quality={88}
                 className="object-cover object-top"

@@ -196,3 +196,22 @@ Work Log:
 Stage Summary:
 - Navigation is now a pair of 100%-height Apple-glass side rails (left = primary nav, right = social/status/CTA + progress seam), replacing the desktop top pill; mobile keeps header + overlay. Verified end-to-end in browser on desktop + mobile.
 - Files: side-rails.tsx (new), nav.tsx (slimmed), portfolio-app.tsx (rewired), globals.css (+3 utilities).
+
+---
+Task ID: 9 (Reference-Match Left Rail)
+Agent: Main agent
+Task: User shared the actual reference image — dark full-height left sidebar with grid-dots launcher, vertically rotated text menu (HOME→CONTACT), signature white curve + dot at active item, sound button + red "2" badge at bottom. Rebuild left rail to match while keeping ember-glass brand.
+
+Work Log:
+- Zoomed reference via PIL crops: text reads TOP-TO-BOTTOM (vertical-rl, glyphs CW, no rotate), curve is a ~300° orbit ring around a glowing dot parked RIGHT of the text column (center ≈62% rail width, ring diameter ≈32% rail width), comet tail enters from top-right, ring gap at upper-left (arc −70°→90°→205°), inactive labels dim / active bright.
+- globals.css: glass-rail-l darkened (extra rgba(56,10,2,.32) tint layer, blur 36px) to match reference sidebar depth.
+- side-rails.tsx SideRailLeft rebuilt:
+  - Removed BN monogram + icon nav; nav items now vertically rotated uppercase bold labels (10.5px, tracking .3em, writing-mode:vertical-rl), left column at x≈20 (button w-[76px] justify-start pl-[13px] — note li shrink-wrap made w-full wrong), active #fff3dd + text-glow, inactive white/40.
+  - Signature curve: measured item centers via refs (rAF + ResizeObserver + fonts.ready, avoids react-hooks/set-state-in-effect), SVG path M56,0 → C tail → arc ring R15 @ (48, activeY) ending at 205°; glow underlay stroke + crisp stroke + gold drop-shadow dot, all spring-morphed via framer-motion animate d/cy (structure-stable path). React reduced-motion guarded.
+  - Grid-dots launcher (3×3, alternating gold/white dots, glass-strong rounded-2xl) opens MenuOverlay; bottom = sound toggle + MessageCircle button with red "2" badge ring-white/25 → contact.
+- hero-section.tsx: added loading="eager" to hero portrait (Next 16 LCP hint).
+- Verification: lint 0 problems; Agent Browser 1440×900 — ring/dot render beside HOME, morphs to ABOUT and CONTACT on click + scroll-spy; grid dots opens overlay (active item gold, Escape closes); zoomed PIL crops match reference geometry; mobile 390×844 rails hidden; fresh console clean (LCP warning resolved), page errors none, dev.log 200s.
+
+Stage Summary:
+- Left rail is now a faithful, brand-tinted recreation of the user's reference sidebar (dots launcher, vertical text nav, orbit-ring active indicator, sound + badge). Right rail and mobile flows unchanged.
+- Files: side-rails.tsx, globals.css, hero-section.tsx (eager LCP fix).
