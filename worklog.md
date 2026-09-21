@@ -215,3 +215,19 @@ Work Log:
 Stage Summary:
 - Left rail is now a faithful, brand-tinted recreation of the user's reference sidebar (dots launcher, vertical text nav, orbit-ring active indicator, sound + badge). Right rail and mobile flows unchanged.
 - Files: side-rails.tsx, globals.css, hero-section.tsx (eager LCP fix).
+
+---
+Task ID: 10 (SidebarNotchNav Component)
+Agent: Main agent
+Task: User provided a full component spec — "SidebarNotchNav": vertical glassmorphic sidebar (rgba(255,255,255,.08) shell, .14 right border, blur 20px, 54-74px) with sliding curved SVG notch (transparent fill, white 1.6 glowing stroke, white target dot cx6/cy38/r3), dynamic positioning via useLayoutEffect + getBoundingClientRect + ResizeObserver, 0.38s cubic-bezier(0.25,1,0.5,1) top transition, vertical-rl + rotate(180deg) labels (active accent + offset + glow), 4-dot brand grid top, sound toggle + quick-contact badge bottom, mobile version required.
+
+Work Log:
+- Created src/components/SidebarNotchNav.tsx (user's exact path/structure): kept all spec geometry verbatim (notch path M24,0 L20,0 C…Z, stroke #fff 1.6 + drop-shadow, dot cx=6 cy=38 r=3, preserveAspectRatio none, w 26/30/34 responsive, h 76, HALF_NOTCH=38 clamp, transition top 0.38s cubic-bezier(0.25,1,0.5,1), willChange top, element IDs portfolio-sidebar/sidebar-brand-btn/active-category-notch/side-nav-*/sound-toggle-btn/quick-contact-btn). Labels: vertical-rl + rotate(180deg), active -translate-x-[7px/9px] scale-105 + drop-shadow glow, inactive white/60.
+  - Adaptations: (a) accent teal #19b9b5 → ember-brand gold (#ffc46b/#ffd894 family) for cohesion with the app's art direction — one-line class swap if teal wanted; (b) sound toggle wired to real WebAudio engine via useSoundEngine instead of local state; (c) "use client" + rAF wrapper in useLayoutEffect to satisfy react-hooks/set-state-in-effect; (d) React.FC → named function export per project style; (e) aside made fixed inset-y-0 left-0 z-30 so it doubles as the mobile nav (54px base width) per "mobile version eo add hobe".
+- side-rails.tsx: deleted SideRailLeft (replaced); kept SideRailRight + RailTip/RailDivider (right rail unchanged, md+ only).
+- portfolio-app.tsx: mounts SidebarNotchNav with CATEGORIES (all 6 sections), activeIndex derived from useActiveSection, onSelectCategory → playSound(tap)+scrollToSection, savedCount=2, onOpenContact → contact; content padding pl-[54px] sm:pl-[62px] md:pl-[74px] md:pr-[88px]; removed MobileHeader + MenuOverlay usage (sidebar replaces both; files kept).
+- Verification: lint 0 problems. Agent Browser 1440×900: glass shell + 4-dot grid + notch at HOME with glowing dot; click PROJECTS → notch slides + label gold/offset; scroll 55% → scroll-spy moves notch to SKILLS; contact button scrolls to contact; mobile 390×844 → 54px sidebar with notch at ABOUT, no overlap, badge visible; fresh console clean, page errors none, dev.log 200s.
+
+Stage Summary:
+- Navigation is now the user-specified SidebarNotchNav (glass rail + sliding curved notch + glowing target dot) at all breakpoints; right utility rail unchanged; mobile header/menu overlay retired from the tree.
+- Files: src/components/SidebarNotchNav.tsx (new), side-rails.tsx (slimmed), portfolio-app.tsx (rewired).
