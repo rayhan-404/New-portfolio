@@ -282,3 +282,19 @@ Work Log:
 Stage Summary:
 - Notch is larger with a geometrically centered target dot; mobile hero now reads as one continuous composition — portrait dissolving into the ember background with the left-aligned name/intro starting at the fade line.
 - Files: src/components/SidebarNotchNav.tsx, src/components/portfolio/hero-section.tsx, src/app/globals.css.
+
+---
+Task ID: 14 (Glassier white navbar + editorial "Hello.." typography)
+Agent: Main agent
+Task: User: (a) "navbar white e thak but a little bit glass effect daw" (b) "hello text ta sundor typography koro".
+
+Work Log:
+- globals.css glass-rail-white retuned: white gradient opacity lowered 0.94/0.86/0.90 → 0.84/0.66/0.72/0.80 (4-stop with warm-tinted mid stops) so the ember field breathes through the frost; blur 28→34px, saturate 170→185%, + brightness(1.04); added faint inset warm glow (inset 0 0 44px rgba(255,190,120,0.10)). Read stays WHITE-first, glass-second — background notch remains clearly more saturated than the frosted bar. Applies to both left SidebarNotchNav and right utility rail (shared utility).
+- layout.tsx: added Instrument_Serif (next/font/google, weight 400, normal+italic, variable --font-instrument-serif) wired into body className.
+- globals.css @theme inline: --font-serif: var(--font-instrument-serif), ui-serif, Georgia fallback → generates Tailwind font-serif utility.
+- hero-section.tsx mobile "Hello.." rebuilt: font-serif italic 400 (3.4rem mobile / 4.2rem sm, leading 0.95, tracking -0.015em) in warm ivory #fff9f1 with text-glow; trailing ".." in text-gold-gradient; beneath it a hand-drawn gold swash SVG (pathLength 0→1 draw-on at delay 1.05s, gold gradient stroke #ffe3ae→#ffb45e→#ff7a1c, round caps, drop-shadow) — entrances staggered after the text. Desktop hero untouched.
+- Verification: lint 0 problems. Agent Browser 390×844 — serif italic Hello.. + gold dots + swash render over the cutout, glassy warm rail, notch glide frame-sampled 127.96 → 144.33 → 226.94 → 235.05 (settles dead-center of PROJECTS item). Desktop 1440×900 — both rails show warm glass tint, split hero intact, notch glide 166.62 → 437.68 → 476.55 (SKILLS). Console clean (dev-mode logs only), no page errors, dev.log all 200s, no font-fetch failures.
+
+Stage Summary:
+- Navbar stays white but now reads as real Apple frost (ember glow through the blur, background notch still pops); mobile hero greeting upgraded to editorial Instrument Serif italic with gold gradient dots and an animated hand-drawn swash.
+- Files: src/app/globals.css, src/app/layout.tsx, src/components/portfolio/hero-section.tsx.

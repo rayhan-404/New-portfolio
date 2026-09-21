@@ -133,14 +133,44 @@ export function HeroSection() {
                 quality={88}
                 className="relative h-auto w-full object-contain drop-shadow-[0_30px_44px_rgba(60,5,0,0.42)]"
               />
-              {/* "Hello.." — top-left corner of the picture */}
+              {/* "Hello.." — top-left corner of the picture.
+                  Editorial serif italic + gold-gradient dots + a
+                  hand-drawn gold swash that draws itself in. */}
               <motion.span
                 initial={reduce ? false : { opacity: 0, x: -16, y: -8 }}
                 animate={{ opacity: 1, x: 0, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.55, ease: EASE }}
-                className="text-glow absolute left-5 top-3 font-display text-4xl font-medium tracking-[-0.02em] text-white sm:left-8 sm:top-5 sm:text-5xl"
+                className="text-glow absolute left-5 top-4 sm:left-8 sm:top-6"
               >
-                Hello..
+                <span className="font-serif block text-[3.4rem] font-normal italic leading-[0.95] tracking-[-0.015em] text-[#fff9f1] sm:text-[4.2rem]">
+                  Hello<span className="text-gold-gradient">..</span>
+                </span>
+                <motion.svg
+                  viewBox="0 0 140 14"
+                  aria-hidden="true"
+                  initial={reduce ? false : { opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 1 }}
+                  className="mt-1.5 block h-[13px] w-[118px] drop-shadow-[0_2px_6px_rgba(96,14,0,0.45)] sm:h-[15px] sm:w-[142px]"
+                >
+                  <motion.path
+                    d="M3 9 C 30 3, 58 12.5, 86 7.5 S 128 4.5, 137 7"
+                    fill="none"
+                    stroke="url(#hello-swash-gold)"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    initial={reduce ? false : { pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 0.85, delay: 1.05, ease: EASE }}
+                  />
+                  <defs>
+                    <linearGradient id="hello-swash-gold" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stopColor="#ffe3ae" />
+                      <stop offset="55%" stopColor="#ffb45e" />
+                      <stop offset="100%" stopColor="#ff7a1c" />
+                    </linearGradient>
+                  </defs>
+                </motion.svg>
               </motion.span>
             </div>
 
