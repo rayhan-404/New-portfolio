@@ -2,13 +2,13 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import {
+  ArrowUpRight,
   CalendarClock,
   Clock,
   Copy,
   Globe,
   Loader2,
   Mail,
-  PhoneCall,
   Send,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -24,6 +24,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+const inputCls =
+  "w-full rounded-2xl border border-[var(--line)] bg-[rgba(243,236,227,0.04)] px-4 py-3 text-sm outline-none transition-all duration-300 placeholder:text-muted-foreground/50 focus:border-ember/60 focus:bg-[rgba(243,236,227,0.07)]";
 
 export function ContactSection() {
   const [bookingOpen, setBookingOpen] = useState(false);
@@ -72,74 +75,71 @@ export function ContactSection() {
     }
   };
 
-  const inputCls =
-    "w-full rounded-2xl border border-[var(--glass-border)] bg-[var(--glass-bg)] px-4 py-3 text-sm outline-none transition-all duration-300 placeholder:text-muted-foreground/60 focus:border-[var(--apple-green)]/50 focus:bg-[var(--glass-bg-strong)]";
-
   return (
-    <section id="contact" aria-label="Contact" className="relative scroll-mt-28 px-5 py-24 lg:py-32">
+    <section
+      id="contact"
+      aria-label="Contact"
+      className="relative scroll-mt-20 px-5 py-24 sm:px-8 md:px-10 lg:py-32"
+    >
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          eyebrow="04 · Get In Touch"
-          title="Let's build something great."
+          eyebrow="05 · Get In Touch"
+          title="Let's build something worth signing."
           description="Have a project, role, or idea worth obsessing over? My inbox is open — and I reply fast."
         />
 
-        <div className="mt-14 grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+        <div className="mt-14 grid gap-4 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
           {/* Direct channels */}
           <div className="flex flex-col gap-4">
             <Reveal>
               <button
                 onClick={copyEmail}
-                className="glass group flex w-full items-center gap-4 rounded-3xl p-5 text-left transition-all duration-300 hover:-translate-y-0.5 hover:bg-[var(--glass-bg-strong)]"
+                className="panel group flex w-full items-center gap-4 rounded-3xl p-5 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-ember/45"
               >
-                <span className="glass-strong flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl">
-                  <Mail className="h-4.5 w-4.5 text-[var(--apple-green)]" />
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-ember/35 bg-ember/10">
+                  <Mail className="h-4.5 w-4.5 text-ember-bright" />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                    Email
-                  </span>
+                  <span className="font-tag block text-[9.5px] text-muted-foreground">Email</span>
                   <span className="block truncate text-sm font-semibold">{person.email}</span>
                 </span>
-                <Copy className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-[var(--apple-green)]" />
+                <Copy className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-ember" />
               </button>
             </Reveal>
 
             <Reveal delay={0.06}>
-              <div className="glass grid grid-cols-1 gap-4 rounded-3xl p-5 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+              <div className="panel grid grid-cols-1 gap-4 rounded-3xl p-5 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
                 <ContactFact icon={Clock} label="Response" value="Within 24h" />
                 <ContactFact icon={Globe} label="Location" value={person.location} />
-                <ContactFact icon={CalendarClock} label="Status" value="Open for work" />
+                <ContactFact icon={ArrowUpRight} label="Status" value="Open for work" />
               </div>
             </Reveal>
 
             <Reveal delay={0.12}>
-              <div className="glass relative flex flex-col gap-4 overflow-hidden rounded-3xl p-6">
+              <div className="panel-ember relative flex flex-col gap-4 overflow-hidden rounded-3xl p-6">
                 <div
-                  className="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full blur-3xl"
-                  style={{ background: "var(--orb-2)" }}
+                  className="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(232,99,44,0.4),transparent_70%)] blur-2xl"
                   aria-hidden="true"
                 />
                 <div className="flex items-center gap-3.5">
-                  <span className="glass-strong flex h-11 w-11 items-center justify-center rounded-2xl">
-                    <PhoneCall className="h-4.5 w-4.5 text-[var(--apple-orange)]" />
+                  <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-ember/40 bg-[rgba(11,7,5,0.4)]">
+                    <CalendarClock className="h-4.5 w-4.5 text-ember-bright" />
                   </span>
                   <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                      Prefer talking?
-                    </p>
+                    <p className="font-tag text-[9.5px] text-ember-bright">Prefer talking?</p>
                     <h3 className="text-[15px] font-semibold">30-min discovery call</h3>
                   </div>
                 </div>
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  Discuss technical architecture, roadmap, and feasibility — no slides, just honest engineering talk.
+                <p className="text-sm leading-relaxed text-foreground/75">
+                  Discuss technical architecture, roadmap, and feasibility — no slides, just honest
+                  engineering talk.
                 </p>
                 <button
                   onClick={() => {
                     playSound("chime");
                     setBookingOpen(true);
                   }}
-                  className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-foreground text-sm font-semibold text-background transition-all duration-300 hover:scale-[1.02] hover:opacity-90 active:scale-95"
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-ember text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:bg-ember-bright active:scale-95"
                 >
                   <CalendarClock className="h-4 w-4" />
                   Book a Call
@@ -152,17 +152,17 @@ export function ContactSection() {
           <Reveal delay={0.08}>
             <form
               onSubmit={submit}
-              className="glass h-full rounded-[2rem] p-6 sm:p-8"
+              className="panel h-full rounded-[2rem] p-6 sm:p-8"
               aria-label="Contact form"
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--apple-green)]">
-                    Direct Message
-                  </p>
-                  <h3 className="mt-2 text-xl font-semibold tracking-tight">Tell me about your project</h3>
+                  <p className="font-tag text-[10px] text-ember">Direct Message</p>
+                  <h3 className="font-display mt-2 text-xl tracking-tight">
+                    Tell me about your project
+                  </h3>
                 </div>
-                <span className="glass rounded-full px-3.5 py-1.5 text-[11px] font-semibold text-muted-foreground">
+                <span className="font-tag rounded-full border border-[var(--line)] px-3.5 py-1.5 text-[9px] text-muted-foreground">
                   {person.responseTime}
                 </span>
               </div>
@@ -184,8 +184,8 @@ export function ContactSection() {
                       }}
                       className={`rounded-full px-4 py-2 text-[13px] font-medium transition-all duration-300 active:scale-95 ${
                         type === t
-                          ? "bg-foreground text-background"
-                          : "border border-[var(--glass-border)] text-muted-foreground hover:text-foreground"
+                          ? "border border-ember bg-ember text-white shadow-[0_8px_24px_-8px_rgba(232,99,44,0.6)]"
+                          : "border border-[var(--line)] text-muted-foreground hover:border-ember/50 hover:text-foreground"
                       }`}
                     >
                       {t}
@@ -255,7 +255,7 @@ export function ContactSection() {
                 <button
                   type="submit"
                   disabled={sending}
-                  className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-foreground text-sm font-semibold text-background transition-all duration-300 hover:scale-[1.02] hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-ember text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:bg-ember-bright active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {sending ? (
                     <>
@@ -294,13 +294,11 @@ function ContactFact({
 }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="glass flex h-9 w-9 shrink-0 items-center justify-center rounded-xl">
-        <Icon className="h-4 w-4 text-[var(--apple-green)]" />
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[var(--line)] bg-[rgba(243,236,227,0.04)]">
+        <Icon className="h-4 w-4 text-ember" />
       </span>
       <div>
-        <p className="text-[10.5px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-          {label}
-        </p>
+        <p className="font-tag text-[8.5px] text-muted-foreground">{label}</p>
         <p className="text-[13px] font-semibold">{value}</p>
       </div>
     </div>
@@ -348,28 +346,26 @@ function BookingDialog({
     }
   };
 
-  const inputCls =
-    "w-full rounded-2xl border border-[var(--glass-border)] bg-[var(--glass-bg)] px-4 py-3 text-sm outline-none transition-all duration-300 placeholder:text-muted-foreground/60 focus:border-[var(--apple-green)]/50 focus:bg-[var(--glass-bg-strong)]";
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="glass-strong max-h-[86vh] w-[calc(100vw-2rem)] max-w-lg overflow-y-auto rounded-[1.75rem] p-6 sm:p-8">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--accent)] px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-[var(--accent-foreground)]">
+      <DialogContent className="max-h-[86vh] w-[calc(100vw-2rem)] overflow-y-auto rounded-3xl border border-[var(--line-strong)] bg-popover p-6 sm:p-8">
+        <span className="font-tag inline-flex items-center gap-1.5 rounded-full border border-ember/40 bg-ember/10 px-3 py-1 text-[9px] text-ember-bright">
           <CalendarClock className="h-3 w-3" />
           Instant Scheduling
         </span>
-        <DialogTitle className="mt-4 text-2xl font-semibold tracking-tight">
+        <DialogTitle className="font-display mt-4 text-2xl tracking-tight">
           Book a 30-min discovery call
         </DialogTitle>
         <DialogDescription className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          Pick a convenient slot — we&apos;ll explore requirements and next steps with zero pressure.
+          Pick a convenient slot — we&apos;ll explore requirements and next steps with zero
+          pressure.
         </DialogDescription>
 
         <div className="mt-6 flex flex-col gap-4">
           <label className="flex flex-col gap-1.5">
             <span className="text-[13px] font-medium text-muted-foreground">Meeting topic</span>
             <Select value={topic} onValueChange={setTopic}>
-              <SelectTrigger className="w-full rounded-2xl border-[var(--glass-border)] bg-[var(--glass-bg)] px-4 py-3 text-sm">
+              <SelectTrigger className="w-full rounded-2xl border-[var(--line)] bg-[rgba(243,236,227,0.04)] px-4 py-3 text-sm">
                 <SelectValue placeholder="Select a topic" />
               </SelectTrigger>
               <SelectContent>
@@ -396,7 +392,7 @@ function BookingDialog({
             <label className="flex flex-col gap-1.5">
               <span className="text-[13px] font-medium text-muted-foreground">Time slot</span>
               <Select value={slot} onValueChange={setSlot}>
-                <SelectTrigger className="w-full rounded-2xl border-[var(--glass-border)] bg-[var(--glass-bg)] px-4 py-3 text-sm">
+                <SelectTrigger className="w-full rounded-2xl border-[var(--line)] bg-[rgba(243,236,227,0.04)] px-4 py-3 text-sm">
                   <SelectValue placeholder="Pick a slot" />
                 </SelectTrigger>
                 <SelectContent>
@@ -425,7 +421,7 @@ function BookingDialog({
           <button
             onClick={confirm}
             disabled={sending || !email || !date}
-            className="mt-2 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-foreground text-sm font-semibold text-background transition-all duration-300 hover:scale-[1.02] hover:opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+            className="mt-2 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-ember text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:bg-ember-bright active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {sending ? "Scheduling…" : "Confirm & Schedule"}
           </button>

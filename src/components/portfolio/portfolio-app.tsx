@@ -1,41 +1,40 @@
 "use client";
 
 import { useState } from "react";
-import { AuroraBackground } from "./aurora-background";
-import { GlassNav } from "./glass-nav";
-import { Hero } from "./hero";
-import { AboutSection } from "./about-section";
+import { EmberScene } from "./ember-scene";
+import { SideRail, useActiveSection } from "./side-rail";
+import { MenuOverlay } from "./menu-overlay";
+import { MobileHeader } from "./mobile-header";
+import { HeroSection } from "./hero-section";
 import { ProjectsSection } from "./projects-section";
+import { AboutSection } from "./about-section";
 import { SkillsSection } from "./skills-section";
+import { ServicesSection } from "./services-section";
 import { ContactSection } from "./contact-section";
 import { Footer } from "./footer";
-import ResumeDialog from "./resume-dialog";
 
 export function PortfolioApp() {
-  const [resumeOpen, setResumeOpen] = useState(false);
-
-  const scrollTo = (id: string) =>
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const [menuOpen, setMenuOpen] = useState(false);
+  const active = useActiveSection();
 
   return (
     <>
-      <AuroraBackground />
-      <GlassNav onResume={() => setResumeOpen(true)} />
+      <EmberScene />
+      <SideRail />
+      <MobileHeader onOpenMenu={() => setMenuOpen(true)} />
+      <MenuOverlay open={menuOpen} onOpenChange={setMenuOpen} active={active} />
 
-      <main className="flex-1">
-        <Hero
-          onResume={() => setResumeOpen(true)}
-          onContact={() => scrollTo("contact")}
-          onProjects={() => scrollTo("projects")}
-        />
-        <AboutSection onResume={() => setResumeOpen(true)} />
-        <ProjectsSection />
-        <SkillsSection />
-        <ContactSection />
-      </main>
-
-      <Footer />
-      <ResumeDialog open={resumeOpen} onOpenChange={setResumeOpen} />
+      <div className="flex min-h-svh flex-col md:pl-20 lg:pl-24">
+        <main className="flex-1">
+          <HeroSection onOpenMenu={() => setMenuOpen(true)} />
+          <ProjectsSection />
+          <AboutSection />
+          <SkillsSection />
+          <ServicesSection />
+          <ContactSection />
+        </main>
+        <Footer />
+      </div>
     </>
   );
 }

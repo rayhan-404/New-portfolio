@@ -101,3 +101,22 @@ Stage Summary:
 - Production-ready Apple glass portfolio complete: 1 page, 2 API routes, 2 DB models, 4 interactive demos.
 - Files: src/components/portfolio/* (15 files), src/lib/{portfolio-data,sound,rate-limit}.ts,
   src/app/{layout,page,globals.css}, src/app/api/{contact,booking}/route.ts, prisma/schema.prisma.
+
+---
+Task ID: 6 (Redesign)
+Agent: Main agent
+Task: Full page redesign to "Blue Nile" cinematic dark/ember editorial design (per user reference image) — production ready
+
+Work Log:
+- Rewrote globals.css as "Blue Nile Ember" design system: warm charcoal #0b0705 bg, ember orange #e8632c accents, cream #f3ece3 type; utilities: font-display (Archivo 900), font-tag (Space Mono), panel/panel-strong/panel-ember surfaces, pill-dark glass, grid-overlay blueprint hairlines, v-text vertical nav, pixel artifacts + float animations, text-outline watermarks, ember-scene glow + grain.
+- Rewrote layout.tsx: Archivo + Space Mono fonts, Blue Nile/Rayhan Ahmed SEO metadata, dark-only theme, warm toast styling; added images.qualities + devIndicators:false to next.config.ts.
+- Updated portfolio-data.ts: brand + person "Rayhan Ahmed", heroAward {12+, Awards/Celebrate/Innovation}, socials, services[] (4 items).
+- New components: side-rail.tsx (fixed vertical rail: BN mark, vertical-rl nav with scroll-spy IntersectionObserver, SVG ember arc+dots active indicator, WebAudio sound toggle with decorative "2" badge; useSyncExternalStore for hydration-safe state), hero-section.tsx (full-bleed AI-generated studio portrait with mask/vignette blends, mouse parallax springs, grid overlay, floating pixel clusters, Blue Nile logo header + status dot, hamburger, [12+] badge button, AWARDS CELEBRATE INNOVATION stack, pill-dark scroll CTA), menu-overlay.tsx (full-screen AnimatePresence menu, numbered display links, socials, Escape/scroll-lock), mobile-header.tsx (fixed blur bar <md), ember-scene.tsx, services-section.tsx (new 04 numbered cards).
+- Restyled for ember: section-heading, projects-section (index watermarks, ember filter pill, hover auras), about-section (portrait card + nameplate, CountUp stats, timeline), skills-section (ember meters + sheen, chips, principles, marquee), contact-section (ember form + booking dialog), footer (giant BLUE NILE watermark), project-dialog + resume-dialog.
+- Deleted obsolete aurora-background.tsx, glass-nav.tsx, hero.tsx. portfolio-app.tsx recomposed with rail offset (md:pl-20 lg:pl-24).
+- Generated public/generated/hero-portrait.png via z-ai CLI (864x1152 editorial portrait, warm ember studio light) — note: background nohup runs of the CLI died silently; foreground run succeeded.
+- Fixed lint errors (react-hooks/set-state-in-effect) in side-rail + menu-overlay via useSyncExternalStore pattern; fixed missing useState import that broke useActiveSection (500 → 200).
+
+Stage Summary:
+- VERIFIED via Agent Browser (desktop 1440x900 + mobile 390x844): hero matches reference (logo, label, arc nav, pixels, [12+], awards, scroll pill); scroll-spy arc follows section on scroll; menu overlay opens/closes (button + Escape); project dialog + live PulseAI demo interactive (traffic spike 35ms→50ms); contact form → 201 → Prisma row verified in SQLite; booking dialog → 201 → toast; sound toggle aria/state flips; mobile fixed header + overlay menu + stacked hero verified; footer sticks with mt-auto; zero browser console errors; lint clean; dev.log clean.
+- API routes, Prisma models, demos, sound engine, rate-limit all preserved from previous stage — no backend changes needed.

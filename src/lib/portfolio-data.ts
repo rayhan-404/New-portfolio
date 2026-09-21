@@ -1,20 +1,75 @@
 /**
  * Portfolio content layer — single source of truth.
- * Migrated from the legacy HTML portfolio and enriched for production use.
+ * Blue Nile Studio · Rayhan Ahmed
  */
 
+export const brand = {
+  name: "Blue Nile",
+  tagline: "Digital studio of Rayhan Ahmed",
+} as const;
+
 export const person = {
-  name: "Rayhan",
-  monogram: "R",
+  name: "Rayhan Ahmed",
+  monogram: "BN",
   role: "Full-Stack Engineer & UI/UX Specialist",
   email: "rayhan6355@gmail.com",
   bio: "Crafting resilient digital products, scalable web systems, and high-performance interactive interfaces.",
-  longBio: "I'm Rayhan, a full-stack engineer and interface designer dedicated to building scalable web applications with meticulous user experience. I bridge the gap between complex engineering architectures and intuitive, accessible user interfaces.",
+  longBio: "I'm Rayhan Ahmed, a full-stack engineer and interface designer dedicated to building scalable web applications with meticulous user experience. I bridge the gap between complex engineering architectures and intuitive, accessible user interfaces.",
   philosophy: "Passionate Software Engineer & Designer — crafting resilient digital products.",
   location: "Worldwide · Remote",
   availability: "Available Q2–Q3 2026",
   responseTime: "Fast 24h response",
 } as const;
+
+export const heroAward = {
+  count: 12,
+  lines: ["Awards", "Celebrate", "Innovation"],
+} as const;
+
+export const socials = [
+  { label: "GitHub", handle: "@rayhan-ahmed", href: "https://github.com" },
+  { label: "LinkedIn", handle: "/in/rayhan-ahmed", href: "https://linkedin.com" },
+  { label: "X / Twitter", handle: "@rayhan_builds", href: "https://x.com" },
+  { label: "Dribbble", handle: "@rayhan.ahmed", href: "https://dribbble.com" },
+] as const;
+
+export interface ServiceItem {
+  index: string;
+  title: string;
+  description: string;
+  deliverables: string[];
+}
+
+export const services: ServiceItem[] = [
+  {
+    index: "01",
+    title: "Full-Stack Development",
+    description:
+      "End-to-end product engineering — from database schema to deploy pipeline. Type-safe, tested, and built to scale past your first hundred thousand users.",
+    deliverables: ["Next.js / React Apps", "APIs & Integrations", "PostgreSQL / Prisma"],
+  },
+  {
+    index: "02",
+    title: "UI/UX & Interface Design",
+    description:
+      "Interfaces engineered like products, not decoration. Design systems, motion language, and accessibility baked in from the first wireframe.",
+    deliverables: ["Design Systems", "Prototyping", "WCAG 2.1 AA"],
+  },
+  {
+    index: "03",
+    title: "SaaS & MVP Builds",
+    description:
+      "Ship a validated MVP in weeks, not quarters. Opinionated architecture, billing, auth, and analytics wired on day one.",
+    deliverables: ["Rapid Scoping", "Stripe & Auth", "Analytics Ready"],
+  },
+  {
+    index: "04",
+    title: "Technical Consulting",
+    description:
+      "Architecture reviews, performance audits, and team enablement. Honest engineering talk — no slides, just measurable outcomes.",
+    deliverables: ["Perf Audits", "Architecture Review", "Team Mentoring"],
+  },
+];
 
 export const stats = [
   { label: "Years Craft", value: 4, suffix: "+", detail: "35+ shipped apps" },

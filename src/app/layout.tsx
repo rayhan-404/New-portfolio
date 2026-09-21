@@ -1,32 +1,34 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { ThemeProvider } from "next-themes";
-import "./globals.css";
+import { Archivo, Space_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import "./globals.css";
 import { person } from "@/lib/portfolio-data";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const archivo = Archivo({
+  variable: "--font-archivo",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
   subsets: ["latin"],
+  weight: ["400", "700"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://rayhan.dev"),
+  metadataBase: new URL("https://bluenile.dev"),
   title: {
-    default: "Rayhan — Full-Stack Engineer & UI/UX Specialist",
-    template: "%s · Rayhan",
+    default: "Blue Nile — Rayhan Ahmed · Full-Stack Engineer & UI/UX Specialist",
+    template: "%s · Blue Nile",
   },
   description:
-    "Portfolio of Rayhan, a full-stack engineer and interface designer crafting resilient digital products, scalable web systems, and high-performance interactive interfaces.",
+    "Portfolio of Rayhan Ahmed — Blue Nile Studio. Full-stack engineer and interface designer crafting resilient digital products, scalable web systems, and high-performance interactive interfaces.",
   keywords: [
-    "Rayhan",
+    "Blue Nile",
+    "Rayhan Ahmed",
     "Full-Stack Engineer",
     "UI/UX Designer",
     "Next.js Developer",
@@ -38,17 +40,17 @@ export const metadata: Metadata = {
   authors: [{ name: person.name }],
   creator: person.name,
   openGraph: {
-    title: "Rayhan — Full-Stack Engineer & UI/UX Specialist",
+    title: "Blue Nile — Rayhan Ahmed · Full-Stack Engineer & UI/UX Specialist",
     description:
       "Crafting resilient digital products, scalable web systems, and high-performance interactive interfaces.",
-    url: "https://rayhan.dev",
-    siteName: "Rayhan Portfolio",
+    url: "https://bluenile.dev",
+    siteName: "Blue Nile Studio",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rayhan — Full-Stack Engineer & UI/UX Specialist",
+    title: "Blue Nile — Rayhan Ahmed · Full-Stack Engineer & UI/UX Specialist",
     description:
       "Crafting resilient digital products, scalable web systems, and high-performance interactive interfaces.",
   },
@@ -62,10 +64,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#050507" },
-    { media: "(prefers-color-scheme: light)", color: "#f5f5f7" },
-  ],
+  themeColor: "#0b0705",
 };
 
 const jsonLd = {
@@ -92,18 +91,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
+    <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground min-h-screen flex flex-col`}
+        className={`${archivo.variable} ${spaceMono.variable} antialiased bg-background text-foreground min-h-screen flex flex-col`}
       >
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-          />
-          {children}
-          <Toaster position="bottom-right" />
-        </ThemeProvider>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        {children}
+        <Toaster position="bottom-right" toastOptions={{
+          style: {
+            background: "#171009",
+            border: "1px solid rgba(243,236,227,0.14)",
+            color: "#f3ece3",
+          },
+        }} />
       </body>
     </html>
   );

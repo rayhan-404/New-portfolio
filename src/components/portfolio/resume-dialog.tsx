@@ -47,13 +47,13 @@ export default function ResumeDialog({ open, onOpenChange }: ResumeDialogProps) 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[85vh] gap-0 overflow-y-auto rounded-2xl border-[var(--glass-border)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:max-w-xl">
+      <DialogContent className="max-h-[85vh] gap-0 overflow-y-auto rounded-3xl border-[var(--line-strong)] bg-popover [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:max-w-xl">
         <DialogHeader className="items-start gap-1.5 text-left">
           <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2">
-            <DialogTitle className="text-lg font-semibold tracking-tight">
+            <DialogTitle className="font-display text-lg tracking-tight">
               Rayhan&apos;s Resume
             </DialogTitle>
-            <span className="glass shrink-0 rounded-full px-2.5 py-1 text-[10px] font-medium uppercase tracking-widest text-apple-green">
+            <span className="font-tag shrink-0 rounded-full border border-ember/40 bg-ember/10 px-2.5 py-1 text-[9px] text-ember-bright">
               2026 Edition
             </span>
           </div>
@@ -63,18 +63,16 @@ export default function ResumeDialog({ open, onOpenChange }: ResumeDialogProps) 
           </DialogDescription>
         </DialogHeader>
 
-        <div className="glass-divider mt-5" />
+        <div className="mt-5 h-px bg-[var(--line)]" />
 
         {/* Professional Experience */}
         <section className="mt-5">
-          <h3 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-            Professional Experience
-          </h3>
+          <h3 className="font-tag text-[9.5px] text-muted-foreground">Professional Experience</h3>
           <ol className="mt-4">
             {experience.map((item, index) => (
               <li
                 key={`${item.company}-${item.period}`}
-                className={`relative border-l border-[var(--glass-border)] pl-5 ${
+                className={`relative border-l border-[var(--line-strong)] pl-5 ${
                   index < experience.length - 1 ? "pb-5" : ""
                 }`}
               >
@@ -97,13 +95,11 @@ export default function ResumeDialog({ open, onOpenChange }: ResumeDialogProps) 
           </ol>
         </section>
 
-        <div className="glass-divider mt-5" />
+        <div className="mt-5 h-px bg-[var(--line)]" />
 
         {/* Core Skills */}
         <section className="mt-5">
-          <h3 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-            Core Skills
-          </h3>
+          <h3 className="font-tag text-[9.5px] text-muted-foreground">Core Skills</h3>
           <div className="mt-4 flex flex-col gap-3">
             {SKILL_ROWS.map((row) => (
               <div
@@ -115,7 +111,7 @@ export default function ResumeDialog({ open, onOpenChange }: ResumeDialogProps) 
                   {row.items.map((item) => (
                     <span
                       key={item}
-                      className="rounded-full border border-[var(--glass-border)] bg-[var(--secondary)] px-2 py-0.5 text-[11px] text-foreground/90"
+                      className="rounded-full border border-[var(--line)] bg-[rgba(243,236,227,0.05)] px-2 py-0.5 text-[11px] text-foreground/90"
                     >
                       {item}
                     </span>
@@ -135,16 +131,15 @@ export default function ResumeDialog({ open, onOpenChange }: ResumeDialogProps) 
                 description: "rayhan-resume-2026.pdf",
               })
             }
-            className="glass inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition hover:brightness-110 active:scale-[0.98]"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--line-strong)] px-4 py-2 text-sm font-medium transition hover:border-ember/60 active:scale-[0.98]"
           >
-            <Download className="size-4 text-apple-green" />
+            <Download className="size-4 text-ember" />
             Download PDF
           </button>
           <button
             type="button"
             onClick={handleHireClick}
-            className="inline-flex items-center rounded-full px-4 py-2 text-sm font-semibold transition hover:brightness-110 active:scale-[0.98]"
-            style={{ backgroundColor: "var(--apple-green)", color: "#0b0b0d" }}
+            className="inline-flex items-center rounded-full bg-ember px-4 py-2 text-sm font-semibold text-white transition hover:bg-ember-bright active:scale-[0.98]"
           >
             Hire Rayhan
           </button>

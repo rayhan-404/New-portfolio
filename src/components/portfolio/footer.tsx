@@ -1,61 +1,70 @@
 "use client";
 
 import { ArrowUp } from "lucide-react";
-import { person } from "@/lib/portfolio-data";
+import { person, socials } from "@/lib/portfolio-data";
 import { playSound } from "@/lib/sound";
+import { scrollToSection } from "./side-rail";
 
 export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative mt-auto px-5 pb-8 pt-4">
-      <div className="mx-auto max-w-6xl">
-        <div className="glass rounded-[2rem] px-6 py-5 sm:px-8">
-          <div className="flex flex-col items-center justify-between gap-5 sm:flex-row">
-            <div className="flex items-center gap-3">
-              <span className="glass-strong flex h-9 w-9 items-center justify-center rounded-full font-mono text-sm font-bold">
-                {person.monogram}
-              </span>
-              <div>
-                <p className="text-sm font-semibold">{person.name}</p>
-                <p className="text-[11px] text-muted-foreground">
-                  © {year} · Crafted with Next.js 16 & Tailwind CSS
-                </p>
-              </div>
-            </div>
-
-            <nav aria-label="Footer">
-              <ul role="list" className="flex items-center gap-5 text-[13px] font-medium text-muted-foreground">
-                {["about", "projects", "skills", "contact"].map((id) => (
-                  <li key={id}>
-                    <a
-                      href={`#${id}`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        playSound("tap");
-                        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-                      }}
-                      className="capitalize transition-colors hover:text-foreground"
-                    >
-                      {id}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            <button
-              onClick={() => {
-                playSound("tap");
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              className="glass-strong inline-flex h-10 items-center gap-2 rounded-full px-4 text-[13px] font-semibold transition-all duration-300 hover:scale-105 active:scale-95"
-              aria-label="Back to top"
-            >
-              <ArrowUp className="h-4 w-4" />
-              Top
-            </button>
+    <footer className="relative mt-auto overflow-hidden border-t border-[var(--line)]">
+      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 pb-8 pt-12 sm:px-8 md:px-10">
+        <div className="flex flex-wrap items-start justify-between gap-8">
+          <div>
+            <p className="font-display text-2xl leading-none">
+              Blue<span className="text-ember"> Nile</span>
+            </p>
+            <p className="font-tag mt-2 text-[9.5px] text-muted-foreground">
+              {person.role}
+            </p>
           </div>
+
+          <nav aria-label="Footer">
+            <ul className="flex flex-wrap gap-x-6 gap-y-2">
+              {socials.map((s) => (
+                <li key={s.label}>
+                  <a
+                    href={s.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-tag text-[10px] text-muted-foreground transition-colors duration-300 hover:text-ember"
+                  >
+                    {s.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <button
+            onClick={() => {
+              playSound("tap");
+              scrollToSection("home");
+            }}
+            aria-label="Back to top"
+            className="group flex h-11 w-11 items-center justify-center rounded-full border border-[var(--line-strong)] transition-all duration-300 hover:border-ember hover:bg-ember hover:text-white active:scale-95"
+          >
+            <ArrowUp className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
+          </button>
+        </div>
+
+        {/* Giant sign-off */}
+        <p
+          aria-hidden="true"
+          className="font-display select-none text-center text-[clamp(3.4rem,13vw,10rem)] leading-[0.85] tracking-tight text-foreground/[0.05]"
+        >
+          BLUE NILE
+        </p>
+
+        <div className="hairline-t flex flex-col items-center justify-between gap-2 pt-5 sm:flex-row">
+          <p className="font-tag text-[9px] text-muted-foreground/70">
+            © {year} Blue Nile Studio — Rayhan Ahmed
+          </p>
+          <p className="font-tag text-[9px] text-muted-foreground/70">
+            Designed & engineered with obsession
+          </p>
         </div>
       </div>
     </footer>
