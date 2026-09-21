@@ -1,0 +1,2002 @@
+     1→<!DOCTYPE html>
+     2→<html lang="en">
+     3→<head>
+     4→<meta charset="UTF-8">
+     5→<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+     6→<title>Rayhan — Full-Stack Developer & UI/UX Designer</title>
+     7→<meta name="description" content="Personal portfolio of Rayhan: About Me, Handcrafted Projects, Technical Stack, and Direct Collaboration.">
+     8→<meta property="og:title" content="Rayhan — Full-Stack Developer & UI/UX Designer">
+     9→<meta property="og:description" content="Explore Rayhan's engineering portfolio featuring modern web apps, design systems, and full-stack solutions.">
+    10→
+    11→<link rel="preconnect" href="https://fonts.googleapis.com">
+    12→<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    13→<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    14→<script src="/sounds/soundsData.js"></script>
+    15→
+    16→<style>
+    17→  :root {
+    18→    --green-dark: #0d4c3c;
+    19→    --green-mid: #1d5c4b;
+    20→    --green-accent: #7ba05b;
+    21→    --green-light: #e8f0e5;
+    22→    --green-badge: #d8e6d3;
+    23→    --cream-bg: #f4f1eb;
+    24→    --card-white: #fbf9f5;
+    25→    --card-subtle: #ffffff;
+    26→    --text-dark: #0d4c3c;
+    27→    --text-muted: #2d5a4a;
+    28→    --text-light: #5f7468;
+    29→    --text-subtle: #8a9c92;
+    30→    --border-subtle: rgba(13, 76, 60, 0.08);
+    31→    --border-card: rgba(13, 76, 60, 0.12);
+    32→    --shadow-sm: 0 2px 8px rgba(13, 76, 60, 0.04);
+    33→    --shadow-md: 0 10px 28px rgba(13, 76, 60, 0.07);
+    34→    --shadow-lg: 0 16px 40px rgba(13, 76, 60, 0.12);
+    35→  }
+    36→
+    37→  * { box-sizing: border-box; margin: 0; padding: 0; }
+    38→
+    39→  html, body {
+    40→    height: 100%;
+    41→    width: 100%;
+    42→  }
+    43→
+    44→  body {
+    45→    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    46→    background: var(--cream-bg);
+    47→    color: var(--text-dark);
+    48→    margin: 0;
+    49→    padding: 0;
+    50→    min-height: 100svh;
+    51→    height: 100svh;
+    52→    overflow: hidden;
+    53→    -webkit-font-smoothing: antialiased;
+    54→    -moz-osx-font-smoothing: grayscale;
+    55→  }
+    56→
+    57→  /* Full Viewport App Container */
+    58→  .app-container {
+    59→    width: 100vw;
+    60→    height: 100svh;
+    61→    min-height: 100%;
+    62→    background: var(--cream-bg);
+    63→    position: relative;
+    64→    display: flex;
+    65→    overflow: hidden;
+    66→    margin: 0;
+    67→    padding: 0;
+    68→  }
+    69→
+    70→  /* =========================================================
+    71→     SIDEBAR NAVIGATION
+    72→     - Flush against left browser edge
+    73→     - Top-right and bottom-right corners rounded (26px-36px)
+    74→     ========================================================= */
+    75→  .sidebar {
+    76→    width: 66px;
+    77→    flex-shrink: 0;
+    78→    background: var(--green-dark);
+    79→    display: flex;
+    80→    flex-direction: column;
+    81→    align-items: center;
+    82→    padding: 22px 0 20px;
+    83→    position: relative;
+    84→    z-index: 30;
+    85→    user-select: none;
+    86→    height: 100%;
+    87→    margin: 0;
+    88→    border-top-left-radius: 0;
+    89→    border-bottom-left-radius: 0;
+    90→    border-top-right-radius: 26px;
+    91→    border-bottom-right-radius: 26px;
+    92→    box-shadow: 2px 0 16px rgba(13, 76, 60, 0.12);
+    93→  }
+    94→
+    95→  @media (min-width: 768px) {
+    96→    .sidebar {
+    97→      width: 82px;
+    98→      padding: 28px 0 26px;
+    99→      border-top-right-radius: 30px;
+   100→      border-bottom-right-radius: 30px;
+   101→    }
+   102→  }
+   103→
+   104→  @media (min-width: 1200px) {
+   105→    .sidebar {
+   106→      width: 90px;
+   107→      padding: 34px 0 30px;
+   108→      border-top-right-radius: 36px;
+   109→      border-bottom-right-radius: 36px;
+   110→    }
+   111→  }
+   112→
+   113→  /* Monogram Brand */
+   114→  .sidebar-brand {
+   115→    display: flex;
+   116→    flex-direction: column;
+   117→    align-items: center;
+   118→    gap: 10px;
+   119→    margin-bottom: 20px;
+   120→    text-decoration: none;
+   121→    cursor: pointer;
+   122→  }
+   123→
+   124→  .sidebar-logo {
+   125→    width: 34px;
+   126→    height: 34px;
+   127→    border-radius: 10px;
+   128→    background: rgba(255, 255, 255, 0.18);
+   129→    display: flex;
+   130→    align-items: center;
+   131→    justify-content: center;
+   132→    color: #ffffff;
+   133→    font-family: 'Fraunces', Georgia, serif;
+   134→    font-weight: 700;
+   135→    font-size: 17px;
+   136→    transition: transform 0.2s ease, background 0.2s ease;
+   137→  }
+   138→
+   139→  .sidebar-brand:hover .sidebar-logo {
+   140→    background: rgba(255, 255, 255, 0.28);
+   141→    transform: scale(1.08);
+   142→  }
+   143→
+   144→  .dots {
+   145→    display: grid;
+   146→    grid-template-columns: repeat(2, 4.5px);
+   147→    gap: 4px;
+   148→  }
+   149→  .dots span {
+   150→    width: 4.5px;
+   151→    height: 4.5px;
+   152→    border-radius: 50%;
+   153→    background: rgba(255, 255, 255, 0.55);
+   154→  }
+   155→
+   156→  @media (min-width: 768px) {
+   157→    .dots {
+   158→      gap: 5px;
+   159→      grid-template-columns: repeat(2, 5px);
+   160→    }
+   161→    .dots span {
+   162→      width: 5px;
+   163→      height: 5px;
+   164→    }
+   165→  }
+   166→
+   167→  /* Vertical Navigation Items */
+   168→  .side-labels {
+   169→    flex: 1;
+   170→    width: 100%;
+   171→    display: flex;
+   172→    flex-direction: column;
+   173→    align-items: stretch;
+   174→    justify-content: center;
+   175→    gap: 28px;
+   176→  }
+   177→
+   178→  @media (min-width: 768px) {
+   179→    .side-labels {
+   180→      gap: 38px;
+   181→    }
+   182→  }
+   183→
+   184→  .side-item {
+   185→    position: relative;
+   186→    display: flex;
+   187→    align-items: center;
+   188→    justify-content: center;
+   189→    min-height: 48px;
+   190→    padding: 4px 0;
+   191→    cursor: pointer;
+   192→    outline: none;
+   193→    text-decoration: none;
+   194→    -webkit-tap-highlight-color: transparent;
+   195→  }
+   196→
+   197→  .side-item span {
+   198→    position: relative;
+   199→    z-index: 2;
+   200→    writing-mode: vertical-rl;
+   201→    transform: rotate(180deg);
+   202→    color: rgba(255, 255, 255, 0.65);
+   203→    font-size: 11px;
+   204→    font-weight: 600;
+   205→    letter-spacing: 1.5px;
+   206→    text-transform: uppercase;
+   207→    left: 0;
+   208→    transition: left 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), color 0.25s ease, font-weight 0.2s ease, letter-spacing 0.2s ease;
+   209→    white-space: nowrap;
+   210→  }
+   211→
+   212→  @media (min-width: 768px) {
+   213→    .side-item span {
+   214→      font-size: 12.5px;
+   215→      letter-spacing: 1.8px;
+   216→    }
+   217→  }
+   218→
+   219→  .side-item.active span {
+   220→    color: #ffffff;
+   221→    font-weight: 800;
+   222→    letter-spacing: 2px;
+   223→    left: -14px;
+   224→  }
+   225→
+   226→  @media (min-width: 768px) {
+   227→    .side-item.active span {
+   228→      left: -17px;
+   229→    }
+   230→  }
+   231→
+   232→  .side-item:hover:not(.active) span {
+   233→    color: #ffffff;
+   234→    opacity: 0.9;
+   235→  }
+   236→
+   237→  .side-item:focus-visible {
+   238→    border-radius: 4px;
+   239→    outline: 2px solid rgba(255, 255, 255, 0.6);
+   240→  }
+   241→
+   242→  /* Curved Notch SVG */
+   243→  .notch {
+   244→    position: absolute;
+   245→    top: 50%;
+   246→    right: -2px;
+   247→    transform: translateY(-50%);
+   248→    width: 38px;
+   249→    height: 104px;
+   250→    z-index: 1;
+   251→    pointer-events: none;
+   252→    overflow: visible;
+   253→    will-change: transform;
+   254→  }
+   255→
+   256→  @media (min-width: 768px) {
+   257→    .notch {
+   258→      width: 44px;
+   259→      height: 118px;
+   260→    }
+   261→  }
+   262→
+   263→  /* Bottom Actions */
+   264→  .sidebar-bottom {
+   265→    display: flex;
+   266→    flex-direction: column;
+   267→    align-items: center;
+   268→    gap: 10px;
+   269→    margin-top: auto;
+   270→  }
+   271→
+   272→  .side-icon-btn {
+   273→    width: 36px;
+   274→    height: 36px;
+   275→    border-radius: 50%;
+   276→    background: rgba(255, 255, 255, 0.14);
+   277→    display: flex;
+   278→    align-items: center;
+   279→    justify-content: center;
+   280→    cursor: pointer;
+   281→    border: none;
+   282→    outline: none;
+   283→    transition: transform 0.2s ease, background 0.2s ease;
+   284→    color: #ffffff;
+   285→    text-decoration: none;
+   286→    -webkit-tap-highlight-color: transparent;
+   287→    position: relative;
+   288→  }
+   289→
+   290→  .side-icon-btn:hover {
+   291→    background: rgba(255, 255, 255, 0.25);
+   292→    transform: scale(1.08);
+   293→  }
+   294→  .side-icon-btn:active {
+   295→    transform: scale(0.92);
+   296→  }
+   297→  .side-icon-btn:focus-visible {
+   298→    outline: 2px solid #ffffff;
+   299→  }
+   300→  .side-icon-btn svg {
+   301→    width: 16px;
+   302→    height: 16px;
+   303→    stroke: currentColor;
+   304→    stroke-width: 2;
+   305→    fill: none;
+   306→  }
+   307→
+   308→  @media (min-width: 768px) {
+   309→    .side-icon-btn {
+   310→      width: 40px;
+   311→      height: 40px;
+   312→    }
+   313→    .side-icon-btn svg {
+   314→      width: 17px;
+   315→      height: 17px;
+   316→    }
+   317→  }
+   318→
+   319→  /* Tooltip for sidebar buttons */
+   320→  .side-icon-btn::after {
+   321→    content: attr(data-tooltip);
+   322→    position: absolute;
+   323→    left: calc(100% + 12px);
+   324→    top: 50%;
+   325→    transform: translateY(-50%) translateX(-6px);
+   326→    background: #082820;
+   327→    color: #ffffff;
+   328→    font-size: 11px;
+   329→    font-weight: 600;
+   330→    padding: 5px 10px;
+   331→    border-radius: 6px;
+   332→    white-space: nowrap;
+   333→    opacity: 0;
+   334→    pointer-events: none;
+   335→    transition: opacity 0.2s ease, transform 0.2s ease;
+   336→    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+   337→    z-index: 50;
+   338→  }
+   339→  .side-icon-btn:hover::after {
+   340→    opacity: 1;
+   341→    transform: translateY(-50%) translateX(0);
+   342→  }
+   343→
+   344→  /* =========================================================
+   345→     CONTINUOUS SCROLL CONTENT CONTAINER
+   346→     ========================================================= */
+   347→  .content {
+   348→    flex: 1;
+   349→    height: 100%;
+   350→    padding: 0;
+   351→    display: flex;
+   352→    flex-direction: column;
+   353→    overflow-y: auto;
+   354→    overflow-x: hidden;
+   355→    scroll-behavior: smooth;
+   356→    min-width: 0;
+   357→    background: var(--card-white);
+   358→    position: relative;
+   359→    z-index: 1;
+   360→  }
+   361→
+   362→  .content::-webkit-scrollbar { width: 7px; }
+   363→  .content::-webkit-scrollbar-track { background: var(--cream-bg); }
+   364→  .content::-webkit-scrollbar-thumb { background: #cfc8ba; border-radius: 4px; }
+   365→  .content::-webkit-scrollbar-thumb:hover { background: #b8b09f; }
+   366→
+   367→  /* Top Header Toolbar (Scrolls naturally with page content) */
+   368→  .top-sticky-header {
+   369→    position: relative;
+   370→    z-index: 10;
+   371→    background: var(--card-white);
+   372→    padding: 20px 24px 16px;
+   373→    border-bottom: 1px solid var(--border-subtle);
+   374→    display: flex;
+   375→    justify-content: space-between;
+   376→    align-items: center;
+   377→    gap: 16px;
+   378→  }
+   379→
+   380→  @media (min-width: 768px) {
+   381→    .top-sticky-header {
+   382→      padding: 24px 36px 18px;
+   383→    }
+   384→  }
+   385→
+   386→  @media (min-width: 1024px) {
+   387→    .top-sticky-header {
+   388→      padding: 28px 56px 20px;
+   389→    }
+   390→  }
+   391→
+   392→  @media (min-width: 1440px) {
+   393→    .top-sticky-header {
+   394→      padding: 30px 76px 22px;
+   395→    }
+   396→  }
+   397→
+   398→  .title-group {
+   399→    display: flex;
+   400→    flex-direction: column;
+   401→    gap: 3px;
+   402→  }
+   403→
+   404→  .eyebrow-wrap {
+   405→    display: flex;
+   406→    align-items: center;
+   407→    gap: 10px;
+   408→    flex-wrap: wrap;
+   409→  }
+   410→
+   411→  .eyebrow {
+   412→    font-size: 11px;
+   413→    font-weight: 700;
+   414→    text-transform: uppercase;
+   415→    letter-spacing: 1.8px;
+   416→    color: var(--green-mid);
+   417→  }
+   418→
+   419→  .status-badge {
+   420→    font-size: 10.5px;
+   421→    font-weight: 700;
+   422→    letter-spacing: 0.5px;
+   423→    background: var(--green-badge);
+   424→    color: var(--green-dark);
+   425→    padding: 3px 10px;
+   426→    border-radius: 14px;
+   427→    display: inline-flex;
+   428→    align-items: center;
+   429→    gap: 6px;
+   430→  }
+   431→
+   432→  .status-pulse {
+   433→    width: 6px;
+   434→    height: 6px;
+   435→    border-radius: 50%;
+   436→    background: #2ea043;
+   437→    box-shadow: 0 0 0 0 rgba(46, 160, 67, 0.7);
+   438→    animation: pulse 2s infinite;
+   439→  }
+   440→  @keyframes pulse {
+   441→    0% { box-shadow: 0 0 0 0 rgba(46, 160, 67, 0.7); }
+   442→    70% { box-shadow: 0 0 0 6px rgba(46, 160, 67, 0); }
+   443→    100% { box-shadow: 0 0 0 0 rgba(46, 160, 67, 0); }
+   444→  }
+   445→
+   446→  .current-view-title {
+   447→    font-family: 'Fraunces', Georgia, serif;
+   448→    font-size: 20px;
+   449→    font-weight: 700;
+   450→    color: var(--text-dark);
+   451→    letter-spacing: -0.3px;
+   452→  }
+   453→
+   454→  @media (min-width: 768px) {
+   455→    .current-view-title {
+   456→      font-size: 24px;
+   457→    }
+   458→  }
+   459→
+   460→  .header-actions {
+   461→    display: flex;
+   462→    align-items: center;
+   463→    gap: 10px;
+   464→  }
+   465→
+   466→  .header-btn {
+   467→    display: inline-flex;
+   468→    align-items: center;
+   469→    gap: 6px;
+   470→    padding: 8px 16px;
+   471→    border-radius: 20px;
+   472→    background: #ffffff;
+   473→    border: 1px solid var(--border-card);
+   474→    cursor: pointer;
+   475→    color: var(--text-dark);
+   476→    font-family: inherit;
+   477→    font-size: 12.5px;
+   478→    font-weight: 700;
+   479→    transition: all 0.2s ease;
+   480→    box-shadow: var(--shadow-sm);
+   481→    text-decoration: none;
+   482→  }
+   483→
+   484→  .header-btn:hover {
+   485→    background: var(--green-dark);
+   486→    color: #ffffff;
+   487→    border-color: var(--green-dark);
+   488→    transform: translateY(-2px);
+   489→    box-shadow: var(--shadow-md);
+   490→  }
+   491→
+   492→  .header-btn.primary {
+   493→    background: var(--green-dark);
+   494→    color: #ffffff;
+   495→    border-color: var(--green-dark);
+   496→  }
+   497→  .header-btn.primary:hover {
+   498→    background: var(--green-mid);
+   499→    border-color: var(--green-mid);
+   500→  }
+   501→
+   502→  .header-btn svg {
+   503→    width: 14px;
+   504→    height: 14px;
+   505→    stroke: currentColor;
+   506→    stroke-width: 2;
+   507→    fill: none;
+   508→  }
+   509→
+   510→  /* Main Sections Scroll Wrapper */
+   511→  .sections-wrapper {
+   512→    display: flex;
+   513→    flex-direction: column;
+   514→    gap: 60px;
+   515→    padding: 30px 24px 80px;
+   516→  }
+   517→
+   518→  @media (min-width: 768px) {
+   519→    .sections-wrapper {
+   520→      padding: 36px 36px 90px;
+   521→      gap: 70px;
+   522→    }
+   523→  }
+   524→
+   525→  @media (min-width: 1024px) {
+   526→    .sections-wrapper {
+   527→      padding: 40px 56px 100px;
+   528→      gap: 80px;
+   529→    }
+   530→  }
+   531→
+   532→  @media (min-width: 1440px) {
+   533→    .sections-wrapper {
+   534→      padding: 44px 76px 110px;
+   535→      gap: 90px;
+   536→    }
+   537→  }
+   538→
+   539→  /* Section Container */
+   540→  .portfolio-section {
+   541→    display: flex;
+   542→    flex-direction: column;
+   543→    gap: 24px;
+   544→    scroll-margin-top: 20px;
+   545→  }
+   546→
+   547→  .portfolio-section:last-child {
+   548→    border-bottom: none;
+   549→    padding-bottom: 0;
+   550→  }
+   551→
+   552→  /* Section Header Block */
+   553→  .section-header-block {
+   554→    display: flex;
+   555→    flex-direction: column;
+   556→    gap: 4px;
+   557→    margin-bottom: 6px;
+   558→  }
+   559→
+   560→  .section-tag {
+   561→    font-size: 11px;
+   562→    font-weight: 800;
+   563→    text-transform: uppercase;
+   564→    letter-spacing: 2px;
+   565→    color: var(--green-mid);
+   566→  }
+   567→
+   568→  .section-heading {
+   569→    font-family: 'Fraunces', Georgia, serif;
+   570→    font-size: 26px;
+   571→    font-weight: 700;
+   572→    color: var(--text-dark);
+   573→    letter-spacing: -0.4px;
+   574→    line-height: 1.15;
+   575→  }
+   576→
+   577→  @media (min-width: 768px) {
+   578→    .section-heading {
+   579→      font-size: 34px;
+   580→    }
+   581→  }
+   582→
+   583→  /* 2-Column Responsive Layout for Sections */
+   584→  .section-grid {
+   585→    display: flex;
+   586→    flex-direction: column;
+   587→    gap: 24px;
+   588→  }
+   589→
+   590→  @media (min-width: 960px) {
+   591→    .section-grid {
+   592→      display: grid;
+   593→      grid-template-columns: 1.05fr 1.35fr;
+   594→      column-gap: 48px;
+   595→      align-items: start;
+   596→    }
+   597→  }
+   598→
+   599→  @media (min-width: 1200px) {
+   600→    .section-grid {
+   601→      grid-template-columns: 1fr 1.4fr;
+   602→      column-gap: 56px;
+   603→    }
+   604→  }
+   605→
+   606→  /* Section Left Visual Column */
+   607→  .section-visual-col {
+   608→    display: flex;
+   609→    flex-direction: column;
+   610→    align-items: center;
+   611→    justify-content: center;
+   612→    text-align: center;
+   613→    background: #ffffff;
+   614→    border: 1px solid var(--border-card);
+   615→    border-radius: 24px;
+   616→    padding: 24px 20px;
+   617→    box-shadow: var(--shadow-sm);
+   618→    position: relative;
+   619→    overflow: hidden;
+   620→  }
+   621→
+   622→  @media (min-width: 768px) {
+   623→    .section-visual-col {
+   624→      padding: 30px 24px;
+   625→    }
+   626→  }
+   627→
+   628→  .hero-circle {
+   629→    width: 130px;
+   630→    height: 130px;
+   631→    border-radius: 50%;
+   632→    margin: 0 auto;
+   633→    overflow: visible;
+   634→    position: relative;
+   635→    cursor: pointer;
+   636→    perspective: 800px;
+   637→    transform-style: preserve-3d;
+   638→    will-change: transform;
+   639→    animation: heroFloat 5.5s ease-in-out infinite;
+   640→  }
+   641→
+   642→  @keyframes heroFloat {
+   643→    0%, 100% {
+   644→      transform: translateY(0px) rotate(0deg);
+   645→    }
+   646→    50% {
+   647→      transform: translateY(-8px) rotate(1deg);
+   648→    }
+   649→  }
+   650→
+   651→  .hero-svg-interactive {
+   652→    width: 100%;
+   653→    height: 100%;
+   654→    overflow: visible;
+   655→    filter: drop-shadow(0 12px 24px rgba(13, 76, 60, 0.16));
+   656→    transition: filter 0.3s ease;
+   657→  }
+   658→
+   659→  .hero-circle:hover .hero-svg-interactive {
+   660→    filter: drop-shadow(0 18px 32px rgba(13, 76, 60, 0.24));
+   661→  }
+   662→
+   663→  .hero-svg-glow-ring {
+   664→    animation: heroGlowPulse 4s ease-in-out infinite alternate;
+   665→    transform-origin: center;
+   666→  }
+   667→
+   668→  @keyframes heroGlowPulse {
+   669→    0% { transform: scale(0.96); opacity: 0.14; }
+   670→    100% { transform: scale(1.04); opacity: 0.32; }
+   671→  }
+   672→
+   673→  .hero-badge-bracket {
+   674→    animation: badgeGlow 3s ease-in-out infinite alternate;
+   675→  }
+   676→
+   677→  @keyframes badgeGlow {
+   678→    0% { fill: #7ba05b; }
+   679→    100% { fill: #a5d680; }
+   680→  }
+   681→
+   682→  @media (min-width: 480px) {
+   683→    .hero-circle { width: 150px; height: 150px; }
+   684→  }
+   685→
+   686→  @media (min-width: 768px) {
+   687→    .hero-circle { width: 170px; height: 170px; }
+   688→  }
+   689→
+   690→  /* Badge chips */
+   691→  .badge-chips {
+   692→    display: flex;
+   693→    gap: 6px;
+   694→    flex-wrap: wrap;
+   695→    justify-content: center;
+   696→    margin-top: 14px;
+   697→  }
+   698→
+   699→  .badge {
+   700→    font-size: 11px;
+   701→    font-weight: 600;
+   702→    padding: 5px 11px;
+   703→    border-radius: 16px;
+   704→    background: var(--green-light);
+   705→    color: var(--green-dark);
+   706→    display: inline-flex;
+   707→    align-items: center;
+   708→    gap: 5px;
+   709→    border: 1px solid rgba(123, 160, 91, 0.2);
+   710→  }
+   711→
+   712→  /* Metrics Bar */
+   713→  .metrics-bar {
+   714→    display: grid;
+   715→    grid-template-columns: repeat(3, 1fr);
+   716→    gap: 8px;
+   717→    width: 100%;
+   718→    margin-top: 16px;
+   719→    padding: 10px 12px;
+   720→    background: var(--cream-bg);
+   721→    border-radius: 14px;
+   722→  }
+   723→
+   724→  .metric-item {
+   725→    display: flex;
+   726→    flex-direction: column;
+   727→    align-items: center;
+   728→    text-align: center;
+   729→  }
+   730→
+   731→  .metric-label {
+   732→    font-size: 9.5px;
+   733→    font-weight: 600;
+   734→    text-transform: uppercase;
+   735→    letter-spacing: 0.8px;
+   736→    color: var(--text-subtle);
+   737→  }
+   738→
+   739→  .metric-value {
+   740→    font-size: 13px;
+   741→    font-weight: 800;
+   742→    color: var(--text-dark);
+   743→  }
+   744→
+   745→  /* Social Links in Visual Card */
+   746→  .social-bar {
+   747→    display: flex;
+   748→    align-items: center;
+   749→    justify-content: center;
+   750→    gap: 10px;
+   751→    margin-top: 14px;
+   752→  }
+   753→
+   754→  /* =========================================================
+   755→     MOBILE FULL-WIDTH EDITORIAL HERO (REFERENCE DESIGN)
+   756→     ========================================================= */
+   757→  .mobile-hero-editorial {
+   758→    display: none;
+   759→  }
+   760→
+   761→  @media (max-width: 768px) {
+   762→    .mobile-hero-editorial {
+   763→      display: flex;
+   764→      flex-direction: column;
+   765→      width: calc(100% + 48px);
+   766→      margin-left: -24px;
+   767→      margin-right: -24px;
+   768→      margin-top: -30px;
+   769→      margin-bottom: 24px;
+   770→      position: relative;
+   771→      background: var(--cream-bg);
+   772→      overflow: hidden;
+   773→    }
+   774→
+   775→    .mobile-hero-frame {
+   776→      position: relative;
+   777→      width: 100%;
+   778→      aspect-ratio: 3 / 4;
+   779→      min-height: 440px;
+   780→      max-height: 560px;
+   781→      background: var(--cream-bg);
+   782→      overflow: hidden;
+   783→    }
+   784→
+   785→    .mobile-hero-portrait-img {
+   786→      width: 100%;
+   787→      height: 100%;
+   788→      object-fit: cover;
+   789→      object-position: center 12%;
+   790→      display: block;
+   791→      background: var(--cream-bg);
+   792→      mask-image: linear-gradient(to bottom, #000 0%, #000 48%, rgba(0,0,0,0.85) 65%, rgba(0,0,0,0) 96%);
+   793→      -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 48%, rgba(0,0,0,0.85) 65%, rgba(0,0,0,0) 96%);
+   794→    }
+   795→
+   796→    .mobile-hero-fade-layer {
+   797→      position: absolute;
+   798→      inset: 0;
+   799→      pointer-events: none;
+   800→      background: linear-gradient(
+   801→        to bottom,
+   802→        rgba(244, 241, 235, 0) 0%,
+   803→        rgba(244, 241, 235, 0) 38%,
+   804→        rgba(244, 241, 235, 0.45) 60%,
+   805→        rgba(244, 241, 235, 0.9) 82%,
+   806→        var(--cream-bg) 100%
+   807→      );
+   808→    }
+   809→
+   810→    .mobile-hero-top-overlay {
+   811→      position: absolute;
+   812→      top: 18px;
+   813→      left: 20px;
+   814→      right: 20px;
+   815→      display: flex;
+   816→      justify-content: space-between;
+   817→      align-items: flex-start;
+   818→      z-index: 5;
+   819→      pointer-events: auto;
+   820→    }
+   821→
+   822→    .mobile-hero-brand-name {
+   823→      font-family: 'Fraunces', Georgia, serif;
+   824→      font-size: 26px;
+   825→      font-weight: 800;
+   826→      line-height: 1;
+   827→      color: #0d4c3c;
+   828→      letter-spacing: -0.5px;
+   829→    }
+   830→
+   831→    .mobile-hero-brand-sub {
+   832→      font-size: 10px;
+   833→      font-weight: 800;
+   834→      text-transform: uppercase;
+   835→      letter-spacing: 2px;
+   836→      color: #1d5c4b;
+   837→      display: block;
+   838→      margin-top: 3px;
+   839→    }
+   840→
+   841→    .mobile-hero-badge {
+   842→      font-size: 10.5px;
+   843→      font-weight: 700;
+   844→      background: rgba(255, 255, 255, 0.9);
+   845→      backdrop-filter: blur(8px);
+   846→      color: #0d4c3c;
+   847→      padding: 5px 12px;
+   848→      border-radius: 20px;
+   849→      border: 1px solid rgba(13, 76, 60, 0.15);
+   850→      display: inline-flex;
+   851→      align-items: center;
+   852→      gap: 6px;
+   853→      box-shadow: 0 2px 8px rgba(13, 76, 60, 0.08);
+   854→    }
+   855→
+   856→    /* Floating geometric accents inspired by reference */
+   857→    .mobile-hero-geo-1 {
+   858→      position: absolute;
+   859→      top: 48%;
+   860→      left: 18px;
+   861→      width: 22px;
+   862→      height: 22px;
+   863→      background: #ffffff;
+   864→      box-shadow: 0 4px 12px rgba(13, 76, 60, 0.1);
+   865→      z-index: 4;
+   866→      pointer-events: none;
+   867→    }
+   868→    .mobile-hero-geo-1::after {
+   869→      content: '';
+   870→      position: absolute;
+   871→      top: 100%;
+   872→      left: -14px;
+   873→      width: 26px;
+   874→      height: 14px;
+   875→      background: rgba(255, 255, 255, 0.95);
+   876→    }
+   877→
+   878→    .mobile-hero-geo-2 {
+   879→      position: absolute;
+   880→      bottom: 24%;
+   881→      right: 20px;
+   882→      width: 20px;
+   883→      height: 20px;
+   884→      background: #ffffff;
+   885→      box-shadow: 0 4px 12px rgba(13, 76, 60, 0.1);
+   886→      z-index: 4;
+   887→      pointer-events: none;
+   888→    }
+   889→    .mobile-hero-geo-2::after {
+   890→      content: '';
+   891→      position: absolute;
+   892→      bottom: 0;
+   893→      left: 100%;
+   894→      width: 14px;
+   895→      height: 14px;
+   896→      background: rgba(255, 255, 255, 0.95);
+   897→    }
+   898→
+   899→    .mobile-hero-bottom-info {
+   900→      position: absolute;
+   901→      bottom: 16px;
+   902→      left: 20px;
+   903→      right: 20px;
+   904→      z-index: 6;
+   905→      display: flex;
+   906→      flex-direction: column;
+   907→      gap: 10px;
+   908→    }
+   909→
+   910→    .mobile-hero-name {
+   911→      font-family: 'Fraunces', Georgia, serif;
+   912→      font-size: 34px;
+   913→      font-weight: 800;
+   914→      color: #0d4c3c;
+   915→      line-height: 1.05;
+   916→      letter-spacing: -0.6px;
+   917→    }
+   918→
+   919→    .mobile-hero-role {
+   920→      font-size: 13px;
+   921→      font-weight: 700;
+   922→      color: #1d5c4b;
+   923→      letter-spacing: 0.2px;
+   924→      margin-top: 1px;
+   925→    }
+   926→
+   927→    .mobile-hero-bio {
+   928→      font-size: 13px;
+   929→      line-height: 1.45;
+   930→      color: #2d5a4a;
+   931→      margin-top: 2px;
+   932→      max-width: 95%;
+   933→    }
+   934→
+   935→    /* Reference design bracket highlight */
+   936→    .mobile-hero-bracket-row {
+   937→      display: flex;
+   938→      align-items: center;
+   939→      justify-content: space-between;
+   940→      gap: 12px;
+   941→      margin-top: 4px;
+   942→      padding-top: 6px;
+   943→    }
+   944→
+   945→    .mobile-bracket-stat {
+   946→      display: inline-flex;
+   947→      align-items: center;
+   948→      gap: 10px;
+   949→    }
+   950→
+   951→    .mobile-bracket-glyph {
+   952→      display: inline-flex;
+   953→      align-items: center;
+   954→      font-family: 'Fraunces', Georgia, serif;
+   955→      font-size: 28px;
+   956→      font-weight: 800;
+   957→      color: #0d4c3c;
+   958→      line-height: 1;
+   959→      letter-spacing: -0.8px;
+   960→      background: rgba(255, 255, 255, 0.85);
+   961→      backdrop-filter: blur(6px);
+   962→      padding: 4px 10px;
+   963→      border-radius: 8px;
+   964→      border: 1.5px solid rgba(13, 76, 60, 0.2);
+   965→    }
+   966→
+   967→    .mobile-bracket-text {
+   968→      display: flex;
+   969→      flex-direction: column;
+   970→      font-size: 10px;
+   971→      font-weight: 800;
+   972→      letter-spacing: 1.2px;
+   973→      text-transform: uppercase;
+   974→      color: #0d4c3c;
+   975→      line-height: 1.25;
+   976→    }
+   977→
+   978→    .mobile-hero-btn-group {
+   979→      display: flex;
+   980→      align-items: center;
+   981→      gap: 8px;
+   982→    }
+   983→
+   984→    .mobile-hero-btn {
+   985→      font-size: 12px;
+   986→      font-weight: 700;
+   987→      padding: 7px 13px;
+   988→      border-radius: 20px;
+   989→      background: #ffffff;
+   990→      color: #0d4c3c;
+   991→      border: 1px solid rgba(13, 76, 60, 0.18);
+   992→      box-shadow: 0 2px 6px rgba(13, 76, 60, 0.08);
+   993→      cursor: pointer;
+   994→      text-decoration: none;
+   995→      display: inline-flex;
+   996→      align-items: center;
+   997→      gap: 4px;
+   998→      transition: transform 0.2s ease, background 0.2s ease;
+   999→    }
+  1000→
+  1001→    .mobile-hero-btn.primary {
+  1002→      background: #0d4c3c;
+  1003→      color: #ffffff;
+  1004→      border-color: #0d4c3c;
+  1005→    }
+  1006→
+  1007→    .section-visual-col {
+  1008→      display: none;
+  1009→    }
+  1010→  }
+  1011→
+  1012→  @media (min-width: 769px) {
+  1013→    .section-visual-col {
+  1014→      display: flex;
+  1015→    }
+  1016→  }
+  1017→
+  1018→  .social-link {
+  1019→    width: 32px;
+  1020→    height: 32px;
+  1021→    border-radius: 50%;
+  1022→    background: #fbf9f5;
+  1023→    border: 1px solid var(--border-card);
+  1024→    display: flex;
+  1025→    align-items: center;
+  1026→    justify-content: center;
+  1027→    color: var(--text-dark);
+  1028→    text-decoration: none;
+  1029→    transition: all 0.2s ease;
+  1030→    cursor: pointer;
+  1031→  }
+  1032→
+  1033→  .social-link:hover {
+  1034→    background: var(--green-dark);
+  1035→    color: #ffffff;
+  1036→    border-color: var(--green-dark);
+  1037→    transform: translateY(-2px);
+  1038→  }
+  1039→
+  1040→  .social-link svg {
+  1041→    width: 14px;
+  1042→    height: 14px;
+  1043→    fill: currentColor;
+  1044→  }
+  1045→
+  1046→  /* Right Content Column */
+  1047→  .section-content-col {
+  1048→    display: flex;
+  1049→    flex-direction: column;
+  1050→    gap: 16px;
+  1051→  }
+  1052→
+  1053→  /* Filter Tabs for Projects */
+  1054→  .project-filters {
+  1055→    display: flex;
+  1056→    gap: 8px;
+  1057→    flex-wrap: wrap;
+  1058→    margin-bottom: 4px;
+  1059→  }
+  1060→
+  1061→  .filter-pill {
+  1062→    padding: 5px 14px;
+  1063→    border-radius: 16px;
+  1064→    font-size: 11.5px;
+  1065→    font-weight: 700;
+  1066→    border: 1px solid var(--border-card);
+  1067→    background: #ffffff;
+  1068→    color: var(--text-muted);
+  1069→    cursor: pointer;
+  1070→    transition: all 0.2s ease;
+  1071→  }
+  1072→
+  1073→  .filter-pill:hover {
+  1074→    border-color: var(--green-dark);
+  1075→    color: var(--green-dark);
+  1076→  }
+  1077→
+  1078→  .filter-pill.active {
+  1079→    background: var(--green-dark);
+  1080→    color: #ffffff;
+  1081→    border-color: var(--green-dark);
+  1082→    box-shadow: 0 2px 8px rgba(13, 76, 60, 0.2);
+  1083→  }
+  1084→
+  1085→  /* Cards & Mouse Glow Effect */
+  1086→  .card-1 {
+  1087→    background: linear-gradient(180deg, #ffffff 0%, #fbf9f5 100%);
+  1088→    border: 1px solid var(--border-card);
+  1089→    border-radius: 22px;
+  1090→    padding: 22px 24px;
+  1091→    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 4px 20px -2px rgba(13, 76, 60, 0.06), 0 1px 3px rgba(13, 76, 60, 0.04);
+  1092→    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease;
+  1093→    position: relative;
+  1094→    overflow: hidden;
+  1095→  }
+  1096→
+  1097→  .card-1 > *,
+  1098→  .card-2 > * {
+  1099→    position: relative;
+  1100→    z-index: 2;
+  1101→  }
+  1102→
+  1103→  /* Radial Mouse Glow Overlays */
+  1104→  .card-1::after,
+  1105→  .card-2::after {
+  1106→    content: "";
+  1107→    position: absolute;
+  1108→    inset: 0;
+  1109→    border-radius: inherit;
+  1110→    background: radial-gradient(
+  1111→      280px circle at var(--mouse-x, -999px) var(--mouse-y, -999px),
+  1112→      rgba(123, 160, 91, 0.22),
+  1113→      rgba(13, 76, 60, 0.04) 40%,
+  1114→      transparent 80%
+  1115→    );
+  1116→    opacity: 0;
+  1117→    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  1118→    pointer-events: none;
+  1119→    z-index: 1;
+  1120→  }
+  1121→
+  1122→  .card-1:hover::after,
+  1123→  .card-2:hover::after {
+  1124→    opacity: 1;
+  1125→  }
+  1126→
+  1127→  .card-1::before {
+  1128→    content: "";
+  1129→    position: absolute;
+  1130→    top: 0;
+  1131→    left: 0;
+  1132→    width: 4px;
+  1133→    height: 100%;
+  1134→    background: linear-gradient(180deg, var(--green-mid) 0%, var(--green-accent) 100%);
+  1135→    border-top-left-radius: 22px;
+  1136→    border-bottom-left-radius: 22px;
+  1137→    z-index: 3;
+  1138→  }
+  1139→
+  1140→  .card-1:hover {
+  1141→    transform: translateY(-4px);
+  1142→    border-color: rgba(13, 76, 60, 0.22);
+  1143→    box-shadow: inset 0 1px 0 #ffffff, 0 18px 40px -4px rgba(13, 76, 60, 0.12), 0 6px 16px rgba(13, 76, 60, 0.05);
+  1144→  }
+  1145→
+  1146→  @media (min-width: 768px) {
+  1147→    .card-1 {
+  1148→      padding: 26px 30px;
+  1149→    }
+  1150→  }
+  1151→
+  1152→  .card-header-row {
+  1153→    display: flex;
+  1154→    justify-content: space-between;
+  1155→    align-items: flex-start;
+  1156→    gap: 12px;
+  1157→    margin-bottom: 8px;
+  1158→  }
+  1159→
+  1160→  .card-subtitle {
+  1161→    font-family: 'Fraunces', Georgia, serif;
+  1162→    font-style: italic;
+  1163→    font-size: 13px;
+  1164→    color: var(--green-mid);
+  1165→    margin-bottom: 2px;
+  1166→    font-weight: 600;
+  1167→  }
+  1168→
+  1169→  .card-1 h3 {
+  1170→    font-family: 'Plus Jakarta Sans', sans-serif;
+  1171→    font-size: 19px;
+  1172→    font-weight: 800;
+  1173→    color: var(--text-dark);
+  1174→    letter-spacing: -0.4px;
+  1175→  }
+  1176→
+  1177→  @media (min-width: 768px) {
+  1178→    .card-1 h3 {
+  1179→      font-size: 22px;
+  1180→    }
+  1181→  }
+  1182→
+  1183→  .tag-pill {
+  1184→    font-size: 10.5px;
+  1185→    font-weight: 700;
+  1186→    padding: 3.5px 11px;
+  1187→    border-radius: 12px;
+  1188→    background: var(--green-light);
+  1189→    color: var(--green-dark);
+  1190→    white-space: nowrap;
+  1191→    display: inline-flex;
+  1192→    align-items: center;
+  1193→    gap: 5px;
+  1194→    border: 1px solid rgba(123, 160, 91, 0.25);
+  1195→    box-shadow: 0 1px 3px rgba(13, 76, 60, 0.04);
+  1196→  }
+  1197→
+  1198→  .card-1 p {
+  1199→    font-size: 13px;
+  1200→    line-height: 1.65;
+  1201→    color: var(--text-light);
+  1202→    margin-bottom: 16px;
+  1203→  }
+  1204→
+  1205→  @media (min-width: 768px) {
+  1206→    .card-1 p {
+  1207→      font-size: 13.5px;
+  1208→    }
+  1209→  }
+  1210→
+  1211→  .tech-tags {
+  1212→    display: flex;
+  1213→    flex-wrap: wrap;
+  1214→    gap: 6px;
+  1215→    margin-bottom: 18px;
+  1216→  }
+  1217→
+  1218→  .tech-chip {
+  1219→    font-size: 11px;
+  1220→    font-weight: 700;
+  1221→    padding: 4px 10px;
+  1222→    border-radius: 12px;
+  1223→    background: #f4f1eb;
+  1224→    color: var(--text-muted);
+  1225→    border: 1px solid rgba(13, 76, 60, 0.1);
+  1226→    transition: all 0.18s ease;
+  1227→  }
+  1228→
+  1229→  .tech-chip:hover {
+  1230→    background: var(--green-light);
+  1231→    color: var(--green-dark);
+  1232→    border-color: rgba(123, 160, 91, 0.35);
+  1233→    transform: translateY(-1px);
+  1234→  }
+  1235→
+  1236→  .action-row {
+  1237→    display: flex;
+  1238→    align-items: center;
+  1239→    justify-content: space-between;
+  1240→    padding-top: 16px;
+  1241→    border-top: 1px solid var(--border-subtle);
+  1242→    gap: 12px;
+  1243→    flex-wrap: wrap;
+  1244→  }
+  1245→
+  1246→  .card-btn {
+  1247→    display: inline-flex;
+  1248→    align-items: center;
+  1249→    gap: 8px;
+  1250→    padding: 9.5px 20px;
+  1251→    border-radius: 24px;
+  1252→    background: linear-gradient(180deg, var(--green-mid) 0%, var(--green-dark) 100%);
+  1253→    color: #ffffff;
+  1254→    border: 1px solid rgba(13, 76, 60, 0.2);
+  1255→    cursor: pointer;
+  1256→    font-family: inherit;
+  1257→    font-size: 12.5px;
+  1258→    font-weight: 700;
+  1259→    box-shadow: 0 4px 14px rgba(13, 76, 60, 0.22);
+  1260→    outline: none;
+  1261→    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  1262→    text-decoration: none;
+  1263→  }
+  1264→
+  1265→  .card-btn:hover {
+  1266→    background: linear-gradient(180deg, #246a57 0%, var(--green-mid) 100%);
+  1267→    transform: translateY(-2px);
+  1268→    box-shadow: 0 8px 22px rgba(13, 76, 60, 0.3);
+  1269→  }
+  1270→
+  1271→  .card-btn:active {
+  1272→    transform: translateY(0) scale(0.98);
+  1273→  }
+  1274→
+  1275→  .card-btn.outline {
+  1276→    background: #ffffff;
+  1277→    color: var(--text-dark);
+  1278→    border: 1px solid var(--border-card);
+  1279→    box-shadow: 0 1px 4px rgba(13, 76, 60, 0.05);
+  1280→  }
+  1281→  .card-btn.outline:hover {
+  1282→    background: var(--cream-bg);
+  1283→    border-color: rgba(13, 76, 60, 0.2);
+  1284→    transform: translateY(-2px);
+  1285→    box-shadow: 0 4px 12px rgba(13, 76, 60, 0.08);
+  1286→  }
+  1287→
+  1288→  .card-btn svg {
+  1289→    width: 14px;
+  1290→    height: 14px;
+  1291→    stroke: currentColor;
+  1292→    stroke-width: 2.2;
+  1293→    fill: none;
+  1294→  }
+  1295→
+  1296→  /* Secondary Bento Cards Grid */
+  1297→  .cards-subgrid {
+  1298→    display: grid;
+  1299→    grid-template-columns: 1fr;
+  1300→    gap: 12px;
+  1301→  }
+  1302→
+  1303→  @media (min-width: 640px) {
+  1304→    .cards-subgrid {
+  1305→      grid-template-columns: 1fr 1fr;
+  1306→    }
+  1307→  }
+  1308→
+  1309→  .card-2 {
+  1310→    display: flex;
+  1311→    gap: 14px;
+  1312→    align-items: center;
+  1313→    background: linear-gradient(180deg, #ffffff 0%, #fbf9f5 100%);
+  1314→    border: 1px solid var(--border-card);
+  1315→    border-radius: 20px;
+  1316→    padding: 15px 18px;
+  1317→    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 2px 8px rgba(13, 76, 60, 0.04);
+  1318→    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+  1319→    cursor: pointer;
+  1320→    text-decoration: none;
+  1321→    color: inherit;
+  1322→    position: relative;
+  1323→  }
+  1324→
+  1325→  .card-2:hover {
+  1326→    transform: translateY(-3px);
+  1327→    box-shadow: inset 0 1px 0 #ffffff, 0 12px 28px rgba(13, 76, 60, 0.09);
+  1328→    border-color: rgba(13, 76, 60, 0.25);
+  1329→  }
+  1330→
+  1331→  .thumb {
+  1332→    width: 58px;
+  1333→    height: 58px;
+  1334→    border-radius: 14px;
+  1335→    background: var(--cream-bg);
+  1336→    flex-shrink: 0;
+  1337→    overflow: hidden;
+  1338→    position: relative;
+  1339→    border: 1px solid var(--border-subtle);
+  1340→    display: flex;
+  1341→    align-items: center;
+  1342→    justify-content: center;
+  1343→    transition: transform 0.25s ease;
+  1344→  }
+  1345→
+  1346→  .card-2:hover .thumb {
+  1347→    transform: scale(1.05);
+  1348→  }
+  1349→
+  1350→  .card-2-info {
+  1351→    flex: 1;
+  1352→    min-width: 0;
+  1353→  }
+  1354→
+  1355→  .card-2-tag {
+  1356→    font-size: 10px;
+  1357→    font-weight: 800;
+  1358→    text-transform: uppercase;
+  1359→    letter-spacing: 1.2px;
+  1360→    color: var(--green-accent);
+  1361→    margin-bottom: 2px;
+  1362→    display: block;
+  1363→  }
+  1364→
+  1365→  .card-2 h4 {
+  1366→    font-size: 14.5px;
+  1367→    font-weight: 800;
+  1368→    color: var(--text-dark);
+  1369→    margin-bottom: 3px;
+  1370→    letter-spacing: -0.2px;
+  1371→  }
+  1372→
+  1373→  .card-2 p {
+  1374→    font-size: 12px;
+  1375→    line-height: 1.45;
+  1376→    color: var(--text-light);
+  1377→  }
+  1378→
+  1379→  .card-arrow {
+  1380→    width: 20px;
+  1381→    height: 20px;
+  1382→    border-radius: 50%;
+  1383→    background: var(--cream-bg);
+  1384→    display: flex;
+  1385→    align-items: center;
+  1386→    justify-content: center;
+  1387→    color: var(--text-muted);
+  1388→    flex-shrink: 0;
+  1389→    transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+  1390→  }
+  1391→
+  1392→  .card-2:hover .card-arrow {
+  1393→    transform: translateX(3px);
+  1394→    background: var(--green-dark);
+  1395→    color: #ffffff;
+  1396→  }
+  1397→
+  1398→  /* Skills Grid & Cards */
+  1399→  .skills-grid {
+  1400→    display: grid;
+  1401→    grid-template-columns: repeat(2, 1fr);
+  1402→    gap: 10px;
+  1403→  }
+  1404→
+  1405→  .skill-item {
+  1406→    background: #ffffff;
+  1407→    border: 1px solid var(--border-card);
+  1408→    border-radius: 16px;
+  1409→    padding: 13px 15px;
+  1410→    display: flex;
+  1411→    flex-direction: column;
+  1412→    gap: 7px;
+  1413→    box-shadow: 0 2px 6px rgba(13, 76, 60, 0.03);
+  1414→    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  1415→  }
+  1416→
+  1417→  .skill-item:hover {
+  1418→    border-color: var(--green-mid);
+  1419→    transform: translateY(-2px);
+  1420→    box-shadow: 0 6px 16px rgba(13, 76, 60, 0.06);
+  1421→  }
+  1422→
+  1423→  .skill-header {
+  1424→    display: flex;
+  1425→    justify-content: space-between;
+  1426→    align-items: center;
+  1427→  }
+  1428→
+  1429→  .skill-name {
+  1430→    font-size: 12.5px;
+  1431→    font-weight: 800;
+  1432→    color: var(--text-dark);
+  1433→  }
+  1434→
+  1435→  .skill-level {
+  1436→    font-size: 10.5px;
+  1437→    font-weight: 800;
+  1438→    color: var(--green-dark);
+  1439→    background: var(--green-light);
+  1440→    padding: 2px 7px;
+  1441→    border-radius: 8px;
+  1442→  }
+  1443→
+  1444→  .skill-bar {
+  1445→    width: 100%;
+  1446→    height: 6.5px;
+  1447→    border-radius: 4px;
+  1448→    background: #e8e3d8;
+  1449→    overflow: hidden;
+  1450→  }
+  1451→
+  1452→  .skill-fill {
+  1453→    height: 100%;
+  1454→    border-radius: 4px;
+  1455→    background: linear-gradient(90deg, var(--green-mid), var(--green-accent));
+  1456→    box-shadow: 0 0 6px rgba(123, 160, 91, 0.4);
+  1457→  }
+  1458→
+  1459→  /* Contact Form */
+  1460→  .contact-form {
+  1461→    display: flex;
+  1462→    flex-direction: column;
+  1463→    gap: 12px;
+  1464→  }
+  1465→
+  1466→  .form-row {
+  1467→    display: grid;
+  1468→    grid-template-columns: 1fr 1fr;
+  1469→    gap: 12px;
+  1470→  }
+  1471→
+  1472→  @media (max-width: 600px) {
+  1473→    .form-row {
+  1474→      grid-template-columns: 1fr;
+  1475→    }
+  1476→  }
+  1477→
+  1478→  .form-group {
+  1479→    display: flex;
+  1480→    flex-direction: column;
+  1481→    gap: 4px;
+  1482→  }
+  1483→
+  1484→  .form-group label {
+  1485→    font-size: 11px;
+  1486→    font-weight: 700;
+  1487→    text-transform: uppercase;
+  1488→    letter-spacing: 0.8px;
+  1489→    color: var(--text-muted);
+  1490→  }
+  1491→
+  1492→  .form-control {
+  1493→    width: 100%;
+  1494→    padding: 10px 14px;
+  1495→    border-radius: 12px;
+  1496→    border: 1px solid var(--border-card);
+  1497→    background: #fbf9f5;
+  1498→    font-family: inherit;
+  1499→    font-size: 13px;
+  1500→    color: var(--text-dark);
+  1501→    outline: none;
+  1502→    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  1503→  }
+  1504→
+  1505→  .form-control:focus {
+  1506→    border-color: var(--green-dark);
+  1507→    background: #ffffff;
+  1508→    box-shadow: 0 0 0 3px rgba(13, 76, 60, 0.12);
+  1509→  }
+  1510→
+  1511→  textarea.form-control {
+  1512→    resize: vertical;
+  1513→    min-height: 86px;
+  1514→  }
+  1515→
+  1516→  /* Project Type Selection Chips */
+  1517→  .project-type-grid {
+  1518→    display: grid;
+  1519→    grid-template-columns: repeat(2, 1fr);
+  1520→    gap: 6px;
+  1521→  }
+  1522→
+  1523→  @media (min-width: 540px) {
+  1524→    .project-type-grid {
+  1525→      grid-template-columns: repeat(4, 1fr);
+  1526→    }
+  1527→  }
+  1528→
+  1529→  .type-chip {
+  1530→    padding: 7px 10px;
+  1531→    border-radius: 10px;
+  1532→    font-size: 11px;
+  1533→    font-weight: 700;
+  1534→    text-align: center;
+  1535→    border: 1px solid var(--border-card);
+  1536→    background: #fbf9f5;
+  1537→    color: var(--text-muted);
+  1538→    cursor: pointer;
+  1539→    transition: all 0.18s ease;
+  1540→    user-select: none;
+  1541→  }
+  1542→
+  1543→  .type-chip:hover {
+  1544→    border-color: var(--green-mid);
+  1545→  }
+  1546→
+  1547→  .type-chip.selected {
+  1548→    background: var(--green-dark);
+  1549→    color: #ffffff;
+  1550→    border-color: var(--green-dark);
+  1551→  }
+  1552→
+  1553→  /* Next Section Jump Link */
+  1554→  .next-section-link {
+  1555→    display: inline-flex;
+  1556→    align-items: center;
+  1557→    gap: 6px;
+  1558→    font-size: 12px;
+  1559→    font-weight: 700;
+  1560→    color: var(--green-mid);
+  1561→    cursor: pointer;
+  1562→    background: none;
+  1563→    border: none;
+  1564→    outline: none;
+  1565→    margin-top: 8px;
+  1566→    transition: color 0.2s ease, transform 0.2s ease;
+  1567→  }
+  1568→  .next-section-link:hover {
+  1569→    color: var(--green-dark);
+  1570→    transform: translateY(2px);
+  1571→  }
+  1572→
+  1573→  /* Staggered Entrance Animation System */
+  1574→  .reveal-item {
+  1575→    opacity: 0;
+  1576→    transform: translateY(28px);
+  1577→    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+  1578→                transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+  1579→                box-shadow 0.25s ease,
+  1580→                background-color 0.2s ease,
+  1581→                border-color 0.2s ease;
+  1582→    will-change: opacity, transform;
+  1583→  }
+  1584→
+  1585→  .reveal-item.in-view {
+  1586→    opacity: 1;
+  1587→    transform: translateY(0);
+  1588→  }
+  1589→
+  1590→  /* Seamless hover transitions for revealed cards */
+  1591→  .reveal-item.card-1.in-view:hover {
+  1592→    transform: translateY(-3px);
+  1593→    box-shadow: var(--shadow-md);
+  1594→  }
+  1595→
+  1596→  .reveal-item.card-2.in-view:hover {
+  1597→    transform: translateY(-3px);
+  1598→    box-shadow: var(--shadow-md);
+  1599→  }
+  1600→
+  1601→  .reveal-item.section-visual-col.in-view:hover {
+  1602→    transform: translateY(-2px);
+  1603→  }
+  1604→
+  1605→  /* Stagger Delays for Sequential Fluid Reveal */
+  1606→  .stagger-1 { transition-delay: 0.05s; }
+  1607→  .stagger-2 { transition-delay: 0.12s; }
+  1608→  .stagger-3 { transition-delay: 0.19s; }
+  1609→  .stagger-4 { transition-delay: 0.26s; }
+  1610→  .stagger-5 { transition-delay: 0.33s; }
+  1611→  .stagger-6 { transition-delay: 0.40s; }
+  1612→
+  1613→  /* Animated Skill Fill on Entrance */
+  1614→  .skill-bar .skill-fill {
+  1615→    width: 0% !important;
+  1616→    transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.25s;
+  1617→  }
+  1618→
+  1619→  .in-view .skill-bar .skill-fill,
+  1620→  .reveal-item.in-view .skill-bar .skill-fill {
+  1621→    width: var(--skill-percent) !important;
+  1622→  }
+  1623→
+  1624→  @media (prefers-reduced-motion: reduce) {
+  1625→    .reveal-item {
+  1626→      opacity: 1 !important;
+  1627→      transform: none !important;
+  1628→      transition: none !important;
+  1629→    }
+  1630→    .skill-bar .skill-fill {
+  1631→      width: var(--skill-percent) !important;
+  1632→      transition: none !important;
+  1633→    }
+  1634→  }
+  1635→
+  1636→  /* Footer */
+  1637→  .site-footer {
+  1638→    border-top: 1px solid var(--border-subtle);
+  1639→    padding: 24px 0 10px;
+  1640→    display: flex;
+  1641→    justify-content: space-between;
+  1642→    align-items: center;
+  1643→    flex-wrap: wrap;
+  1644→    gap: 14px;
+  1645→    margin-top: 20px;
+  1646→  }
+  1647→
+  1648→  .footer-text {
+  1649→    font-size: 12px;
+  1650→    color: var(--text-light);
+  1651→  }
+  1652→
+  1653→  .footer-actions {
+  1654→    display: flex;
+  1655→    align-items: center;
+  1656→    gap: 12px;
+  1657→  }
+  1658→
+  1659→  .back-to-top {
+  1660→    display: inline-flex;
+  1661→    align-items: center;
+  1662→    gap: 6px;
+  1663→    font-size: 11.5px;
+  1664→    font-weight: 700;
+  1665→    color: var(--green-mid);
+  1666→    background: none;
+  1667→    border: none;
+  1668→    cursor: pointer;
+  1669→    transition: transform 0.2s ease, color 0.2s ease;
+  1670→  }
+  1671→  .back-to-top:hover {
+  1672→    color: var(--green-dark);
+  1673→    transform: translateY(-2px);
+  1674→  }
+  1675→
+  1676→  /* Toast Notification */
+  1677→  .toast {
+  1678→    position: fixed;
+  1679→    left: 50%;
+  1680→    bottom: 28px;
+  1681→    transform: translate(-50%, 14px);
+  1682→    padding: 11px 22px;
+  1683→    border-radius: 30px;
+  1684→    color: #ffffff;
+  1685→    background: var(--green-dark);
+  1686→    font-size: 13px;
+  1687→    font-weight: 600;
+  1688→    letter-spacing: 0.2px;
+  1689→    opacity: 0;
+  1690→    pointer-events: none;
+  1691→    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  1692→    z-index: 100;
+  1693→    box-shadow: 0 10px 30px rgba(13, 76, 60, 0.3);
+  1694→    display: flex;
+  1695→    align-items: center;
+  1696→    gap: 8px;
+  1697→  }
+  1698→
+  1699→  .toast.visible {
+  1700→    opacity: 1;
+  1701→    transform: translate(-50%, 0);
+  1702→  }
+  1703→
+  1704→  /* Modal Dialog Backdrop & Container */
+  1705→  .modal-backdrop {
+  1706→    position: fixed;
+  1707→    top: 0;
+  1708→    left: 0;
+  1709→    width: 100vw;
+  1710→    height: 100vh;
+  1711→    background: rgba(13, 76, 60, 0.45);
+  1712→    backdrop-filter: blur(6px);
+  1713→    -webkit-backdrop-filter: blur(6px);
+  1714→    z-index: 200;
+  1715→    display: flex;
+  1716→    align-items: center;
+  1717→    justify-content: center;
+  1718→    padding: 20px;
+  1719→    opacity: 0;
+  1720→    pointer-events: none;
+  1721→    transition: opacity 0.25s ease;
+  1722→  }
+  1723→
+  1724→  .modal-backdrop.open {
+  1725→    opacity: 1;
+  1726→    pointer-events: auto;
+  1727→  }
+  1728→
+  1729→  .modal-content {
+  1730→    background: #ffffff;
+  1731→    border-radius: 24px;
+  1732→    width: 100%;
+  1733→    max-width: 580px;
+  1734→    max-height: 85vh;
+  1735→    overflow-y: auto;
+  1736→    padding: 28px 28px;
+  1737→    box-shadow: 0 20px 60px rgba(13, 76, 60, 0.3);
+  1738→    position: relative;
+  1739→    transform: scale(0.95) translateY(10px);
+  1740→    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  1741→  }
+  1742→
+  1743→  .modal-backdrop.open .modal-content {
+  1744→    transform: scale(1) translateY(0);
+  1745→  }
+  1746→
+  1747→  .modal-close-btn {
+  1748→    position: absolute;
+  1749→    top: 18px;
+  1750→    right: 18px;
+  1751→    width: 32px;
+  1752→    height: 32px;
+  1753→    border-radius: 50%;
+  1754→    background: var(--cream-bg);
+  1755→    border: none;
+  1756→    display: flex;
+  1757→    align-items: center;
+  1758→    justify-content: center;
+  1759→    cursor: pointer;
+  1760→    color: var(--text-dark);
+  1761→    transition: background 0.2s ease, transform 0.2s ease;
+  1762→  }
+  1763→  .modal-close-btn:hover {
+  1764→    background: #e0d9cb;
+  1765→    transform: scale(1.08);
+  1766→  }
+  1767→
+  1768→  /* Resume Timeline styles inside modal */
+  1769→  .resume-section-title {
+  1770→    font-family: 'Fraunces', Georgia, serif;
+  1771→    font-size: 18px;
+  1772→    color: var(--text-dark);
+  1773→    margin: 18px 0 10px;
+  1774→    border-bottom: 1px solid var(--border-subtle);
+  1775→    padding-bottom: 4px;
+  1776→  }
+  1777→
+  1778→  .resume-timeline-item {
+  1779→    margin-bottom: 14px;
+  1780→    padding-left: 12px;
+  1781→    border-left: 2px solid var(--green-accent);
+  1782→  }
+  1783→
+  1784→  .resume-item-role {
+  1785→    font-weight: 800;
+  1786→    font-size: 13.5px;
+  1787→    color: var(--text-dark);
+  1788→  }
+  1789→
+  1790→  .resume-item-company {
+  1791→    font-size: 12px;
+  1792→    color: var(--green-mid);
+  1793→    font-weight: 600;
+  1794→  }
+  1795→
+  1796→  .resume-item-desc {
+  1797→    font-size: 12.5px;
+  1798→    color: var(--text-light);
+  1799→    margin-top: 4px;
+  1800→    line-height: 1.5;
+  1801→  }
+  1802→
+  1803→  /* Interactive Live Playground in Modal */
+  1804→  .modal-playground-box {
+  1805→    background: #f8f6f0;
+  1806→    border: 1px solid rgba(13, 76, 60, 0.15);
+  1807→    border-radius: 18px;
+  1808→    padding: 16px 18px;
+  1809→    margin: 14px 0 18px;
+  1810→    box-shadow: inset 0 2px 4px rgba(13, 76, 60, 0.03);
+  1811→  }
+  1812→
+  1813→  .playground-header {
+  1814→    display: flex;
+  1815→    justify-content: space-between;
+  1816→    align-items: center;
+  1817→    margin-bottom: 12px;
+  1818→    padding-bottom: 8px;
+  1819→    border-bottom: 1px dashed rgba(13, 76, 60, 0.12);
+  1820→  }
+  1821→
+  1822→  .playground-title {
+  1823→    font-size: 12px;
+  1824→    font-weight: 800;
+  1825→    text-transform: uppercase;
+  1826→    letter-spacing: 1.2px;
+  1827→    color: var(--green-dark);
+  1828→    display: flex;
+  1829→    align-items: center;
+  1830→    gap: 6px;
+  1831→  }
+  1832→
+  1833→  .playground-badge {
+  1834→    font-size: 10px;
+  1835→    font-weight: 700;
+  1836→    background: #e8f0e5;
+  1837→    color: var(--green-dark);
+  1838→    padding: 2px 8px;
+  1839→    border-radius: 10px;
+  1840→  }
+  1841→
+  1842→  /* PulseAI Live Simulator */
+  1843→  .pulse-chart-container {
+  1844→    background: #0d4c3c;
+  1845→    border-radius: 12px;
+  1846→    padding: 12px 14px;
+  1847→    color: #ffffff;
+  1848→    margin-bottom: 12px;
+  1849→  }
+  1850→
+  1851→  .pulse-live-stats {
+  1852→    display: flex;
+  1853→    justify-content: space-between;
+  1854→    align-items: baseline;
+  1855→    margin-bottom: 8px;
+  1856→  }
+  1857→
+  1858→  .pulse-stat-val {
+  1859→    font-family: 'Fraunces', serif;
+  1860→    font-size: 20px;
+  1861→    color: #a8d59d;
+  1862→    font-weight: 700;
+  1863→  }
+  1864→
+  1865→  .pulse-stat-label {
+  1866→    font-size: 11px;
+  1867→    color: rgba(255, 255, 255, 0.7);
+  1868→  }
+  1869→
+  1870→  .pulse-svg-chart {
+  1871→    width: 100%;
+  1872→    height: 60px;
+  1873→  }
+  1874→
+  1875→  .pulse-control-row {
+  1876→    display: flex;
+  1877→    gap: 8px;
+  1878→    align-items: center;
+  1879→    flex-wrap: wrap;
+  1880→  }
+  1881→
+  1882→  .pulse-chip-btn {
+  1883→    font-size: 11px;
+  1884→    font-weight: 700;
+  1885→    padding: 4px 10px;
+  1886→    border-radius: 14px;
+  1887→    background: #ffffff;
+  1888→    border: 1px solid rgba(13, 76, 60, 0.15);
+  1889→    color: var(--text-dark);
+  1890→    cursor: pointer;
+  1891→    transition: all 0.18s ease;
+  1892→  }
+  1893→
+  1894→  .pulse-chip-btn.active {
+  1895→    background: var(--green-dark);
+  1896→    color: #ffffff;
+  1897→    border-color: var(--green-dark);
+  1898→  }
+  1899→
+  1900→  /* Aura UI Live Playground */
+  1901→  .aura-demo-box {
+  1902→    display: flex;
+  1903→    flex-direction: column;
+  1904→    gap: 12px;
+  1905→  }
+  1906→
+  1907→  .aura-token-picker {
+  1908→    display: flex;
+  1909→    gap: 8px;
+  1910→    align-items: center;
+  1911→  }
+  1912→
+  1913→  .theme-dot-btn {
+  1914→    width: 22px;
+  1915→    height: 22px;
+  1916→    border-radius: 50%;
+  1917→    border: 2px solid #ffffff;
+  1918→    box-shadow: 0 0 0 1px rgba(0,0,0,0.15);
+  1919→    cursor: pointer;
+  1920→    transition: transform 0.18s ease;
+  1921→  }
+  1922→  .theme-dot-btn:hover { transform: scale(1.15); }
+  1923→  .theme-dot-btn.active { box-shadow: 0 0 0 2px var(--green-dark); }
+  1924→
+  1925→  .aura-components-row {
+  1926→    display: flex;
+  1927→    gap: 10px;
+  1928→    align-items: center;
+  1929→    flex-wrap: wrap;
+  1930→    background: #ffffff;
+  1931→    border: 1px solid rgba(13, 76, 60, 0.1);
+  1932→    padding: 12px;
+  1933→    border-radius: 12px;
+  1934→  }
+  1935→
+  1936→  .aura-toggle-switch {
+  1937→    width: 44px;
+  1938→    height: 24px;
+  1939→    border-radius: 12px;
+  1940→    background: #d8e0d6;
+  1941→    position: relative;
+  1942→    cursor: pointer;
+  1943→    transition: background 0.2s ease;
+  1944→  }
+  1945→  .aura-toggle-switch.on { background: var(--green-dark); }
+  1946→  .aura-toggle-knob {
+  1947→    width: 18px;
+  1948→    height: 18px;
+  1949→    border-radius: 50%;
+  1950→    background: #ffffff;
+  1951→    position: absolute;
+  1952→    top: 3px;
+  1953→    left: 3px;
+  1954→    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  1955→    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  1956→  }
+  1957→  .aura-toggle-switch.on .aura-toggle-knob { transform: translateX(20px); }
+  1958→
+  1959→  /* DevCanvas Sandbox */
+  1960→  .canvas-sandbox-wrap {
+  1961→    display: flex;
+  1962→    flex-direction: column;
+  1963→    gap: 8px;
+  1964→  }
+  1965→
+  1966→  .canvas-sandbox-toolbar {
+  1967→    display: flex;
+  1968→    justify-content: space-between;
+  1969→    align-items: center;
+  1970→  }
+  1971→
+  1972→  .canvas-color-palette {
+  1973→    display: flex;
+  1974→    gap: 6px;
+  1975→  }
+  1976→
+  1977→  .canvas-color-btn {
+  1978→    width: 20px;
+  1979→    height: 20px;
+  1980→    border-radius: 50%;
+  1981→    border: 1px solid rgba(0,0,0,0.1);
+  1982→    cursor: pointer;
+  1983→  }
+  1984→
+  1985→  .draw-canvas {
+  1986→    width: 100%;
+  1987→    height: 120px;
+  1988→    background: #ffffff;
+  1989→    border: 1px solid rgba(13, 76, 60, 0.18);
+  1990→    border-radius: 10px;
+  1991→    cursor: crosshair;
+  1992→    touch-action: none;
+  1993→  }
+  1994→
+  1995→  /* EcoTrack Carbon Calculator */
+  1996→  .eco-calc-grid {
+  1997→    display: grid;
+  1998→    grid-template-columns: 1fr 1fr;
+  1999→    gap: 10px;
+  2000→  }
+
+[showing lines 1-2000 of 3936; use offset=2001 with limit to continue reading]
