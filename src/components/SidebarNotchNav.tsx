@@ -51,8 +51,8 @@ interface NotchGeometry {
 }
 
 function notchGeometryFor(w: number): NotchGeometry {
-  const R = Math.min(24, Math.max(15, w * 0.31));
-  const m = Math.min(10, Math.max(6.5, w * 0.125));
+  const R = Math.min(28, Math.max(17, w * 0.36));
+  const m = Math.min(12, Math.max(7.5, w * 0.15));
   return { R, m, k: Math.sqrt(R * R + 2 * R * m) };
 }
 
@@ -258,12 +258,19 @@ export function SidebarNotchNav({
         style={{ borderRight: "1px solid rgba(255, 255, 255, 0.72)" }}
       />
 
-      {/* Target dot — floats inside the background notch */}
+      {/* Target dot — floats dead-center inside the background notch:
+          vertically cy (translateY -50%) and horizontally the midpoint
+          of the visible half-disc (W - R/2 → right = R/2 - half dot). */}
       <span
         ref={dotRef}
         aria-hidden="true"
         className="pointer-events-none absolute z-[2] h-[7px] w-[7px] rounded-full bg-white shadow-[0_1px_6px_rgba(122,32,0,0.5)]"
-        style={{ right: 9, top: 0, opacity: 0 }}
+        style={{
+          right: dims ? Math.max(5, notchGeometryFor(dims.w).R / 2 - 3.5) : 9,
+          top: 0,
+          opacity: 0,
+          transform: "translateY(-50%)",
+        }}
       />
 
       {/* Brand tile → back to top */}

@@ -143,43 +143,43 @@ export function HeroSection() {
                 Hello..
               </motion.span>
             </div>
-          </div>
-        </motion.div>
 
-        {/* Glass panel — the picture's faded bottom melts into it */}
-        <motion.div
-          initial={reduce ? false : { opacity: 0, y: 34 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.95, delay: 0.32, ease: EASE }}
-          className="glass-strong relative z-10 -mt-14 rounded-t-[2.75rem] px-6 pb-9 pt-9 text-center sm:-mt-20 sm:px-10"
-        >
-          <span className="glass-chip inline-flex items-center gap-2.5 rounded-full px-4 py-2">
-            <span className="status-dot" aria-hidden="true" />
-            <span className="text-xs font-medium text-foreground/90">
-              Available for new projects
-            </span>
-          </span>
+            {/* Name + intro begin exactly where the fade starts — left aligned */}
+            <motion.div
+              initial={reduce ? false : { opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.95, delay: 0.32, ease: EASE }}
+              className="relative z-10 -mt-28 px-5 pb-2 text-left sm:-mt-40 sm:px-8"
+            >
+              <span className="glass-chip inline-flex items-center gap-2.5 rounded-full px-4 py-2">
+                <span className="status-dot" aria-hidden="true" />
+                <span className="text-xs font-medium text-foreground/90">
+                  Available for new projects
+                </span>
+              </span>
 
-          <h1 className="font-display mt-5 text-[2.6rem] leading-[1.04] tracking-[-0.03em] text-foreground sm:text-6xl">
-            I am <span className="text-gold-gradient">M Rayhan</span>
-          </h1>
+              <h1 className="font-display text-glow mt-4 text-[2.6rem] leading-[1.04] tracking-[-0.03em] text-foreground sm:text-6xl">
+                I am <span className="text-gold-gradient">M Rayhan</span>
+              </h1>
 
-          <p className="font-tag mt-3 text-[10px] uppercase tracking-[0.32em] text-white/70">
-            {person.role}
-          </p>
+              <p className="font-tag mt-3 text-[10px] uppercase tracking-[0.32em] text-white/70">
+                {person.role}
+              </p>
 
-          <p className="mx-auto mt-5 max-w-md text-[15px] leading-relaxed text-white/85">
-            Full-stack engineer &amp; UI/UX specialist behind Blue Nile Studio, crafting
-            resilient apps, scalable systems and glass-grade interfaces with
-            obsession-level polish.
-          </p>
+              <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/85">
+                Full-stack engineer &amp; UI/UX specialist behind Blue Nile Studio, crafting
+                resilient apps, scalable systems and glass-grade interfaces with
+                obsession-level polish.
+              </p>
 
-          <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-            <HeroCTAs />
-          </div>
+              <div className="mt-7 flex flex-wrap items-center gap-3">
+                <HeroCTAs />
+              </div>
 
-          <div className="mt-8 text-left sm:text-center">
-            <StatsGrid />
+              <div className="mt-8">
+                <StatsGrid />
+              </div>
+            </motion.div>
           </div>
         </motion.div>
       </div>

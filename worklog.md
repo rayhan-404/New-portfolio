@@ -267,3 +267,18 @@ Work Log:
 Stage Summary:
 - Notch now answers taps instantly and glides on a spring in every browser (per-frame DOM clip-path painting); mobile hero rebuilt as a full-width transparent cutout with 'Hello..' overlay and glass-blended name/intro panel; desktop untouched.
 - Files: src/components/SidebarNotchNav.tsx, src/components/portfolio/hero-section.tsx, src/app/globals.css, scripts/make-cutout.mjs, scripts/gen-greenscreen.mjs, public/generated/hero-cutout.png (greenscreen intermediate deleted).
+
+---
+Task ID: 13 (Bigger notch + centered dot; mobile hero blend rework)
+Agent: Main agent
+Task: User: (a) "notch er dot er position thik koro, and notch er size ta arektu boro koro." (b) "I am M Rayhan and intro evabe na — image ta background er sathe blend hoye jabe smoothly, or fade out hoye jabe. r image er ekdom nicher dike jekhan theke fade out suru okhane left side align a I am M Rayhan ... suru hobe."
+
+Work Log:
+- SidebarNotchNav.tsx: notch geometry enlarged — R = clamp(w*0.36, 17..28) (was .31/15..24), fillet m = clamp(w*0.15, 7.5..12) (was .125/6.5..10). Dot position fixed: (1) restored translateY(-50%) which the v12 rewrite dropped (dot sat ~3.5px below true center); (2) right offset now derived from geometry = R/2 - 3.5 (center of the visible half-disc) instead of a hard-coded 9.
+- Frame-sampled verification: dot center measured at x=61 on the 74px rail = EXACT geometric midpoint of the bite half-disc; dotCy = SKILLS item center (477) — perfectly centered. Glide re-sampled: 337.07 → 331.49 → settled (ABOUT).
+- hero-section.tsx mobile variant restructured: glass-strong panel REMOVED; name+intro no longer centered inside a panel. New composition: image fades smoothly into the raw page background (multi-stop eased mask: solid to 74%, .55 @85%, .18 @93%, transparent 99% — globals.css hero-cutout-fade), and a left-aligned text block (-mt-28/-mt-40, inside the same max-w-[560px] column as the picture so "Hello.." and the name share one left edge) begins exactly at the fade start: availability chip → big "I am M Rayhan" (gold-gradient name, text-glow) → role tag → intro → CTAs (left-aligned, wrap) → stats.
+- Verification: lint 0. Agent Browser — mobile 390x844: name begins precisely where the suit dissolves into the fiery bg; tablet 768x1024: same alignment inside the capped column; desktop 1440x900: bigger notch + centered dot at HOME, labels clear of the bite, glide verified; console clean, dev.log 200s.
+
+Stage Summary:
+- Notch is larger with a geometrically centered target dot; mobile hero now reads as one continuous composition — portrait dissolving into the ember background with the left-aligned name/intro starting at the fade line.
+- Files: src/components/SidebarNotchNav.tsx, src/components/portfolio/hero-section.tsx, src/app/globals.css.

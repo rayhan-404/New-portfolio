@@ -225,10 +225,23 @@
 }
 
 /* Mobile hero cutout — the portrait's bottom edge dissolves softly
-   so it can melt into the frosted glass panel that overlaps it */
+   into the raw page background; the name block starts exactly where
+   this fade begins (multi-stop easing = no visible seam) */
 @utility hero-cutout-fade {
-  -webkit-mask-image: linear-gradient(to bottom, #000 68%, transparent 97%);
-  mask-image: linear-gradient(to bottom, #000 68%, transparent 97%);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 74%,
+    rgba(0, 0, 0, 0.55) 85%,
+    rgba(0, 0, 0, 0.18) 93%,
+    transparent 99%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 74%,
+    rgba(0, 0, 0, 0.55) 85%,
+    rgba(0, 0, 0, 0.18) 93%,
+    transparent 99%
+  );
 }
 
 /* ============================================================
