@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { AppBackground } from "./app-background";
-import { FloatingNav, useActiveSection } from "./nav";
+import { useActiveSection } from "./nav";
 import { MenuOverlay } from "./menu-overlay";
 import { MobileHeader } from "./mobile-header";
+import { SideRailLeft, SideRailRight } from "./side-rails";
 import { HeroSection } from "./hero-section";
 import { ProjectsSection } from "./projects-section";
 import { AboutSection } from "./about-section";
@@ -20,11 +21,14 @@ export function PortfolioApp() {
   return (
     <>
       <AppBackground />
-      <FloatingNav />
+      {/* Full-height glass side rails (desktop) */}
+      <SideRailLeft active={active} onOpenMenu={() => setMenuOpen(true)} />
+      <SideRailRight />
       <MobileHeader onOpenMenu={() => setMenuOpen(true)} />
       <MenuOverlay open={menuOpen} onOpenChange={setMenuOpen} active={active} />
 
-      <div className="flex min-h-svh flex-col">
+      {/* Content column sits between the two 100%-height rails */}
+      <div className="flex min-h-svh flex-col md:pl-[88px] md:pr-[88px]">
         <main className="flex-1">
           <HeroSection />
           <ProjectsSection />

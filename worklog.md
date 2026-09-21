@@ -177,3 +177,22 @@ Work Log:
 Stage Summary:
 - Production-ready "Ember Glass" portfolio complete: user's fiery background verbatim + Apple liquid-glass UI, floating pill nav, keynote hero, 6 glass sections, 4 live demos, 2 DB-backed API flows verified end-to-end.
 - Files: globals.css + layout.tsx rewritten; nav.tsx + app-background.tsx new; side-rail/ember-scene deleted; hero-section rewritten; 11 components restyled (5 + 6 via agents); portfolio-app rewired. No backend changes needed.
+
+---
+Task ID: 8 (Side Rails Layout)
+Agent: Main agent
+Task: User request — "nav bar right left side a daw, height 100% hobe, reference image er moto". Move navigation into full-height (100svh) left + right side rails, Apple glass style; replace the desktop top floating pill.
+
+Work Log:
+- globals.css: added `glass-rail-l` / `glass-rail-r` utilities (full-height sidebar glass: 180deg white gradient, blur(32px) saturate(190%), inner-edge hairline border, directional depth shadow, top inner highlight) + `.no-scrollbar` helper.
+- New side-rails.tsx:
+  - SideRailLeft — fixed inset-y-0 left-0 w-[76px] glass-rail-l, md+: BN monogram (scroll top), RailDivider, vertical nav icons (Home/FolderKanban/UserRound/Sparkles/BriefcaseBusiness/Mail) with framer-motion layoutId "rail-active-pill" white rounded-2xl active state, custom CSS RailTip glass tooltips (side right, hover + focus-visible, no portals), sound toggle + LayoutGrid menu button (opens MenuOverlay) at bottom; slide-in x:-84 entrance, staggered items, reduced-motion guarded.
+  - SideRailRight — fixed inset-y-0 right-0 w-[76px] glass-rail-r, md+: availability status-dot chip, vertical social links (GitHub/LinkedIn/X/Dribbble with handle a11y labels) with RailTip side left, vertical-rl "Blue Nile" wordmark (whitespace-nowrap, lg+), btn-light Mail CTA → contact; spring scroll-progress seam (useScroll + useSpring scaleY, gold gradient, 2px inner-edge track).
+- nav.tsx: deleted dead FloatingNav + unused motion/lucide imports; kept NAV_ITEMS, NavId, useActiveSection, scrollToSection, useSoundEngine as shared source for rails/overlay.
+- portfolio-app.tsx: mounts SideRailLeft(active, onOpenMenu) + SideRailRight; content column gets md:pl-[88px] md:pr-[88px] so sections + footer sit between the rails; MobileHeader unchanged for <md.
+- Fixed vertical wordmark wrapping into 2 columns (whitespace-nowrap + "Blue Nile").
+- Verification: bun run lint → 0 problems; dev.log clean (200s, no runtime errors). Agent Browser (1440x900): rails render full-height edge-attached glass; rail click "Projects" scrolls + active pill slides; scroll-spy auto-updates pill on manual scroll (Skills/Contact verified); "Menu" tooltip renders on hover; menu overlay opens from rail + Escape closes; scroll progress scaleY 0.6252 == scrollY 3724/(docH 6856−900) exactly; footer sits between rails with contact pill active; a11y tree shows labelled nav/buttons/links. Mobile 390x844: rails hidden, sticky header, overlay open with active gold item; console + page errors clean.
+
+Stage Summary:
+- Navigation is now a pair of 100%-height Apple-glass side rails (left = primary nav, right = social/status/CTA + progress seam), replacing the desktop top pill; mobile keeps header + overlay. Verified end-to-end in browser on desktop + mobile.
+- Files: side-rails.tsx (new), nav.tsx (slimmed), portfolio-app.tsx (rewired), globals.css (+3 utilities).
