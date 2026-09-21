@@ -1,20 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Space_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import { person } from "@/lib/portfolio-data";
 
-const archivo = Archivo({
-  variable: "--font-archivo",
+const geistSans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
   display: "swap",
 });
 
-const spaceMono = Space_Mono({
-  variable: "--font-space-mono",
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
-  weight: ["400", "700"],
   display: "swap",
 });
 
@@ -64,7 +62,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0b0705",
+  themeColor: "#b9210f",
 };
 
 const jsonLd = {
@@ -91,22 +89,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body
-        className={`${archivo.variable} ${spaceMono.variable} antialiased bg-background text-foreground min-h-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased text-foreground min-h-screen flex flex-col`}
       >
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         {children}
-        <Toaster position="bottom-right" toastOptions={{
-          style: {
-            background: "#171009",
-            border: "1px solid rgba(243,236,227,0.14)",
-            color: "#f3ece3",
-          },
-        }} />
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            style: {
+              background: "rgba(64, 14, 5, 0.78)",
+              backdropFilter: "blur(24px) saturate(180%)",
+              WebkitBackdropFilter: "blur(24px) saturate(180%)",
+              border: "1px solid rgba(255,255,255,0.24)",
+              color: "#fff7ee",
+              boxShadow: "0 20px 50px -18px rgba(84,12,0,0.55)",
+            },
+          }}
+        />
       </body>
     </html>
   );

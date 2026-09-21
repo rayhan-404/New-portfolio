@@ -4,17 +4,17 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
-   BLUE NILE — EMBER EDITORIAL DESIGN SYSTEM
-   Cinematic dark portfolio: warm charcoal, burnt ember orange,
-   cream typography, blueprint hairlines & pixel artifacts.
-   Art direction is intentionally dark-only.
+   BLUE NILE — EMBER GLASS
+   Apple-style liquid glassmorphism over a premium fiery
+   mobile-app gradient. One art direction: warm, vibrant,
+   frosted translucent panels with soft depth.
    ============================================================ */
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-space-mono), ui-monospace, monospace;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", monospace;
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -38,57 +38,63 @@
   --radius-2xl: calc(var(--radius) + 10px);
   --radius-3xl: calc(var(--radius) + 18px);
 
-  /* Brand accents */
-  --color-ember: var(--ember);
-  --color-ember-bright: var(--ember-bright);
-  --color-ember-deep: var(--ember-deep);
-  --color-cream: var(--cream);
-  --color-coal: var(--coal);
+  /* Apple system accents (used by live demo widgets) */
+  --color-apple-green: var(--apple-green);
+  --color-apple-mint: var(--apple-mint);
+  --color-apple-orange: var(--apple-orange);
+  --color-apple-rose: var(--apple-rose);
+
+  /* Brand gold — highlight accents */
+  --color-gold: var(--gold);
+  --color-gold-bright: var(--gold-bright);
+  --color-gold-deep: var(--gold-deep);
 }
 
 :root,
 .dark {
   --radius: 1rem;
 
-  /* Warm charcoal world */
-  --background: #0b0705;
-  --foreground: #f3ece3;
-  --card: rgba(255, 244, 230, 0.04);
-  --card-foreground: #f3ece3;
-  --popover: #171009;
-  --popover-foreground: #f3ece3;
-  --primary: #e8632c;
-  --primary-foreground: #fff7ef;
-  --secondary: rgba(255, 244, 230, 0.07);
-  --secondary-foreground: #f3ece3;
-  --muted: rgba(255, 244, 230, 0.06);
-  --muted-foreground: rgba(243, 236, 227, 0.55);
-  --accent: rgba(232, 99, 44, 0.16);
-  --accent-foreground: #ff8a50;
+  /* shadcn tokens — warm translucent surfaces over the fire field */
+  --background: rgba(52, 11, 4, 0.62);
+  --foreground: #fff7ee;
+  --card: rgba(255, 255, 255, 0.1);
+  --card-foreground: #fff7ee;
+  --popover: rgba(64, 14, 5, 0.74);
+  --popover-foreground: #fff7ee;
+  --primary: #ff841c;
+  --primary-foreground: #4a0d02;
+  --secondary: rgba(255, 255, 255, 0.1);
+  --secondary-foreground: #fff7ee;
+  --muted: rgba(255, 255, 255, 0.08);
+  --muted-foreground: rgba(255, 247, 238, 0.66);
+  --accent: rgba(255, 255, 255, 0.14);
+  --accent-foreground: #fff7ee;
   --destructive: #ff453a;
-  --border: rgba(243, 236, 227, 0.1);
-  --input: rgba(243, 236, 227, 0.12);
-  --ring: rgba(232, 99, 44, 0.6);
+  --border: rgba(255, 255, 255, 0.18);
+  --input: rgba(255, 255, 255, 0.16);
+  --ring: rgba(255, 255, 255, 0.55);
 
   /* Brand palette */
-  --ember: #e8632c;
-  --ember-bright: #ff8a50;
-  --ember-deep: #9a3a12;
-  --cream: #f3ece3;
-  --coal: #0b0705;
-  --line: rgba(243, 236, 227, 0.09);
-  --line-strong: rgba(243, 236, 227, 0.16);
+  --gold: #ffc46b;
+  --gold-bright: #ffd894;
+  --gold-deep: #ff9f2e;
 
-  /* Surfaces */
-  --surface: #120c08;
-  --surface-2: #1a1109;
+  /* Apple system accents — live demos */
+  --apple-green: #30d158;
+  --apple-mint: #66d4cf;
+  --apple-orange: #ff9f0a;
+  --apple-rose: #ff375f;
 
-  /* Photo treatment */
+  /* Glass tokens */
+  --glass-border: rgba(255, 255, 255, 0.22);
+  --glass-border-strong: rgba(255, 255, 255, 0.32);
+
+  /* Portrait blend — melts photos into the ember field */
   --img-vignette: linear-gradient(
     to top,
-    #0b0705 2%,
-    rgba(11, 7, 5, 0.55) 26%,
-    rgba(11, 7, 5, 0) 55%
+    rgba(146, 20, 9, 0.88) 2%,
+    rgba(146, 20, 9, 0.42) 28%,
+    rgba(146, 20, 9, 0) 58%
   );
 }
 
@@ -99,19 +105,19 @@
 
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 88px;
+    scroll-padding-top: 96px;
   }
 
   body {
     @apply text-foreground antialiased;
-    background-color: var(--background);
+    background-color: #a01c0d;
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
   }
 
   ::selection {
-    background: rgba(232, 99, 44, 0.85);
-    color: #fff7ef;
+    background: rgba(255, 214, 138, 0.92);
+    color: #58120a;
   }
 
   h1,
@@ -124,176 +130,257 @@
   :focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: 6px;
   }
 }
 
 /* ============================================================
-   TYPOGRAPHY HELPERS
+   PREMIUM MOBILE-APP BACKGROUND — fixed fiery gradient field
+   (user-provided art direction, verbatim)
    ============================================================ */
 
-/* Chunky display face — "Blue Nile" style headings */
-@utility font-display {
-  font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
-  font-weight: 900;
-  letter-spacing: -0.02em;
+.app-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      85% 55% at 82% 8%,
+      rgba(255, 190, 72, 0.95) 0%,
+      rgba(255, 145, 25, 0.75) 32%,
+      transparent 70%
+    ),
+    radial-gradient(
+      80% 65% at 8% 35%,
+      rgba(150, 18, 12, 0.9) 0%,
+      rgba(205, 38, 15, 0.65) 42%,
+      transparent 78%
+    ),
+    radial-gradient(
+      70% 55% at 75% 78%,
+      rgba(235, 52, 20, 0.9) 0%,
+      transparent 70%
+    ),
+    linear-gradient(
+      145deg,
+      #68100c 0%,
+      #b9210f 25%,
+      #f45118 52%,
+      #ff841c 76%,
+      #ffad32 100%
+    );
 }
 
-/* Mono micro-labels — RAYHAN AHMED, nav, badges */
-@utility font-tag {
-  font-family: var(--font-space-mono), ui-monospace, monospace;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+/* Subtle premium curved light */
+.app-background::before {
+  content: "";
+  position: absolute;
+  width: 150%;
+  height: 65%;
+  top: -12%;
+  left: -25%;
+
+  background: linear-gradient(
+    125deg,
+    transparent 35%,
+    rgba(255, 184, 70, 0.13) 48%,
+    rgba(255, 210, 110, 0.08) 58%,
+    transparent 72%
+  );
+
+  border-radius: 50%;
+  transform: rotate(-8deg);
 }
 
-@utility text-ember-gradient {
-  background: linear-gradient(100deg, var(--ember-bright) 0%, var(--ember) 55%, #c2410c 100%);
+/* Bottom depth */
+.app-background::after {
+  content: "";
+  position: absolute;
+  inset: 55% 0 0;
+
+  background:
+    radial-gradient(
+      70% 70% at 55% 45%,
+      rgba(255, 70, 20, 0.45),
+      transparent 70%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent,
+      rgba(90, 5, 8, 0.28)
+    );
+}
+
+/* Cinematic film grain over the fire field */
+.app-grain {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+}
+
+/* ============================================================
+   LIQUID GLASS SURFACES — the core Apple recipe
+   ============================================================ */
+
+/* Standard frosted panel */
+@utility glass {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.07));
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  backdrop-filter: blur(24px) saturate(170%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04),
+    0 20px 50px -20px rgba(84, 12, 0, 0.45);
+}
+
+/* Heavier frosted panel — nav bars, dialogs, nameplates */
+@utility glass-strong {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.11));
+  -webkit-backdrop-filter: blur(34px) saturate(190%);
+  backdrop-filter: blur(34px) saturate(190%);
+  border: 1px solid var(--glass-border-strong);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+    0 24px 60px -22px rgba(84, 12, 0, 0.5);
+}
+
+/* Floating navigation bar */
+@utility glass-nav {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.19), rgba(255, 255, 255, 0.1));
+  -webkit-backdrop-filter: blur(30px) saturate(190%);
+  backdrop-filter: blur(30px) saturate(190%);
+  border: 1px solid var(--glass-border-strong);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 16px 40px -14px rgba(84, 12, 0, 0.55);
+}
+
+/* Form fields on glass */
+@utility glass-input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.glass-input:focus,
+.glass-input:focus-visible {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 0 0 4px rgba(255, 255, 255, 0.12);
+}
+
+/* Small pill chips */
+@utility glass-chip {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+/* Amber-tinted glass — emphasized feature panels */
+@utility glass-ember {
+  background: linear-gradient(140deg, rgba(255, 158, 44, 0.26), rgba(255, 120, 30, 0.1));
+  -webkit-backdrop-filter: blur(26px) saturate(180%);
+  backdrop-filter: blur(26px) saturate(180%);
+  border: 1px solid rgba(255, 196, 120, 0.38);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    0 20px 50px -20px rgba(90, 14, 0, 0.5);
+}
+
+/* Hairline divider between glass rows */
+@utility glass-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+}
+
+/* Warm white primary button — Apple's solid pill over vivid art */
+@utility btn-light {
+  background: linear-gradient(180deg, #fffdf8, #ffe9cc);
+  color: #7c1a06;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 14px 34px -12px rgba(70, 8, 0, 0.55);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, filter 0.25s ease;
+}
+.btn-light:hover {
+  filter: brightness(1.04);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 18px 44px -12px rgba(70, 8, 0, 0.62);
+}
+.btn-light:active {
+  transform: scale(0.97);
+}
+
+/* Golden gradient text */
+@utility text-gold-gradient {
+  background: linear-gradient(100deg, #fff6e4 0%, #ffd9a1 42%, #ffb45e 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-/* ============================================================
-   BLUEPRINT GRID & LINES
-   ============================================================ */
-
-/* Vertical design-grid hairlines — 4 columns */
-@utility grid-overlay {
-  background-image: linear-gradient(to right, var(--line) 1px, transparent 1px);
-  background-size: 25% 100%;
+/* Soft readable glow for type sitting on bright zones */
+@utility text-glow {
+  text-shadow: 0 1px 18px rgba(96, 14, 0, 0.35), 0 1px 2px rgba(96, 14, 0, 0.2);
 }
 
-@utility hairline-t {
-  border-top: 1px solid var(--line);
-}
-
-@utility hairline-b {
-  border-bottom: 1px solid var(--line);
+/* Big outlined display text */
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.22);
 }
 
 /* ============================================================
-   SURFACES — warm smoked glass
+   TYPOGRAPHY — SF-flavored Geist
    ============================================================ */
 
-@utility panel {
-  background: linear-gradient(160deg, rgba(255, 244, 230, 0.055), rgba(255, 244, 230, 0.02));
-  border: 1px solid var(--line);
-  box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.8);
+@utility font-display {
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.025em;
 }
 
-@utility panel-strong {
-  background: linear-gradient(160deg, rgba(255, 244, 230, 0.09), rgba(255, 244, 230, 0.035));
-  border: 1px solid var(--line-strong);
-  box-shadow: 0 28px 70px -28px rgba(0, 0, 0, 0.85);
-}
-
-@utility panel-ember {
-  background: linear-gradient(150deg, rgba(232, 99, 44, 0.16), rgba(232, 99, 44, 0.04));
-  border: 1px solid rgba(232, 99, 44, 0.32);
-}
-
-/* Dark glass pill — "Scroll Down To Explore Works" */
-@utility pill-dark {
-  background: rgba(18, 12, 8, 0.55);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  backdrop-filter: blur(18px) saturate(140%);
-  border: 1px solid rgba(243, 236, 227, 0.16);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 244, 230, 0.08),
-    0 18px 44px -18px rgba(0, 0, 0, 0.7);
-}
-
-/* ============================================================
-   EMBER GLOW & GRAIN
-   ============================================================ */
-
-.ember-scene {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  overflow: hidden;
-  pointer-events: none;
-  background: var(--background);
-}
-
-.ember-scene::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 70% 45% at 68% -6%, rgba(232, 99, 44, 0.17), transparent 65%),
-    radial-gradient(ellipse 50% 40% at 12% 108%, rgba(154, 58, 18, 0.12), transparent 70%);
-}
-
-.ember-grain {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.55;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-}
-
-/* ============================================================
-   PIXEL ARTIFACTS — floating white squares
-   ============================================================ */
-
-.pixel {
-  position: absolute;
-  background: #f3ece3;
-  opacity: 0.92;
-  will-change: transform;
-}
-
-.pixel-dim {
-  opacity: 0.35;
-}
-
-@keyframes pixel-float {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate3d(0, -10px, 0);
-  }
-}
-
-.pixel-float {
-  animation: pixel-float 7s ease-in-out infinite;
-}
-.pixel-float-slow {
-  animation: pixel-float 11s ease-in-out infinite;
-}
-
-/* ============================================================
-   VERTICAL NAV
-   ============================================================ */
-
-@utility v-text {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
+@utility font-tag {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
 }
 
 /* ============================================================
    MICRO DETAILS
    ============================================================ */
 
-/* Pulsing availability dot */
+/* Pulsing availability dot — Apple green */
 .status-dot {
   position: relative;
   width: 7px;
   height: 7px;
   border-radius: 9999px;
-  background: var(--ember);
+  background: var(--apple-green);
+  box-shadow: 0 0 10px rgba(48, 209, 88, 0.75);
 }
 .status-dot::after {
   content: "";
   position: absolute;
   inset: -4px;
   border-radius: 9999px;
-  border: 1px solid var(--ember);
+  border: 1px solid var(--apple-green);
   animation: status-ping 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 @keyframes status-ping {
@@ -325,24 +412,21 @@
   animation: nudge-down 1.8s ease-in-out infinite;
 }
 
-/* Custom scrollbar — warm */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+/* Floating glass orbs — gentle levitation */
+@keyframes orb-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -12px, 0);
+  }
 }
-::-webkit-scrollbar-track {
-  background: transparent;
+.orb-float {
+  animation: orb-float 7s ease-in-out infinite;
 }
-::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--foreground) 16%, transparent);
-  border-radius: 9999px;
-  border: 3px solid transparent;
-  background-clip: content-box;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in srgb, var(--ember) 55%, transparent);
-  background-clip: content-box;
-  border: 3px solid transparent;
+.orb-float-slow {
+  animation: orb-float 11s ease-in-out infinite;
 }
 
 /* Skill meter sheen sweep */
@@ -372,15 +456,29 @@
   mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
 }
 
-/* Big outlined display text */
-@utility text-outline {
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(243, 236, 227, 0.22);
+/* Custom scrollbar — warm frosted */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.45);
+  background-clip: content-box;
+  border: 3px solid transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pixel-float,
-  .pixel-float-slow,
+  .orb-float,
+  .orb-float-slow,
   .animate-marquee,
   .animate-nudge {
     animation: none;

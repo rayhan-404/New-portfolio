@@ -25,19 +25,19 @@ export function SkillsSection() {
         <div className="mt-14 grid gap-4 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
           {/* Meters */}
           <Reveal>
-            <div className="panel h-full rounded-3xl p-6 sm:p-8">
-              <p className="font-tag text-[10px] text-ember">Core proficiency</p>
+            <div className="glass h-full rounded-3xl p-6 sm:p-8">
+              <p className="font-tag text-[10px] text-gold-bright">Core proficiency</p>
               <div className="mt-7 flex flex-col gap-6">
                 {skillMeters.map((skill, i) => (
                   <div key={skill.name}>
                     <div className="flex items-baseline justify-between gap-3">
-                      <span className="text-sm font-medium">{skill.name}</span>
-                      <span className="font-tag text-[10px] text-muted-foreground">
+                      <span className="text-sm font-medium text-foreground/95">{skill.name}</span>
+                      <span className="font-tag text-[10px] text-white/60">
                         {skill.level}%
                       </span>
                     </div>
                     <div
-                      className="mt-2.5 h-[6px] overflow-hidden rounded-full bg-[rgba(243,236,227,0.07)]"
+                      className="mt-2.5 h-[6px] overflow-hidden rounded-full bg-white/12"
                       role="progressbar"
                       aria-valuenow={skill.level}
                       aria-valuemin={0}
@@ -45,7 +45,7 @@ export function SkillsSection() {
                       aria-label={`${skill.name} proficiency`}
                     >
                       <motion.div
-                        className="relative h-full rounded-full bg-gradient-to-r from-ember-deep via-ember to-ember-bright"
+                        className="relative h-full rounded-full bg-gradient-to-r from-gold-deep via-gold to-gold-bright"
                         initial={reduce ? false : { width: 0 }}
                         whileInView={{ width: `${skill.level}%` }}
                         viewport={{ once: true, margin: "-40px" }}
@@ -66,14 +66,14 @@ export function SkillsSection() {
 
           {/* Chips + principles */}
           <div className="flex flex-col gap-4">
-            <StaggerGroup className="panel rounded-3xl p-6 sm:p-8">
-              <p className="font-tag text-[10px] text-ember">Also in the toolbox</p>
+            <StaggerGroup className="glass rounded-3xl p-6 sm:p-8">
+              <p className="font-tag text-[10px] text-gold-bright">Also in the toolbox</p>
               <div className="mt-5 flex flex-wrap gap-2">
                 {skillChips.map((chip) => (
                   <StaggerItem key={chip}>
                     <button
                       onClick={() => playSound("tap")}
-                      className="font-tag rounded-full border border-[var(--line)] px-3.5 py-2 text-[9.5px] text-muted-foreground transition-all duration-300 hover:border-ember/60 hover:text-foreground active:scale-95"
+                      className="glass-chip font-tag rounded-full px-3.5 py-2 text-[9.5px] text-white/75 transition-all duration-300 hover:bg-white/20 hover:text-foreground active:scale-95"
                     >
                       {chip}
                     </button>
@@ -83,12 +83,14 @@ export function SkillsSection() {
             </StaggerGroup>
 
             <Reveal delay={0.1}>
-              <div className="panel-ember relative overflow-hidden rounded-3xl p-6 sm:p-8">
+              <div className="glass-ember relative overflow-hidden rounded-3xl p-6 sm:p-8">
                 <span
                   aria-hidden="true"
-                  className="pixel pixel-float absolute right-6 top-6 h-3 w-3"
-                />
-                <p className="font-tag text-[10px] text-ember-bright">How I work</p>
+                  className="glass-chip orb-float-slow absolute right-6 top-6 rounded-full px-3 py-1.5 text-[10px] font-semibold text-foreground"
+                >
+                  WCAG 2.1 AA
+                </span>
+                <p className="font-tag text-[10px] text-gold-bright">How I work</p>
                 <ul className="mt-4 flex flex-col gap-3.5">
                   {[
                     "Type-safe from database to pixel",
@@ -97,7 +99,7 @@ export function SkillsSection() {
                     "Ship small, measure, iterate",
                   ].map((line) => (
                     <li key={line} className="flex items-start gap-3 text-sm text-foreground/90">
-                      <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rotate-45 bg-ember" aria-hidden="true" />
+                      <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rotate-45 bg-gold" aria-hidden="true" />
                       {line}
                     </li>
                   ))}
@@ -114,10 +116,10 @@ export function SkillsSection() {
           {[...marqueeStack, ...marqueeStack].map((tech, i) => (
             <span
               key={`${tech}-${i}`}
-              className="font-tag flex items-center gap-10 text-[11px] text-muted-foreground/60"
+              className="font-tag flex items-center gap-10 text-[11px] text-white/60"
             >
               {tech}
-              <span className="h-1.5 w-1.5 rotate-45 bg-ember/50" />
+              <span className="h-1.5 w-1.5 rotate-45 bg-gold/60" />
             </span>
           ))}
         </div>

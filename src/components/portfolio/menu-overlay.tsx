@@ -3,7 +3,7 @@
 import { useEffect, useSyncExternalStore } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
-import { NAV_ITEMS, scrollToSection } from "./side-rail";
+import { NAV_ITEMS, scrollToSection } from "./nav";
 import { socials } from "@/lib/portfolio-data";
 import { playSound } from "@/lib/sound";
 
@@ -48,15 +48,12 @@ export function MenuOverlay({
           role="dialog"
           aria-modal="true"
           aria-label="Site menu"
-          className="fixed inset-0 z-[80] flex flex-col bg-[rgba(9,6,4,0.9)] backdrop-blur-2xl md:pl-20"
+          className="fixed inset-0 z-[80] flex flex-col bg-[rgba(70,12,4,0.55)] backdrop-blur-3xl"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
-          {/* grid lines */}
-          <div aria-hidden="true" className="grid-overlay pointer-events-none absolute inset-0" />
-
           {/* Top row */}
           <div className="relative flex items-center justify-between px-5 py-5 md:px-10">
             <span className="font-display text-xl leading-none text-foreground">
@@ -65,7 +62,7 @@ export function MenuOverlay({
             <button
               onClick={() => onOpenChange(false)}
               aria-label="Close menu"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--line-strong)] text-foreground transition-colors duration-300 hover:border-ember hover:text-ember active:scale-95"
+              className="glass-chip flex h-11 w-11 items-center justify-center rounded-full text-foreground transition-all duration-300 hover:bg-white/25 active:scale-95"
             >
               <X className="h-5 w-5" />
             </button>
@@ -88,21 +85,21 @@ export function MenuOverlay({
                       onClick={() => go(item.id)}
                       className="group flex items-baseline gap-4 text-left"
                     >
-                      <span className="font-tag text-[10px] text-ember/80">
+                      <span className="font-tag text-[10px] text-gold-bright/80">
                         0{i + 1}
                       </span>
                       <span
                         className={`font-display text-[clamp(2.2rem,7vw,4.5rem)] uppercase leading-[1.02] tracking-tight transition-colors duration-300 ${
                           isActive
-                            ? "text-ember"
-                            : "text-foreground/85 group-hover:text-ember"
+                            ? "text-gold-bright"
+                            : "text-foreground/85 group-hover:text-gold-bright"
                         }`}
                       >
                         {item.label}
                       </span>
                       <span
                         aria-hidden="true"
-                        className="ml-2 hidden h-2 w-2 self-center rounded-full bg-ember opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:block"
+                        className="ml-2 hidden h-2 w-2 self-center rounded-full bg-gold opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:block"
                       />
                     </button>
                   </motion.li>
@@ -126,7 +123,7 @@ export function MenuOverlay({
                     href={s.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="font-tag text-[10px] text-muted-foreground transition-colors duration-300 hover:text-ember"
+                    className="font-tag text-[10px] text-white/65 transition-colors duration-300 hover:text-foreground"
                   >
                     {s.label}
                   </a>
@@ -134,7 +131,7 @@ export function MenuOverlay({
               ))}
             </ul>
             {mounted && (
-              <p className="font-tag text-[10px] text-muted-foreground/60">
+              <p className="font-tag text-[10px] text-white/45">
                 © {new Date().getFullYear()} Blue Nile Studio
               </p>
             )}

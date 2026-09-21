@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/select";
 
 const inputCls =
-  "w-full rounded-2xl border border-[var(--line)] bg-[rgba(243,236,227,0.04)] px-4 py-3 text-sm outline-none transition-all duration-300 placeholder:text-muted-foreground/50 focus:border-ember/60 focus:bg-[rgba(243,236,227,0.07)]";
+  "glass-input w-full rounded-2xl px-4 py-3 text-sm text-foreground outline-none placeholder:text-white/45";
 
 export function ContactSection() {
   const [bookingOpen, setBookingOpen] = useState(false);
@@ -94,21 +94,21 @@ export function ContactSection() {
             <Reveal>
               <button
                 onClick={copyEmail}
-                className="panel group flex w-full items-center gap-4 rounded-3xl p-5 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-ember/45"
+                className="glass group flex w-full items-center gap-4 rounded-3xl p-5 text-left transition-all duration-500 hover:-translate-y-0.5 hover:border-white/45"
               >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-ember/35 bg-ember/10">
-                  <Mail className="h-4.5 w-4.5 text-ember-bright" />
+                <span className="glass-chip flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl">
+                  <Mail className="h-4.5 w-4.5 text-gold" />
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="font-tag block text-[9.5px] text-muted-foreground">Email</span>
                   <span className="block truncate text-sm font-semibold">{person.email}</span>
                 </span>
-                <Copy className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-ember" />
+                <Copy className="h-4 w-4 shrink-0 text-white/60 transition-colors group-hover:text-gold" />
               </button>
             </Reveal>
 
             <Reveal delay={0.06}>
-              <div className="panel grid grid-cols-1 gap-4 rounded-3xl p-5 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+              <div className="glass grid grid-cols-1 gap-4 rounded-3xl p-5 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
                 <ContactFact icon={Clock} label="Response" value="Within 24h" />
                 <ContactFact icon={Globe} label="Location" value={person.location} />
                 <ContactFact icon={ArrowUpRight} label="Status" value="Open for work" />
@@ -116,21 +116,21 @@ export function ContactSection() {
             </Reveal>
 
             <Reveal delay={0.12}>
-              <div className="panel-ember relative flex flex-col gap-4 overflow-hidden rounded-3xl p-6">
+              <div className="glass-ember relative flex flex-col gap-4 overflow-hidden rounded-3xl p-6">
                 <div
-                  className="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(232,99,44,0.4),transparent_70%)] blur-2xl"
+                  className="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(255,190,90,0.4),transparent_70%)] blur-2xl"
                   aria-hidden="true"
                 />
                 <div className="flex items-center gap-3.5">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-ember/40 bg-[rgba(11,7,5,0.4)]">
-                    <CalendarClock className="h-4.5 w-4.5 text-ember-bright" />
+                  <span className="glass-chip flex h-11 w-11 items-center justify-center rounded-2xl">
+                    <CalendarClock className="h-4.5 w-4.5 text-gold-bright" />
                   </span>
                   <div>
-                    <p className="font-tag text-[9.5px] text-ember-bright">Prefer talking?</p>
+                    <p className="font-tag text-[9.5px] text-gold-bright">Prefer talking?</p>
                     <h3 className="text-[15px] font-semibold">30-min discovery call</h3>
                   </div>
                 </div>
-                <p className="text-sm leading-relaxed text-foreground/75">
+                <p className="text-sm leading-relaxed text-white/80">
                   Discuss technical architecture, roadmap, and feasibility — no slides, just honest
                   engineering talk.
                 </p>
@@ -139,7 +139,7 @@ export function ContactSection() {
                     playSound("chime");
                     setBookingOpen(true);
                   }}
-                  className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-ember text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:bg-ember-bright active:scale-95"
+                  className="btn-light inline-flex h-11 items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold transition-all duration-300 active:scale-95"
                 >
                   <CalendarClock className="h-4 w-4" />
                   Book a Call
@@ -152,24 +152,24 @@ export function ContactSection() {
           <Reveal delay={0.08}>
             <form
               onSubmit={submit}
-              className="panel h-full rounded-[2rem] p-6 sm:p-8"
+              className="glass h-full rounded-[2rem] p-6 sm:p-8"
               aria-label="Contact form"
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <p className="font-tag text-[10px] text-ember">Direct Message</p>
+                  <p className="font-tag text-[10px] text-gold-bright">Direct Message</p>
                   <h3 className="font-display mt-2 text-xl tracking-tight">
                     Tell me about your project
                   </h3>
                 </div>
-                <span className="font-tag rounded-full border border-[var(--line)] px-3.5 py-1.5 text-[9px] text-muted-foreground">
+                <span className="glass-chip font-tag rounded-full px-3.5 py-1.5 text-[9px] text-white/70">
                   {person.responseTime}
                 </span>
               </div>
 
               {/* Type chips */}
               <fieldset className="mt-6">
-                <legend className="mb-2.5 text-[13px] font-medium text-muted-foreground">
+                <legend className="mb-2.5 text-[13px] font-medium text-white/70">
                   I&apos;m looking for
                 </legend>
                 <div className="flex flex-wrap gap-2">
@@ -182,10 +182,10 @@ export function ContactSection() {
                         playSound("tap");
                         setType(t);
                       }}
-                      className={`rounded-full px-4 py-2 text-[13px] font-medium transition-all duration-300 active:scale-95 ${
+                      className={`rounded-full px-4 py-2 text-[13px] font-semibold transition-all duration-300 active:scale-95 ${
                         type === t
-                          ? "border border-ember bg-ember text-white shadow-[0_8px_24px_-8px_rgba(232,99,44,0.6)]"
-                          : "border border-[var(--line)] text-muted-foreground hover:border-ember/50 hover:text-foreground"
+                          ? "bg-white text-[#7c1a06] shadow-[0_10px_26px_-10px_rgba(84,12,0,0.6)]"
+                          : "glass-chip text-white/75 hover:text-foreground hover:bg-white/20"
                       }`}
                     >
                       {t}
@@ -196,7 +196,7 @@ export function ContactSection() {
 
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
                 <label className="flex flex-col gap-1.5">
-                  <span className="text-[13px] font-medium text-muted-foreground">Your name</span>
+                  <span className="text-[13px] font-medium text-white/70">Your name</span>
                   <input
                     className={inputCls}
                     value={name}
@@ -209,7 +209,7 @@ export function ContactSection() {
                   />
                 </label>
                 <label className="flex flex-col gap-1.5">
-                  <span className="text-[13px] font-medium text-muted-foreground">Your email</span>
+                  <span className="text-[13px] font-medium text-white/70">Your email</span>
                   <input
                     className={inputCls}
                     type="email"
@@ -223,7 +223,7 @@ export function ContactSection() {
               </div>
 
               <label className="mt-4 flex flex-col gap-1.5">
-                <span className="text-[13px] font-medium text-muted-foreground">
+                <span className="text-[13px] font-medium text-white/70">
                   Project goals & scope
                 </span>
                 <textarea
@@ -255,7 +255,7 @@ export function ContactSection() {
                 <button
                   type="submit"
                   disabled={sending}
-                  className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full bg-ember text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:bg-ember-bright active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="btn-light inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-full text-sm font-semibold transition-all duration-300 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {sending ? (
                     <>
@@ -269,7 +269,7 @@ export function ContactSection() {
                     </>
                   )}
                 </button>
-                <p className="text-xs leading-relaxed text-muted-foreground sm:max-w-44">
+                <p className="text-xs leading-relaxed text-white/55 sm:max-w-44">
                   Stored securely & used only to reply to you.
                 </p>
               </div>
@@ -294,12 +294,12 @@ function ContactFact({
 }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[var(--line)] bg-[rgba(243,236,227,0.04)]">
-        <Icon className="h-4 w-4 text-ember" />
+      <span className="glass-chip flex h-9 w-9 shrink-0 items-center justify-center rounded-xl">
+        <Icon className="h-4 w-4 text-gold" />
       </span>
       <div>
-        <p className="font-tag text-[8.5px] text-muted-foreground">{label}</p>
-        <p className="text-[13px] font-semibold">{value}</p>
+        <p className="font-tag text-[8.5px] text-white/60">{label}</p>
+        <p className="text-[13px] font-semibold text-foreground">{value}</p>
       </div>
     </div>
   );
@@ -348,8 +348,8 @@ function BookingDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[86vh] w-[calc(100vw-2rem)] overflow-y-auto rounded-3xl border border-[var(--line-strong)] bg-popover p-6 sm:p-8">
-        <span className="font-tag inline-flex items-center gap-1.5 rounded-full border border-ember/40 bg-ember/10 px-3 py-1 text-[9px] text-ember-bright">
+      <DialogContent className="max-h-[86vh] w-[calc(100vw-2rem)] overflow-y-auto rounded-[1.75rem] border-white/25 bg-[rgba(58,13,5,0.72)] p-6 backdrop-blur-2xl sm:p-8">
+        <span className="glass-chip font-tag inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[9px] text-gold-bright">
           <CalendarClock className="h-3 w-3" />
           Instant Scheduling
         </span>
@@ -363,12 +363,12 @@ function BookingDialog({
 
         <div className="mt-6 flex flex-col gap-4">
           <label className="flex flex-col gap-1.5">
-            <span className="text-[13px] font-medium text-muted-foreground">Meeting topic</span>
+            <span className="text-[13px] font-medium text-white/70">Meeting topic</span>
             <Select value={topic} onValueChange={setTopic}>
-              <SelectTrigger className="w-full rounded-2xl border-[var(--line)] bg-[rgba(243,236,227,0.04)] px-4 py-3 text-sm">
+              <SelectTrigger className="glass-input w-full rounded-2xl px-4 py-3 text-sm text-foreground">
                 <SelectValue placeholder="Select a topic" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="rounded-2xl border-white/20 bg-[rgba(58,13,5,0.88)] text-foreground backdrop-blur-2xl">
                 {bookingTopics.map((t) => (
                   <SelectItem key={t} value={t}>
                     {t}
@@ -380,7 +380,7 @@ function BookingDialog({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <label className="flex flex-col gap-1.5">
-              <span className="text-[13px] font-medium text-muted-foreground">Preferred date</span>
+              <span className="text-[13px] font-medium text-white/70">Preferred date</span>
               <input
                 type="date"
                 className={inputCls}
@@ -390,12 +390,12 @@ function BookingDialog({
               />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className="text-[13px] font-medium text-muted-foreground">Time slot</span>
+              <span className="text-[13px] font-medium text-white/70">Time slot</span>
               <Select value={slot} onValueChange={setSlot}>
-                <SelectTrigger className="w-full rounded-2xl border-[var(--line)] bg-[rgba(243,236,227,0.04)] px-4 py-3 text-sm">
+                <SelectTrigger className="glass-input w-full rounded-2xl px-4 py-3 text-sm text-foreground">
                   <SelectValue placeholder="Pick a slot" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-2xl border-white/20 bg-[rgba(58,13,5,0.88)] text-foreground backdrop-blur-2xl">
                   {bookingSlots.map((s) => (
                     <SelectItem key={s} value={s}>
                       {s}
@@ -407,7 +407,7 @@ function BookingDialog({
           </div>
 
           <label className="flex flex-col gap-1.5">
-            <span className="text-[13px] font-medium text-muted-foreground">Your email</span>
+            <span className="text-[13px] font-medium text-white/70">Your email</span>
             <input
               type="email"
               className={inputCls}
@@ -421,7 +421,7 @@ function BookingDialog({
           <button
             onClick={confirm}
             disabled={sending || !email || !date}
-            className="mt-2 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-ember text-sm font-semibold text-white transition-all duration-300 hover:scale-[1.02] hover:bg-ember-bright active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+            className="btn-light mt-2 inline-flex h-12 items-center justify-center gap-2 rounded-full text-sm font-semibold transition-all duration-300 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {sending ? "Scheduling…" : "Confirm & Schedule"}
           </button>

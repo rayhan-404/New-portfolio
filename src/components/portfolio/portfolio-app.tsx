@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { EmberScene } from "./ember-scene";
-import { SideRail, useActiveSection } from "./side-rail";
+import { AppBackground } from "./app-background";
+import { FloatingNav, useActiveSection } from "./nav";
 import { MenuOverlay } from "./menu-overlay";
 import { MobileHeader } from "./mobile-header";
 import { HeroSection } from "./hero-section";
@@ -19,14 +19,14 @@ export function PortfolioApp() {
 
   return (
     <>
-      <EmberScene />
-      <SideRail />
+      <AppBackground />
+      <FloatingNav />
       <MobileHeader onOpenMenu={() => setMenuOpen(true)} />
       <MenuOverlay open={menuOpen} onOpenChange={setMenuOpen} active={active} />
 
-      <div className="flex min-h-svh flex-col md:pl-20 lg:pl-24">
+      <div className="flex min-h-svh flex-col">
         <main className="flex-1">
-          <HeroSection onOpenMenu={() => setMenuOpen(true)} />
+          <HeroSection />
           <ProjectsSection />
           <AboutSection />
           <SkillsSection />
