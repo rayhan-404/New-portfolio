@@ -1,7 +1,19 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useMotionValueEvent,
+  useReducedMotion,
+} from "framer-motion";
 import { Mail, Volume2, VolumeX } from "lucide-react";
 import { useSoundEngine } from "./portfolio/nav";
 
@@ -47,7 +59,7 @@ function notchGeometryFor(w: number): NotchGeometry {
 /**
  * Border-box clip path: the full rail rectangle minus the notch.
  * Always emits the same command structure (M H V A A A V H Z) so
- * browsers can smoothly interpolate between positions.
+ * per-frame path rebuilds stay cheap and geometry-stable.
  */
 function buildNotchPath(w: number, h: number, cy: number, g: NotchGeometry): string {
   const { R, m, k } = g;
@@ -75,13 +87,16 @@ function buildNotchPath(w: number, h: number, cy: number, g: NotchGeometry): str
  * • White glass shell (blur + saturate) with rounded right corners and
  *   a warm directional depth shadow cast onto the content.
  * • Background notch: the surface is clipped with a tangent-continuous
- *   S-curve bite that glides to the active section — the fiery page
- *   gradient shows through the cutout with a small white target dot,
- *   so it reads as the background biting into the white bar.
+ *   S-curve bite whose center glides to the active section on a spring.
+ *   The path is rebuilt EVERY FRAME and written straight to the DOM —
+ *   no dependence on CSS `path()` interpolation, so the glide is
+ *   butter-smooth and retargets instantly in every browser.
+ * • Instant response: tapping a destination pins the notch target
+ *   immediately (no waiting for the scroll-spy to catch up mid-scroll);
+ *   the pin releases once the spy confirms, or after a short timeout.
  * • Vertical category labels (bottom-to-top) — warm ink, brand-red
- *   when active. Position measured via layout effects +
- *   ResizeObserver + font-ready, animated with a 0.45s ease.
- * • Actions: brand tile (back to top), sound toggle, quick-contact.
+ *   when active. Measured via layout effects + ResizeObserver +
+ *   font-ready. Actions: brand tile (back to top), sound, quick-contact.
  *   Visible on mobile (54px) through desktop (74px).
  */
 export function SidebarNotchNav({
@@ -91,67 +106,133 @@ export function SidebarNotchNav({
   savedCount = 0,
   onOpenContact,
 }: SidebarNotchNavProps) {
-  const [notch, setNotch] = useState<{ w: number; h: number; cy: number } | null>(null);
-  const asideRef = useRef<HTMLAsideElement>(null);
+  const [dims, setDims] = useState<{ w: number; h: number } | null>(null);
+  const [targetCy, setTargetCy] = useState<number | null>(null);
+  const [measureTick, setMeasureTick] = useState(0);
+  const [pinned, setPinned] = useState<number | null>(null);
+
+  const asideRef = useRef<HTMLElement>(null);
+  const surfaceRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLSpanElement>(null);
   const navContainerRef = useRef<HTMLDivElement>(null);
   const sideItemRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const initializedRef = useRef(false);
+
+  const cy = useMotionValue(0);
   const { soundOn, toggle } = useSoundEngine();
   const reduceMotion = useReducedMotion();
 
-  /* Measure the active item's center relative to the rail box */
-  const updateNotchPosition = useCallback(() => {
+  /* Optimistic activation — the notch answers the tap immediately.
+     The pin self-expires: while `pinned` differs from the scroll-spy's
+     verdict it wins; the moment the spy confirms (or after the timeout)
+     it defers back to `activeIndex`. */
+  const effectiveIndex =
+    pinned !== null && pinned !== activeIndex ? pinned : activeIndex;
+
+  const handleSelect = useCallback(
+    (index: number) => {
+      setPinned(index);
+      onSelectCategory(index);
+    },
+    [onSelectCategory]
+  );
+
+  useEffect(() => {
+    if (pinned === null) return;
+    const t = setTimeout(() => setPinned(null), 1800);
+    return () => clearTimeout(t);
+  }, [pinned]);
+
+  /* Measure the rail box; tick bumps force target recompute when
+     label metrics change (fonts load, container resize) */
+  const measure = useCallback(() => {
     const asideEl = asideRef.current;
-    const activeEl = sideItemRefs.current[activeIndex];
-    if (!asideEl || !activeEl) return;
-
+    if (!asideEl) return;
     const asideRect = asideEl.getBoundingClientRect();
-    const itemRect = activeEl.getBoundingClientRect();
     if (asideRect.width === 0 || asideRect.height === 0) return;
-
-    const g = notchGeometryFor(asideRect.width);
-    const raw = itemRect.top - asideRect.top + itemRect.height / 2;
-    // Keep the notch strictly inside the rail's rounded corners
-    const cy = Math.max(g.k + 18, Math.min(raw, asideRect.height - g.k - 18));
-
-    setNotch((prev) => {
+    setDims((prev) => {
       if (
         prev &&
         Math.abs(prev.w - asideRect.width) < 0.5 &&
-        Math.abs(prev.h - asideRect.height) < 0.5 &&
-        Math.abs(prev.cy - cy) < 0.5
+        Math.abs(prev.h - asideRect.height) < 0.5
       ) {
         return prev;
       }
-      return { w: asideRect.width, h: asideRect.height, cy };
+      return { w: asideRect.width, h: asideRect.height };
     });
-  }, [activeIndex]);
+    setMeasureTick((t) => (t + 1) % 1_000_000);
+  }, []);
 
-  /* Sync measure before paint — no first-frame flash */
+  /* Center of the effective item, clamped inside the rounded corners */
   useLayoutEffect(() => {
-    updateNotchPosition();
-  }, [updateNotchPosition, categories.length]);
+    if (!dims) return;
+    const activeEl = sideItemRefs.current[effectiveIndex];
+    const asideEl = asideRef.current;
+    if (!activeEl || !asideEl) return;
+    const asideRect = asideEl.getBoundingClientRect();
+    const itemRect = activeEl.getBoundingClientRect();
+    if (itemRect.height === 0 || asideRect.height === 0) return;
+    const g = notchGeometryFor(dims.w);
+    const raw = itemRect.top - asideRect.top + itemRect.height / 2;
+    const next = Math.max(g.k + 18, Math.min(raw, asideRect.height - g.k - 18));
+    setTargetCy((prev) => (prev !== null && Math.abs(prev - next) < 0.5 ? prev : next));
+  }, [dims, effectiveIndex, measureTick, categories.length]);
 
+  /* Paint one frame: rebuild the clip path + move the target dot */
+  const paint = useCallback(() => {
+    const d = dims;
+    const surface = surfaceRef.current;
+    if (!d || !surface) return;
+    const g = notchGeometryFor(d.w);
+    const v = cy.get();
+    surface.style.clipPath = `path("${buildNotchPath(d.w, d.h, v, g)}")`;
+    const dot = dotRef.current;
+    if (dot) {
+      dot.style.top = `${v}px`;
+      dot.style.opacity = "1";
+    }
+  }, [cy, dims]);
+
+  useMotionValueEvent(cy, "change", paint);
+  useEffect(() => {
+    paint();
+  }, [paint]);
+
+  /* Glide to the target on a spring — retargets from the current
+     position mid-flight, so rapid taps never jump or stutter */
+  useLayoutEffect(() => {
+    if (targetCy === null || !dims) return;
+    if (!initializedRef.current || reduceMotion) {
+      initializedRef.current = true;
+      cy.jump(targetCy);
+      paint();
+      return;
+    }
+    const controls = animate(cy, targetCy, {
+      type: "spring",
+      stiffness: 330,
+      damping: 34,
+      mass: 0.9,
+    });
+    return () => controls.stop();
+  }, [targetCy, dims, cy, reduceMotion, paint]);
+
+  /* Keep measurements honest across resizes / webfont settling */
   useEffect(() => {
     const asideEl = asideRef.current;
     if (!asideEl) return;
 
-    const ro = new ResizeObserver(updateNotchPosition);
+    const ro = new ResizeObserver(measure);
     ro.observe(asideEl);
     if (navContainerRef.current) ro.observe(navContainerRef.current);
-    window.addEventListener("resize", updateNotchPosition);
-    // Vertical label heights settle once webfonts load
-    document.fonts?.ready.then(updateNotchPosition).catch(() => {});
+    window.addEventListener("resize", measure);
+    document.fonts?.ready.then(measure).catch(() => {});
 
     return () => {
       ro.disconnect();
-      window.removeEventListener("resize", updateNotchPosition);
+      window.removeEventListener("resize", measure);
     };
-  }, [updateNotchPosition]);
-
-  const geometry = notch ? notchGeometryFor(notch.w) : null;
-  const notchPath = notch && geometry ? buildNotchPath(notch.w, notch.h, notch.cy, geometry) : null;
-  const EASE = "cubic-bezier(0.25, 1, 0.5, 1)";
-  const slide = reduceMotion ? "none" : `0.45s ${EASE}`;
+  }, [measure]);
 
   return (
     <motion.aside
@@ -168,36 +249,28 @@ export function SidebarNotchNav({
         className="pointer-events-none absolute inset-0 rounded-r-[16px] shadow-[22px_0_54px_-30px_rgba(84,12,0,0.55)] sm:rounded-r-[18px] md:rounded-r-[22px]"
       />
 
-      {/* White glass surface — the background bites in through the notch clip */}
+      {/* White glass surface — the background bites in through the notch clip.
+          clipPath is painted imperatively every animation frame. */}
       <div
+        ref={surfaceRef}
         aria-hidden="true"
         className="glass-rail-white pointer-events-none absolute inset-0 rounded-r-[16px] sm:rounded-r-[18px] md:rounded-r-[22px]"
-        style={{
-          borderRight: "1px solid rgba(255, 255, 255, 0.72)",
-          clipPath: notchPath ? `path("${notchPath}")` : undefined,
-          transition: `clip-path ${slide}`,
-          willChange: "clip-path",
-        }}
+        style={{ borderRight: "1px solid rgba(255, 255, 255, 0.72)" }}
       />
 
       {/* Target dot — floats inside the background notch */}
       <span
+        ref={dotRef}
         aria-hidden="true"
         className="pointer-events-none absolute z-[2] h-[7px] w-[7px] rounded-full bg-white shadow-[0_1px_6px_rgba(122,32,0,0.5)]"
-        style={{
-          right: geometry ? Math.max(6, geometry.R / 2 - 3.5) : 8,
-          top: notch ? notch.cy : "50%",
-          opacity: notch ? 1 : 0,
-          transform: "translateY(-50%)",
-          transition: `top ${slide}, opacity 0.3s ease`,
-        }}
+        style={{ right: 9, top: 0, opacity: 0 }}
       />
 
       {/* Brand tile → back to top */}
       <button
         id="sidebar-brand-btn"
         type="button"
-        onClick={() => onSelectCategory(0)}
+        onClick={() => handleSelect(0)}
         title="Scroll to Top / Home"
         aria-label="Blue Nile — back to top"
         className="relative z-[2] mb-3 flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-[14px] bg-gradient-to-br from-[#8f1d0c] via-[#a62a08] to-[#c2410c] text-[13px] font-black tracking-tight text-[#fff7ee] shadow-[0_10px_22px_-10px_rgba(124,26,6,0.65)] outline-none transition-transform duration-300 hover:scale-105 focus-visible:ring-2 focus-visible:ring-[#7c1a06]/40 active:scale-95"
@@ -213,7 +286,7 @@ export function SidebarNotchNav({
         className="relative z-[2] flex w-full flex-1 flex-col items-stretch justify-around overflow-visible py-2"
       >
         {categories.map((cat, idx) => {
-          const isActive = idx === activeIndex;
+          const isActive = idx === effectiveIndex;
           return (
             <button
               key={cat.id}
@@ -225,9 +298,9 @@ export function SidebarNotchNav({
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                onSelectCategory(idx);
+                handleSelect(idx);
               }}
-              aria-current={isActive ? "page" : undefined}
+              aria-current={idx === activeIndex ? "page" : undefined}
               title={cat.label}
               className="group relative z-[2] flex w-full cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent px-0 py-2.5 outline-none focus-visible:ring-1 focus-visible:ring-[#7c1a06]/35"
             >

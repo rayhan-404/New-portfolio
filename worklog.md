@@ -248,3 +248,22 @@ Work Log:
 Stage Summary:
 - Navbar is now white Apple frost with the page background genuinely biting into it at the active section (reference-faithful), right rail unified white, tooltip clipping fixed, label transform bug fixed.
 - Files: src/components/SidebarNotchNav.tsx, src/components/portfolio/side-rails.tsx, src/app/globals.css.
+
+---
+Task ID: 12 (Mobile full-bleed cutout hero + notch animation fix)
+Agent: Main agent
+Task: User: (a) "specially mobile er jonne, hero section a 100% width a ekta pic thakbe, transparent background er, jate pic er background a website er main background thake. ei image er top left a 'Hello..' bottom ta softly blend hoye jabe glass effect er sathe and text big 'I am M Rayhan' and my intro." (b) "notch er animation ta thik moto work korcho na, response korche na, ota fix korbe."
+
+Work Log:
+- Diagnosed notch complaints: (1) scroll-spy-only activation meant taps waited for IntersectionObserver bands to cross intermediate sections — felt unresponsive; (2) CSS transition of clip-path path() relies on browser path interpolation — unreliable/janky.
+- SidebarNotchNav.tsx (rewritten): MotionValue cy driven by framer-motion animate() spring (stiffness 330, damping 34, mass .9); paint() rebuilds the tangent-continuous notch path EVERY FRAME and writes style.clipPath + dot top directly to DOM (no CSS path() interpolation dependency, mid-flight retargeting, reduceMotion → jump). First measure uses cy.jump pre-paint (no flash).
+- Instant response: handleSelect pins the tapped index immediately (effectiveIndex = pinned when pinned !== activeIndex); pin self-expires after 1800ms via timeout (no setState-in-effect lint violation) and defers back to scroll-spy the moment it confirms.
+- Lint fixes: removed ref-write-during-render (dimsRef) by making paint depend on [cy, dims]; restructured pin release into timeout-only effect.
+- Mobile hero: generated new green-screen portrait via z-ai SDK (864x1152, three-quarter body, charcoal blazer + black turtleneck — persona consistent with desktop card) to public/generated/hero-greenscreen.png (JPEG-in-.png quirk noted; ensureAlpha handles it).
+- scripts/make-cutout.mjs (v2): GLOBAL green-dominance mask (g>30 && g>r+14 && g>b+14 — flood-fill v1 failed on vignette/pockets), 2px erosion, despill, feathered alpha, bbox crop. CRITICAL fix: sharp .blur() on 1-band raw emits 3 bands (soft.length 2985984 vs 995328) which produced scanline-alpha corruption — now blurs a replicated 3-band mask and reads byte i*3. Output: hero-cutout.png 761x1065, 56.7% opaque, verified visually (clean edges, no fringe).
+- hero-section.tsx: extracted HeroCTAs/StatsGrid; new <lg mobile hero = full-bleed (-mx-5/-mx-8) transparent cutout (next/image w=761 h=1065, priority, drop-shadow, warm halo) with 'Hello..' top-left overlay (text-glow, staggered entrance) + glass-strong panel (-mt-14/-mt-20, rounded-t-[2.75rem]) overlapping the mask-faded image bottom (hero-cutout-fade utility in globals.css: mask-image linear-gradient to transparent 97%) containing availability chip, big 'I am M Rayhan' (gold-gradient name), role tag, intro, CTAs, stats. Desktop split hero (lg+) unchanged.
+- Verification: lint 0 problems. Agent Browser 390x844: cutout spans full width with fiery bg visible through transparency; Hello.. top-left; suit melts into glass panel; 'I am M Rayhan' + intro + CTAs + stats render; notch visibly bites at HOME/PROJECTS. Notch glide PROVEN by frame sampling after side-nav-projects click: top 139.08 → 162.83 → 209.45 → 212.22 (spring deceleration, settles at PROJECTS); contact click → top 651.63, scrollY 9149; scroll-spy returns notch to HOME near top. Desktop 1440x900: split hero intact, glide 175.56 → 241.96 → 300.71 (ABOUT), footer between rails with notch at CONTACT. Tablet 768x1024: capped 560px cutout centered, rails intact. Console: dev-mode logs only; page errors none; dev.log 200s (historical 404s for cutout predate file creation).
+
+Stage Summary:
+- Notch now answers taps instantly and glides on a spring in every browser (per-frame DOM clip-path painting); mobile hero rebuilt as a full-width transparent cutout with 'Hello..' overlay and glass-blended name/intro panel; desktop untouched.
+- Files: src/components/SidebarNotchNav.tsx, src/components/portfolio/hero-section.tsx, src/app/globals.css, scripts/make-cutout.mjs, scripts/gen-greenscreen.mjs, public/generated/hero-cutout.png (greenscreen intermediate deleted).
