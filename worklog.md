@@ -380,3 +380,20 @@ Work Log:
 Stage Summary:
 - Name mark now = "I am," (italic serif) + "M Rayhan" (Lobster bold retro script, white) on one line at every breakpoint. Journey dropped its red field and now floats directly on the site's ember background with shorter glass cards and monochrome emoji titles. About reads tighter.
 - Files: layout.tsx, globals.css, hero-section.tsx, journey-section.tsx, portfolio-data.ts, about-section.tsx.
+
+---
+Task ID: 36 (follow-up feedback — two-line name, Lucide title icons, tighter About)
+Agent: Main agent
+Task: User: (1) About line spacing aro komaw + word space aro komaw; (2) "Iam" er porer line a "M Rayhan" hobe (undo the one-line merge — name back on its own line); (3) mono emoji gulo → line icons.
+
+Work Log:
+- Hero (hero-section.tsx, mobile + desktop): split the flex one-liner back into two elements — "I am," (Instrument Serif italic) as its own line, then "M Rayhan" in font-script (Lobster, white, text-glow) on the next line. Mobile 1.7rem serif / 2.7rem script (sm 2.1rem / 6xl); desktop 2.3rem serif / 4.4rem script (xl 4.9rem); restored the staggered two-element entrance animation.
+- Journey icons (journey-section.tsx + portfolio-data.ts): Era.emoji: string → Era.icon: string (lucide key, follows the existing heroBadges string-key pattern); journeyFuture.icon = "rocket". TITLE_ICONS map = baby/home/shapes/school/book/gradcap/rocket (Baby, Home, Shapes, School, BookOpen, GraduationCap, Rocket). Icons render inline before the title at h-[0.82em] w-[0.82em] (em-sized so they scale with the clamp title), align-[-0.08em], strokeWidth 2.25, inheriting the white title color — true line icons, no filter needed.
+- globals.css: removed the now-unused .journey-emoji grayscale rule; added t36 recompile nudge.
+- About (about-section.tsx): leading philosophy 1.5→1.4, longBio 1.55→1.45, experience descriptions 1.5→1.45; paragraph gaps mt-3→mt-2.5; added [word-spacing:-0.06em] to philosophy, longBio and experience descriptions.
+- VERIFICATION (agent-browser): desktop 1440×900 — two-line name ("I am," / script M Rayhan), journey titles show white line icons (baby, shapes, school) aligned to cap height, 🚀→Rocket line icon on the 2028 Loading strip, About visibly denser; transparent journey flows into Projects. Mobile 390×844 — two-line name fits, Home/Shapes icons correct, scrollWidth 390 == innerWidth, zero page errors, dev.log clean, lint 0 problems.
+- COMMITTED (this commit).
+
+Stage Summary:
+- Name lockup = "I am," above, "M Rayhan" in white Lobster script below (user's final arrangement). Journey chapter titles carry Lucide line icons instead of grayscale emoji. About typography tightened further (leading 1.4-1.45 + negative word-spacing).
+- Files: hero-section.tsx, journey-section.tsx, portfolio-data.ts, about-section.tsx, globals.css.

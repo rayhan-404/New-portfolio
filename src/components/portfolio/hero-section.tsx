@@ -188,14 +188,13 @@ export function HeroSection() {
               transition={{ duration: 0.95, delay: 0.32, ease: EASE }}
               className="relative z-10 -mt-20 px-5 pb-2 text-left sm:-mt-28 sm:px-8"
             >
-              {/* Name — one line: italic serif "I am," + bold retro script "M Rayhan" */}
-              <h1 className="text-glow mt-2 flex items-baseline gap-x-3 leading-none text-white">
-                <span className="font-serif text-[1.7rem] font-normal italic leading-none text-[#fff9f1] sm:text-[2.1rem]">
-                  I am<span className="text-gold-gradient">,</span>
-                </span>
-                <span className="font-script text-[2.6rem] leading-none sm:text-6xl">
-                  M Rayhan
-                </span>
+              {/* Name — "I am," on top, the script name on its own line below */}
+              <p className="font-serif text-[1.7rem] font-normal italic leading-none text-[#fff9f1] sm:text-[2.1rem]">
+                I am<span className="text-gold-gradient">,</span>
+              </p>
+
+              <h1 className="font-script text-glow mt-2.5 text-[2.7rem] leading-[1.05] text-white sm:text-6xl">
+                M Rayhan
               </h1>
 
               <IntroBio className="mt-6" />
@@ -209,19 +208,23 @@ export function HeroSection() {
         <div className="grid items-center grid-cols-[minmax(0,7fr)_minmax(0,5fr)] gap-12">
           {/* ── Intro column ───────────────────────────────────── */}
           <div className="text-left">
-            {/* Name — one line: italic serif "I am," + bold retro script "M Rayhan" */}
+            {/* Name — "I am," on top, the script name on its own line below */}
+            <motion.p
+              initial={reduce ? false : { opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
+              className="font-serif text-[2.3rem] font-normal italic leading-none text-[#fff9f1]"
+            >
+              I am<span className="text-gold-gradient">,</span>
+            </motion.p>
+
             <motion.h1
               initial={reduce ? false : { opacity: 0, y: 26 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.85, delay: 0.32, ease: EASE }}
-              className="text-glow flex items-baseline gap-x-4 leading-none text-white"
+              className="font-script text-glow mt-3 text-[4.4rem] leading-[1.05] text-white xl:text-[4.9rem]"
             >
-              <span className="font-serif text-[2.3rem] font-normal italic leading-none text-[#fff9f1]">
-                I am<span className="text-gold-gradient">,</span>
-              </span>
-              <span className="font-script text-[4.4rem] leading-none xl:text-[4.9rem]">
-                M Rayhan
-              </span>
+              M Rayhan
             </motion.h1>
 
             <motion.div

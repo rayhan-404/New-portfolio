@@ -1,7 +1,29 @@
 "use client";
 
+import type { LucideIcon } from "lucide-react";
+import {
+  Baby,
+  BookOpen,
+  GraduationCap,
+  Home,
+  Rocket,
+  School,
+  Shapes,
+} from "lucide-react";
 import { journey, journeyFuture } from "@/lib/portfolio-data";
 import { Reveal } from "./reveal";
+
+/* Line icons for the chapter titles — stroke glyphs inherit the white
+   title color, sized in em so they scale with the clamp() title. */
+const TITLE_ICONS: Record<string, LucideIcon> = {
+  baby: Baby,
+  home: Home,
+  shapes: Shapes,
+  school: School,
+  book: BookOpen,
+  gradcap: GraduationCap,
+  rocket: Rocket,
+};
 
 /* Geist black (900) — the timeline's ultra-heavy display weight.
    Inline style so it reliably beats the @utility font-display default. */
@@ -73,6 +95,7 @@ export function JourneySection() {
 
           {journey.map((era, idx) => {
             const isLeft = idx % 2 === 0;
+            const TitleIcon = TITLE_ICONS[era.icon];
             return (
               <Reveal key={era.period}>
                 <article
@@ -127,12 +150,13 @@ export function JourneySection() {
                           : "text-[clamp(24px,3.1vw,38px)]"
                       }`}
                     >
-                      <span
-                        aria-hidden="true"
-                        className="journey-emoji mr-2 select-none align-baseline"
-                      >
-                        {era.emoji}
-                      </span>
+                      {TitleIcon && (
+                        <TitleIcon
+                          aria-hidden="true"
+                          strokeWidth={2.25}
+                          className="mr-2 inline-block h-[0.82em] w-[0.82em] align-[-0.08em]"
+                        />
+                      )}
                       {era.title}
                     </h2>
 
@@ -184,13 +208,21 @@ export function JourneySection() {
                   className="my-2.5 leading-[0.9] tracking-[-0.055em] text-white"
                   style={{ ...BLACK, fontSize: "clamp(38px, 5vw, 70px)" }}
                 >
-                  <span
-                    aria-hidden="true"
-                    className="journey-emoji mr-3 select-none align-baseline"
-                  >
-                    {journeyFuture.emoji}
-                  </span>
-                  {journeyFuture.title}
+                  {(() => {
+                    const FutureIcon = TITLE_ICONS[journeyFuture.icon];
+                    return (
+                      <>
+                        {FutureIcon && (
+                          <FutureIcon
+                            aria-hidden="true"
+                            strokeWidth={2.25}
+                            className="mr-3 inline-block h-[0.82em] w-[0.82em] align-[-0.08em]"
+                          />
+                        )}
+                        {journeyFuture.title}
+                      </>
+                    );
+                  })()}
                   <span className="opacity-40">...</span>
                 </h2>
                 <p className="text-[15px] leading-relaxed text-white/65">

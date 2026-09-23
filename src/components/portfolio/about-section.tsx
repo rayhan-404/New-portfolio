@@ -81,10 +81,10 @@ export function AboutSection() {
                   <Sparkles className="h-4 w-4 text-gold" aria-hidden="true" />
                   <p className="font-tag text-[10px] text-gold-bright">Philosophy</p>
                 </div>
-                <p className="mt-3 text-lg font-medium leading-[1.5] text-foreground/95">
+                <p className="mt-2.5 text-lg font-medium leading-[1.4] [word-spacing:-0.06em] text-foreground/95">
                   {person.philosophy}
                 </p>
-                <p className="mt-3 text-[15px] leading-[1.55] text-white/70">
+                <p className="mt-2.5 text-[15px] leading-[1.45] [word-spacing:-0.06em] text-white/70">
                   {person.longBio}
                 </p>
                 <p className="font-tag mt-6 flex items-center gap-2 text-[10px] text-muted-foreground">
@@ -143,7 +143,7 @@ export function AboutSection() {
                         <p className="mt-0.5 text-[13px] font-medium text-gold-bright/90">
                           {job.company}
                         </p>
-                        <p className="mt-1.5 text-sm leading-[1.5] text-white/70">
+                        <p className="mt-1.5 text-sm leading-[1.45] [word-spacing:-0.06em] text-white/70">
                           {job.description}
                         </p>
                       </div>

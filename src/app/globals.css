@@ -684,13 +684,6 @@
   animation: journey-pulse 2s ease-in-out infinite;
 }
 
-/* Monochrome emoji in journey titles — grayscale + lifted so the glyph
-   reads as a single light tone matching the white type on the dark bg */
-.journey-emoji {
-  filter: grayscale(1) brightness(1.65) contrast(0.95);
-  -webkit-filter: grayscale(1) brightness(1.65) contrast(0.95);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .journey-pulse {
     animation: none;
@@ -706,4 +699,5 @@
 /* recompile nudge t34c */
 
 /* recompile nudge t35 — Lobster script name + font-script utility + journey-emoji mono filter */
+/* recompile nudge t36 — two-line script name + Lucide title icons + About tighter leading/word-spacing */
 /* recompile nudge t34d */
