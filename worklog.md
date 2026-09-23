@@ -468,3 +468,26 @@ Work Log:
 Stage Summary:
 - Current design is now double-protected: (1) every change committed to git (Task 39 = 94d4199 + worklog checkpoint), (2) offline backup set in /home/z/backups (bundle + tar + db + restore script). If the workspace ever resets, one command restores the exact state: bash /home/z/backups/restore-my-project.sh
 - Files: worklog.md (this entry); artifacts in /home/z/backups/.
+
+---
+Task ID: 41 (full visual QA pass — user: "visual onek problem ache, ui ekhono parfect na")
+Agent: Main agent
+Task: User asked for a deep analysis of the whole UI and updates to fix every visual problem.
+
+Work Log:
+- Captured all 7 sections + footer at 1440×900 AND 390×844 (16 screenshots). Discovery: window.scrollTo(0, el.offsetTop) does NOT navigate this site — offsetTop is relative to the positioned SlideSection wrapper, so it lands ~0 (screenshots all showed home). Correct programmatic navigation = dispatch the app's own event: window.dispatchEvent(new CustomEvent('portfolio:section-navigate', {detail: '<id>'})), wait ~1.5s for the 0.8s slide reveal. Use this in all future browser verification.
+- ANALYSIS findings (16 shots reviewed one by one):
+  1. BUG desktop journey: ghost years clamp(70px,8vw,115px) render "2005 — 2007" ≈690px wide; absolute right-[25px]/left-[25px] anchoring against the half-column makes left years bleed under the left sidebar (section overflow-hidden clips them → reads "005") and right years clip under the right rail ("2011" cut).
+  2. BUG mobile projects: flagship card header chips are shrink-0 inside flex justify-between → "PRODUCTION SAAS"+"FEATURED" (220px) overflow the 201px space left of the 32px arrow button → FEATURED sits under the ↗ button.
+  3. MINOR mobile projects: filter container rounded-full looks like a broken 2-row stadium when the 3 chips wrap.
+  4. Reviewed-and-OK (no change): hero both breakpoints (Task 39 zoom state good), journey mobile timeline, about (photo card/philosophy/stats/trajectory all aligned), skills (bars/chips/marquee), services (2×2 grid, aligned chip rows), contact (email/segment/form cards), footer (brand/links/watermark) — desktop + mobile.
+- FIXES:
+  - journey-section.tsx: desktop ghost year size → clamp(54px,5.5vw,84px) (+ comment). Full "2005 — 2007" now fits its half-column at every desktop width (1440: ≈504px < 575px available; 1024: ≈338px < 386px).
+  - projects-section.tsx: card header chip span +flex-wrap → "Featured" wraps to its own row on narrow cards instead of colliding with the arrow; filter container rounded-full → rounded-[22px] (identical look in 1 row, intentional look in 2 rows).
+- VERIFICATION (agent-browser): desktop 1440×900 journey — "2005"/"2007"/"2011" all fully readable inside the viewport; projects desktop unchanged (pill still stadium in 1 row, header intact); mobile 390×844 projects — FEATURED on its own row, arrow clear, filter container clean. lint 0 problems; dev.log all 200; no page errors.
+- COMMITTED (7c28bbb).
+
+Stage Summary:
+- Three visual bugs fixed (journey ghost-year clipping, project chip/arrow collision, filter pill wrap shape); full-site screenshot audit found everything else rendering cleanly on both breakpoints.
+- NOTE for future content decision (user hasn't asked, flagged before): About still carries studio-era persona copy ("Senior Full-Stack Engineer @ TechFlow Studios", "4+ Years Craft / 35+ Apps Shipped / 99.8% Satisfaction") and Projects/Services copy is engineer-flavored vs the CSE-student persona used everywhere else — recommend a content pass when the user wants it.
+- Files: journey-section.tsx, projects-section.tsx.
