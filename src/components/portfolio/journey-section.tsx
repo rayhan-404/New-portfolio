@@ -12,9 +12,10 @@ const BLACK = {
 
 /**
  * JourneySection — "How I got here."
- * The user's red-field timeline design: giant MY JOURNEY backdrop,
- * a centered spine on desktop (left rail on mobile), huge ghost years,
- * glowing dots, and frosted glass cards in the site's own card recipe.
+ * Transparent field that melts into the site's own background: giant
+ * MY JOURNEY backdrop, a centered spine on desktop (left rail on mobile),
+ * huge ghost years, glowing dots, compact frosted-glass cards with
+ * monochrome emoji titles in the site's own card recipe.
  * Ends with the "2028 · Loading..." next-chapter strip.
  */
 export function JourneySection() {
@@ -23,12 +24,6 @@ export function JourneySection() {
       id="journey"
       aria-label="My journey"
       className="relative min-h-svh overflow-hidden px-5 py-20 sm:px-8 md:px-10 lg:py-28"
-      style={{
-        background:
-          "radial-gradient(75% 45% at 65% 0%, rgba(255,157,45,0.65), transparent 70%)," +
-          "radial-gradient(65% 55% at 5% 55%, rgba(105,0,0,0.5), transparent 75%)," +
-          "linear-gradient(145deg, #760603 0%, #c52a12 42%, #f45b17 100%)",
-      }}
     >
       {/* Giant backdrop word — sits behind everything, all breakpoints */}
       <span
@@ -81,7 +76,7 @@ export function JourneySection() {
             return (
               <Reveal key={era.period}>
                 <article
-                  className={`group relative mb-16 w-full pl-[52px] md:mb-[90px] md:w-1/2 md:min-h-[300px] md:pl-0 ${
+                  className={`group relative mb-14 w-full pl-[52px] md:mb-[84px] md:w-1/2 md:min-h-[230px] md:pl-0 ${
                     isLeft
                       ? "md:pr-[72px] md:text-right lg:pr-[90px]"
                       : "md:ml-[50%] md:pl-[72px] lg:pl-[90px]"
@@ -107,16 +102,16 @@ export function JourneySection() {
                     }`}
                   />
 
-                  {/* Card — the site's liquid-glass recipe */}
+                  {/* Card — the site's liquid-glass recipe, kept compact */}
                   <div
-                    className={`journey-card relative z-[2] w-full max-w-[470px] rounded-[22px] p-6 text-left sm:p-[30px] md:ml-auto ${
+                    className={`journey-card relative z-[2] w-full max-w-[470px] rounded-[22px] p-5 text-left sm:p-6 md:ml-auto ${
                       era.current
-                        ? "journey-card--current p-7 sm:p-[38px]"
+                        ? "journey-card--current p-6 sm:p-7"
                         : ""
                     } ${isLeft ? "" : "md:ml-0"}`}
                   >
                     {era.current && (
-                      <div className="mb-5 inline-flex items-center gap-2.5 font-tag text-[9px] tracking-[0.22em] text-white/90">
+                      <div className="mb-4 inline-flex items-center gap-2.5 font-tag text-[9px] tracking-[0.22em] text-white/90">
                         <span
                           aria-hidden="true"
                           className="journey-pulse h-[7px] w-[7px] rounded-full bg-white shadow-[0_0_0_4px_rgba(255,255,255,0.12),0_0_16px_rgba(255,255,255,0.85)]"
@@ -128,14 +123,20 @@ export function JourneySection() {
                     <h2
                       className={`font-display uppercase leading-[0.95] tracking-[-0.045em] text-white ${
                         era.current
-                          ? "text-[clamp(30px,4.4vw,58px)]"
-                          : "text-[clamp(26px,3.4vw,44px)]"
+                          ? "text-[clamp(28px,4vw,50px)]"
+                          : "text-[clamp(24px,3.1vw,38px)]"
                       }`}
                     >
+                      <span
+                        aria-hidden="true"
+                        className="journey-emoji mr-2 select-none align-baseline"
+                      >
+                        {era.emoji}
+                      </span>
                       {era.title}
                     </h2>
 
-                    <p className="mt-2.5 text-[15px] font-semibold text-white/85">
+                    <p className="mt-2 text-[15px] font-semibold text-white/85">
                       {era.place}
                     </p>
 
@@ -146,16 +147,16 @@ export function JourneySection() {
                     )}
 
                     {era.degree && (
-                      <div className="mt-6 border-l-2 border-white/70 bg-white/[0.05] px-4 py-3 font-mono text-[11px] leading-[1.5] text-white/90">
+                      <div className="mt-4 border-l-2 border-white/70 bg-white/[0.05] px-3.5 py-2.5 font-mono text-[11px] leading-[1.5] text-white/90">
                         {era.degree}
                       </div>
                     )}
 
-                    <p className="mt-[22px] max-w-[390px] text-[14px] leading-[1.75] text-white/75">
+                    <p className="mt-4 max-w-[390px] text-[14px] leading-[1.6] text-white/75">
                       {era.description}
                     </p>
 
-                    <span className="mt-[22px] inline-block rounded-full border border-white/25 px-[11px] py-[7px] font-tag text-[8px] tracking-[0.22em] text-white/70">
+                    <span className="mt-4 inline-block rounded-full border border-white/25 px-[11px] py-[6px] font-tag text-[8px] tracking-[0.22em] text-white/70">
                       {era.tag}
                     </span>
                   </div>
@@ -183,6 +184,12 @@ export function JourneySection() {
                   className="my-2.5 leading-[0.9] tracking-[-0.055em] text-white"
                   style={{ ...BLACK, fontSize: "clamp(38px, 5vw, 70px)" }}
                 >
+                  <span
+                    aria-hidden="true"
+                    className="journey-emoji mr-3 select-none align-baseline"
+                  >
+                    {journeyFuture.emoji}
+                  </span>
                   {journeyFuture.title}
                   <span className="opacity-40">...</span>
                 </h2>

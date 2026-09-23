@@ -362,3 +362,21 @@ Stage Summary:
 - Hero bio now reads as an editorial column: special italic serif opener, justified Source Serif 4 body, white Syne name mark, larger portrait on both breakpoints. Journey is the user's red-field timeline design 1:1 (giant MY JOURNEY, How I got here., center spine, ghost years, glowing dots, 6 chapters ending in the pulsing CURRENTLY HERE NWU card, 2028 Loading strip) with cards rendered in the site's own frosted-glass language. Nav rail is clean: no MR tile, no message icon.
 - Files: layout.tsx, globals.css, hero-section.tsx, journey-section.tsx, portfolio-data.ts, SidebarNotchNav.tsx, portfolio-app.tsx.
 - Still pending (noted, user hasn't asked): About section studio-era stats + TechFlow/Pulse experience entries; Projects/Services/Contact copy still engineer-flavored vs student persona.
+
+---
+Task ID: 35 (user feedback polish — About spacing, script name, journey transparency)
+Agent: Main agent
+Task: User: (1) About er line spacing komaw; (2) "M Rayhan" same line as "I am" + use the font from the attached image (Rebel-style bold retro script); (3) Journey — background transparent so it melts into the main background, card heights reduced, emojis added to titles in monochrome.
+
+Work Log:
+- Font: identified the attached "Rebel" sample as a bold retro connected script → closest Google Font = Lobster. Added Lobster to layout.tsx (--font-lobster, weight 400) + new @utility font-script in globals.css (no letter-spacing tweaks so Lobster's letters stay connected; font-name/Syne kept as fallback + still defined).
+- Hero (hero-section.tsx, mobile + desktop): merged the separate "I am," paragraph and "M Rayhan" h1 into ONE h1 = flex items-baseline: "I am," in Instrument Serif italic + "M Rayhan" in font-script white with text-glow. Sizes: mobile 1.7rem serif + 2.6rem script (sm: 2.1rem + text-6xl); desktop 2.3rem + 4.4rem (xl: 4.9rem). Verified one-line fit at 390px (h1 width 296px, right edge 370px < 390vw, no horizontal overflow).
+- Journey (journey-section.tsx): REMOVED the 3-layer red gradient inline background — section is now transparent and the site's ember-glass main background flows through (user: "main background er sathe mass hoy"). Card height reduction: padding p-6/sm:p-[30px] → p-5/sm:p-6 (current: p-7/p-[38px] → p-6/p-7), title clamps reduced (44→38 / 58→50 max), internal margins mt-[22px]→mt-4, place mt-2.5→mt-2, degree mt-6/py-3→mt-4/py-2.5, description leading 1.75→1.6, badge py-[7px]→py-[6px], article mb-16/md:mb-[90px]→mb-14/md:mb-[84px], md:min-h 300→230. Titles now lead with era.emoji in a .journey-emoji span (globals.css: filter grayscale(1) brightness(1.65) contrast(0.95) = monochrome glyph matching white type). Emojis: 👶 lap, 🏡 home, 🧸 kindergarten, 🏫 school, 📚 college, 🎓 NWU, 🚀 future "Loading" strip.
+- About (about-section.tsx): line spacing tightened — philosophy leading-relaxed→[1.5] + mt-4→mt-3, longBio leading-relaxed→[1.55] + mt-4→mt-3, experience items pb-8→pb-6 + description leading-relaxed→[1.5] + mt-2→mt-1.5, Trajectory ol mt-6→mt-4.
+- Turbopack CSS verified visually this time (script font + grayscale emoji both visible in screenshots — no stale chunk issue).
+- VERIFICATION (agent-browser): desktop 1440×900 — hero one-line script name over the warm field; journey transparent (ember bg through the whole section), alternating compact glass cards, monochrome emojis, CURRENTLY HERE + degree, 2028 🚀 Loading strip; About tighter rhythm. Mobile 390×844 — name on one line, scrollWidth 390 == innerWidth, journey left-rail + emoji titles, About compact. Nav: SERVICES/CONTACT land top=0 (sub-pixel), footer present. Zero page errors (only the known benign framer-motion non-static warning); dev.log all 200. Lint: 0 problems.
+- COMMITTED (this commit).
+
+Stage Summary:
+- Name mark now = "I am," (italic serif) + "M Rayhan" (Lobster bold retro script, white) on one line at every breakpoint. Journey dropped its red field and now floats directly on the site's ember background with shorter glass cards and monochrome emoji titles. About reads tighter.
+- Files: layout.tsx, globals.css, hero-section.tsx, journey-section.tsx, portfolio-data.ts, about-section.tsx.

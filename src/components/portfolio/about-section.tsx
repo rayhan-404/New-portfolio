@@ -81,10 +81,10 @@ export function AboutSection() {
                   <Sparkles className="h-4 w-4 text-gold" aria-hidden="true" />
                   <p className="font-tag text-[10px] text-gold-bright">Philosophy</p>
                 </div>
-                <p className="mt-4 text-lg font-medium leading-relaxed text-foreground/95">
+                <p className="mt-3 text-lg font-medium leading-[1.5] text-foreground/95">
                   {person.philosophy}
                 </p>
-                <p className="mt-4 text-[15px] leading-relaxed text-white/70">
+                <p className="mt-3 text-[15px] leading-[1.55] text-white/70">
                   {person.longBio}
                 </p>
                 <p className="font-tag mt-6 flex items-center gap-2 text-[10px] text-muted-foreground">
@@ -115,9 +115,9 @@ export function AboutSection() {
             <Reveal delay={0.12}>
               <div className="glass rounded-3xl p-6 sm:p-8">
                 <p className="font-tag text-[10px] text-gold-bright">Trajectory</p>
-                <ol className="mt-6 flex flex-col">
+                <ol className="mt-4 flex flex-col">
                   {experience.map((job, i) => (
-                    <li key={job.period} className="relative flex gap-5 pb-8 last:pb-0">
+                    <li key={job.period} className="relative flex gap-5 pb-6 last:pb-0">
                       {/* rail */}
                       {i < experience.length - 1 && (
                         <span
@@ -143,7 +143,7 @@ export function AboutSection() {
                         <p className="mt-0.5 text-[13px] font-medium text-gold-bright/90">
                           {job.company}
                         </p>
-                        <p className="mt-2 text-sm leading-relaxed text-white/70">
+                        <p className="mt-1.5 text-sm leading-[1.5] text-white/70">
                           {job.description}
                         </p>
                       </div>

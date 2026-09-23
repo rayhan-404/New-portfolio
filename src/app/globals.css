@@ -481,11 +481,18 @@
   font-family: var(--font-source-serif), ui-serif, Georgia, serif;
 }
 
-/* Stylish geometric display — the personal name mark */
+/* Stylish geometric display — secondary name weight */
 @utility font-name {
   font-family: var(--font-syne), var(--font-geist-sans), ui-sans-serif, sans-serif;
   font-weight: 800;
   letter-spacing: -0.015em;
+}
+
+/* Bold retro script — the "M Rayhan" name mark (user's Rebel reference).
+   No letter-spacing tweaks: Lobster's letters are meant to connect. */
+@utility font-script {
+  font-family: var(--font-lobster), var(--font-syne), cursive;
+  font-weight: 400;
 }
 
 /* ============================================================
@@ -677,6 +684,13 @@
   animation: journey-pulse 2s ease-in-out infinite;
 }
 
+/* Monochrome emoji in journey titles — grayscale + lifted so the glyph
+   reads as a single light tone matching the white type on the dark bg */
+.journey-emoji {
+  filter: grayscale(1) brightness(1.65) contrast(0.95);
+  -webkit-filter: grayscale(1) brightness(1.65) contrast(0.95);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .journey-pulse {
     animation: none;
@@ -690,4 +704,6 @@
 /* recompile nudge t34b */
 
 /* recompile nudge t34c */
+
+/* recompile nudge t35 — Lobster script name + font-script utility + journey-emoji mono filter */
 /* recompile nudge t34d */

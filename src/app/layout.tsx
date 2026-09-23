@@ -3,6 +3,7 @@ import {
   Geist,
   Geist_Mono,
   Instrument_Serif,
+  Lobster,
   Source_Serif_4,
   Syne,
 } from "next/font/google";
@@ -40,11 +41,19 @@ const sourceSerif = Source_Serif_4({
   display: "swap",
 });
 
-/* Stylish geometric display — the personal name mark */
+/* Stylish geometric display — secondary name weight */
 const syne = Syne({
   variable: "--font-syne",
   subsets: ["latin"],
   weight: ["700", "800"],
+  display: "swap",
+});
+
+/* Bold retro script — the user's "Rebel" reference, for the name mark */
+const lobster = Lobster({
+  variable: "--font-lobster",
+  subsets: ["latin"],
+  weight: "400",
   display: "swap",
 });
 
@@ -120,7 +129,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${sourceSerif.variable} ${syne.variable} antialiased text-foreground min-h-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${sourceSerif.variable} ${syne.variable} ${lobster.variable} antialiased text-foreground min-h-screen flex flex-col`}
       >
         <script
           type="application/ld+json"

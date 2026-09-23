@@ -137,6 +137,8 @@ export type ProjectCategory = "all" | "fullstack" | "design";
 export interface Era {
   period: string;
   title: string;
+  /** monochrome emoji shown inline before the title */
+  emoji: string;
   /** funny sub-title under the big title */
   place: string;
   /** real-world location line (mono) */
@@ -152,6 +154,7 @@ export const journey: Era[] = [
   {
     period: "2005 — 2007",
     title: "Father & Mother's Lap",
+    emoji: "👶",
     place: "Tiny Human Era",
     description:
       "No school. No homework. No responsibilities. Just sleeping, eating and professionally doing nothing.",
@@ -160,6 +163,7 @@ export const journey: Era[] = [
   {
     period: "2007 — 2011",
     title: "Home Sweet Home",
+    emoji: "🏡",
     place: "The Family Headquarters",
     description:
       "Started discovering the world from the safest possible location. Basically, childhood with unlimited Wi-Fi from the universe.",
@@ -168,6 +172,7 @@ export const journey: Era[] = [
   {
     period: "2011 — 2015",
     title: "Sundarban Kindergarten",
+    emoji: "🧸",
     place: "First School Arc",
     location: "Nowabeki, Shyamnagar, Satkhira",
     description:
@@ -177,6 +182,7 @@ export const journey: Era[] = [
   {
     period: "2016 — 2020",
     title: "Henchi Adarsha High School",
+    emoji: "🏫",
     place: "The School Years",
     location: "Henchi, Shyamnagar, Satkhira",
     description:
@@ -186,6 +192,7 @@ export const journey: Era[] = [
   {
     period: "2021 — 2023",
     title: "Ahsanullah College",
+    emoji: "📚",
     place: "College Mode",
     location: "Khulna, Bangladesh",
     description:
@@ -195,6 +202,7 @@ export const journey: Era[] = [
   {
     period: "2024 — Present",
     title: "North Western University",
+    emoji: "🎓",
     place: "Currently Building.",
     location: "Khulna, Bangladesh",
     description:
@@ -209,6 +217,7 @@ export const journeyFuture = {
   year: "2028",
   label: "Next chapter",
   title: "Loading",
+  emoji: "🚀",
   description: "Degree first. What happens next? Let's find out.",
 } as const;
 
