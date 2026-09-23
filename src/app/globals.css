@@ -107,13 +107,26 @@
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 96px;
+    /* Kill Chrome Android pull-to-refresh / glow bounce at page top */
+    overscroll-behavior-y: none;
   }
 
   body {
     @apply text-foreground antialiased;
     background-color: #a01c0d;
     text-rendering: optimizeLegibility;
+    /* overflow-x must NOT create a secondary scroll container on iOS —
+       `hidden` on body makes Safari scroll <body> separately, which is
+       exactly the "whole page + navbar drifts up then settles" bug.
+       `clip` clips without becoming a scroll container (modern fix);
+       `hidden` stays as the fallback for ancient browsers. */
     overflow-x: hidden;
+    overflow-x: clip;
+  }
+
+  html {
+    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   ::selection {
@@ -214,7 +227,12 @@
     );
 }
 
-/* Cinematic film grain over the fire field */
+/* Cinematic film grain over the fire field.
+   Desktop: overlay blend for that filmic texture.
+   Mobile (<md): mix-blend-mode on a fullscreen fixed layer forces the
+   GPU to re-blend the ENTIRE page every scroll frame — the #1 cause of
+   phone lag on this design. There we drop the blend and rely on the
+   baked-in low opacity. */
 .app-grain {
   position: fixed;
   inset: 0;
@@ -223,6 +241,51 @@
   opacity: 0.5;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+}
+
+@media (max-width: 767px) {
+  .app-grain {
+    mix-blend-mode: normal;
+    opacity: 0.4;
+  }
+}
+
+/* ============================================================
+   MOBILE GPU BUDGET — keep the glass look, halve the cost.
+   backdrop-filter cost scales with blur radius × layer area.
+   Phones get visibly similar frost at ~half the radius, which
+   is the difference between 60fps and stutter on mid-range
+   Android. Desktop keeps the full-fat values.
+   ============================================================ */
+@media (max-width: 767px) {
+  .glass {
+    -webkit-backdrop-filter: blur(12px) saturate(155%);
+    backdrop-filter: blur(12px) saturate(155%);
+  }
+  .glass-strong {
+    -webkit-backdrop-filter: blur(16px) saturate(170%);
+    backdrop-filter: blur(16px) saturate(170%);
+  }
+  .glass-rail-white {
+    -webkit-backdrop-filter: blur(18px) saturate(170%) brightness(1.04);
+    backdrop-filter: blur(18px) saturate(170%) brightness(1.04);
+  }
+  .glass-chip {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+  .glass-input {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+  .glass-ember {
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    backdrop-filter: blur(14px) saturate(160%);
+  }
+  .glass-nav {
+    -webkit-backdrop-filter: blur(16px) saturate(170%);
+    backdrop-filter: blur(16px) saturate(170%);
+  }
 }
 
 /* Mobile hero cutout — the portrait's bottom edge dissolves softly
@@ -541,3 +604,5 @@
     animation: none;
   }
 }
+
+/* recompile nudge t32 — rollback restore rebuild (slide system + journey + ghost 5% + mobile perf) */

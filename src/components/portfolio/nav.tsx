@@ -23,6 +23,7 @@ function notifySoundChange() {
 
 export const NAV_ITEMS = [
   { id: "home", label: "Home" },
+  { id: "journey", label: "Journey" },
   { id: "projects", label: "Projects" },
   { id: "about", label: "About" },
   { id: "skills", label: "Skills" },
@@ -31,6 +32,13 @@ export const NAV_ITEMS = [
 ] as const;
 
 export type NavId = (typeof NAV_ITEMS)[number]["id"];
+
+/**
+ * Custom event fired by every "go to section" action. Each section is
+ * wrapped in a <SlideSection id=…> which listens for its own id and
+ * performs the instant landing + slide-in reveal.
+ */
+export const SECTION_NAVIGATE_EVENT = "portfolio:section-navigate";
 
 /** Scroll-spy across the page sections. */
 export function useActiveSection(): NavId {
@@ -61,8 +69,15 @@ export function useActiveSection(): NavId {
   return active;
 }
 
+/**
+ * Navigate to a section. Fires SECTION_NAVIGATE_EVENT — the matching
+ * SlideSection instantly lands flush with the viewport top and plays
+ * its slide-in reveal. (Never scrollIntoView: scroll-margin/padding
+ * would offset the landing.)
+ */
 export function scrollToSection(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent(SECTION_NAVIGATE_EVENT, { detail: id }));
 }
 
 export function useSoundEngine() {

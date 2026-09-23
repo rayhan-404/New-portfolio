@@ -5,6 +5,7 @@ import { skillChips, skillMeters, marqueeStack } from "@/lib/portfolio-data";
 import { playSound } from "@/lib/sound";
 import { Reveal, StaggerGroup, StaggerItem } from "./reveal";
 import { SectionHeading } from "./section-heading";
+import { SectionNumber } from "./section-number";
 
 export function SkillsSection() {
   const reduce = useReducedMotion();
@@ -13,11 +14,17 @@ export function SkillsSection() {
     <section
       id="skills"
       aria-label="Skills and expertise"
-      className="relative scroll-mt-20 px-5 py-24 sm:px-8 md:px-10 lg:py-32"
+      className="relative scroll-mt-20 overflow-hidden px-5 py-24 sm:px-8 md:px-10 lg:py-32"
     >
+      {/* ghost numeral — 5% backward parallax */}
+      <SectionNumber
+        index="05"
+        className="-top-4 right-0 hidden text-[11rem] lg:block"
+      />
+
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          eyebrow="03 · Weapons Of Choice"
+          eyebrow="05 · Weapons Of Choice"
           title="A stack sharpened by shipping."
           description="Depth where it matters — architecture, performance, and interfaces that feel inevitable."
         />
@@ -110,9 +117,9 @@ export function SkillsSection() {
         </div>
       </div>
 
-      {/* Tech marquee */}
+      {/* Tech marquee — hover pauses the strip */}
       <div className="marquee-mask relative mt-14 overflow-hidden py-2" aria-hidden="true">
-        <div className="animate-marquee flex w-max items-center gap-10">
+        <div className="animate-marquee flex w-max items-center gap-10 hover:[animation-play-state:paused]">
           {[...marqueeStack, ...marqueeStack].map((tech, i) => (
             <span
               key={`${tech}-${i}`}

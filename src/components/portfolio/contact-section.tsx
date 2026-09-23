@@ -79,11 +79,11 @@ export function ContactSection() {
     <section
       id="contact"
       aria-label="Contact"
-      className="relative scroll-mt-20 px-5 py-24 sm:px-8 md:px-10 lg:py-32"
+      className="relative scroll-mt-20 overflow-hidden px-5 py-24 sm:px-8 md:px-10 lg:py-32"
     >
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          eyebrow="05 · Get In Touch"
+          eyebrow="07 · Get In Touch"
           title="Let's build something worth signing."
           description="Have a project, role, or idea worth obsessing over? My inbox is open — and I reply fast."
         />
@@ -152,7 +152,7 @@ export function ContactSection() {
           <Reveal delay={0.08}>
             <form
               onSubmit={submit}
-              className="glass h-full rounded-[2rem] p-6 sm:p-8"
+              className="glass relative h-full rounded-[2rem] p-6 sm:p-8"
               aria-label="Contact form"
             >
               <div className="flex flex-wrap items-start justify-between gap-3">

@@ -5,6 +5,7 @@ import { services } from "@/lib/portfolio-data";
 import { playSound } from "@/lib/sound";
 import { Reveal, StaggerGroup, StaggerItem } from "./reveal";
 import { SectionHeading } from "./section-heading";
+import { SectionNumber } from "./section-number";
 import { scrollToSection } from "./nav";
 
 export function ServicesSection() {
@@ -12,20 +13,18 @@ export function ServicesSection() {
     <section
       id="services"
       aria-label="Services offered"
-      className="relative scroll-mt-20 px-5 py-24 sm:px-8 md:px-10 lg:py-32"
+      className="relative scroll-mt-20 overflow-hidden px-5 py-24 sm:px-8 md:px-10 lg:py-32"
     >
-      {/* watermark */}
-      <span
-        aria-hidden="true"
-        className="text-outline font-display pointer-events-none absolute -top-4 left-0 hidden select-none text-[11rem] leading-none lg:block"
-      >
-        04
-      </span>
+      {/* ghost numeral — 5% backward parallax */}
+      <SectionNumber
+        index="06"
+        className="-top-4 left-0 hidden text-[11rem] lg:block"
+      />
 
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <SectionHeading
-            eyebrow="04 · What I Can Do For You"
+            eyebrow="06 · What I Can Do For You"
             title="Services built around outcomes."
           />
           <Reveal delay={0.15}>

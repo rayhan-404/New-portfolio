@@ -133,6 +133,59 @@ export const experience: ExperienceItem[] = [
 
 export type ProjectCategory = "all" | "fullstack" | "design";
 
+/* ── Journey — the life story timeline ─────────────────────────── */
+export interface Era {
+  chapter: string;
+  emoji: string;
+  title: string;
+  description: string;
+}
+
+export const journey: Era[] = [
+  {
+    chapter: "Chapter 01",
+    emoji: "👶",
+    title: "Curious Beginnings",
+    description:
+      "The kid who took apart every gadget at home. The family radio never survived — but the curiosity never left either.",
+  },
+  {
+    chapter: "Chapter 02",
+    emoji: "🏠",
+    title: "First Home Computer",
+    description:
+      "An old desktop became my playground. Paint, Notepad, and a hundred questions about how the internet actually works.",
+  },
+  {
+    chapter: "Chapter 03",
+    emoji: "🎒",
+    title: "School & First Code",
+    description:
+      "Wrote my first HTML page for a school project and stayed up all night styling it. The hook was set for good.",
+  },
+  {
+    chapter: "Chapter 04",
+    emoji: "🏫",
+    title: "College & Late Nights",
+    description:
+      "Computer science by day, freelance builds by night — shipping real websites before the degree was even finished.",
+  },
+  {
+    chapter: "Chapter 05",
+    emoji: "🎓",
+    title: "Graduation & The Grind",
+    description:
+      "Turned deadlines into discipline: internships, open-source contributions, and a growing folder of shipped products.",
+  },
+  {
+    chapter: "Chapter 06",
+    emoji: "💻",
+    title: "Blue Nile Studio",
+    description:
+      "Founded my own studio — engineering full-stack products and glass-grade interfaces for clients around the world.",
+  },
+];
+
 export interface Project {
   id: string;
   title: string;

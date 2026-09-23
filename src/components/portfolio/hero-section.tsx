@@ -351,9 +351,9 @@ export function HeroSection() {
         <button
           onClick={() => {
             playSound("notch");
-            scrollToSection("projects");
+            scrollToSection("journey");
           }}
-          aria-label="Scroll to projects"
+          aria-label="Scroll to my journey"
           className="glass-chip group flex items-center gap-2.5 rounded-full py-2 pl-3 pr-5 transition-all duration-300 hover:bg-white/20 active:scale-[0.98]"
         >
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition-colors duration-300 group-hover:bg-white/30">

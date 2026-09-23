@@ -5,7 +5,9 @@ import { NAV_ITEMS, scrollToSection, useActiveSection } from "./nav";
 import { SidebarNotchNav, type NavCategory } from "@/components/SidebarNotchNav";
 import { SideRailRight } from "./side-rails";
 import { playSound } from "@/lib/sound";
+import { SlideSection } from "./slide-section";
 import { HeroSection } from "./hero-section";
+import { JourneySection } from "./journey-section";
 import { ProjectsSection } from "./projects-section";
 import { AboutSection } from "./about-section";
 import { SkillsSection } from "./skills-section";
@@ -50,12 +52,27 @@ export function PortfolioApp() {
       {/* Content column: left pad = notch sidebar width, right pad = rail */}
       <div className="flex min-h-svh flex-col pl-[54px] sm:pl-[62px] md:pl-[74px] md:pr-[88px]">
         <main className="flex-1">
-          <HeroSection />
-          <ProjectsSection />
-          <AboutSection />
-          <SkillsSection />
-          <ServicesSection />
-          <ContactSection />
+          <SlideSection id="home">
+            <HeroSection />
+          </SlideSection>
+          <SlideSection id="journey">
+            <JourneySection />
+          </SlideSection>
+          <SlideSection id="projects">
+            <ProjectsSection />
+          </SlideSection>
+          <SlideSection id="about">
+            <AboutSection />
+          </SlideSection>
+          <SlideSection id="skills">
+            <SkillsSection />
+          </SlideSection>
+          <SlideSection id="services">
+            <ServicesSection />
+          </SlideSection>
+          <SlideSection id="contact">
+            <ContactSection />
+          </SlideSection>
         </main>
         <Footer />
       </div>

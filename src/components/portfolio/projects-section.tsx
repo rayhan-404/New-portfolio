@@ -8,6 +8,7 @@ import { playSound } from "@/lib/sound";
 import { Reveal } from "./reveal";
 import { ProjectDialog } from "./project-dialog";
 import { SectionHeading } from "./section-heading";
+import { SectionNumber } from "./section-number";
 
 const FILTERS: { id: ProjectCategory; label: string }[] = [
   { id: "all", label: "All" },
@@ -35,12 +36,17 @@ export function ProjectsSection() {
     <section
       id="projects"
       aria-label="Featured projects"
-      className="relative scroll-mt-20 px-5 py-24 sm:px-8 md:px-10 lg:py-32"
+      className="relative scroll-mt-20 overflow-hidden px-5 py-24 sm:px-8 md:px-10 lg:py-32"
     >
+      <SectionNumber
+        index="03"
+        speed={1.1}
+        className="-top-4 right-0 hidden text-[11rem] lg:block"
+      />
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <SectionHeading
-            eyebrow="01 · Selected Works"
+            eyebrow="03 · Selected Works"
             title="Projects engineered for production."
             description="A selection of systems I designed and built end-to-end — each one ships with real telemetry, accessibility, and performance budgets."
           />
