@@ -10,8 +10,11 @@ import {
   School,
   Shapes,
 } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { journey, journeyFuture } from "@/lib/portfolio-data";
 import { Reveal } from "./reveal";
+
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 /* Line icons for the chapter titles — stroke glyphs inherit the white
    title color, sized in em so they scale with the clamp() title. */
@@ -41,11 +44,13 @@ const BLACK = {
  * Ends with the "2028 · Loading..." next-chapter strip.
  */
 export function JourneySection() {
+  const reduce = useReducedMotion();
+
   return (
     <section
       id="journey"
       aria-label="My journey"
-      className="relative min-h-svh overflow-hidden px-5 py-20 sm:px-8 md:px-10 lg:py-28"
+      className="relative min-h-svh overflow-hidden px-5 py-24 sm:px-8 md:px-10 lg:py-32"
     >
       {/* Giant backdrop word — sits behind everything, all breakpoints */}
       <span
@@ -70,6 +75,37 @@ export function JourneySection() {
                 in the world
               </em>
             </h1>
+
+            {/* Gold swash — the same hand-drawn stroke as the hero's
+                "Hello..", drawing itself in when the title lands */}
+            <motion.svg
+              viewBox="0 0 180 14"
+              aria-hidden="true"
+              initial={reduce ? false : { opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="mt-5 block h-[15px] w-[172px] sm:w-[200px]"
+            >
+              <motion.path
+                d="M4 9 C 38 3, 74 12.5, 110 7.5 S 168 4.5, 176 7"
+                fill="none"
+                stroke="url(#journey-swash-gold)"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                initial={reduce ? false : { pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.9, delay: 0.55, ease: EASE }}
+              />
+              <defs>
+                <linearGradient id="journey-swash-gold" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#ffe3ae" />
+                  <stop offset="55%" stopColor="#ffb45e" />
+                  <stop offset="100%" stopColor="#ff7a1c" />
+                </linearGradient>
+              </defs>
+            </motion.svg>
           </header>
         </Reveal>
 

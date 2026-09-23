@@ -13,10 +13,11 @@ export function Footer() {
       <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 pb-8 pt-12 sm:px-8 md:px-10">
         <div className="flex flex-wrap items-start justify-between gap-8">
           <div>
-            <p className="font-display text-2xl leading-none text-foreground">
+            {/* Script wordmark — echoes the hero's Lobster name lockup */}
+            <p className="font-script text-[1.65rem] leading-none text-foreground">
               M<span className="text-gold"> Rayhan</span>
             </p>
-            <p className="font-tag mt-2 text-[9.5px] text-white/55">
+            <p className="font-tag mt-2.5 text-[9.5px] text-white/55">
               {person.role}
             </p>
           </div>

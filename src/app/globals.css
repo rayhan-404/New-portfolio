@@ -146,6 +146,22 @@
     outline-offset: 2px;
     border-radius: 6px;
   }
+
+  /* Tailwind v4 preflight regressed buttons to cursor:default —
+     every clickable control on this site is hand-rolled, so restore
+     the pointer affordance globally. */
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  label:has(> input:enabled),
+  summary {
+    cursor: pointer;
+  }
+
+  /* Nicer paragraph rag — balance alone is for headings; pretty avoids
+     single-word last lines in the long-form bio / description copy. */
+  p {
+    text-wrap: pretty;
+  }
 }
 
 /* ============================================================
@@ -701,3 +717,5 @@
 /* recompile nudge t35 — Lobster script name + font-script utility + journey-emoji mono filter */
 /* recompile nudge t36 — two-line script name + Lucide title icons + About tighter leading/word-spacing */
 /* recompile nudge t34d */
+
+/* recompile nudge t38 — cursor:pointer restore + text-wrap pretty + design polish pass */

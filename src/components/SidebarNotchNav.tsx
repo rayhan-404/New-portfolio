@@ -13,6 +13,8 @@ import {
   useMotionValue,
   useMotionValueEvent,
   useReducedMotion,
+  useScroll,
+  useSpring,
 } from "framer-motion";
 import { Volume2, VolumeX } from "lucide-react";
 import { useSoundEngine } from "./portfolio/nav";
@@ -117,6 +119,17 @@ export function SidebarNotchNav({
   const cy = useMotionValue(0);
   const { soundOn, toggle } = useSoundEngine();
   const reduceMotion = useReducedMotion();
+
+  /* Gold scroll-progress seam along the top edge — the always-visible
+     twin of the desktop right rail's vertical seam (the rail is hidden
+     below md, so this is the only progress indicator on phones).
+     Transform-only (scaleX) — zero layout work while scrolling. */
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 26,
+    mass: 0.4,
+  });
 
   /* Optimistic activation — the notch answers the tap immediately.
      The pin self-expires: while `pinned` differs from the scroll-spy's
@@ -267,6 +280,14 @@ export function SidebarNotchNav({
           opacity: 0,
           transform: "translateY(-50%)",
         }}
+      />
+
+      {/* Scroll progress seam — along the top edge (notch bites always
+          start ≥18px below the top, so this line never crosses one) */}
+      <motion.div
+        aria-hidden="true"
+        style={{ scaleX: progress }}
+        className="absolute inset-x-0 top-0 z-[3] h-[2px] origin-left bg-gradient-to-r from-[#ffe3ae] via-[#ffb45e] to-[#ff7a1c]"
       />
 
       {/* Top hairline ornament */}

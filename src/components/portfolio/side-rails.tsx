@@ -10,6 +10,8 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { socials } from "@/lib/portfolio-data";
+import { playSound } from "@/lib/sound";
+import { scrollToSection } from "./nav";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -152,7 +154,10 @@ export function SideRailRight() {
           M Rayhan
         </p>
         <button
-          onClick={() => scrollToContact()}
+          onClick={() => {
+            playSound("notch");
+            scrollToSection("contact");
+          }}
           aria-label="Start a project — go to contact"
           className="btn-light group relative flex h-10 w-10 items-center justify-center rounded-full"
         >
@@ -162,8 +167,4 @@ export function SideRailRight() {
       </div>
     </motion.aside>
   );
-}
-
-function scrollToContact() {
-  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }

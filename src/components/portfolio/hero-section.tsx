@@ -9,8 +9,10 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { GraduationCap, Telescope } from "lucide-react";
+import { ChevronDown, GraduationCap, Telescope } from "lucide-react";
 import { person } from "@/lib/portfolio-data";
+import { playSound } from "@/lib/sound";
+import { scrollToSection } from "./nav";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -299,6 +301,25 @@ export function HeroSection() {
               <Telescope className="h-4 w-4 text-gold" />
               <span className="text-xs font-semibold text-foreground">Curious Builder</span>
             </div>
+
+            {/* Scroll cue — sits just under the card, clear of all copy */}
+            <motion.button
+              type="button"
+              onClick={() => {
+                playSound("notch");
+                scrollToSection("journey");
+              }}
+              initial={reduce ? false : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.9, delay: 1.7, ease: EASE }}
+              aria-label="Scroll to the journey section"
+              className="group absolute -bottom-[74px] left-1/2 flex -translate-x-1/2 flex-col items-center gap-1"
+            >
+              <span className="font-tag text-[9px] text-white/55 transition-colors duration-300 group-hover:text-foreground">
+                Scroll
+              </span>
+              <ChevronDown className="animate-nudge h-4 w-4 text-white/60 transition-colors duration-300 group-hover:text-foreground" />
+            </motion.button>
           </motion.div>
         </div>
       </div>

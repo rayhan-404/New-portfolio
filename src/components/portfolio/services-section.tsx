@@ -59,7 +59,7 @@ export function ServicesSection() {
                     className="mt-2 flex gap-1.5"
                   >
                     <span className="h-2 w-2 bg-white/30 transition-colors duration-500 group-hover:bg-gold" />
-                    <span className="h-2 w-2 bg-white/15" />
+                    <span className="h-2 w-2 bg-white/15 transition-colors duration-500 group-hover:bg-white/40" />
                   </span>
                 </div>
 

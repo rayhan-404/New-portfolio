@@ -122,8 +122,15 @@ export function ProjectsSection() {
                   </span>
 
                   <div className="flex items-center justify-between gap-3">
-                    <span className="glass-chip font-tag rounded-full px-3 py-1 text-[9.5px] text-white/75">
-                      {p.tag}
+                    <span className="flex min-w-0 items-center gap-2">
+                      <span className="glass-chip font-tag shrink-0 rounded-full px-3 py-1 text-[9.5px] text-white/75">
+                        {p.tag}
+                      </span>
+                      {p.flagship && (
+                        <span className="font-tag shrink-0 rounded-full border border-gold/45 bg-gold/10 px-3 py-1 text-[9.5px] text-gold-bright backdrop-blur-sm">
+                          Featured
+                        </span>
+                      )}
                     </span>
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/25 transition-all duration-300 group-hover:border-white group-hover:bg-white group-hover:text-[#7c1a06]">
                       <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" />

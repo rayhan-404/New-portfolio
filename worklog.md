@@ -411,3 +411,25 @@ Work Log:
 Stage Summary:
 - Journey section now opens with just "My journey / in the world" — kicker and subline removed per user request.
 - Files: journey-section.tsx.
+
+---
+Task ID: 38 (overall design polish pass)
+Agent: Main agent
+Task: User: "polish and improve overall design" — global refinement pass across all 7 sections, nav rails, footer and base CSS.
+
+Work Log:
+- globals.css (base layer): restored `cursor: pointer` on button/[role=button]/label>input/summary — Tailwind v4 preflight regressed buttons to cursor:default, which affected every hand-rolled control on the site; added `p { text-wrap: pretty }` for nicer paragraph rag; t38 recompile nudge.
+- hero-section.tsx: added a desktop scroll cue (font-tag "Scroll" + animate-nudge ChevronDown) anchored -bottom-[74px] under the portrait card, centered on it — clear of all copy at any width; onClick = playSound("notch") + scrollToSection("journey") slide-landing; entrance fades in at 1.7s. First attempt (absolute bottom-6 of section) was clipped by the fold (cue spanned y881-917 vs 900 viewport) because hero content overflows min-h-svh — measured via agent-browser eval and repositioned.
+- side-rails.tsx: FIXED the right-rail "Start a project" CTA — it used scrollIntoView(smooth), which lands offset by html scroll-padding-top (96px) and skips the slide reveal; now uses scrollToSection("contact") like every other nav action. Verified: contactTop = 0 after click.
+- SidebarNotchNav.tsx: added a gold scroll-progress seam (2px, scaleX via useScroll+useSpring, transform-only) along the sidebar's top edge — the always-visible twin of the desktop right rail's vertical seam (rail is hidden below md, so this is the only progress indicator on phones). Verified pixel-accurate: scaleX 0.5043 == scrollY 7000 / maxScroll 13881. Placed at top 0-2px where notch bites never reach (cy clamped ≥ k+18).
+- journey-section.tsx: aligned section padding to the site rhythm (py-20/lg:py-28 → py-24/lg:py-32); added the hero's signature gold swash (same 3-stop gradient stroke) under "My journey / in the world", self-drawing via whileInView pathLength, reduced-motion safe.
+- projects-section.tsx: flagship card now carries a gold-tinted "Featured" chip (border-gold/45 bg-gold/10 text-gold-bright, explicit classes — glass-chip's border shorthand would fight the override) next to the category tag.
+- services-section.tsx: second decorative dot now transitions too (group-hover:bg-white/40).
+- footer.tsx: brand wordmark switched from font-display to font-script (Lobster, white "M" + gold "Rayhan") echoing the hero name lockup.
+- mobile-header.tsx: added the same progress seam to the (currently unmounted) MobileHeader for consistency. NOTE: MobileHeader + MenuOverlay are dead code — never mounted; mobile nav is handled entirely by SidebarNotchNav. Left in place.
+- VERIFICATION: lint 0 problems; agent-browser desktop 1440x900 (hero + cue click→journey slide-landing + swash, projects Featured chip, contact, footer script brand, services, skills, about — all render clean, no overflow) + mobile 390x844 (hero, journey title+swash, scrollWidth 390 == innerWidth, progress seam advances 0.187→0.504 with scroll); console shows only the known benign framer-motion non-static-position warning; dev.log all 200s.
+- COMMITTED (this commit).
+
+Stage Summary:
+- Global polish pass: cursor affordance restored (v4 regression), text-wrap pretty, hero scroll cue (desktop), gold scroll-progress seams on sidebar (all viewports) + mobile header, journey swash + padding rhythm, Featured chip on flagship project, services dot hover polish, footer script wordmark, rail CTA slide-landing fix.
+- Files: globals.css, hero-section.tsx, side-rails.tsx, SidebarNotchNav.tsx, journey-section.tsx, projects-section.tsx, services-section.tsx, footer.tsx, mobile-header.tsx.

@@ -1,10 +1,20 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import { person } from "@/lib/portfolio-data";
 import { playSound } from "@/lib/sound";
 
 export function MobileHeader({ onOpenMenu }: { onOpenMenu: () => void }) {
+  /* Gold scroll-progress seam — the mobile twin of the desktop right
+     rail's progress bar. Transform-only (scaleX) so it never triggers
+     layout work while scrolling. */
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 26,
+    mass: 0.4,
+  });
+
   return (
     <motion.header
       initial={{ y: -60, opacity: 0 }}
@@ -38,6 +48,13 @@ export function MobileHeader({ onOpenMenu }: { onOpenMenu: () => void }) {
         <span className="h-px w-4.5 bg-foreground" />
         <span className="mr-2 h-px w-3 self-end bg-foreground" />
       </button>
+
+      {/* Scroll progress seam — along the header's bottom edge */}
+      <motion.div
+        aria-hidden="true"
+        style={{ scaleX: progress }}
+        className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-gradient-to-r from-[#ffe3ae] via-[#ffb45e] to-[#ff7a1c]"
+      />
     </motion.header>
   );
 }
