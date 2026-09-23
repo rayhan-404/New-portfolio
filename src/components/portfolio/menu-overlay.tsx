@@ -57,7 +57,7 @@ export function MenuOverlay({
           {/* Top row */}
           <div className="relative flex items-center justify-between px-5 py-5 md:px-10">
             <span className="font-display text-xl leading-none text-foreground">
-              Blue<br />Nile
+              M<br />Rayhan
             </span>
             <button
               onClick={() => onOpenChange(false)}
@@ -132,7 +132,7 @@ export function MenuOverlay({
             </ul>
             {mounted && (
               <p className="font-tag text-[10px] text-white/45">
-                © {new Date().getFullYear()} Blue Nile Studio
+                © {new Date().getFullYear()} M Rayhan
               </p>
             )}
           </motion.div>

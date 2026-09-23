@@ -149,7 +149,7 @@ export function SideRailRight() {
           aria-hidden="true"
           className="hidden max-h-40 overflow-hidden whitespace-nowrap font-tag text-[9px] tracking-[0.32em] text-[#53301f]/40 [writing-mode:vertical-rl] lg:block"
         >
-          Blue Nile
+          M Rayhan
         </p>
         <button
           onClick={() => scrollToContact()}

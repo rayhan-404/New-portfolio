@@ -16,10 +16,10 @@ export function MobileHeader({ onOpenMenu }: { onOpenMenu: () => void }) {
       <button
         onClick={() => playSound("tap")}
         className="flex items-center gap-2.5 text-left"
-        aria-label="Blue Nile home"
+        aria-label="M Rayhan home"
       >
         <span className="font-display text-lg leading-none text-foreground">
-          Blue <span className="text-gold">Nile</span>
+          M <span className="text-gold">Rayhan</span>
         </span>
         <span className="font-tag hidden text-[8px] text-white/55 xs:block">
           {person.name}

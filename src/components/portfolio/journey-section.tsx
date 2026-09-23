@@ -5,6 +5,7 @@ import { Reveal, StaggerGroup, StaggerItem } from "./reveal";
 
 /**
  * JourneySection — "Life / Journey." personal timeline.
+ * Centered vertical rail: year → node → title → place → note.
  * Ghost watermark sits at 5% opacity, single line, hidden on mobile.
  */
 export function JourneySection() {
@@ -45,56 +46,66 @@ export function JourneySection() {
             </span>
           </h2>
           <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-white/70">
-            Every product I ship carries a piece of this road — from
-            dismantled radios to a studio of my own.
+            From a village in Shyamnagar to a CSE classroom in Khulna — the
+            road so far.
           </p>
         </Reveal>
 
-        {/* Timeline */}
-        <StaggerGroup className="relative mt-12 flex flex-col gap-4">
-          {/* rail connecting the chapter nodes */}
+        {/* Centered timeline rail */}
+        <div className="relative mx-auto mt-14 max-w-md">
+          {/* continuous rail */}
           <span
             aria-hidden="true"
-            className="absolute bottom-8 left-[27px] top-8 w-px bg-gradient-to-b from-gold/60 via-white/20 to-transparent sm:left-[31px]"
+            className="absolute bottom-4 left-1/2 top-2 w-px -translate-x-1/2 bg-gradient-to-b from-gold/60 via-white/25 to-transparent"
           />
 
-          {journey.map((era, i) => (
-            <StaggerItem key={era.chapter}>
-              <article className="glass group relative flex items-start gap-4 rounded-3xl p-5 transition-all duration-500 hover:-translate-y-1 hover:border-white/45 sm:gap-6 sm:p-6">
-                {/* chapter node */}
-                <span
-                  aria-hidden="true"
-                  className="font-tag relative z-10 flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-full border border-white/25 bg-[#3a0d05]/80 text-[8px] text-gold-bright shadow-[0_0_16px_rgba(255,170,80,0.25)] sm:h-[30px] sm:w-[30px] sm:text-[9px]"
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+          <StaggerGroup className="relative flex flex-col gap-12">
+            {journey.map((era) => (
+              <StaggerItem key={era.period}>
+                <div className="relative flex flex-col items-center text-center">
+                  {/* year */}
+                  <p className="font-tag bg-transparent text-[10px] text-gold-bright">
+                    {era.period}
+                  </p>
 
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2.5">
-                    {/* emoji + chapter pill */}
-                    <span className="glass-chip font-tag inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[9px] text-white/75">
-                      <span aria-hidden="true" className="text-[11px] not-italic">
-                        {era.emoji}
-                      </span>
-                      {era.chapter}
-                    </span>
+                  {/* node on the rail */}
+                  <span
+                    aria-hidden="true"
+                    className="relative my-3 flex h-[18px] w-[18px] items-center justify-center"
+                  >
                     <span
-                      aria-hidden="true"
-                      className="h-px w-6 bg-white/20 transition-all duration-500 group-hover:w-10 group-hover:bg-gold/70"
+                      className={`absolute inset-0 rounded-full border-2 ${
+                        era.current
+                          ? "border-apple-green/70 bg-apple-green/15 shadow-[0_0_18px_rgba(48,209,88,0.55)]"
+                          : "border-gold/60 bg-[#3a0d05]"
+                      }`}
                     />
-                  </div>
+                    <span
+                      className={`h-[6px] w-[6px] rounded-full ${
+                        era.current
+                          ? "bg-apple-green shadow-[0_0_10px_rgba(48,209,88,0.9)]"
+                          : "bg-gold shadow-[0_0_12px_rgba(255,196,107,0.9)]"
+                      }`}
+                    />
+                  </span>
 
-                  <h3 className="font-display mt-3 text-lg tracking-tight sm:text-xl">
+                  {/* title + place */}
+                  <h3 className="font-display text-[1.15rem] uppercase leading-tight tracking-[0.06em] text-foreground sm:text-[1.3rem]">
                     {era.title}
                   </h3>
-                  <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/70">
-                    {era.description}
+                  <p className="mt-1.5 text-sm font-medium text-white/85">
+                    {era.place}
                   </p>
+                  {era.description && (
+                    <p className="mt-1.5 text-[13px] leading-relaxed text-white/60">
+                      {era.description}
+                    </p>
+                  )}
                 </div>
-              </article>
-            </StaggerItem>
-          ))}
-        </StaggerGroup>
+              </StaggerItem>
+            ))}
+          </StaggerGroup>
+        </div>
       </div>
     </section>
   );

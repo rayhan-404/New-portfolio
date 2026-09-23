@@ -9,65 +9,70 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { ArrowDown, CalendarClock, Layers, Sparkles } from "lucide-react";
-import { person, stats } from "@/lib/portfolio-data";
-import { playSound } from "@/lib/sound";
-import { scrollToSection } from "./nav";
-import { CountUp } from "./reveal";
+import { GraduationCap, Telescope } from "lucide-react";
+import { person } from "@/lib/portfolio-data";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-/* hero-cutout.png intrinsic size (kept in sync by scripts/make-cutout.mjs) */
-const CUTOUT_W = 761;
-const CUTOUT_H = 1065;
+/* hero-cutout.png intrinsic size (uploaded portrait, Photoroom cutout) */
+const CUTOUT_W = 1369;
+const CUTOUT_H = 1149;
 
-/* ── Shared hero pieces ─────────────────────────────────────────── */
+/* ── Personal intro copy ─────────────────────────────────────────── */
 
-function HeroCTAs() {
+function IntroBio({ className = "" }: { className?: string }) {
   return (
-    <>
-      <button
-        onClick={() => {
-          playSound("notch");
-          scrollToSection("projects");
-        }}
-        className="btn-light inline-flex h-12 items-center gap-2.5 rounded-full px-7 text-[15px] font-semibold"
-      >
-        Explore Selected Works
-        <ArrowDown className="h-4 w-4" aria-hidden="true" />
-      </button>
-      <button
-        onClick={() => {
-          playSound("chime");
-          scrollToSection("contact");
-        }}
-        className="glass-strong inline-flex h-12 items-center gap-2.5 rounded-full px-7 text-[15px] font-semibold text-foreground transition-all duration-300 hover:bg-white/25 active:scale-[0.97]"
-      >
-        <CalendarClock className="h-4 w-4" aria-hidden="true" />
-        Book a Discovery Call
-      </button>
-    </>
-  );
-}
-
-function StatsGrid() {
-  return (
-    <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
-      {stats.map((s) => (
-        <div key={s.label} className="glass rounded-2xl px-4 py-4 text-center lg:text-left">
-          <p className="font-display text-[1.65rem] leading-none text-gold-gradient sm:text-3xl">
-            <CountUp
-              value={s.value}
-              suffix={s.suffix}
-              decimals={s.value % 1 !== 0 ? 1 : 0}
-            />
-          </p>
-          <p className="mt-2 text-[11px] font-semibold text-foreground/90 sm:text-xs">
-            {s.label}
-          </p>
-          <p className="mt-0.5 hidden text-[10px] text-white/55 sm:block">{s.detail}</p>
-        </div>
-      ))}
+    <div className={`flex flex-col gap-3.5 ${className}`}>
+      <p className="text-[14.5px] leading-relaxed text-white/85 sm:text-[15px]">
+        I&apos;m a CSE student at{" "}
+        <strong className="font-semibold text-foreground">
+          North Western University, Khulna
+        </strong>
+        , and originally from{" "}
+        <strong className="font-semibold text-foreground">
+          Shyamnagar, Satkhira, Bangladesh
+        </strong>
+        .
+      </p>
+      <p className="text-[14.5px] leading-relaxed text-white/85 sm:text-[15px]">
+        I&apos;m basically a boring and curious guy who wants to know{" "}
+        <strong className="font-semibold text-foreground">
+          how everything works, from my cell, brain, everything surrounding me,
+          to the universe, and what&apos;s going on behind the screen
+        </strong>{" "}
+        🤔 If I find something interesting, there&apos;s a pretty good chance
+        I&apos;ll spend hours trying to figure it out and understand how it
+        works.
+      </p>
+      <p className="text-[14.5px] leading-relaxed text-white/85 sm:text-[15px]">
+        I like learning new things, trying random ideas, and building stuff
+        just to see if I can actually make it work. I&apos;ve already built a
+        few small projects because of this habit, and honestly, I enjoy the
+        process more than the final result, and it satisfies me more than
+        anything.
+      </p>
+      <p className="text-[14.5px] leading-relaxed text-white/85 sm:text-[15px]">
+        Sometimes I build something useful. Sometimes I build something
+        completely unnecessary. And sometimes I break something and then spend
+        the next few hours figuring out how it actually works. 🧐
+      </p>
+      <p className="text-[14.5px] leading-relaxed text-white/85 sm:text-[15px]">
+        If you ask,{" "}
+        <strong className="font-semibold text-foreground">
+          what is this guy interested in?
+        </strong>{" "}
+        🤨 Then I&apos;m interested in{" "}
+        <strong className="font-semibold text-foreground">
+          Artificial Intelligence, Robotics, Electronics, new gadgets and
+          technologies
+        </strong>
+        . I don&apos;t know where this curiosity will take me yet, but I&apos;m
+        having fun finding out.
+      </p>
+      <p className="text-[14.5px] font-semibold leading-relaxed text-foreground sm:text-[15px]">
+        I&apos;m curious about almost everything, and I love building things
+        just to see what happens.
+      </p>
     </div>
   );
 }
@@ -98,7 +103,7 @@ export function HeroSection() {
       ref={ref}
       aria-label="Introduction"
       onMouseMove={onMouseMove}
-      className="relative flex min-h-svh flex-col justify-center overflow-hidden px-5 pb-14 pt-20 sm:px-8 sm:pt-24 md:px-10 lg:pt-32"
+      className="relative flex min-h-svh flex-col justify-center overflow-hidden px-5 pb-14 pt-20 sm:px-8 sm:pt-24 md:px-10 lg:pt-28"
     >
       {/* soft light bloom behind the type */}
       <div
@@ -118,13 +123,13 @@ export function HeroSection() {
             {/* warm halo behind the cutout */}
             <div
               aria-hidden="true"
-              className="absolute left-1/2 top-[10%] h-[60%] w-[92%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,205,120,0.34),transparent_66%)] blur-2xl"
+              className="absolute left-1/2 top-[6%] h-[58%] w-[94%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,205,120,0.34),transparent_66%)] blur-2xl"
             />
 
             <div className="hero-cutout-fade relative">
               <Image
-                src="/generated/hero-cutout.png"
-                alt="Portrait of Rayhan Ahmed"
+                src="/generated/m-rayhan-cutout.png"
+                alt="Portrait of M Rayhan"
                 width={CUTOUT_W}
                 height={CUTOUT_H}
                 priority
@@ -142,7 +147,7 @@ export function HeroSection() {
                 transition={{ duration: 0.7, delay: 0.55, ease: EASE }}
                 className="text-glow absolute left-5 top-4 sm:left-8 sm:top-6"
               >
-                <span className="font-serif block text-[3.4rem] font-normal italic leading-[0.95] tracking-[-0.015em] text-[#fff9f1] sm:text-[4.2rem]">
+                <span className="font-serif block text-[3rem] font-normal italic leading-[0.95] tracking-[-0.015em] text-[#fff9f1] sm:text-[3.6rem]">
                   Hello<span className="text-gold-gradient">..</span>
                 </span>
                 <motion.svg
@@ -174,109 +179,57 @@ export function HeroSection() {
               </motion.span>
             </div>
 
-            {/* Name + intro begin exactly where the fade starts — left aligned */}
+            {/* Intro begins where the fade starts — left aligned */}
             <motion.div
               initial={reduce ? false : { opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.95, delay: 0.32, ease: EASE }}
-              className="relative z-10 -mt-28 px-5 pb-2 text-left sm:-mt-40 sm:px-8"
+              className="relative z-10 -mt-20 px-5 pb-2 text-left sm:-mt-28 sm:px-8"
             >
-              <span className="glass-chip inline-flex items-center gap-2.5 rounded-full px-4 py-2">
-                <span className="status-dot" aria-hidden="true" />
-                <span className="text-xs font-medium text-foreground/90">
-                  Available for new projects
-                </span>
-              </span>
+              <p className="font-serif text-[1.7rem] font-normal italic leading-none text-[#fff9f1] sm:text-[2.1rem]">
+                I am<span className="text-gold-gradient">,</span>
+              </p>
 
-              <h1 className="font-display text-glow mt-4 text-[2.6rem] leading-[1.04] tracking-[-0.03em] text-foreground sm:text-6xl">
-                I am <span className="text-gold-gradient">M Rayhan</span>
+              <h1 className="font-display text-glow mt-2.5 text-[2.7rem] leading-[1.02] tracking-[-0.03em] sm:text-6xl">
+                <span className="text-gold-gradient">M Rayhan</span>
               </h1>
 
-              <p className="font-tag mt-3 text-[10px] uppercase tracking-[0.32em] text-white/70">
-                {person.role}
-              </p>
-
-              <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/85">
-                Full-stack engineer &amp; UI/UX specialist behind Blue Nile Studio, crafting
-                resilient apps, scalable systems and glass-grade interfaces with
-                obsession-level polish.
-              </p>
-
-              <div className="mt-7 flex flex-wrap items-center gap-3">
-                <HeroCTAs />
-              </div>
-
-              <div className="mt-8">
-                <StatsGrid />
-              </div>
+              <IntroBio className="mt-6" />
             </motion.div>
           </div>
         </motion.div>
       </div>
 
-      {/* ══ DESKTOP — keynote column + portrait card ══ */}
+      {/* ══ DESKTOP — intro column + portrait card ══ */}
       <div className="relative z-10 mx-auto hidden w-full max-w-6xl lg:block">
-        <div className="grid items-center grid-cols-[minmax(0,7fr)_minmax(0,5fr)] gap-10">
-          {/* ── Keynote column ─────────────────────────────────── */}
+        <div className="grid items-center grid-cols-[minmax(0,7fr)_minmax(0,5fr)] gap-12">
+          {/* ── Intro column ───────────────────────────────────── */}
           <div className="text-left">
-            {/* availability pill */}
-            <motion.div
+            <motion.p
               initial={reduce ? false : { opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
-              className="mb-7 inline-flex"
+              className="font-serif text-[2.3rem] font-normal italic leading-none text-[#fff9f1]"
             >
-              <span className="glass-chip inline-flex items-center gap-2.5 rounded-full px-4 py-2">
-                <span className="status-dot" aria-hidden="true" />
-                <span className="text-xs font-medium text-foreground/90">
-                  Available for new projects
-                </span>
-              </span>
-            </motion.div>
+              I am<span className="text-gold-gradient">,</span>
+            </motion.p>
 
-            {/* headline */}
             <motion.h1
               initial={reduce ? false : { opacity: 0, y: 26 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.85, delay: 0.32, ease: EASE }}
-              className="font-display text-glow text-[4.4rem] leading-[1.02] tracking-[-0.03em] text-foreground"
+              className="font-display text-glow mt-3 text-[4.2rem] leading-[1.02] tracking-[-0.03em]"
             >
-              Products that
-              <br />
-              <span className="text-gold-gradient">feel inevitable.</span>
+              <span className="text-gold-gradient">M Rayhan</span>
             </motion.h1>
 
-            {/* subcopy */}
-            <motion.p
+            <motion.div
               initial={reduce ? false : { opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.85, delay: 0.44, ease: EASE }}
-              className="mt-6 max-w-xl text-base leading-relaxed text-white/80"
+              className="mt-7 max-w-xl"
             >
-              <span className="font-semibold text-foreground">{person.name}</span> —
-              full-stack engineer &amp; UI/UX specialist behind Blue Nile Studio, crafting
-              resilient apps, scalable systems and glass-grade interfaces with
-              obsession-level polish.
-            </motion.p>
-
-            {/* CTAs */}
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 22 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.85, delay: 0.56, ease: EASE }}
-              className="mt-9 flex flex-wrap items-center justify-start gap-3"
-            >
-              <HeroCTAs />
-            </motion.div>
-
-            {/* stats strip */}
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.7, ease: EASE }}
-              className="mt-10"
-            >
-              <StatsGrid />
+              <IntroBio />
             </motion.div>
           </div>
 
@@ -296,8 +249,13 @@ export function HeroSection() {
 
             <div className="glass-strong relative overflow-hidden rounded-[2.5rem] p-2.5">
               <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem]">
+                {/* warm studio backdrop behind the transparent cutout */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 bg-[radial-gradient(circle_at_50%_32%,rgba(255,178,92,0.55),rgba(140,22,10,0.92)_62%,rgba(90,8,6,0.96)_100%)]"
+                />
                 <Image
-                  src="/generated/hero-portrait.png"
+                  src="/generated/m-rayhan-portrait.png"
                   alt={`Portrait of ${person.name}`}
                   fill
                   priority
@@ -327,41 +285,19 @@ export function HeroSection() {
               aria-hidden="true"
               className="glass-chip orb-float absolute -right-8 top-8 flex items-center gap-2 rounded-2xl px-3.5 py-2.5"
             >
-              <Sparkles className="h-4 w-4 text-gold" />
-              <span className="text-xs font-semibold text-foreground">35+ Apps Shipped</span>
+              <GraduationCap className="h-4 w-4 text-gold" />
+              <span className="text-xs font-semibold text-foreground">CSE Student</span>
             </div>
             <div
               aria-hidden="true"
               className="glass-chip orb-float-slow absolute -left-8 bottom-24 flex items-center gap-2 rounded-2xl px-3.5 py-2.5"
             >
-              <Layers className="h-4 w-4 text-gold" />
-              <span className="text-xs font-semibold text-foreground">Design Systems</span>
+              <Telescope className="h-4 w-4 text-gold" />
+              <span className="text-xs font-semibold text-foreground">Curious Builder</span>
             </div>
           </motion.div>
         </div>
       </div>
-
-      {/* scroll cue */}
-      <motion.div
-        initial={reduce ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.9, delay: 1.05, ease: EASE }}
-        className="relative z-10 mt-12 flex justify-center"
-      >
-        <button
-          onClick={() => {
-            playSound("notch");
-            scrollToSection("journey");
-          }}
-          aria-label="Scroll to my journey"
-          className="glass-chip group flex items-center gap-2.5 rounded-full py-2 pl-3 pr-5 transition-all duration-300 hover:bg-white/20 active:scale-[0.98]"
-        >
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 transition-colors duration-300 group-hover:bg-white/30">
-            <ArrowDown className="animate-nudge h-3.5 w-3.5" aria-hidden="true" />
-          </span>
-          <span className="text-[13px] font-medium text-white/85">Scroll to explore</span>
-        </button>
-      </motion.div>
     </section>
   );
 }

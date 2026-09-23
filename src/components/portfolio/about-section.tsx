@@ -12,7 +12,7 @@ export function AboutSection() {
   return (
     <section
       id="about"
-      aria-label="About Rayhan Ahmed"
+      aria-label="About M Rayhan"
       className="relative scroll-mt-20 overflow-hidden px-5 py-24 sm:px-8 md:px-10 lg:py-32"
     >
       {/* ghost numeral — 5% backward parallax */}
@@ -34,7 +34,7 @@ export function AboutSection() {
               <div className="glass-strong relative overflow-hidden rounded-[2.5rem] p-2.5">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem]">
                   <Image
-                    src="/generated/hero-portrait.png"
+                    src="/generated/m-rayhan-portrait.png"
                     alt={`Portrait of ${person.name}`}
                     fill
                     sizes="(max-width: 1024px) 100vw, 440px"

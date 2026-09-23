@@ -1,23 +1,23 @@
 /**
  * Portfolio content layer — single source of truth.
- * Blue Nile Studio · Rayhan Ahmed
+ * M Rayhan · CSE Student, North Western University Khulna
  */
 
 export const brand = {
-  name: "Blue Nile",
-  tagline: "Digital studio of Rayhan Ahmed",
+  name: "M Rayhan",
+  tagline: "Portfolio of a curious CSE student",
 } as const;
 
 export const person = {
-  name: "Rayhan Ahmed",
-  monogram: "BN",
-  role: "Full-Stack Engineer & UI/UX Specialist",
+  name: "M Rayhan",
+  monogram: "MR",
+  role: "CSE Student · North Western University",
   email: "rayhan6355@gmail.com",
-  bio: "Crafting resilient digital products, scalable web systems, and high-performance interactive interfaces.",
-  longBio: "I'm Rayhan Ahmed, a full-stack engineer and interface designer dedicated to building scalable web applications with meticulous user experience. I bridge the gap between complex engineering architectures and intuitive, accessible user interfaces.",
-  philosophy: "Passionate Software Engineer & Designer — crafting resilient digital products.",
-  location: "Worldwide · Remote",
-  availability: "Available Q2–Q3 2026",
+  bio: "CSE student at North Western University, Khulna — curious about almost everything, building things just to see what happens.",
+  longBio: "I'm M Rayhan, a CSE student at North Western University, Khulna, originally from Shyamnagar, Satkhira, Bangladesh. I'm interested in Artificial Intelligence, Robotics, Electronics, new gadgets and technologies — and I love building things just to see what happens.",
+  philosophy: "I'm curious about almost everything, and I love building things just to see what happens.",
+  location: "Khulna, Bangladesh",
+  availability: "Open to internships & collabs",
   responseTime: "Fast 24h response",
 } as const;
 
@@ -135,54 +135,47 @@ export type ProjectCategory = "all" | "fullstack" | "design";
 
 /* ── Journey — the life story timeline ─────────────────────────── */
 export interface Era {
-  chapter: string;
-  emoji: string;
+  period: string;
   title: string;
-  description: string;
+  place: string;
+  description?: string;
+  current?: boolean;
 }
 
 export const journey: Era[] = [
   {
-    chapter: "Chapter 01",
-    emoji: "👶",
-    title: "Curious Beginnings",
-    description:
-      "The kid who took apart every gadget at home. The family radio never survived — but the curiosity never left either.",
+    period: "2005 — 2007",
+    title: "Tiny Human",
+    place: "Father & Mother's Lap",
+    description: "Life was beautifully simple...",
   },
   {
-    chapter: "Chapter 02",
-    emoji: "🏠",
-    title: "First Home Computer",
-    description:
-      "An old desktop became my playground. Paint, Notepad, and a hundred questions about how the internet actually works.",
+    period: "2007 — 2011",
+    title: "Home Sweet Home",
+    place: "The Family Headquarters",
+    description: "The tutorial level of life...",
   },
   {
-    chapter: "Chapter 03",
-    emoji: "🎒",
-    title: "School & First Code",
-    description:
-      "Wrote my first HTML page for a school project and stayed up all night styling it. The hook was set for good.",
+    period: "2011 — 2015",
+    title: "School Unlocked",
+    place: "Sundarban Kindergarten",
+    description: "Nowabeki, Shyamnagar...",
   },
   {
-    chapter: "Chapter 04",
-    emoji: "🏫",
-    title: "College & Late Nights",
-    description:
-      "Computer science by day, freelance builds by night — shipping real websites before the degree was even finished.",
+    period: "2016 — 2020",
+    title: "The School Arc",
+    place: "Henchi Adarsha High School",
   },
   {
-    chapter: "Chapter 05",
-    emoji: "🎓",
-    title: "Graduation & The Grind",
-    description:
-      "Turned deadlines into discipline: internships, open-source contributions, and a growing folder of shipped products.",
+    period: "2021 — 2023",
+    title: "College Mode",
+    place: "Ahsanullah College",
   },
   {
-    chapter: "Chapter 06",
-    emoji: "💻",
-    title: "Blue Nile Studio",
-    description:
-      "Founded my own studio — engineering full-stack products and glass-grade interfaces for clients around the world.",
+    period: "2024 — Now",
+    title: "Currently Building",
+    place: "North Western University",
+    current: true,
   },
 ];
 

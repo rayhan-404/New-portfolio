@@ -279,10 +279,10 @@ export function SidebarNotchNav({
         type="button"
         onClick={() => handleSelect(0)}
         title="Scroll to Top / Home"
-        aria-label="Blue Nile — back to top"
+        aria-label="M Rayhan — back to top"
         className="relative z-[2] mb-3 flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-[14px] bg-gradient-to-br from-[#8f1d0c] via-[#a62a08] to-[#c2410c] text-[13px] font-black tracking-tight text-[#fff7ee] shadow-[0_10px_22px_-10px_rgba(124,26,6,0.65)] outline-none transition-transform duration-300 hover:scale-105 focus-visible:ring-2 focus-visible:ring-[#7c1a06]/40 active:scale-95"
       >
-        BN
+        MR
       </button>
 
       <span aria-hidden="true" className="relative z-[2] mb-1 h-px w-7 shrink-0 bg-[#53301f]/15" />

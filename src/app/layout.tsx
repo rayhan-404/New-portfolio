@@ -26,40 +26,39 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://bluenile.dev"),
+  metadataBase: new URL("https://mrayhan.dev"),
   title: {
-    default: "Blue Nile — Rayhan Ahmed · Full-Stack Engineer & UI/UX Specialist",
-    template: "%s · Blue Nile",
+    default: "M Rayhan — CSE Student & Curious Builder",
+    template: "%s · M Rayhan",
   },
   description:
-    "Portfolio of Rayhan Ahmed — Blue Nile Studio. Full-stack engineer and interface designer crafting resilient digital products, scalable web systems, and high-performance interactive interfaces.",
+    "Portfolio of M Rayhan — CSE student at North Western University, Khulna, from Shyamnagar, Satkhira. Curious about AI, robotics, electronics and new technologies; building things just to see what happens.",
   keywords: [
-    "Blue Nile",
-    "Rayhan Ahmed",
-    "Full-Stack Engineer",
-    "UI/UX Designer",
-    "Next.js Developer",
-    "TypeScript",
-    "React",
-    "Design Systems",
+    "M Rayhan",
+    "CSE Student",
+    "North Western University",
+    "Artificial Intelligence",
+    "Robotics",
+    "Electronics",
     "Portfolio",
+    "Bangladesh",
   ],
   authors: [{ name: person.name }],
   creator: person.name,
   openGraph: {
-    title: "Blue Nile — Rayhan Ahmed · Full-Stack Engineer & UI/UX Specialist",
+    title: "M Rayhan — CSE Student & Curious Builder",
     description:
-      "Crafting resilient digital products, scalable web systems, and high-performance interactive interfaces.",
-    url: "https://bluenile.dev",
-    siteName: "Blue Nile Studio",
+      "Curious about almost everything — AI, robotics, electronics — and building things just to see what happens.",
+    url: "https://mrayhan.dev",
+    siteName: "M Rayhan",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Blue Nile — Rayhan Ahmed · Full-Stack Engineer & UI/UX Specialist",
+    title: "M Rayhan — CSE Student & Curious Builder",
     description:
-      "Crafting resilient digital products, scalable web systems, and high-performance interactive interfaces.",
+      "Curious about almost everything — AI, robotics, electronics — and building things just to see what happens.",
   },
   robots: {
     index: true,
@@ -82,13 +81,11 @@ const jsonLd = {
   jobTitle: person.role,
   description: person.bio,
   knowsAbout: [
-    "React",
-    "Next.js",
-    "TypeScript",
-    "Node.js",
-    "PostgreSQL",
-    "UI/UX Design",
-    "Design Systems",
+    "Artificial Intelligence",
+    "Robotics",
+    "Electronics",
+    "Web Development",
+    "Problem Solving",
   ],
 };
 

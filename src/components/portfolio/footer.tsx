@@ -14,7 +14,7 @@ export function Footer() {
         <div className="flex flex-wrap items-start justify-between gap-8">
           <div>
             <p className="font-display text-2xl leading-none text-foreground">
-              Blue<span className="text-gold"> Nile</span>
+              M<span className="text-gold"> Rayhan</span>
             </p>
             <p className="font-tag mt-2 text-[9.5px] text-white/55">
               {person.role}
@@ -55,12 +55,12 @@ export function Footer() {
           aria-hidden="true"
           className="font-display select-none text-center text-[clamp(3.4rem,13vw,10rem)] leading-[0.85] tracking-tight text-white/[0.07]"
         >
-          BLUE NILE
+          M RAYHAN
         </p>
 
         <div className="flex flex-col items-center justify-between gap-2 border-t border-white/10 pt-5 sm:flex-row">
           <p className="font-tag text-[9px] text-white/50">
-            © {year} Blue Nile Studio — Rayhan Ahmed
+            © {year} M Rayhan
           </p>
           <p className="font-tag text-[9px] text-white/50">
             Designed & engineered with obsession
