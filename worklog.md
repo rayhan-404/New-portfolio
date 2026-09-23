@@ -298,3 +298,27 @@ Work Log:
 Stage Summary:
 - Navbar stays white but now reads as real Apple frost (ember glow through the blur, background notch still pops); mobile hero greeting upgraded to editorial Instrument Serif italic with gold gradient dots and an animated hand-drawn swash.
 - Files: src/app/globals.css, src/app/layout.tsx, src/components/portfolio/hero-section.tsx.
+
+---
+Task ID: 32 (Rollback restore + rebuild of Tasks 15–31)
+Agent: Main agent
+Task: User: "heyy, e ki 😦 amar website koi gelo, e to onek ager version" — sandbox had rolled back to the Sep 21 19:29 snapshot (Task 14 state). Tasks 15–31 existed only in the prior conversation (never git-committed): slide-section.tsx, journey-section.tsx, section-number.tsx were missing from disk; nav had 6 items; no SlideSection wrappers. Rebuild everything to the Task 30 state AND bake in the pending Task 31 fixes (mobile smoothness, scroll float bug, ghost 5%).
+
+Work Log:
+- Diagnosed loss: git HEAD was Task-14-era snapshot; worklog ended at Task 14; slide-section/journey-section/section-number absent from disk AND from all git history (never committed).
+- nav.tsx: NAV_ITEMS now 7 entries (home, journey, projects, about, skills, services, contact); added SECTION_NAVIGATE_EVENT ("portfolio:section-navigate"); scrollToSection dispatches the event (never scrollIntoView).
+- slide-section.tsx (NEW): SlideSection wrapper — listens for its id; instant scrollTo landing (wrapper top + scrollY, bypasses scroll-margin); slide-in x ["-100%","0%"] + opacity ramp [0.35→1], 0.8s EASE; alreadyInView guard (rect.top in (-80, 40% vh)); data-slide-section attr; transform/opacity-only animation for GPU compositing.
+- section-number.tsx (NEW): giant text-outline ghost numeral; useScroll(target, ["start end","end start"]) + useTransform → y drifts "0%" → "-5%" (speed multiplier, 1.1 ≈ 5.5%) — the user-spec 5% BACKWARD parallax (was 20% before the loss); verified translateY(-5%) live in browser.
+- portfolio-data.ts: added Era interface + journey[] (6 chapters 👶🏠🎒🏫🎓💻 with chapter label, emoji, title, description).
+- journey-section.tsx (NEW): id=journey; eyebrow "02 · The Road So Far"; heading "Life / Journey." with serif-italic gold-gradient period; single-line ghost watermark whitespace-nowrap text-[clamp(80px,12vw,185px)] text-white/[0.05] -right-8 top-10 hidden sm:block; timeline cards with chapter node (01–06), emoji+chapter glass pill, rail gradient.
+- portfolio-app.tsx: all 7 sections wrapped in <SlideSection id=…>; order Home→Journey→Projects→About→Skills→Services→Contact; Footer outside main with mt-auto.
+- Renumbering: projects eyebrow "03 · Selected Works" + SectionNumber 03 speed 1.1 (-top-4 right-0 text-[11rem] lg:block) + section overflow-hidden; about → 04 (SectionNumber right); skills → 05 (SectionNumber right) + marquee hover:[animation-play-state:paused]; services → 06 (SectionNumber left); contact → "07 · Get In Touch" + form gets relative (honeypot anchoring).
+- hero-section.tsx: scroll cue → scrollToSection("journey"), aria-label "Scroll to my journey".
+- globals.css (Task 31 fixes): ① Mobile perf — .app-grain drops mix-blend-mode:overlay below md (fullscreen blend = #1 phone GPU killer) with baked opacity 0.4; new <md media block halves every backdrop-filter radius (glass 24→12, strong 34→16, rail 34→18, chip/input 14→8, ember 26→14, nav 30→16) keeping desktop full-fat. ② Scroll float bug — html/body overflow-x hidden→clip (hidden on body made iOS scroll <body> as a secondary container = "whole page incl. navbar drifts then settles"; clip clips WITHOUT creating a scroll container); + html overscroll-behavior-y:none (kills Chrome Android pull-to-refresh bounce).
+- Re-added the Turbopack recompile nudge comment.
+- VERIFICATION (agent-browser): desktop 1440×900 — hero/journey/projects/about screenshots all correct; ghost 03/04 visible; serif Journey title correct. All 7 nav clicks land EXACTLY top=0. Slide sampled mid-flight translateX(-8.5%) → settles to transform:none. Mobile 390×844 — hero (Hello.. serif + swash) and Journey render; watermark hidden on mobile; scrollWidth 390 == innerWidth (no h-overflow, clip fix holds); free-scroll replay test: transform stays none (no slide retrigger); footer visible at document bottom; zero page errors (only the known benign framer scroll-offset warning). Bun lint: 0 problems.
+- COMMITTED TO GIT (8246518) — the root cause of this rollback disaster was that Tasks 15–31 were never committed; from now on every task ends with a git commit.
+
+Stage Summary:
+- Website restored to the latest (Task 30) design with the pending Task 31 fixes baked in: 7-section slide navigation with exact top=0 landing, Journey "Life / Journey." section with emoji chapters, ghost numerals at 5% backward parallax, mobile GPU budget overhaul (no blend grain, halved blurs), and the iOS scroll-drift fix via overflow-x:clip.
+- Files: nav.tsx, slide-section.tsx (new), section-number.tsx (new), journey-section.tsx (new), portfolio-data.ts, portfolio-app.tsx, hero-section.tsx, projects-section.tsx, about-section.tsx, skills-section.tsx, services-section.tsx, contact-section.tsx, globals.css.
