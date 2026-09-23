@@ -33,7 +33,7 @@ const BLACK = {
 } as const;
 
 /**
- * JourneySection — "How I got here."
+ * JourneySection — "My journey in the world"
  * Transparent field that melts into the site's own background: giant
  * MY JOURNEY backdrop, a centered spine on desktop (left rail on mobile),
  * huge ghost years, glowing dots, compact frosted-glass cards with
@@ -57,31 +57,19 @@ export function JourneySection() {
       </span>
 
       <div className="relative z-[2] mx-auto max-w-6xl">
-        {/* ── Header ─────────────────────────────────────────── */}
+        {/* ── Header — just the title ────────────────────────── */}
         <Reveal>
-          <header className="mb-20 max-w-[760px] lg:mb-[120px]">
-            <div className="mb-7 flex items-center gap-4">
-              <span aria-hidden="true" className="h-px w-12 bg-white/65" />
-              <p className="font-tag text-[11px] text-white/80">
-                02 · The Journey
-              </p>
-            </div>
-
+          <header className="mb-16 max-w-[860px] lg:mb-24">
             <h1
-              className="leading-[0.85] tracking-[-0.06em] text-white"
-              style={{ ...BLACK, fontSize: "clamp(56px, 9vw, 125px)" }}
+              className="leading-[0.88] tracking-[-0.055em] text-white"
+              style={{ ...BLACK, fontSize: "clamp(44px, 7.5vw, 104px)" }}
             >
-              How I
+              My journey
               <br />
-              <em className="font-serif font-normal italic tracking-[-0.05em]">
-                got here.
+              <em className="font-serif font-normal italic tracking-[-0.04em]">
+                in the world
               </em>
             </h1>
-
-            <p className="mt-9 max-w-[500px] text-[16px] leading-[1.7] text-white/75 sm:text-[17px]">
-              A slightly chaotic timeline of growing up, getting educated, and
-              somehow ending up as a CSE student.
-            </p>
           </header>
         </Reveal>
 

@@ -397,3 +397,17 @@ Work Log:
 Stage Summary:
 - Name lockup = "I am," above, "M Rayhan" in white Lobster script below (user's final arrangement). Journey chapter titles carry Lucide line icons instead of grayscale emoji. About typography tightened further (leading 1.4-1.45 + negative word-spacing).
 - Files: hero-section.tsx, journey-section.tsx, portfolio-data.ts, about-section.tsx, globals.css.
+
+---
+Task ID: 37 (journey header simplification)
+Agent: Main agent
+Task: User: remove the journey header block ("02 · The Journey" kicker, "How I / got here." h1, and the "A slightly chaotic timeline..." subline) and just give the title "My journey in the world".
+
+Work Log:
+- journey-section.tsx: replaced the whole <header> (kicker line + two-line display h1 + subline paragraph) with a single h1: "My journey" (Geist 900 via BLACK inline style, clamp(44px, 7.5vw, 104px)) / "in the world" (Instrument Serif italic) — keeps the section's mixed display language; header margins reduced mb-20/lg:mb-[120px] → mb-16/lg:mb-24 (no subline anymore). Doc comment updated. Verified no other file referenced the removed copy (rg "got here|The Journey|chaotic timeline").
+- VERIFICATION (agent-browser): desktop 1440×900 + mobile 390×844 — new title renders on both lines, fits (mobile title 296px < 390vw, no overflow), timeline (ghost years, icons, cards) unaffected; zero page errors; lint 0 problems.
+- COMMITTED (this commit).
+
+Stage Summary:
+- Journey section now opens with just "My journey / in the world" — kicker and subline removed per user request.
+- Files: journey-section.tsx.
