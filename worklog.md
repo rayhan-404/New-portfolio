@@ -507,3 +507,18 @@ Stage Summary:
 - About bio is now the user's own voice (curious-builder story) — this also resolves the persona mismatch flagged in Task 41 for the bio block. NOTE: stats (4+ Years / 35+ Apps / 99.8%) and Trajectory (TechFlow Studios etc.) still carry the studio-era copy — flagged twice now, needs the user's go-ahead for a content pass.
 - Line spacing on About text is now leading-[1.3] (tightest so far); if the user wants even tighter, next step would be 1.22–1.25 + smaller paragraph gap.
 - Files: portfolio-data.ts, about-section.tsx.
+
+---
+Task ID: 43 (bio text on a visible glass card + even tighter gaps — user: "ei text gulo ekta glass card er upor daw to and gap aro komaw")
+Agent: Main agent
+Task: Make the About bio text clearly sit on a glass card (the old glass tint was too subtle over the vivid gradient — user read it as floating text) and reduce the remaining gaps further.
+
+Work Log:
+- about-section.tsx: bio/philosophy card upgraded `glass` → `glass-strong` (now matches the portrait card — frosted card edges clearly visible on both breakpoints).
+- Gap pass: paragraph spacing space-y-2 → space-y-1.5; philosophy→bio mt-2.5 → mt-2; location line mt-6 → mt-4; right-column card gap gap-8 → gap-6; portrait↔text grid gap gap-10/lg:gap-14 → gap-8/lg:gap-10.
+- Verified: desktop 1440×900 (bio card visibly frosted, stats grid pulled up, everything aligned) and mobile 390×844 (card edges + border clearly readable, tight paragraph gaps, overflowX = 0). lint 0 problems, dev.log all 200, no browser errors.
+- COMMITTED (a0dd938).
+
+Stage Summary:
+- The About text card now visually reads as a glass card at last; all About-related gaps are one notch tighter. Stats + Trajectory still use plain `glass` (smaller tiles, fine as-is) and still carry studio-era copy — awaiting user's go-ahead for that content pass.
+- Files: about-section.tsx.
