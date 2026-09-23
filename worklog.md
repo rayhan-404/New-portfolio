@@ -522,3 +522,19 @@ Work Log:
 Stage Summary:
 - The About text card now visually reads as a glass card at last; all About-related gaps are one notch tighter. Stats + Trajectory still use plain `glass` (smaller tiles, fine as-is) and still carry studio-era copy — awaiting user's go-ahead for that content pass.
 - Files: about-section.tsx.
+
+---
+Task ID: 45 (version store v29/v30 + rollback to v29 — user: "store the v30", "store v29", "put back the version 29 / 9303465")
+Agent: Main agent
+Task: Snapshot the two recent design states as named versions, then roll the live site back to the user-designated v29 = commit 9303465.
+
+Work Log:
+- Created git tags: v30 = 5c6beae (Task 44 state: hero bio on glass card, journey ghost fix) and v29 — re-pointed per user instruction to 9303465 (Task 43 state: About bio on glass-strong card + tight gaps, hero bio floating).
+- Offline artifacts in /home/z/backups: full git bundle WITH tags (m-rayhan-portfolio-20260923-1933.bundle, verified "complete history"), source tarballs m-rayhan-v29-20260923-1933.tar.gz + m-rayhan-v30-20260923-1930.tar.gz (git archive, 167 files each), db copy custom-db-20260923-1930-v30.sqlite. Superseded 1930 bundle/v29-tarball removed.
+- New helper /home/z/backups/restore-version.sh: `bash restore-version.sh v29|v30|<hash>` → safety-commit + safety-bundle of current state, then git reset --hard to the version. (Task 32 rule: nothing is ever lost.)
+- Rollback executed: safety-20260923-193326.bundle written, then reset --hard 9303465. Browser-verified at 390×844: hero bio floats on background again (no card), About philosophy card = glass-strong — matches the exact v29 state. dev.log all 200.
+- This worklog entry is committed ON TOP of 9303465 so the record travels with the current branch (code files are identical to v29).
+
+Stage Summary:
+- Live design = v29 (9303465). v30 (the Task 44 hero-card design) is fully preserved: tag v30, tarball, and inside the bundle — one command brings it back: bash /home/z/backups/restore-version.sh v30.
+- NOTE: the Task 44 worklog entry lives in commit 5c6beae (v30); this file at v29 had not yet included it. Full history remains intact either way.
