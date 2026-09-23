@@ -491,3 +491,19 @@ Stage Summary:
 - Three visual bugs fixed (journey ghost-year clipping, project chip/arrow collision, filter pill wrap shape); full-site screenshot audit found everything else rendering cleanly on both breakpoints.
 - NOTE for future content decision (user hasn't asked, flagged before): About still carries studio-era persona copy ("Senior Full-Stack Engineer @ TechFlow Studios", "4+ Years Craft / 35+ Apps Shipped / 99.8% Satisfaction") and Projects/Services copy is engineer-flavored vs the CSE-student persona used everywhere else — recommend a content pass when the user wants it.
 - Files: journey-section.tsx, projects-section.tsx.
+
+---
+Task ID: 42 (About bio rewrite + tighter line spacing — user pasted new bio text + "egulor line spacing aro komaw")
+Agent: Main agent
+Task: Replace the About bio with the user's new first-person "boring & curious guy" story and reduce the line spacing of those paragraphs even more.
+
+Work Log:
+- portfolio-data.ts: person.longBio changed from a single string to an array of 4 paragraphs (user's exact text, emojis 🤔 🧐 🤨 kept as typed). Their 5th paragraph ("I'm curious about almost everything…") is identical to the existing Philosophy pull-quote, so it stays as the highlighted line at the top of the card — all of the user's text is on the page with no duplication.
+- about-section.tsx: bio block now maps over longBio paragraphs in a space-y-2 stack; line spacing tightened further per request — bio leading-[1.45] → leading-[1.3], philosophy leading-[1.4] → leading-[1.3]. word-spacing utility untouched.
+- Verified in agent-browser: desktop 1440×900 (About top + scrolled lower half — philosophy/bio card aligned next to portrait, stats + trajectory intact below) and mobile 390×844 (portrait card, philosophy card, all 4 bio paragraphs with tight spacing, location line; overflowX = 0). dev.log all 200, no browser errors. lint 0 problems.
+- COMMITTED (9b374d1).
+
+Stage Summary:
+- About bio is now the user's own voice (curious-builder story) — this also resolves the persona mismatch flagged in Task 41 for the bio block. NOTE: stats (4+ Years / 35+ Apps / 99.8%) and Trajectory (TechFlow Studios etc.) still carry the studio-era copy — flagged twice now, needs the user's go-ahead for a content pass.
+- Line spacing on About text is now leading-[1.3] (tightest so far); if the user wants even tighter, next step would be 1.22–1.25 + smaller paragraph gap.
+- Files: portfolio-data.ts, about-section.tsx.
