@@ -538,3 +538,26 @@ Work Log:
 Stage Summary:
 - Live design = v29 (9303465). v30 (the Task 44 hero-card design) is fully preserved: tag v30, tarball, and inside the bundle — one command brings it back: bash /home/z/backups/restore-version.sh v30.
 - NOTE: the Task 44 worklog entry lives in commit 5c6beae (v30); this file at v29 had not yet included it. Full history remains intact either way.
+
+---
+Task ID: 46 (hero complete redesign — user: "image placement ... basic basic lagche ... I need totally mind blowing ui ... think like best ui ux designer in the world, do everything whatever you want")
+Agent: Main agent
+Task: Full creative redesign of the hero section for a "mind-blowing" morning reveal.
+
+Work Log:
+- CONCEPT "Ember Spotlight": dropped the basic photo-card layout entirely. New layered cinematic composition (3 depth planes + life):
+  1. BACK — giant ghost display word "RAYHAN" (Syne 800, 1.5px gold-tinted stroke, clamp up to 252px) drifting AGAINST the mouse for parallax depth.
+  2. MID — the cutout portrait floats FREE (no glass card): bottom edge AND right sleeve edge dissolve into the ember field via a new `hero-cutout-stage` CSS mask (two linear-gradient layers, mask-composite: intersect — kills the amateur hard rectangular edge). Floor-glow ellipse grounds the subject; a slow-breathing warm stage bloom sits behind.
+  3. FRONT — huge gold-gradient Lobster "M Rayhan" + self-drawing gold swash underline, mono role line, short editorial hook + gold-bar italic quote, real CTA pair ("Explore my journey" btn-light pill + "Say hello" glass pill — both wired to scrollToSection + sound).
+- NEW `ember-canvas.tsx`: warm ember particles rising through the hero. Pre-rendered glow sprites (1 drawImage/particle), DPR≤2, count ≤64 scaled by area, pauses when offscreen/tab-hidden, single static frame under prefers-reduced-motion.
+- Gold orbit ring + orbiting satellite dot circles the portrait (70s, transform-only).
+- Interests ticker: infinite marquee strip closing the hero (AI ✦ Robotics ✦ Electronics ✦ …), font-tag mono + gold diamonds, masked edges, 48s loop.
+- Mobile keeps its approved skeleton (Hello.. + cutout fade + name overlap) but upgraded: gold-gradient name + swash, availability chip, hook+quote in a compact glass card, CTA row, ticker. Desktop copy column: chip → "I am," → name+swash → role → hook → quote → CTAs.
+- The 5-paragraph bio wall is GONE from the hero (hero = hook; the full story already lives in the About section) — deliberate editorial decision under the granted creative freedom.
+- Fixed en route: react/jsx-no-duplicate-props (merged style props on ghost word).
+- Verified: desktop 1440×900 (settled state: mask dissolve clean, ring/particles/ghost/ticker all alive), mobile 390×844 ×3 scrolls (no overflow, no seams), tablet 768 (scales beautifully), section navigation to Journey + back to Home works, overflowX=0, console clean, dev.log all 200, lint 0 problems.
+- COMMITTED (a32807a).
+
+Stage Summary:
+- The hero is now a layered, living, cinematic stage — the single biggest visual leap since the site began. v30 design (hero-card variant) remains preserved and restorable via `bash /home/z/backups/restore-version.sh v30`; this new design is the current live state (v31 in spirit — no tag requested yet).
+- Files: hero-section.tsx (rewritten), ember-canvas.tsx (new), globals.css (hero-cutout-stage mask + orbit-spin + ember-breathe keyframes).
