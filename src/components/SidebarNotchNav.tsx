@@ -14,7 +14,7 @@ import {
   useMotionValueEvent,
   useReducedMotion,
 } from "framer-motion";
-import { Mail, Volume2, VolumeX } from "lucide-react";
+import { Volume2, VolumeX } from "lucide-react";
 import { useSoundEngine } from "./portfolio/nav";
 
 export interface NavCategory {
@@ -26,8 +26,6 @@ interface SidebarNotchNavProps {
   categories: NavCategory[];
   activeIndex: number;
   onSelectCategory: (index: number) => void;
-  savedCount?: number;
-  onOpenContact?: () => void;
 }
 
 /* ------------------------------------------------------------------
@@ -96,15 +94,13 @@ function buildNotchPath(w: number, h: number, cy: number, g: NotchGeometry): str
  *   the pin releases once the spy confirms, or after a short timeout.
  * • Vertical category labels (bottom-to-top) — warm ink, brand-red
  *   when active. Measured via layout effects + ResizeObserver +
- *   font-ready. Actions: brand tile (back to top), sound, quick-contact.
- *   Visible on mobile (54px) through desktop (74px).
+ *   font-ready. Actions: sound toggle. Visible on mobile (54px)
+ *   through desktop (74px).
  */
 export function SidebarNotchNav({
   categories,
   activeIndex,
   onSelectCategory,
-  savedCount = 0,
-  onOpenContact,
 }: SidebarNotchNavProps) {
   const [dims, setDims] = useState<{ w: number; h: number } | null>(null);
   const [targetCy, setTargetCy] = useState<number | null>(null);
@@ -273,18 +269,7 @@ export function SidebarNotchNav({
         }}
       />
 
-      {/* Brand tile → back to top */}
-      <button
-        id="sidebar-brand-btn"
-        type="button"
-        onClick={() => handleSelect(0)}
-        title="Scroll to Top / Home"
-        aria-label="M Rayhan — back to top"
-        className="relative z-[2] mb-3 flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-[14px] bg-gradient-to-br from-[#8f1d0c] via-[#a62a08] to-[#c2410c] text-[13px] font-black tracking-tight text-[#fff7ee] shadow-[0_10px_22px_-10px_rgba(124,26,6,0.65)] outline-none transition-transform duration-300 hover:scale-105 focus-visible:ring-2 focus-visible:ring-[#7c1a06]/40 active:scale-95"
-      >
-        MR
-      </button>
-
+      {/* Top hairline ornament */}
       <span aria-hidden="true" className="relative z-[2] mb-1 h-px w-7 shrink-0 bg-[#53301f]/15" />
 
       {/* Vertical navigation labels */}
@@ -340,23 +325,6 @@ export function SidebarNotchNav({
         >
           {soundOn ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
         </button>
-
-        {onOpenContact && (
-          <button
-            id="quick-contact-btn"
-            type="button"
-            aria-label="Contact"
-            onClick={onOpenContact}
-            className="relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-gradient-to-b from-[#ffb45e] to-[#f45118] text-white shadow-[0_8px_18px_-8px_rgba(244,81,24,0.65)] transition-all duration-300 hover:brightness-105 active:scale-90"
-          >
-            <Mail className="h-4 w-4" />
-            {savedCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 animate-bounce items-center justify-center rounded-full bg-[#ff453a] text-[8.5px] font-extrabold text-white shadow-md">
-                {savedCount}
-              </span>
-            )}
-          </button>
-        )}
       </div>
     </motion.aside>
   );

@@ -137,47 +137,80 @@ export type ProjectCategory = "all" | "fullstack" | "design";
 export interface Era {
   period: string;
   title: string;
+  /** funny sub-title under the big title */
   place: string;
-  description?: string;
+  /** real-world location line (mono) */
+  location?: string;
+  description: string;
+  tag: string;
+  /** degree line — only on the current chapter */
+  degree?: string;
   current?: boolean;
 }
 
 export const journey: Era[] = [
   {
     period: "2005 — 2007",
-    title: "Tiny Human",
-    place: "Father & Mother's Lap",
-    description: "Life was beautifully simple...",
+    title: "Father & Mother's Lap",
+    place: "Tiny Human Era",
+    description:
+      "No school. No homework. No responsibilities. Just sleeping, eating and professionally doing nothing.",
+    tag: "Life was easy",
   },
   {
     period: "2007 — 2011",
     title: "Home Sweet Home",
     place: "The Family Headquarters",
-    description: "The tutorial level of life...",
+    description:
+      "Started discovering the world from the safest possible location. Basically, childhood with unlimited Wi-Fi from the universe.",
+    tag: "Origin story",
   },
   {
     period: "2011 — 2015",
-    title: "School Unlocked",
-    place: "Sundarban Kindergarten",
-    description: "Nowabeki, Shyamnagar...",
+    title: "Sundarban Kindergarten",
+    place: "First School Arc",
+    location: "Nowabeki, Shyamnagar, Satkhira",
+    description:
+      "First official encounter with education. Came for learning, stayed for the snacks and friends.",
+    tag: "Quest started",
   },
   {
     period: "2016 — 2020",
-    title: "The School Arc",
-    place: "Henchi Adarsha High School",
+    title: "Henchi Adarsha High School",
+    place: "The School Years",
+    location: "Henchi, Shyamnagar, Satkhira",
+    description:
+      'Exams, friends, homework, random punishments and the classic "Sir, homework kori nai."',
+    tag: "Character development",
   },
   {
     period: "2021 — 2023",
-    title: "College Mode",
-    place: "Ahsanullah College",
+    title: "Ahsanullah College",
+    place: "College Mode",
+    location: "Khulna, Bangladesh",
+    description:
+      "New city. New people. A little more freedom. And, surprisingly, even more assignments.",
+    tag: "Level up",
   },
   {
-    period: "2024 — Now",
-    title: "Currently Building",
-    place: "North Western University",
+    period: "2024 — Present",
+    title: "North Western University",
+    place: "Currently Building.",
+    location: "Khulna, Bangladesh",
+    description:
+      "Started learning how computers work. Still trying to figure out how life works. One bug at a time.",
+    tag: "Work in progress",
+    degree: "BSc · Computer Science & Engineering",
     current: true,
   },
 ];
+
+export const journeyFuture = {
+  year: "2028",
+  label: "Next chapter",
+  title: "Loading",
+  description: "Degree first. What happens next? Let's find out.",
+} as const;
 
 export interface Project {
   id: string;

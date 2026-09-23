@@ -1,110 +1,197 @@
 "use client";
 
-import { journey } from "@/lib/portfolio-data";
-import { Reveal, StaggerGroup, StaggerItem } from "./reveal";
+import { journey, journeyFuture } from "@/lib/portfolio-data";
+import { Reveal } from "./reveal";
+
+/* Geist black (900) — the timeline's ultra-heavy display weight.
+   Inline style so it reliably beats the @utility font-display default. */
+const BLACK = {
+  fontFamily: "var(--font-geist-sans), ui-sans-serif, sans-serif",
+  fontWeight: 900,
+} as const;
 
 /**
- * JourneySection — "Life / Journey." personal timeline.
- * Centered vertical rail: year → node → title → place → note.
- * Ghost watermark sits at 5% opacity, single line, hidden on mobile.
+ * JourneySection — "How I got here."
+ * The user's red-field timeline design: giant MY JOURNEY backdrop,
+ * a centered spine on desktop (left rail on mobile), huge ghost years,
+ * glowing dots, and frosted glass cards in the site's own card recipe.
+ * Ends with the "2028 · Loading..." next-chapter strip.
  */
 export function JourneySection() {
   return (
     <section
       id="journey"
       aria-label="My journey"
-      className="relative overflow-hidden px-5 py-24 sm:px-8 md:px-10 lg:py-32"
+      className="relative min-h-svh overflow-hidden px-5 py-20 sm:px-8 md:px-10 lg:py-28"
+      style={{
+        background:
+          "radial-gradient(75% 45% at 65% 0%, rgba(255,157,45,0.65), transparent 70%)," +
+          "radial-gradient(65% 55% at 5% 55%, rgba(105,0,0,0.5), transparent 75%)," +
+          "linear-gradient(145deg, #760603 0%, #c52a12 42%, #f45b17 100%)",
+      }}
     >
-      {/* Ghost watermark — single line, 5% opacity, desktop only */}
+      {/* Giant backdrop word — sits behind everything, all breakpoints */}
       <span
         aria-hidden="true"
-        className="font-display pointer-events-none absolute -right-8 top-10 hidden select-none whitespace-nowrap text-[clamp(80px,12vw,185px)] leading-none text-white/[0.05] sm:block"
+        className="pointer-events-none absolute -right-12 top-[30px] select-none whitespace-nowrap leading-[0.8] tracking-[-0.07em] text-white/[0.035]"
+        style={{ ...BLACK, fontSize: "clamp(90px, 18vw, 260px)" }}
       >
-        JOURNEY
+        MY JOURNEY
       </span>
 
-      <div className="relative mx-auto max-w-6xl">
-        {/* Heading — "Life / Journey." with the gold serif period */}
+      <div className="relative z-[2] mx-auto max-w-6xl">
+        {/* ── Header ─────────────────────────────────────────── */}
         <Reveal>
-          <div className="flex items-center gap-3">
-            <span
-              className="h-px w-10"
-              style={{
-                background:
-                  "linear-gradient(90deg, transparent, var(--gold))",
-              }}
-              aria-hidden="true"
-            />
-            <p className="font-tag text-[10.5px] font-bold text-gold-bright">
-              02 · The Road So Far
+          <header className="mb-20 max-w-[760px] lg:mb-[120px]">
+            <div className="mb-7 flex items-center gap-4">
+              <span aria-hidden="true" className="h-px w-12 bg-white/65" />
+              <p className="font-tag text-[11px] text-white/80">
+                02 · The Journey
+              </p>
+            </div>
+
+            <h1
+              className="leading-[0.85] tracking-[-0.06em] text-white"
+              style={{ ...BLACK, fontSize: "clamp(56px, 9vw, 125px)" }}
+            >
+              How I
+              <br />
+              <em className="font-serif font-normal italic tracking-[-0.05em]">
+                got here.
+              </em>
+            </h1>
+
+            <p className="mt-9 max-w-[500px] text-[16px] leading-[1.7] text-white/75 sm:text-[17px]">
+              A slightly chaotic timeline of growing up, getting educated, and
+              somehow ending up as a CSE student.
             </p>
-          </div>
-          <h2 className="font-display text-glow mt-4 text-3xl leading-[1.04] tracking-tight text-foreground sm:text-4xl lg:text-[2.9rem]">
-            Life <span className="text-white/35">/</span>{" "}
-            <span className="font-serif font-normal italic tracking-[-0.01em]">
-              Journey<span className="text-gold-gradient">.</span>
-            </span>
-          </h2>
-          <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-white/70">
-            From a village in Shyamnagar to a CSE classroom in Khulna — the
-            road so far.
-          </p>
+          </header>
         </Reveal>
 
-        {/* Centered timeline rail */}
-        <div className="relative mx-auto mt-14 max-w-md">
-          {/* continuous rail */}
+        {/* ── Timeline ───────────────────────────────────────── */}
+        <div className="relative mx-auto max-w-[1200px]">
+          {/* the spine — center on desktop, left rail on mobile */}
           <span
             aria-hidden="true"
-            className="absolute bottom-4 left-1/2 top-2 w-px -translate-x-1/2 bg-gradient-to-b from-gold/60 via-white/25 to-transparent"
+            className="absolute bottom-0 left-[15px] top-0 w-px bg-[linear-gradient(to_bottom,transparent,rgba(255,255,255,0.45)_5%,rgba(255,255,255,0.35)_95%,transparent)] md:left-1/2 md:-translate-x-1/2"
           />
 
-          <StaggerGroup className="relative flex flex-col gap-12">
-            {journey.map((era) => (
-              <StaggerItem key={era.period}>
-                <div className="relative flex flex-col items-center text-center">
-                  {/* year */}
-                  <p className="font-tag bg-transparent text-[10px] text-gold-bright">
+          {journey.map((era, idx) => {
+            const isLeft = idx % 2 === 0;
+            return (
+              <Reveal key={era.period}>
+                <article
+                  className={`group relative mb-16 w-full pl-[52px] md:mb-[90px] md:w-1/2 md:min-h-[300px] md:pl-0 ${
+                    isLeft
+                      ? "md:pr-[72px] md:text-right lg:pr-[90px]"
+                      : "md:ml-[50%] md:pl-[72px] lg:pl-[90px]"
+                  }`}
+                >
+                  {/* Ghost year — static headline on mobile, huge
+                      floating numeral beside the spine on desktop */}
+                  <p
+                    aria-hidden="true"
+                    className={`relative z-[1] mb-2.5 block whitespace-nowrap text-[38px] leading-[0.9] tracking-[-0.07em] text-white/[0.16] transition-[color,transform] duration-500 group-hover:-translate-y-1 group-hover:text-white/[0.28] sm:text-[clamp(48px,12vw,72px)] md:absolute md:top-[-42px] md:mb-0 md:text-[clamp(70px,8vw,115px)] md:leading-none md:text-white/[0.08] md:group-hover:text-white/[0.15] ${
+                      isLeft ? "md:right-[25px]" : "md:left-[25px]"
+                    }`}
+                    style={BLACK}
+                  >
                     {era.period}
                   </p>
 
-                  {/* node on the rail */}
+                  {/* Dot on the spine */}
                   <span
                     aria-hidden="true"
-                    className="relative my-3 flex h-[18px] w-[18px] items-center justify-center"
-                  >
-                    <span
-                      className={`absolute inset-0 rounded-full border-2 ${
-                        era.current
-                          ? "border-apple-green/70 bg-apple-green/15 shadow-[0_0_18px_rgba(48,209,88,0.55)]"
-                          : "border-gold/60 bg-[#3a0d05]"
-                      }`}
-                    />
-                    <span
-                      className={`h-[6px] w-[6px] rounded-full ${
-                        era.current
-                          ? "bg-apple-green shadow-[0_0_10px_rgba(48,209,88,0.9)]"
-                          : "bg-gold shadow-[0_0_12px_rgba(255,196,107,0.9)]"
-                      }`}
-                    />
-                  </span>
+                    className={`absolute top-[9px] z-[4] h-3 w-3 rounded-full bg-white shadow-[0_0_0_5px_rgba(255,255,255,0.09),0_0_25px_rgba(255,255,255,0.45)] max-md:left-[9px] ${
+                      isLeft ? "md:-right-[6px]" : "md:-left-[6px]"
+                    }`}
+                  />
 
-                  {/* title + place */}
-                  <h3 className="font-display text-[1.15rem] uppercase leading-tight tracking-[0.06em] text-foreground sm:text-[1.3rem]">
-                    {era.title}
-                  </h3>
-                  <p className="mt-1.5 text-sm font-medium text-white/85">
-                    {era.place}
-                  </p>
-                  {era.description && (
-                    <p className="mt-1.5 text-[13px] leading-relaxed text-white/60">
+                  {/* Card — the site's liquid-glass recipe */}
+                  <div
+                    className={`journey-card relative z-[2] w-full max-w-[470px] rounded-[22px] p-6 text-left sm:p-[30px] md:ml-auto ${
+                      era.current
+                        ? "journey-card--current p-7 sm:p-[38px]"
+                        : ""
+                    } ${isLeft ? "" : "md:ml-0"}`}
+                  >
+                    {era.current && (
+                      <div className="mb-5 inline-flex items-center gap-2.5 font-tag text-[9px] tracking-[0.22em] text-white/90">
+                        <span
+                          aria-hidden="true"
+                          className="journey-pulse h-[7px] w-[7px] rounded-full bg-white shadow-[0_0_0_4px_rgba(255,255,255,0.12),0_0_16px_rgba(255,255,255,0.85)]"
+                        />
+                        Currently here
+                      </div>
+                    )}
+
+                    <h2
+                      className={`font-display uppercase leading-[0.95] tracking-[-0.045em] text-white ${
+                        era.current
+                          ? "text-[clamp(30px,4.4vw,58px)]"
+                          : "text-[clamp(26px,3.4vw,44px)]"
+                      }`}
+                    >
+                      {era.title}
+                    </h2>
+
+                    <p className="mt-2.5 text-[15px] font-semibold text-white/85">
+                      {era.place}
+                    </p>
+
+                    {era.location && (
+                      <p className="font-tag mt-1.5 text-[10px] text-white/55">
+                        {era.location}
+                      </p>
+                    )}
+
+                    {era.degree && (
+                      <div className="mt-6 border-l-2 border-white/70 bg-white/[0.05] px-4 py-3 font-mono text-[11px] leading-[1.5] text-white/90">
+                        {era.degree}
+                      </div>
+                    )}
+
+                    <p className="mt-[22px] max-w-[390px] text-[14px] leading-[1.75] text-white/75">
                       {era.description}
                     </p>
-                  )}
-                </div>
-              </StaggerItem>
-            ))}
-          </StaggerGroup>
+
+                    <span className="mt-[22px] inline-block rounded-full border border-white/25 px-[11px] py-[7px] font-tag text-[8px] tracking-[0.22em] text-white/70">
+                      {era.tag}
+                    </span>
+                  </div>
+                </article>
+              </Reveal>
+            );
+          })}
+
+          {/* ── Future — 2028 · Loading… ──────────────────────── */}
+          <Reveal>
+            <div className="relative flex flex-col gap-7 border-y border-white/15 py-14 max-md:pl-[52px] sm:px-0 md:flex-row md:items-center md:gap-11 md:py-[72px] lg:px-[4%]">
+              <p
+                aria-hidden="true"
+                className="whitespace-nowrap leading-[0.8] tracking-[-0.08em] text-white/[0.12]"
+                style={{ ...BLACK, fontSize: "clamp(72px, 10vw, 145px)" }}
+              >
+                {journeyFuture.year}
+              </p>
+
+              <div>
+                <p className="font-tag text-[9px] tracking-[0.3em] text-white/60">
+                  {journeyFuture.label}
+                </p>
+                <h2
+                  className="my-2.5 leading-[0.9] tracking-[-0.055em] text-white"
+                  style={{ ...BLACK, fontSize: "clamp(38px, 5vw, 70px)" }}
+                >
+                  {journeyFuture.title}
+                  <span className="opacity-40">...</span>
+                </h2>
+                <p className="text-[15px] leading-relaxed text-white/65">
+                  {journeyFuture.description}
+                </p>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>

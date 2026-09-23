@@ -39,11 +39,6 @@ export function PortfolioApp() {
           playSound("tap");
           scrollToSection(NAV_ITEMS[index].id);
         }}
-        savedCount={2}
-        onOpenContact={() => {
-          playSound("chime");
-          scrollToSection("contact");
-        }}
       />
 
       {/* Utility rail (socials / status / CTA) — desktop only */}

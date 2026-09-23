@@ -18,23 +18,21 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 const CUTOUT_W = 1369;
 const CUTOUT_H = 1149;
 
-/* ── Personal intro copy ─────────────────────────────────────────── */
+/* ── Personal intro copy ─────────────────────────────────────── */
 
 function IntroBio({ className = "" }: { className?: string }) {
   return (
-    <div className={`flex flex-col gap-3.5 ${className}`}>
-      <p className="text-[14.5px] leading-relaxed text-white/85 sm:text-[15px]">
+    <div className={`flex flex-col gap-4 ${className}`}>
+      {/* Lead line — bigger, editorial serif italic, the "special" opener */}
+      <p className="font-serif text-[1.3rem] italic leading-[1.35] tracking-[-0.01em] text-white/80 sm:text-[1.5rem]">
         I&apos;m a CSE student at{" "}
-        <strong className="font-semibold text-foreground">
+        <span className="text-white">
           North Western University, Khulna
-        </strong>
+        </span>
         , and originally from{" "}
-        <strong className="font-semibold text-foreground">
-          Shyamnagar, Satkhira, Bangladesh
-        </strong>
-        .
+        <span className="text-white">Shyamnagar, Satkhira, Bangladesh</span>.
       </p>
-      <p className="text-[14.5px] leading-relaxed text-white/85 sm:text-[15px]">
+      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-white/80 sm:text-[15.5px]">
         I&apos;m basically a boring and curious guy who wants to know{" "}
         <strong className="font-semibold text-foreground">
           how everything works, from my cell, brain, everything surrounding me,
@@ -44,19 +42,19 @@ function IntroBio({ className = "" }: { className?: string }) {
         I&apos;ll spend hours trying to figure it out and understand how it
         works.
       </p>
-      <p className="text-[14.5px] leading-relaxed text-white/85 sm:text-[15px]">
+      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-white/80 sm:text-[15.5px]">
         I like learning new things, trying random ideas, and building stuff
         just to see if I can actually make it work. I&apos;ve already built a
         few small projects because of this habit, and honestly, I enjoy the
         process more than the final result, and it satisfies me more than
         anything.
       </p>
-      <p className="text-[14.5px] leading-relaxed text-white/85 sm:text-[15px]">
+      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-white/80 sm:text-[15.5px]">
         Sometimes I build something useful. Sometimes I build something
         completely unnecessary. And sometimes I break something and then spend
         the next few hours figuring out how it actually works. 🧐
       </p>
-      <p className="text-[14.5px] leading-relaxed text-white/85 sm:text-[15px]">
+      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-white/80 sm:text-[15.5px]">
         If you ask,{" "}
         <strong className="font-semibold text-foreground">
           what is this guy interested in?
@@ -69,7 +67,7 @@ function IntroBio({ className = "" }: { className?: string }) {
         . I don&apos;t know where this curiosity will take me yet, but I&apos;m
         having fun finding out.
       </p>
-      <p className="text-[14.5px] font-semibold leading-relaxed text-foreground sm:text-[15px]">
+      <p className="font-bio text-justify text-[14.5px] font-semibold leading-[1.78] text-foreground sm:text-[15.5px]">
         I&apos;m curious about almost everything, and I love building things
         just to see what happens.
       </p>
@@ -126,7 +124,50 @@ export function HeroSection() {
               className="absolute left-1/2 top-[6%] h-[58%] w-[94%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,205,120,0.34),transparent_66%)] blur-2xl"
             />
 
-            <div className="hero-cutout-fade relative">
+            {/* "Hello.." — anchored to the column (not the scaled photo):
+                editorial serif italic + gold-gradient dots + a hand-drawn
+                gold swash that draws itself in. */}
+            <motion.span
+              initial={reduce ? false : { opacity: 0, x: -16, y: -8 }}
+              animate={{ opacity: 1, x: 0, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.55, ease: EASE }}
+              className="text-glow absolute left-5 top-4 z-10 sm:left-8 sm:top-6"
+            >
+              <span className="font-serif block text-[3rem] font-normal italic leading-[0.95] tracking-[-0.015em] text-[#fff9f1] sm:text-[3.6rem]">
+                Hello<span className="text-gold-gradient">..</span>
+              </span>
+              <motion.svg
+                viewBox="0 0 140 14"
+                aria-hidden="true"
+                initial={reduce ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 1 }}
+                className="mt-1.5 block h-[13px] w-[118px] drop-shadow-[0_2px_6px_rgba(96,14,0,0.45)] sm:h-[15px] sm:w-[142px]"
+              >
+                <motion.path
+                  d="M3 9 C 30 3, 58 12.5, 86 7.5 S 128 4.5, 137 7"
+                  fill="none"
+                  stroke="url(#hello-swash-gold)"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  initial={reduce ? false : { pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 0.85, delay: 1.05, ease: EASE }}
+                />
+                <defs>
+                  <linearGradient id="hello-swash-gold" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#ffe3ae" />
+                    <stop offset="55%" stopColor="#ffb45e" />
+                    <stop offset="100%" stopColor="#ff7a1c" />
+                  </linearGradient>
+                </defs>
+              </motion.svg>
+            </motion.span>
+
+            {/* The photo itself grows a touch beyond the column
+                (transform-only: layout box, text flow and the fade
+                seam all stay exactly where they were) */}
+            <div className="hero-cutout-fade relative origin-top scale-[1.09] sm:scale-[1.05]">
               <Image
                 src="/generated/m-rayhan-cutout.png"
                 alt="Portrait of M Rayhan"
@@ -138,45 +179,6 @@ export function HeroSection() {
                 quality={88}
                 className="relative h-auto w-full object-contain drop-shadow-[0_30px_44px_rgba(60,5,0,0.42)]"
               />
-              {/* "Hello.." — top-left corner of the picture.
-                  Editorial serif italic + gold-gradient dots + a
-                  hand-drawn gold swash that draws itself in. */}
-              <motion.span
-                initial={reduce ? false : { opacity: 0, x: -16, y: -8 }}
-                animate={{ opacity: 1, x: 0, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.55, ease: EASE }}
-                className="text-glow absolute left-5 top-4 sm:left-8 sm:top-6"
-              >
-                <span className="font-serif block text-[3rem] font-normal italic leading-[0.95] tracking-[-0.015em] text-[#fff9f1] sm:text-[3.6rem]">
-                  Hello<span className="text-gold-gradient">..</span>
-                </span>
-                <motion.svg
-                  viewBox="0 0 140 14"
-                  aria-hidden="true"
-                  initial={reduce ? false : { opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 1 }}
-                  className="mt-1.5 block h-[13px] w-[118px] drop-shadow-[0_2px_6px_rgba(96,14,0,0.45)] sm:h-[15px] sm:w-[142px]"
-                >
-                  <motion.path
-                    d="M3 9 C 30 3, 58 12.5, 86 7.5 S 128 4.5, 137 7"
-                    fill="none"
-                    stroke="url(#hello-swash-gold)"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    initial={reduce ? false : { pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ duration: 0.85, delay: 1.05, ease: EASE }}
-                  />
-                  <defs>
-                    <linearGradient id="hello-swash-gold" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0%" stopColor="#ffe3ae" />
-                      <stop offset="55%" stopColor="#ffb45e" />
-                      <stop offset="100%" stopColor="#ff7a1c" />
-                    </linearGradient>
-                  </defs>
-                </motion.svg>
-              </motion.span>
             </div>
 
             {/* Intro begins where the fade starts — left aligned */}
@@ -190,8 +192,8 @@ export function HeroSection() {
                 I am<span className="text-gold-gradient">,</span>
               </p>
 
-              <h1 className="font-display text-glow mt-2.5 text-[2.7rem] leading-[1.02] tracking-[-0.03em] sm:text-6xl">
-                <span className="text-gold-gradient">M Rayhan</span>
+              <h1 className="font-name text-glow mt-2.5 text-[2.7rem] leading-[1.02] text-white sm:text-6xl">
+                M Rayhan
               </h1>
 
               <IntroBio className="mt-6" />
@@ -218,9 +220,9 @@ export function HeroSection() {
               initial={reduce ? false : { opacity: 0, y: 26 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.85, delay: 0.32, ease: EASE }}
-              className="font-display text-glow mt-3 text-[4.2rem] leading-[1.02] tracking-[-0.03em]"
+              className="font-name text-glow mt-3 text-[4.2rem] leading-[1.02] text-white"
             >
-              <span className="text-gold-gradient">M Rayhan</span>
+              M Rayhan
             </motion.h1>
 
             <motion.div
@@ -238,7 +240,7 @@ export function HeroSection() {
             initial={reduce ? false : { opacity: 0, y: 34, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 1.05, delay: 0.5, ease: EASE }}
-            className="relative mx-auto w-full max-w-[400px]"
+            className="relative mx-auto w-full max-w-[440px]"
             style={reduce ? undefined : { x: cardX, y: cardY, rotate: cardR }}
           >
             {/* glow underlay */}
@@ -260,7 +262,7 @@ export function HeroSection() {
                   fill
                   priority
                   loading="eager"
-                  sizes="400px"
+                  sizes="440px"
                   quality={88}
                   className="object-cover object-top"
                 />

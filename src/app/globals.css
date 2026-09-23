@@ -476,6 +476,18 @@
   font-weight: 500;
 }
 
+/* Professional reading serif — long-form bio paragraphs */
+@utility font-bio {
+  font-family: var(--font-source-serif), ui-serif, Georgia, serif;
+}
+
+/* Stylish geometric display — the personal name mark */
+@utility font-name {
+  font-family: var(--font-syne), var(--font-geist-sans), ui-sans-serif, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+
 /* ============================================================
    MICRO DETAILS
    ============================================================ */
@@ -605,4 +617,77 @@
   }
 }
 
-/* recompile nudge t32 — rollback restore rebuild (slide system + journey + ghost 5% + mobile perf) */
+/* ============================================================
+   JOURNEY TIMELINE CARDS — the site's liquid-glass card recipe,
+   re-expressed as a class so the "current" variant can override
+   border/background and the mobile GPU budget can halve the blur.
+   ============================================================ */
+
+.journey-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.08));
+  -webkit-backdrop-filter: blur(24px) brightness(1.04);
+  backdrop-filter: blur(24px) brightness(1.04);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04),
+    0 25px 60px -22px rgba(60, 2, 0, 0.45);
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.45s ease,
+    box-shadow 0.45s ease;
+}
+.journey-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+/* "Currently here" — heavier frost, brighter frame, deeper glow */
+.journey-card--current {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.12));
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06),
+    0 35px 90px -26px rgba(55, 2, 0, 0.55);
+}
+.journey-card--current:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 767px) {
+  .journey-card {
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+  .journey-card--current {
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+  }
+}
+
+/* Pulsing white dot — "CURRENTLY HERE" badge */
+@keyframes journey-pulse {
+  50% {
+    opacity: 0.4;
+    transform: scale(0.7);
+  }
+}
+.journey-pulse {
+  animation: journey-pulse 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journey-pulse {
+    animation: none;
+  }
+  .journey-card:hover {
+    transform: none;
+  }
+}
+
+/* recompile nudge t34 — bio serif + Syne name + justified bio + journey timeline rebuild + nav cleanup */
+/* recompile nudge t34b */
+
+/* recompile nudge t34c */
+/* recompile nudge t34d */
