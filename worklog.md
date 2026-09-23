@@ -322,3 +322,22 @@ Work Log:
 Stage Summary:
 - Website restored to the latest (Task 30) design with the pending Task 31 fixes baked in: 7-section slide navigation with exact top=0 landing, Journey "Life / Journey." section with emoji chapters, ghost numerals at 5% backward parallax, mobile GPU budget overhaul (no blend grain, halved blurs), and the iOS scroll-drift fix via overflow-x:clip.
 - Files: nav.tsx, slide-section.tsx (new), section-number.tsx (new), journey-section.tsx (new), portfolio-data.ts, portfolio-app.tsx, hero-section.tsx, projects-section.tsx, about-section.tsx, skills-section.tsx, services-section.tsx, contact-section.tsx, globals.css.
+
+---
+Task ID: 33 (Personal identity overhaul — user's 4 requests)
+Agent: Main agent
+Task: User: (1) remove old hero content (pill / I am M Rayhan / role / old bio / both CTAs / stats / scroll cue) and write personal intro "Iam, M Rayhan" + long CSE-student bio; (2) Journey section redesign+content: centered year→dot→title timeline (2005 Tiny Human → 2024 Currently Building NWU); (3) use uploaded portrait; (4) remove "Blue Nile" everywhere → "M Rayhan".
+
+Work Log:
+- Image: upload "ChatGPT Image Sep 14, 2026, 05_49_39 PM-Photoroom.png" (1369×1149 RGBA cutout) copied to public/generated/m-rayhan-cutout.png + m-rayhan-portrait.png. First attempt overwrote hero-*.png in place → browser served stale immutable _next/image cache; tried ?v=2 query → Next 16 runtime error (images.localPatterns); FINAL: renamed files to m-rayhan-*.png (URL change busts all caches, no config needed), old names deleted.
+- portfolio-data.ts: person = M Rayhan / monogram MR / role "CSE Student · North Western University" / location "Khulna, Bangladesh" / availability "Open to internships & collabs" / philosophy + longBio rewritten truthfully (student persona). brand.name "M Rayhan". Era type redesigned {period,title,place,description?,current?} + journey[] = user's 6 real chapters (Tiny Human / Home Sweet Home / School Unlocked / The School Arc / College Mode / Currently Building).
+- hero-section.tsx rewritten: mobile = cutout photo + Hello.. overlay + "I am," (serif italic) + "M Rayhan" (gold display) + full bio (6 paragraphs, user's text verbatim with <strong> highlights, emojis kept, "intelegence"→"Intelligence"); desktop = same intro left + portrait card right (warm radial backdrop behind transparent cutout, nameplate auto M Rayhan); chips → GraduationCap "CSE Student" + Telescope "Curious Builder"; REMOVED: availability pill, CTAs, StatsGrid, scroll cue; CUTOUT_W/H = 1369×1149.
+- journey-section.tsx rebuilt: centered single-column rail (max-w-md) — period (font-tag gold) → node (gold glowing; last = apple-green pulsing "current") → uppercase title → place → optional note; kept "Life / Journey." heading + 5% JOURNEY ghost; subline "From a village in Shyamnagar to a CSE classroom in Khulna".
+- Brand sweep (grep-verified zero "Blue Nile"/"Rayhan Ahmed" left): footer (M Rayhan logo, giant M RAYHAN, © M Rayhan), menu-overlay (M/Rayhan stacked, ©), mobile-header, SidebarNotchNav (MR tile, aria), side-rails vertical wordmark, layout.tsx metadata (title "M Rayhan — CSE Student & Curious Builder", mrayhan.dev, student keywords, jsonLd knowsAbout AI/Robotics/Electronics), about aria-label, globals.css header comment.
+- Verification: desktop 1440×900 hero (photo card + intro + chips + MR), journey timeline incl. green "2024 — NOW / CURRENTLY BUILDING / North Western University" node, mobile 390×844 hero (new photo, Hello.. in empty top-left, bio flow) + journey (centered rail, watermark hidden, no h-overflow); fresh navigation produced ZERO new page errors (4 stale console entries were from the reverted ?v=2 attempt); dev.log traffic all 200 post-fix; lint 0 problems.
+- COMMITTED (Task 33 commit) per new policy.
+
+Stage Summary:
+- Site now presents the user's REAL identity: M Rayhan brand everywhere, real photo in hero (mobile cutout + desktop card) and About, personal CSE-student intro, and a centered life timeline 2005→now ending on "Currently Building — North Western University".
+- NOTE for next task: About section still shows old studio-era stats (4+/35+/99.8%) and TechFlow/Pulse experience entries — inconsistent with student persona; awaiting user direction. Projects/Services/Skills copy also still engineer-flavored.
+- Files: hero-section.tsx, journey-section.tsx, portfolio-data.ts, about-section.tsx, footer.tsx, menu-overlay.tsx, mobile-header.tsx, side-rails.tsx, SidebarNotchNav.tsx, layout.tsx, globals.css, public/generated/m-rayhan-*.png.
