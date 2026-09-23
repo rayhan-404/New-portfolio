@@ -433,3 +433,19 @@ Work Log:
 Stage Summary:
 - Global polish pass: cursor affordance restored (v4 regression), text-wrap pretty, hero scroll cue (desktop), gold scroll-progress seams on sidebar (all viewports) + mobile header, journey swash + padding rhythm, Featured chip on flagship project, services dot hover polish, footer script wordmark, rail CTA slide-landing fix.
 - Files: globals.css, hero-section.tsx, side-rails.tsx, SidebarNotchNav.tsx, journey-section.tsx, projects-section.tsx, services-section.tsx, footer.tsx, mobile-header.tsx.
+
+---
+Task ID: 39 (hero pic zoom + shift left)
+Agent: Main agent
+Task: User: "pic arektu zoom koro and left a soraw" — zoom the hero portrait in a bit more and move it left.
+
+Work Log:
+- Identified target: the hero portrait photo (source cutout 1369×1149 has the subject right-of-center with empty space at left, so he reads right-shifted + small in both renders). Screenshotted before-state at 1440×900 + 390×844 to confirm.
+- Desktop portrait card (hero-section.tsx): img got `origin-top -translate-x-[6%] scale-[1.18]` (was plain object-cover object-top) — person 18% bigger, head anchored at same top position (origin-top), subject shifted ~26px left so body mass centers and the empty red strip at the card's left shrinks. Transform-only; nameplate, vignette, chips, parallax untouched.
+- Mobile cutout wrapper: `scale-[1.09] sm:scale-[1.05]` → `-translate-x-[4%] scale-[1.16] sm:scale-[1.1]` — the fade mask lives on this wrapper, so scaling/translating it keeps the bottom fade glued to the photo (seam intact). Face moved from ~65% to ~51% (centered), person visibly bigger; verified "Hello.." + gold swash still sit clear of the hair (no overlap) and the cutout's right arm-crop edge stays off-screen (right rendered edge ≈406px > 390vw).
+- VERIFICATION (agent-browser): desktop 1440×900 — subject bigger + centered-left in card, no top clipping, nameplate/chips/scroll cue intact; mobile 390×844 — face centered, Hello.. collision-free, no horizontal overflow, fade seam smooth. Console: only the known benign framer-motion non-static warning; dev.log all 200; lint 0 problems.
+- COMMITTED (94d4199).
+
+Stage Summary:
+- Hero portrait reads zoomed-in and left-settled on both breakpoints: desktop card subject ~18% larger and centered-left inside the frame; mobile cutout scaled 1.16 with the face now at frame center, Hello.. lockup undisturbed.
+- Files: hero-section.tsx.
