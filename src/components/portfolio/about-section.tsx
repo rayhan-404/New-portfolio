@@ -27,7 +27,7 @@ export function AboutSection() {
           title="Engineer by craft, designer by obsession."
         />
 
-        <div className="mt-14 grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-14">
+        <div className="mt-14 grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-10">
           {/* Portrait card */}
           <Reveal>
             <div className="relative">
@@ -74,17 +74,17 @@ export function AboutSection() {
           </Reveal>
 
           {/* Bio + stats + experience */}
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-6">
             <Reveal delay={0.08}>
-              <div className="glass rounded-3xl p-6 sm:p-8">
+              <div className="glass-strong rounded-3xl p-6 sm:p-8">
                 <div className="flex items-center gap-2.5">
                   <Sparkles className="h-4 w-4 text-gold" aria-hidden="true" />
                   <p className="font-tag text-[10px] text-gold-bright">Philosophy</p>
                 </div>
-                <p className="mt-2.5 text-lg font-medium leading-[1.3] [word-spacing:-0.06em] text-foreground/95">
+                <p className="mt-2 text-lg font-medium leading-[1.3] [word-spacing:-0.06em] text-foreground/95">
                   {person.philosophy}
                 </p>
-                <div className="mt-2.5 space-y-2">
+                <div className="mt-2 space-y-1.5">
                   {person.longBio.map((paragraph) => (
                     <p
                       key={paragraph.slice(0, 32)}
@@ -94,7 +94,7 @@ export function AboutSection() {
                     </p>
                   ))}
                 </div>
-                <p className="font-tag mt-6 flex items-center gap-2 text-[10px] text-muted-foreground">
+                <p className="font-tag mt-4 flex items-center gap-2 text-[10px] text-muted-foreground">
                   <MapPin className="h-3.5 w-3.5 text-gold" aria-hidden="true" />
                   {person.location} · {person.availability}
                 </p>
