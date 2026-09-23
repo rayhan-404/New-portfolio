@@ -449,3 +449,22 @@ Work Log:
 Stage Summary:
 - Hero portrait reads zoomed-in and left-settled on both breakpoints: desktop card subject ~18% larger and centered-left inside the frame; mobile cutout scaled 1.16 with the face now at frame center, Hello.. lockup undisturbed.
 - Files: hero-section.tsx.
+
+---
+Task ID: 40 (persistence — user asked to keep the saved state safe)
+Agent: Main agent
+Task: User: "eta ke save rakh, abar jeno kal na dekhi j sob abar remove hoy gese" — keep everything saved so the current design never gets lost again (referencing the earlier loss incident).
+
+Work Log:
+- Verified current state fully committed: working tree clean, HEAD = auto-checkpoint eecc113d on top of Task 39 commit 94d4199 (all 40 tasks of history intact).
+- No git remote exists (local-only repo), so created offline durable backups in /home/z/backups/ (outside the project folder):
+  - m-rayhan-portfolio-20260923-1619.bundle (3.7M, `git bundle --all` — complete git history, verified with `git bundle verify`)
+  - m-rayhan-src-20260923-1619.tar.gz (5.7M, `git archive HEAD` — plain source snapshot)
+  - custom-db-20260923-1620.sqlite (28K copy of db/custom.db, which is not in git)
+  - restore-my-project.sh — one-command restore script (auto-picks newest bundle, makes a safety bundle of any current state before replacing, clones, restores DB, bun install + prisma generate).
+- End-to-end restore test PASSED: test-cloned the bundle to /tmp/restore-test — files + full history (incl. Task 39) present; cleaned up after.
+- COMMITTED (this commit).
+
+Stage Summary:
+- Current design is now double-protected: (1) every change committed to git (Task 39 = 94d4199 + worklog checkpoint), (2) offline backup set in /home/z/backups (bundle + tar + db + restore script). If the workspace ever resets, one command restores the exact state: bash /home/z/backups/restore-my-project.sh
+- Files: worklog.md (this entry); artifacts in /home/z/backups/.
