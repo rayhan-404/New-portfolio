@@ -168,8 +168,10 @@ export function HeroSection() {
 
             {/* The photo itself grows a touch beyond the column
                 (transform-only: layout box, text flow and the fade
-                seam all stay exactly where they were) */}
-            <div className="hero-cutout-fade relative origin-top scale-[1.09] sm:scale-[1.05]">
+                seam all stay exactly where they were) — zoomed in
+                further and nudged left so the subject sits bigger
+                and more centered in frame */}
+            <div className="hero-cutout-fade relative origin-top -translate-x-[4%] scale-[1.16] sm:scale-[1.1]">
               <Image
                 src="/generated/m-rayhan-cutout.png"
                 alt="Portrait of M Rayhan"
@@ -268,7 +270,7 @@ export function HeroSection() {
                   loading="eager"
                   sizes="440px"
                   quality={88}
-                  className="object-cover object-top"
+                  className="origin-top -translate-x-[6%] scale-[1.18] object-cover object-top"
                 />
                 <div className="absolute inset-0 bg-[image:var(--img-vignette)]" />
                 {/* bottom nameplate */}
