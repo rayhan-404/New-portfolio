@@ -60,7 +60,7 @@ export function ProjectsSection() {
         {/* Filters */}
         <Reveal delay={0.1} className="mt-9">
           <div
-            className="glass-strong inline-flex flex-wrap items-center gap-1 rounded-full p-1.5"
+            className="glass-strong inline-flex flex-wrap items-center gap-1 rounded-[22px] p-1.5"
             role="tablist"
             aria-label="Filter projects"
           >
@@ -122,7 +122,7 @@ export function ProjectsSection() {
                   </span>
 
                   <div className="flex items-center justify-between gap-3">
-                    <span className="flex min-w-0 items-center gap-2">
+                    <span className="flex min-w-0 flex-wrap items-center gap-2">
                       <span className="glass-chip font-tag shrink-0 rounded-full px-3 py-1 text-[9.5px] text-white/75">
                         {p.tag}
                       </span>
