@@ -76,7 +76,7 @@ export function AboutSection() {
           {/* Bio + stats + experience */}
           <div className="flex flex-col gap-6">
             <Reveal delay={0.08}>
-              <div className="glass-strong rounded-3xl p-6 sm:p-8">
+              <div className="glass rounded-3xl p-6 sm:p-8">
                 <div className="flex items-center gap-2.5">
                   <Sparkles className="h-4 w-4 text-gold" aria-hidden="true" />
                   <p className="font-tag text-[10px] text-gold-bright">Philosophy</p>

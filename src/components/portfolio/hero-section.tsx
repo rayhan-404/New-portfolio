@@ -24,9 +24,10 @@ const CUTOUT_H = 1149;
 
 function IntroBio({ className = "" }: { className?: string }) {
   return (
-    <div className={`flex flex-col gap-4 ${className}`}>
-      {/* Lead line — bigger, editorial serif italic, the "special" opener */}
-      <p className="font-serif text-[1.3rem] italic leading-[1.35] tracking-[-0.01em] text-white/80 sm:text-[1.5rem]">
+    <div className={`glass rounded-3xl p-5 sm:p-7 ${className}`}>
+      <div className="flex flex-col gap-3">
+        {/* Lead line — bigger, editorial serif italic, the "special" opener */}
+        <p className="font-serif text-[1.3rem] italic leading-[1.35] tracking-[-0.01em] text-white/80 sm:text-[1.5rem]">
         I&apos;m a CSE student at{" "}
         <span className="text-white">
           North Western University, Khulna
@@ -34,7 +35,7 @@ function IntroBio({ className = "" }: { className?: string }) {
         , and originally from{" "}
         <span className="text-white">Shyamnagar, Satkhira, Bangladesh</span>.
       </p>
-      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-white/80 sm:text-[15.5px]">
+      <p className="font-bio text-justify text-[14.5px] leading-[1.4] text-white/80 sm:text-[15.5px]">
         I&apos;m basically a boring and curious guy who wants to know{" "}
         <strong className="font-semibold text-foreground">
           how everything works, from my cell, brain, everything surrounding me,
@@ -44,19 +45,19 @@ function IntroBio({ className = "" }: { className?: string }) {
         I&apos;ll spend hours trying to figure it out and understand how it
         works.
       </p>
-      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-white/80 sm:text-[15.5px]">
+      <p className="font-bio text-justify text-[14.5px] leading-[1.4] text-white/80 sm:text-[15.5px]">
         I like learning new things, trying random ideas, and building stuff
         just to see if I can actually make it work. I&apos;ve already built a
         few small projects because of this habit, and honestly, I enjoy the
         process more than the final result, and it satisfies me more than
         anything.
       </p>
-      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-white/80 sm:text-[15.5px]">
+      <p className="font-bio text-justify text-[14.5px] leading-[1.4] text-white/80 sm:text-[15.5px]">
         Sometimes I build something useful. Sometimes I build something
         completely unnecessary. And sometimes I break something and then spend
         the next few hours figuring out how it actually works. 🧐
       </p>
-      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-white/80 sm:text-[15.5px]">
+      <p className="font-bio text-justify text-[14.5px] leading-[1.4] text-white/80 sm:text-[15.5px]">
         If you ask,{" "}
         <strong className="font-semibold text-foreground">
           what is this guy interested in?
@@ -69,10 +70,11 @@ function IntroBio({ className = "" }: { className?: string }) {
         . I don&apos;t know where this curiosity will take me yet, but I&apos;m
         having fun finding out.
       </p>
-      <p className="font-bio text-justify text-[14.5px] font-semibold leading-[1.78] text-foreground sm:text-[15.5px]">
+      <p className="font-bio text-justify text-[14.5px] font-semibold leading-[1.4] text-foreground sm:text-[15.5px]">
         I&apos;m curious about almost everything, and I love building things
         just to see what happens.
       </p>
+      </div>
     </div>
   );
 }
