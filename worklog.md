@@ -522,3 +522,20 @@ Work Log:
 Stage Summary:
 - The About text card now visually reads as a glass card at last; all About-related gaps are one notch tighter. Stats + Trajectory still use plain `glass` (smaller tiles, fine as-is) and still carry studio-era copy — awaiting user's go-ahead for that content pass.
 - Files: about-section.tsx.
+
+---
+Task ID: 44 (hero bio on a glass card + mobile UI perfection pass — user: "no, onno card gulor moto card er upor thakbe and full design and ui mobile er jonne parfect koro")
+Agent: Main agent
+Task: User clarified Task 43's real target — the HERO intro bio paragraphs (which floated on the background with no card) must sit on a glass card like the other cards; also a full mobile-perfection pass on the whole UI.
+
+Work Log:
+- Full mobile audit at 390×844: 17 screenshots across home/journey/projects/about/skills/services/contact/footer. Discovery: the floating-text complaint was about the hero IntroBio (shared by mobile + desktop hero), NOT the About card. Everything else audited clean.
+- REVERTED Task 43's About-card glass-strong → back to glass (user: "like the other cards"; About card already was one).
+- hero-section.tsx IntroBio: wrapped all intro copy (serif lead line + 4 paragraphs + closing bold line) in a `glass rounded-3xl p-5 sm:p-7` card — now renders as a proper card on BOTH mobile and desktop hero, matching the site's card language. Tightened per user's standing preference: paragraph gap 16→12px, line-height 1.78→1.4 (the earlier "line spacing aro komaw" had targeted this text; Task 42 had only changed the About card).
+- journey-section.tsx: mobile ghost year text-[38px] → text-[clamp(26px,8.7vw,38px)] — "2024 — Present" no longer clips at the right viewport edge (verified at 390).
+- Verified: mobile home (bio card renders beautifully under the script name), desktop home (intro column = name + glass card, consistent with portrait card), journey mobile ghost fits, overflowX = 0, lint 0 problems, dev.log all 200, no browser errors.
+- COMMITTED (0bc5c93).
+
+Stage Summary:
+- Hero intro is now carded on both breakpoints and typographically tighter; journey mobile ghost year fits; About card consistent with its siblings again. Mobile audit found no other defects (projects chips/filter OK from Task 41, skills bars/chips/marquee OK, services grid OK, contact form OK, footer OK).
+- Files: hero-section.tsx, journey-section.tsx, about-section.tsx (revert).
