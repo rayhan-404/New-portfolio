@@ -44,38 +44,38 @@ export function ServicesSection() {
         <StaggerGroup className="mt-12 grid gap-4 sm:grid-cols-2">
           {services.map((service) => (
             <StaggerItem key={service.index}>
-              <article className="glass group relative flex h-full flex-col overflow-hidden rounded-3xl p-6 transition-all duration-500 hover:-translate-y-1 hover:border-white/45 sm:p-8">
+              <article className="glass neu-decor group relative flex h-full flex-col overflow-hidden rounded-3xl p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-neu-lg)] sm:p-8">
                 {/* hover aura */}
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute -left-20 -top-20 h-48 w-48 rounded-full bg-[radial-gradient(circle,rgba(255,170,80,0.3),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-700 group-hover:opacity-100"
+                  className="pointer-events-none absolute -left-20 -top-20 h-48 w-48 rounded-full bg-[radial-gradient(circle,rgba(224,64,251,0.18),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-700 group-hover:opacity-100"
                 />
                 <div className="flex items-start justify-between gap-4">
-                  <span className="font-display text-4xl text-white/15 transition-colors duration-500 group-hover:text-gold/80">
+                  <span className="font-display text-4xl text-foreground/15 transition-colors duration-500 group-hover:text-gold/90">
                     {service.index}
                   </span>
                   <span
                     aria-hidden="true"
                     className="mt-2 flex gap-1.5"
                   >
-                    <span className="h-2 w-2 bg-white/30 transition-colors duration-500 group-hover:bg-gold" />
-                    <span className="h-2 w-2 bg-white/15 transition-colors duration-500 group-hover:bg-white/40" />
+                    <span className="h-2 w-2 bg-primary/40 transition-colors duration-500 group-hover:bg-gold" />
+                    <span className="h-2 w-2 bg-primary/20 transition-colors duration-500 group-hover:bg-primary/50" />
                   </span>
                 </div>
 
                 <h3 className="font-display mt-5 text-xl tracking-tight sm:text-2xl">
                   {service.title}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/70">
+                <p className="mt-3 text-sm leading-relaxed text-foreground/70">
                   {service.description}
                 </p>
 
                 <div className="mt-auto pt-6">
-                  <div className="flex flex-wrap gap-x-4 gap-y-1.5 border-t border-white/15 pt-4">
+                  <div className="flex flex-wrap gap-x-4 gap-y-1.5 border-t border-border pt-4">
                     {service.deliverables.map((d) => (
                       <span
                         key={d}
-                        className="font-tag inline-flex items-center gap-1.5 text-[9.5px] text-white/70"
+                        className="font-tag inline-flex items-center gap-1.5 text-[9.5px] text-muted-foreground"
                       >
                         <span className="h-1 w-1 rounded-full bg-gold" aria-hidden="true" />
                         {d}

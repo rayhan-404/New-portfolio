@@ -4,6 +4,7 @@ import {
   Geist_Mono,
   Instrument_Serif,
   Lobster,
+  Nunito,
   Source_Serif_4,
   Syne,
 } from "next/font/google";
@@ -20,6 +21,14 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
+});
+
+/* Rounded friendly sans — the reference design's body font */
+const nunito = Nunito({
+  variable: "--font-nunito",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -102,7 +111,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#b9210f",
+  themeColor: "#f3eefa",
 };
 
 const jsonLd = {
@@ -127,9 +136,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Theme bootstrap — runs before paint (default: light lavender) */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(localStorage.getItem('mr-theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}`,
+          }}
+        />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${sourceSerif.variable} ${syne.variable} ${lobster.variable} antialiased text-foreground min-h-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} ${nunito.variable} ${instrumentSerif.variable} ${sourceSerif.variable} ${syne.variable} ${lobster.variable} antialiased text-foreground min-h-screen flex flex-col`}
       >
         <script
           type="application/ld+json"
@@ -140,12 +157,10 @@ export default function RootLayout({
           position="bottom-right"
           toastOptions={{
             style: {
-              background: "rgba(64, 14, 5, 0.78)",
-              backdropFilter: "blur(24px) saturate(180%)",
-              WebkitBackdropFilter: "blur(24px) saturate(180%)",
-              border: "1px solid rgba(255,255,255,0.24)",
-              color: "#fff7ee",
-              boxShadow: "0 20px 50px -18px rgba(84,12,0,0.55)",
+              background: "var(--bg3)",
+              border: "1px solid var(--border)",
+              color: "var(--text)",
+              boxShadow: "var(--shadow-neu-lg)",
             },
           }}
         />

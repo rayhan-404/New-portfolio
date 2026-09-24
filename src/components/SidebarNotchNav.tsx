@@ -255,7 +255,7 @@ export function SidebarNotchNav({
       {/* Depth shadow twin — kept unclipped so the cast shadow survives the notch */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-r-[16px] shadow-[22px_0_54px_-30px_rgba(84,12,0,0.55)] sm:rounded-r-[18px] md:rounded-r-[22px]"
+        className="pointer-events-none absolute inset-0 rounded-r-[16px] shadow-[22px_0_54px_-30px_rgba(82,45,110,0.5)] sm:rounded-r-[18px] md:rounded-r-[22px]"
       />
 
       {/* White glass surface — the background bites in through the notch clip.
@@ -264,7 +264,7 @@ export function SidebarNotchNav({
         ref={surfaceRef}
         aria-hidden="true"
         className="glass-rail-white pointer-events-none absolute inset-0 rounded-r-[16px] sm:rounded-r-[18px] md:rounded-r-[22px]"
-        style={{ borderRight: "1px solid rgba(255, 255, 255, 0.72)" }}
+        style={{ borderRight: "1px solid var(--nl)" }}
       />
 
       {/* Target dot — floats dead-center inside the background notch:
@@ -273,7 +273,7 @@ export function SidebarNotchNav({
       <span
         ref={dotRef}
         aria-hidden="true"
-        className="pointer-events-none absolute z-[2] h-[7px] w-[7px] rounded-full bg-white shadow-[0_1px_6px_rgba(122,32,0,0.5)]"
+        className="pointer-events-none absolute z-[2] h-[7px] w-[7px] rounded-full bg-primary shadow-[0_1px_6px_rgba(156,39,176,0.55)]"
         style={{
           right: dims ? Math.max(5, notchGeometryFor(dims.w).R / 2 - 3.5) : 9,
           top: 0,
@@ -287,11 +287,11 @@ export function SidebarNotchNav({
       <motion.div
         aria-hidden="true"
         style={{ scaleX: progress }}
-        className="absolute inset-x-0 top-0 z-[3] h-[2px] origin-left bg-gradient-to-r from-[#ffe3ae] via-[#ffb45e] to-[#ff7a1c]"
+        className="absolute inset-x-0 top-0 z-[3] h-[2px] origin-left bg-gradient-to-r from-[#ab47bc] via-[#c26bdc] to-[#e040fb]"
       />
 
       {/* Top hairline ornament */}
-      <span aria-hidden="true" className="relative z-[2] mb-1 h-px w-7 shrink-0 bg-[#53301f]/15" />
+      <span aria-hidden="true" className="relative z-[2] mb-1 h-px w-7 shrink-0 bg-primary/20" />
 
       {/* Vertical navigation labels */}
       <div
@@ -315,15 +315,15 @@ export function SidebarNotchNav({
               }}
               aria-current={idx === activeIndex ? "page" : undefined}
               title={cat.label}
-              className="group relative z-[2] flex w-full cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent px-0 py-2.5 outline-none focus-visible:ring-1 focus-visible:ring-[#7c1a06]/35"
+              className="group relative z-[2] flex w-full cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent px-0 py-2.5 outline-none focus-visible:ring-1 focus-visible:ring-primary/35"
             >
               {/* Vertical Text Label — Tailwind v4 translate/scale compose
                   with the standalone `rotate` property (no transform clash) */}
               <span
                 className={`pointer-events-none relative whitespace-nowrap text-[9.5px] font-bold uppercase transition-all duration-300 ease-out tracking-[1.4px] sm:text-[10.5px] sm:tracking-[1.6px] md:text-[11px] ${
                   isActive
-                    ? "-translate-x-[5px] scale-105 text-[#7c1a06] sm:-translate-x-[7px]"
-                    : "translate-x-0 text-[#53301f]/55 group-hover:text-[#53301f]"
+                    ? "-translate-x-[5px] scale-105 text-primary sm:-translate-x-[7px]"
+                    : "translate-x-0 text-muted-foreground group-hover:text-foreground"
                 }`}
                 style={{ writingMode: "vertical-rl", rotate: "180deg" }}
               >
@@ -342,7 +342,7 @@ export function SidebarNotchNav({
           aria-label={soundOn ? "Mute sounds" : "Unmute sounds"}
           aria-pressed={soundOn}
           onClick={toggle}
-          className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[#53301f]/10 bg-white/70 text-[#53301f]/75 shadow-[0_2px_8px_-2px_rgba(84,12,0,0.18)] backdrop-blur-sm transition-all duration-300 hover:border-[#7c1a06]/25 hover:bg-white hover:text-[#7c1a06] active:scale-90"
+          className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-muted-foreground shadow-[var(--shadow-neu-sm)] transition-all duration-300 hover:text-primary active:scale-90"
         >
           {soundOn ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
         </button>

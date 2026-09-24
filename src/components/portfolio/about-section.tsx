@@ -31,7 +31,7 @@ export function AboutSection() {
           {/* Portrait card */}
           <Reveal>
             <div className="relative">
-              <div className="glass-strong relative overflow-hidden rounded-[2.5rem] p-2.5">
+              <div className="glass-strong neu-decor relative overflow-hidden rounded-[2.5rem] p-2.5">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem]">
                   <Image
                     src="/generated/m-rayhan-portrait.png"
@@ -48,7 +48,7 @@ export function AboutSection() {
                 <div className="glass-strong absolute bottom-5 left-5 right-5 flex items-center justify-between gap-3 rounded-2xl px-5 py-4">
                   <div>
                     <p className="font-display text-lg leading-tight">{person.name}</p>
-                    <p className="font-tag mt-1 text-[9px] text-white/70">
+                    <p className="font-tag mt-1 text-[9px] text-muted-foreground">
                       {person.role}
                     </p>
                   </div>
@@ -76,7 +76,7 @@ export function AboutSection() {
           {/* Bio + stats + experience */}
           <div className="flex flex-col gap-6">
             <Reveal delay={0.08}>
-              <div className="glass-strong rounded-3xl p-6 sm:p-8">
+              <div className="glass-strong neu-decor rounded-3xl p-6 sm:p-8">
                 <div className="flex items-center gap-2.5">
                   <Sparkles className="h-4 w-4 text-gold" aria-hidden="true" />
                   <p className="font-tag text-[10px] text-gold-bright">Philosophy</p>
@@ -88,7 +88,7 @@ export function AboutSection() {
                   {person.longBio.map((paragraph) => (
                     <p
                       key={paragraph.slice(0, 32)}
-                      className="text-[15px] leading-[1.3] [word-spacing:-0.06em] text-white/70"
+                      className="text-[15px] leading-[1.3] [word-spacing:-0.06em] text-foreground/70"
                     >
                       {paragraph}
                     </p>
@@ -105,12 +105,12 @@ export function AboutSection() {
             <StaggerGroup className="grid grid-cols-3 gap-3 sm:gap-4">
               {stats.map((s) => (
                 <StaggerItem key={s.label}>
-                  <div className="glass group h-full rounded-2xl p-4 text-center transition-colors duration-300 hover:border-white/40 sm:p-5">
+                  <div className="glass neu-decor group h-full rounded-2xl p-4 text-center transition-shadow duration-300 hover:shadow-[var(--shadow-neu-lg)] sm:p-5">
                     <p className="font-display text-gold-gradient text-2xl sm:text-3xl">
                       <CountUp value={s.value} suffix={s.suffix} decimals={s.value % 1 !== 0 ? 1 : 0} />
                     </p>
                     <p className="mt-1.5 text-[11px] font-semibold text-foreground/90 sm:text-xs">{s.label}</p>
-                    <p className="mt-0.5 hidden text-[10px] text-white/55 sm:block">
+                    <p className="mt-0.5 hidden text-[10px] text-muted-foreground sm:block">
                       {s.detail}
                     </p>
                   </div>
@@ -120,7 +120,7 @@ export function AboutSection() {
 
             {/* Experience timeline */}
             <Reveal delay={0.12}>
-              <div className="glass rounded-3xl p-6 sm:p-8">
+              <div className="glass neu-decor rounded-3xl p-6 sm:p-8">
                 <p className="font-tag text-[10px] text-gold-bright">Trajectory</p>
                 <ol className="mt-4 flex flex-col">
                   {experience.map((job, i) => (
@@ -129,7 +129,7 @@ export function AboutSection() {
                       {i < experience.length - 1 && (
                         <span
                           aria-hidden="true"
-                          className="absolute left-[7px] top-5 h-[calc(100%-14px)] w-px bg-white/20"
+                          className="absolute left-[7px] top-5 h-[calc(100%-14px)] w-px bg-primary/20"
                         />
                       )}
                       <span
@@ -137,20 +137,20 @@ export function AboutSection() {
                         className={`relative mt-1.5 h-[15px] w-[15px] shrink-0 rounded-full border-2 ${
                           job.current
                             ? "border-apple-green bg-apple-green/25 shadow-[0_0_14px_rgba(48,209,88,0.6)]"
-                            : "border-white/35 bg-transparent"
+                            : "border-primary/35 bg-transparent"
                         }`}
                       />
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-baseline justify-between gap-x-4">
                           <h3 className="text-[15px] font-semibold">{job.role}</h3>
-                          <span className="font-tag text-[9.5px] text-white/55">
+                          <span className="font-tag text-[9.5px] text-muted-foreground">
                             {job.period}
                           </span>
                         </div>
                         <p className="mt-0.5 text-[13px] font-medium text-gold-bright/90">
                           {job.company}
                         </p>
-                        <p className="mt-1.5 text-sm leading-[1.45] [word-spacing:-0.06em] text-white/70">
+                        <p className="mt-1.5 text-sm leading-[1.45] [word-spacing:-0.06em] text-foreground/70">
                           {job.description}
                         </p>
                       </div>

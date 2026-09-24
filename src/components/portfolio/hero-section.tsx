@@ -26,15 +26,15 @@ function IntroBio({ className = "" }: { className?: string }) {
   return (
     <div className={`flex flex-col gap-4 ${className}`}>
       {/* Lead line — bigger, editorial serif italic, the "special" opener */}
-      <p className="font-serif text-[1.3rem] italic leading-[1.35] tracking-[-0.01em] text-white/80 sm:text-[1.5rem]">
+      <p className="font-serif text-[1.3rem] italic leading-[1.35] tracking-[-0.01em] text-foreground/80 sm:text-[1.5rem]">
         I&apos;m a CSE student at{" "}
-        <span className="text-white">
+        <span className="font-medium text-foreground">
           North Western University, Khulna
         </span>
         , and originally from{" "}
-        <span className="text-white">Shyamnagar, Satkhira, Bangladesh</span>.
+        <span className="font-medium text-foreground">Shyamnagar, Satkhira, Bangladesh</span>.
       </p>
-      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-white/80 sm:text-[15.5px]">
+      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-foreground/75 sm:text-[15.5px]">
         I&apos;m basically a boring and curious guy who wants to know{" "}
         <strong className="font-semibold text-foreground">
           how everything works, from my cell, brain, everything surrounding me,
@@ -44,19 +44,19 @@ function IntroBio({ className = "" }: { className?: string }) {
         I&apos;ll spend hours trying to figure it out and understand how it
         works.
       </p>
-      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-white/80 sm:text-[15.5px]">
+      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-foreground/75 sm:text-[15.5px]">
         I like learning new things, trying random ideas, and building stuff
         just to see if I can actually make it work. I&apos;ve already built a
         few small projects because of this habit, and honestly, I enjoy the
         process more than the final result, and it satisfies me more than
         anything.
       </p>
-      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-white/80 sm:text-[15.5px]">
+      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-foreground/75 sm:text-[15.5px]">
         Sometimes I build something useful. Sometimes I build something
         completely unnecessary. And sometimes I break something and then spend
         the next few hours figuring out how it actually works. 🧐
       </p>
-      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-white/80 sm:text-[15.5px]">
+      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-foreground/75 sm:text-[15.5px]">
         If you ask,{" "}
         <strong className="font-semibold text-foreground">
           what is this guy interested in?
@@ -108,7 +108,7 @@ export function HeroSection() {
       {/* soft light bloom behind the type */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_58%_42%_at_50%_30%,rgba(255,214,138,0.2),transparent_70%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_58%_42%_at_50%_30%,rgba(156,39,176,0.08),transparent_70%)]"
       />
 
       {/* ══ MOBILE / TABLET — full-width transparent cutout portrait ══ */}
@@ -123,7 +123,7 @@ export function HeroSection() {
             {/* warm halo behind the cutout */}
             <div
               aria-hidden="true"
-              className="absolute left-1/2 top-[6%] h-[58%] w-[94%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,205,120,0.34),transparent_66%)] blur-2xl"
+              className="absolute left-1/2 top-[6%] h-[58%] w-[94%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(224,64,251,0.16),transparent_66%)] blur-2xl"
             />
 
             {/* "Hello.." — anchored to the column (not the scaled photo):
@@ -135,7 +135,7 @@ export function HeroSection() {
               transition={{ duration: 0.7, delay: 0.55, ease: EASE }}
               className="text-glow absolute left-5 top-4 z-10 sm:left-8 sm:top-6"
             >
-              <span className="font-serif block text-[3rem] font-normal italic leading-[0.95] tracking-[-0.015em] text-[#fff9f1] sm:text-[3.6rem]">
+              <span className="font-serif block text-[3rem] font-normal italic leading-[0.95] tracking-[-0.015em] text-foreground sm:text-[3.6rem]">
                 Hello<span className="text-gold-gradient">..</span>
               </span>
               <motion.svg
@@ -144,7 +144,7 @@ export function HeroSection() {
                 initial={reduce ? false : { opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 1 }}
-                className="mt-1.5 block h-[13px] w-[118px] drop-shadow-[0_2px_6px_rgba(96,14,0,0.45)] sm:h-[15px] sm:w-[142px]"
+                className="mt-1.5 block h-[13px] w-[118px] drop-shadow-[0_2px_6px_rgba(82,45,110,0.35)] sm:h-[15px] sm:w-[142px]"
               >
                 <motion.path
                   d="M3 9 C 30 3, 58 12.5, 86 7.5 S 128 4.5, 137 7"
@@ -158,9 +158,9 @@ export function HeroSection() {
                 />
                 <defs>
                   <linearGradient id="hello-swash-gold" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#ffe3ae" />
-                    <stop offset="55%" stopColor="#ffb45e" />
-                    <stop offset="100%" stopColor="#ff7a1c" />
+                    <stop offset="0%" stopColor="#ab47bc" />
+                    <stop offset="55%" stopColor="#c955e0" />
+                    <stop offset="100%" stopColor="#e040fb" />
                   </linearGradient>
                 </defs>
               </motion.svg>
@@ -181,7 +181,7 @@ export function HeroSection() {
                 loading="eager"
                 sizes="(max-width: 640px) 100vw, 560px"
                 quality={88}
-                className="relative h-auto w-full object-contain drop-shadow-[0_30px_44px_rgba(60,5,0,0.42)]"
+                className="relative h-auto w-full object-contain drop-shadow-[0_30px_44px_rgba(58,28,84,0.35)]"
               />
             </div>
 
@@ -193,11 +193,11 @@ export function HeroSection() {
               className="relative z-10 -mt-20 px-5 pb-2 text-left sm:-mt-28 sm:px-8"
             >
               {/* Name — "I am," on top, the script name on its own line below */}
-              <p className="font-serif text-[1.7rem] font-normal italic leading-none text-[#fff9f1] sm:text-[2.1rem]">
+              <p className="font-serif text-[1.7rem] font-normal italic leading-none text-foreground sm:text-[2.1rem]">
                 I am<span className="text-gold-gradient">,</span>
               </p>
 
-              <h1 className="font-script text-glow mt-2.5 text-[2.7rem] leading-[1.05] text-white sm:text-6xl">
+              <h1 className="font-script text-glow mt-2.5 text-[2.7rem] leading-[1.05] text-foreground sm:text-6xl">
                 M Rayhan
               </h1>
 
@@ -217,7 +217,7 @@ export function HeroSection() {
               initial={reduce ? false : { opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
-              className="font-serif text-[2.3rem] font-normal italic leading-none text-[#fff9f1]"
+              className="font-serif text-[2.3rem] font-normal italic leading-none text-foreground"
             >
               I am<span className="text-gold-gradient">,</span>
             </motion.p>
@@ -226,7 +226,7 @@ export function HeroSection() {
               initial={reduce ? false : { opacity: 0, y: 26 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.85, delay: 0.32, ease: EASE }}
-              className="font-script text-glow mt-3 text-[4.4rem] leading-[1.05] text-white xl:text-[4.9rem]"
+              className="font-script text-glow mt-3 text-[4.4rem] leading-[1.05] text-foreground xl:text-[4.9rem]"
             >
               M Rayhan
             </motion.h1>
@@ -252,15 +252,15 @@ export function HeroSection() {
             {/* glow underlay */}
             <div
               aria-hidden="true"
-              className="absolute -inset-8 rounded-[3.5rem] bg-[radial-gradient(circle_at_50%_45%,rgba(255,170,80,0.35),transparent_68%)] blur-2xl"
+              className="absolute -inset-8 rounded-[3.5rem] bg-[radial-gradient(circle_at_50%_45%,rgba(224,64,251,0.14),transparent_68%)] blur-2xl"
             />
 
-            <div className="glass-strong relative overflow-hidden rounded-[2.5rem] p-2.5">
+            <div className="glass-strong neu-decor relative overflow-hidden rounded-[2.5rem] p-2.5">
               <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem]">
-                {/* warm studio backdrop behind the transparent cutout */}
+                {/* purple studio backdrop behind the transparent cutout */}
                 <div
                   aria-hidden="true"
-                  className="absolute inset-0 bg-[radial-gradient(circle_at_50%_32%,rgba(255,178,92,0.55),rgba(140,22,10,0.92)_62%,rgba(90,8,6,0.96)_100%)]"
+                  className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(224,64,251,0.4),rgba(156,39,176,0.6)_55%,rgba(38,22,64,0.95)_100%)]"
                 />
                 <Image
                   src="/generated/m-rayhan-portrait.png"
@@ -279,7 +279,7 @@ export function HeroSection() {
                     <p className="truncate text-[15px] font-semibold leading-tight text-foreground">
                       {person.name}
                     </p>
-                    <p className="font-tag mt-0.5 truncate text-[8.5px] text-white/70">
+                    <p className="font-tag mt-0.5 truncate text-[8.5px] text-muted-foreground">
                       {person.role}
                     </p>
                   </div>
@@ -317,10 +317,10 @@ export function HeroSection() {
               aria-label="Scroll to the journey section"
               className="group absolute -bottom-[74px] left-1/2 flex -translate-x-1/2 flex-col items-center gap-1"
             >
-              <span className="font-tag text-[9px] text-white/55 transition-colors duration-300 group-hover:text-foreground">
+              <span className="font-tag text-[9px] text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
                 Scroll
               </span>
-              <ChevronDown className="animate-nudge h-4 w-4 text-white/60 transition-colors duration-300 group-hover:text-foreground" />
+              <ChevronDown className="animate-nudge h-4 w-4 text-muted-foreground transition-colors duration-300 group-hover:text-foreground" />
             </motion.button>
           </motion.div>
         </div>

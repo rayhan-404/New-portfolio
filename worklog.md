@@ -555,3 +555,25 @@ Stage Summary:
 - Live design = the pre-redesign hero (v29 code, 1306986). The Ember Spotlight cinematic hero is fully preserved as v31 (tag + tarball + inside bundle) — one command brings it back: bash /home/z/backups/restore-version.sh v31
 - Version map now: v29 = 9303465 (current live design) · v30 = 5c6beae (hero-card variant) · v31 = 4834ba5 (Ember Spotlight cinematic hero).
 - Files: none (rollback commit; worklog only).
+
+---
+Task ID: 48 (full-site UI reskin to user-provided reference — user: "Ekhan theke ui style and design hubuhu copy koro ... background, card, colour, ui style, etc")
+Agent: Main agent
+Task: Port the user-supplied reference CSS (fetched from tmpfiles.org link after upload sync failed twice; ref-pasted.txt in upload/) — a Material-purple neumorphic glassmorphism system with light/dark themes — onto the entire 7-section portfolio.
+
+Work Log:
+- Reference analyzed (53KB CSS): lavender light theme (#f3eefa/#ede5f7, dual neu shadows nl=#fff/nd=#cdbfe0), deep-purple dark theme (#120820/#1c1130, nl=#2d1f45/nd=#0a0414), primary #9c27b0 → accent #e040fb gradient, Syne headings + Nunito body, neumorphic raised/inset cards, corner-blob ornaments, press-in interactions, purple-tinted hairlines.
+- globals.css REWRITTEN as a token remap (class names unchanged so the whole tree reskins): :root = light lavender, .dark = deep purple; --gold/--gold-bright/--gold-deep now carry purple accents; .glass/.glass-strong/.glass-chip/.glass-ember/.glass-input/.glass-rail-white/.glass-nav re-expressed as neumorphic surfaces (backdrop-filter removed from cards = perf win); .btn-light = purple glowing primary; .text-gold-gradient = primary→accent; journey-card = neu + purple focus ring; new utilities neu-inset/grad-fill/neu-tile/neu-decor; scrollbar/selection/ring purple; app-background = flat bg + two fixed radial blobs (ref recipe); grain kept at opacity 0.1.
+- layout.tsx: added Nunito (weights 400-800) as --font-nunito + body font; pre-paint theme bootstrap script (localStorage mr-theme, default LIGHT); themeColor #f3eefa; Toaster restyled via CSS vars.
+- New theme-toggle.tsx (useSyncExternalStore + MutationObserver over <html> class, Sun/Moon, persists to localStorage) wired into the right rail (desktop).
+- Hardcoded-color sweep across 14 files (~126 replacements): text-white/XX → text-foreground/XX|text-muted-foreground, ember reds/amber radials/drop-shadows → purple equivalents, #7c1a06/#53301f inks → primary/muted tokens, bg-white active pills → bg-primary + white, dialog/select surfaces → var(--bg)/var(--bg2) + neu-lg shadow, sidebar/rail progress seams → purple gradient, journey spine/dots/ghost years/degree box → purple, skills meters → neu-inset track + gradient fill, filter pill → primary, footer ghost → foreground/5%.
+- Hero portrait card + about portrait: purple "studio" radial backdrop behind the cutout; neu-decor blobs added to major cards (hero, about portrait/bio/stats/trajectory, projects, services, contact form/email/facts).
+- DEBUG en route: browser showed stale CSS while curl served fresh — single dev server (no EADDRINUSE zombie) but Turbopack chunk cache held the old :root block. Fix: kill server, rm -rf .next, restart → served CSS verified (f3eefa present, old fire gradient absent).
+- Verified (agent-browser, fresh sessions): desktop 1440×900 light — hero/journey/projects/about/skills/services/contact/footer all render the lavender neumorphic look, overflowX=0; dark toggle → body rgb(18,8,32), deep-purple hero + journey verified; mobile 390×844 light — hero (Hello.. + cutout + name + bio), journey timeline (ghost years fit), contact, overflowX=0, section navigation home→journey→projects→about→skills→services→contact all land; browser errors: none; dev.log all 200; lint 0 problems.
+- COMMITTED + tagged v32 (backup tarball m-rayhan-v32-*.tar.gz in /home/z/backups).
+
+Stage Summary:
+- The site now wears the user's reference design end-to-end: lavender neumorphic light (default) + deep-purple dark, Syne/Nunito type, purple→magenta gradient accents, neu cards with corner blobs and press-in feel. Lobster name mark and Instrument-serif italics kept as personal-brand flourishes.
+- Theme toggle lives in the right rail on desktop; mobile toggle still TODO if user asks (mobile-header has menu + sound only).
+- Version map: v29 = 9303465 (ember hero, floating bio) · v30 = 5c6beae (hero-card variant) · v31 = 4834ba5 (Ember Spotlight) · v32 = this commit (purple neumorphic reskin) — restore via: bash /home/z/backups/restore-version.sh <tag>
+- Files: globals.css, layout.tsx, theme-toggle.tsx (new), SidebarNotchNav.tsx, side-rails.tsx, mobile-header.tsx, menu-overlay.tsx, hero/journey/projects/about/skills/services/contact sections, project-dialog.tsx, resume-dialog.tsx, footer.tsx, section-heading.tsx.

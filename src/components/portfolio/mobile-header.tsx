@@ -20,7 +20,7 @@ export function MobileHeader({ onOpenMenu }: { onOpenMenu: () => void }) {
       initial={{ y: -60, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed inset-x-0 top-0 z-40 flex items-center justify-between border-b border-white/15 bg-white/10 px-5 py-3 backdrop-blur-2xl md:hidden"
+      className="glass-nav fixed inset-x-0 top-0 z-40 flex items-center justify-between border-b border-border px-5 py-3 md:hidden"
       aria-label="Mobile navigation"
     >
       <button
@@ -31,7 +31,7 @@ export function MobileHeader({ onOpenMenu }: { onOpenMenu: () => void }) {
         <span className="font-display text-lg leading-none text-foreground">
           M <span className="text-gold">Rayhan</span>
         </span>
-        <span className="font-tag hidden text-[8px] text-white/55 xs:block">
+        <span className="font-tag hidden text-[8px] text-muted-foreground xs:block">
           {person.name}
         </span>
       </button>
@@ -53,7 +53,7 @@ export function MobileHeader({ onOpenMenu }: { onOpenMenu: () => void }) {
       <motion.div
         aria-hidden="true"
         style={{ scaleX: progress }}
-        className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-gradient-to-r from-[#ffe3ae] via-[#ffb45e] to-[#ff7a1c]"
+        className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-gradient-to-r from-[#ab47bc] via-[#c26bdc] to-[#e040fb]"
       />
     </motion.header>
   );

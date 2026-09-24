@@ -12,6 +12,7 @@ import {
 import { socials } from "@/lib/portfolio-data";
 import { playSound } from "@/lib/sound";
 import { scrollToSection } from "./nav";
+import { ThemeToggle } from "./theme-toggle";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -36,7 +37,7 @@ function RailTip({ label, side }: { label: string; side: "left" | "right" }) {
           : "right-full mr-3 translate-x-2"
       }`}
     >
-      <span className="glass-strong block whitespace-nowrap rounded-full border-white/30 px-3 py-1.5 text-[11px] font-semibold text-foreground">
+      <span className="glass-strong block whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-semibold text-foreground">
         {label}
       </span>
     </span>
@@ -47,7 +48,7 @@ function RailDivider() {
   return (
     <span
       aria-hidden="true"
-      className="h-px w-8 bg-gradient-to-r from-transparent via-[#53301f]/20 to-transparent"
+      className="h-px w-8 bg-gradient-to-r from-transparent via-primary/25 to-transparent"
     />
   );
 }
@@ -79,30 +80,31 @@ export function SideRailRight() {
       {/* Depth shadow twin — cast onto the content side */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-l-[22px] shadow-[-22px_0_54px_-30px_rgba(84,12,0,0.5)]"
+        className="pointer-events-none absolute inset-0 rounded-l-[22px] shadow-[-22px_0_54px_-30px_rgba(82,45,110,0.45)]"
       />
 
       {/* White glass surface */}
       <div
         aria-hidden="true"
         className="glass-rail-white pointer-events-none absolute inset-0 rounded-l-[22px]"
-        style={{ borderLeft: "1px solid rgba(255, 255, 255, 0.72)" }}
+        style={{ borderLeft: "1px solid var(--nl)" }}
       />
 
       {/* Scroll progress seam (inner edge) */}
       <div
         aria-hidden="true"
-        className="absolute inset-y-0 left-0 z-[1] w-[2px] overflow-hidden bg-[#53301f]/10"
+        className="absolute inset-y-0 left-0 z-[1] w-[2px] overflow-hidden bg-primary/10"
       >
         <motion.div
           style={{ scaleY: progress }}
-          className="h-full w-full origin-top bg-gradient-to-b from-[#ffe3ae] via-[#ffb45e] to-[#ff7a1c]"
+          className="h-full w-full origin-top bg-gradient-to-b from-[#ab47bc] via-[#c26bdc] to-[#e040fb]"
         />
       </div>
 
-      {/* Availability pulse */}
-      <div className="relative z-[1] pt-5">
-        <div className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-[#53301f]/10 bg-white/70 shadow-[0_2px_8px_-2px_rgba(84,12,0,0.18)]">
+      {/* Theme switch + availability pulse */}
+      <div className="relative z-[1] pt-5 flex flex-col items-center gap-3">
+        <ThemeToggle />
+        <div className="group relative flex h-10 w-10 items-center justify-center rounded-full shadow-[var(--shadow-neu-sm)]">
           <span className="status-dot" aria-hidden="true" />
           <RailTip label="Available for projects" side="left" />
         </div>
@@ -132,7 +134,7 @@ export function SideRailRight() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={`${s.label} — ${s.handle}`}
-                className="group relative flex h-10 w-10 items-center justify-center rounded-full text-[#53301f]/65 transition-all duration-300 hover:bg-[#7c1a06]/10 hover:text-[#7c1a06] active:scale-95"
+                className="group relative flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground transition-all duration-300 hover:bg-primary/10 hover:text-primary active:scale-95"
               >
                 <Icon className="h-[17px] w-[17px]" strokeWidth={1.8} />
                 <RailTip label={s.label} side="left" />
@@ -149,7 +151,7 @@ export function SideRailRight() {
         </div>
         <p
           aria-hidden="true"
-          className="hidden max-h-40 overflow-hidden whitespace-nowrap font-tag text-[9px] tracking-[0.32em] text-[#53301f]/40 [writing-mode:vertical-rl] lg:block"
+          className="hidden max-h-40 overflow-hidden whitespace-nowrap font-tag text-[9px] tracking-[0.32em] text-muted-foreground/70 [writing-mode:vertical-rl] lg:block"
         >
           M Rayhan
         </p>

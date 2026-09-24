@@ -52,7 +52,7 @@ export function ProjectDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[86vh] max-w-2xl gap-0 overflow-y-auto rounded-[1.75rem] border-white/25 bg-[rgba(58,13,5,0.72)] p-0 backdrop-blur-2xl">
+      <DialogContent className="max-h-[86vh] max-w-2xl gap-0 overflow-y-auto rounded-[1.75rem] border-border bg-[var(--bg)] p-0 shadow-[var(--shadow-neu-lg)]">
         <div className="p-6 sm:p-8">
           <span className="glass-chip font-tag inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[9px] text-gold-bright">
             {project.tag}
@@ -61,7 +61,7 @@ export function ProjectDialog({
             {project.title}
             <span className="text-muted-foreground/60"> · {project.subtitle}</span>
           </DialogTitle>
-          <DialogDescription className="mt-3 text-[14.5px] leading-relaxed text-white/75">
+          <DialogDescription className="mt-3 text-[14.5px] leading-relaxed text-foreground/75">
             {project.description}
           </DialogDescription>
 
@@ -79,16 +79,16 @@ export function ProjectDialog({
 
           {/* Live demo */}
           <div className="mt-6">
-            <p className="font-tag mb-3 text-[9.5px] text-white/55">Live Interactive Demo</p>
+            <p className="font-tag mb-3 text-[9.5px] text-muted-foreground">Live Interactive Demo</p>
             <Demo id={project.id} />
           </div>
 
           {/* Features */}
           <div className="mt-6">
-            <p className="font-tag mb-3 text-[9.5px] text-white/55">Key Features</p>
+            <p className="font-tag mb-3 text-[9.5px] text-muted-foreground">Key Features</p>
             <ul className="space-y-2" role="list">
               {project.features.map((f) => (
-                <li key={f} className="flex items-start gap-2.5 text-sm text-white/75">
+                <li key={f} className="flex items-start gap-2.5 text-sm text-foreground/75">
                   <span className="mt-0.5 flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full border border-gold/40 bg-gold/10">
                     <Check className="h-3 w-3 text-gold-bright" />
                   </span>
@@ -103,7 +103,7 @@ export function ProjectDialog({
             {project.tech.map((t) => (
               <span
                 key={t}
-                className="glass-chip font-tag rounded-full px-3 py-1.5 text-[9.5px] text-white/70"
+                className="glass-chip font-tag rounded-full px-3 py-1.5 text-[9.5px] text-muted-foreground"
               >
                 {t}
               </span>
@@ -114,7 +114,7 @@ export function ProjectDialog({
           <div className="mt-7 flex flex-col gap-2.5 sm:flex-row">
             <button
               onClick={copyRepo}
-              className="glass-chip inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-full text-sm font-semibold text-foreground transition-all duration-300 hover:bg-white/20 active:scale-95"
+              className="glass-chip inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-full text-sm font-semibold text-foreground transition-all duration-300 hover:text-primary active:scale-95"
             >
               <Copy className="h-4 w-4" />
               Copy Repo Link

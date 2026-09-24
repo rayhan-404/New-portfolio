@@ -32,19 +32,19 @@ export function SkillsSection() {
         <div className="mt-14 grid gap-4 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
           {/* Meters */}
           <Reveal>
-            <div className="glass h-full rounded-3xl p-6 sm:p-8">
+            <div className="glass neu-decor h-full rounded-3xl p-6 sm:p-8">
               <p className="font-tag text-[10px] text-gold-bright">Core proficiency</p>
               <div className="mt-7 flex flex-col gap-6">
                 {skillMeters.map((skill, i) => (
                   <div key={skill.name}>
                     <div className="flex items-baseline justify-between gap-3">
                       <span className="text-sm font-medium text-foreground/95">{skill.name}</span>
-                      <span className="font-tag text-[10px] text-white/60">
+                      <span className="font-tag text-[10px] text-muted-foreground">
                         {skill.level}%
                       </span>
                     </div>
                     <div
-                      className="mt-2.5 h-[6px] overflow-hidden rounded-full bg-white/12"
+                      className="neu-inset mt-2.5 h-[8px] overflow-hidden rounded-full"
                       role="progressbar"
                       aria-valuenow={skill.level}
                       aria-valuemin={0}
@@ -73,14 +73,14 @@ export function SkillsSection() {
 
           {/* Chips + principles */}
           <div className="flex flex-col gap-4">
-            <StaggerGroup className="glass rounded-3xl p-6 sm:p-8">
+            <StaggerGroup className="glass neu-decor rounded-3xl p-6 sm:p-8">
               <p className="font-tag text-[10px] text-gold-bright">Also in the toolbox</p>
               <div className="mt-5 flex flex-wrap gap-2">
                 {skillChips.map((chip) => (
                   <StaggerItem key={chip}>
                     <button
                       onClick={() => playSound("tap")}
-                      className="glass-chip font-tag rounded-full px-3.5 py-2 text-[9.5px] text-white/75 transition-all duration-300 hover:bg-white/20 hover:text-foreground active:scale-95"
+                      className="glass-chip font-tag rounded-full px-3.5 py-2 text-[9.5px] text-foreground/75 transition-all duration-300 hover:text-primary active:scale-95"
                     >
                       {chip}
                     </button>
@@ -123,7 +123,7 @@ export function SkillsSection() {
           {[...marqueeStack, ...marqueeStack].map((tech, i) => (
             <span
               key={`${tech}-${i}`}
-              className="font-tag flex items-center gap-10 text-[11px] text-white/60"
+              className="font-tag flex items-center gap-10 text-[11px] text-muted-foreground"
             >
               {tech}
               <span className="h-1.5 w-1.5 rotate-45 bg-gold/60" />

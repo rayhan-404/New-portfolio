@@ -47,7 +47,7 @@ export default function ResumeDialog({ open, onOpenChange }: ResumeDialogProps) 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[85vh] gap-0 overflow-y-auto rounded-[1.75rem] border-white/25 bg-[rgba(58,13,5,0.72)] backdrop-blur-2xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:max-w-xl">
+      <DialogContent className="max-h-[85vh] gap-0 overflow-y-auto rounded-[1.75rem] border-border bg-[var(--bg)] shadow-[var(--shadow-neu-lg)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:max-w-xl">
         <DialogHeader className="items-start gap-1.5 text-left">
           <div className="flex flex-wrap items-center gap-x-2.5 gap-y-2">
             <DialogTitle className="font-display text-lg tracking-tight">
@@ -67,12 +67,12 @@ export default function ResumeDialog({ open, onOpenChange }: ResumeDialogProps) 
 
         {/* Professional Experience */}
         <section className="mt-5">
-          <h3 className="font-tag text-[9.5px] text-white/55">Professional Experience</h3>
+          <h3 className="font-tag text-[9.5px] text-muted-foreground">Professional Experience</h3>
           <ol className="mt-4">
             {experience.map((item, index) => (
               <li
                 key={`${item.company}-${item.period}`}
-                className={`relative border-l border-white/20 pl-5 ${
+                className={`relative border-l border-primary/25 pl-5 ${
                   index < experience.length - 1 ? "pb-5" : ""
                 }`}
               >
@@ -80,14 +80,14 @@ export default function ResumeDialog({ open, onOpenChange }: ResumeDialogProps) 
                   {item.current ? (
                     <span className="status-dot inline-block" />
                   ) : (
-                    <span className="inline-block size-[7px] rounded-full bg-white/40 opacity-70" />
+                    <span className="inline-block size-[7px] rounded-full bg-primary/40 opacity-70" />
                   )}
                 </span>
                 <p className="text-sm font-medium text-foreground">{item.role}</p>
-                <p className="mt-0.5 text-xs text-white/60">
+                <p className="mt-0.5 text-xs text-muted-foreground">
                   {item.company} · {item.period}
                 </p>
-                <p className="mt-1.5 text-xs leading-relaxed text-white/70">
+                <p className="mt-1.5 text-xs leading-relaxed text-foreground/70">
                   {item.description}
                 </p>
               </li>
@@ -99,14 +99,14 @@ export default function ResumeDialog({ open, onOpenChange }: ResumeDialogProps) 
 
         {/* Core Skills */}
         <section className="mt-5">
-          <h3 className="font-tag text-[9.5px] text-white/55">Core Skills</h3>
+          <h3 className="font-tag text-[9.5px] text-muted-foreground">Core Skills</h3>
           <div className="mt-4 flex flex-col gap-3">
             {SKILL_ROWS.map((row) => (
               <div
                 key={row.label}
                 className="flex flex-col gap-1.5 sm:flex-row sm:items-baseline sm:gap-3"
               >
-                <span className="w-24 shrink-0 text-xs text-white/60">{row.label}</span>
+                <span className="w-24 shrink-0 text-xs text-muted-foreground">{row.label}</span>
                 <div className="flex flex-wrap gap-1.5">
                   {row.items.map((item) => (
                     <span
@@ -131,7 +131,7 @@ export default function ResumeDialog({ open, onOpenChange }: ResumeDialogProps) 
                 description: "rayhan-resume-2026.pdf",
               })
             }
-            className="glass-chip inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-foreground transition hover:bg-white/20 active:scale-[0.98]"
+            className="glass-chip inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-foreground transition hover:text-primary active:scale-[0.98]"
           >
             <Download className="size-4 text-gold" />
             Download PDF
@@ -143,7 +143,7 @@ export default function ResumeDialog({ open, onOpenChange }: ResumeDialogProps) 
           >
             Hire Rayhan
           </button>
-          <span className="ml-auto hidden items-center gap-2 text-xs text-white/60 sm:inline-flex">
+          <span className="ml-auto hidden items-center gap-2 text-xs text-muted-foreground sm:inline-flex">
             <span className="status-dot inline-block" />
             {person.availability}
           </span>

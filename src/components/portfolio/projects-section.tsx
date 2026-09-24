@@ -51,7 +51,7 @@ export function ProjectsSection() {
             description="A selection of systems I designed and built end-to-end — each one ships with real telemetry, accessibility, and performance budgets."
           />
           <Reveal delay={0.15}>
-            <p className="font-tag hidden text-[10px] text-white/50 lg:block">
+            <p className="font-tag hidden text-[10px] text-muted-foreground lg:block">
               {projects.length} case studies — 2021 / {new Date().getFullYear()}
             </p>
           </Reveal>
@@ -74,13 +74,13 @@ export function ProjectsSection() {
                   setFilter(f.id);
                 }}
                 className={`relative rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors duration-300 ${
-                  filter === f.id ? "text-[#7c1a06]" : "text-white/70 hover:text-foreground"
+                  filter === f.id ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {filter === f.id && (
                   <motion.span
                     layoutId="project-filter-pill"
-                    className="absolute inset-0 rounded-full bg-white shadow-[0_6px_18px_-6px_rgba(84,12,0,0.5),inset_0_1px_0_rgba(255,255,255,0.9)]"
+                    className="absolute inset-0 rounded-full bg-primary shadow-[0_6px_18px_-6px_rgba(156,39,176,0.55)]"
                     transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
                   />
                 )}
@@ -105,44 +105,44 @@ export function ProjectsSection() {
               >
                 <button
                   onClick={() => open(p)}
-                  className="glass group relative flex h-full w-full flex-col overflow-hidden rounded-3xl p-6 text-left transition-all duration-500 hover:-translate-y-1.5 hover:border-white/45 sm:p-7"
+                  className="glass neu-decor group relative flex h-full w-full flex-col overflow-hidden rounded-3xl p-6 text-left transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[var(--shadow-neu-lg)] sm:p-7"
                   aria-label={`Open details for ${p.title}`}
                 >
-                  {/* amber aura on hover */}
+                  {/* purple aura on hover */}
                   <div
-                    className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[radial-gradient(circle,rgba(255,170,80,0.35),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-700 group-hover:opacity-100"
+                    className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[radial-gradient(circle,rgba(224,64,251,0.22),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-700 group-hover:opacity-100"
                     aria-hidden="true"
                   />
                   {/* index number */}
                   <span
                     aria-hidden="true"
-                    className="pointer-events-none absolute -bottom-5 -right-2 font-display text-[6rem] leading-none text-white/[0.06] transition-colors duration-500 group-hover:text-white/10"
+                    className="pointer-events-none absolute -bottom-5 -right-2 font-display text-[6rem] leading-none text-foreground/[0.05] transition-colors duration-500 group-hover:text-foreground/[0.09]"
                   >
                     {p.id.slice(0, 2).toUpperCase()}
                   </span>
 
                   <div className="flex items-center justify-between gap-3">
                     <span className="flex min-w-0 flex-wrap items-center gap-2">
-                      <span className="glass-chip font-tag shrink-0 rounded-full px-3 py-1 text-[9.5px] text-white/75">
+                      <span className="glass-chip font-tag shrink-0 rounded-full px-3 py-1 text-[9.5px] text-muted-foreground">
                         {p.tag}
                       </span>
                       {p.flagship && (
-                        <span className="font-tag shrink-0 rounded-full border border-gold/45 bg-gold/10 px-3 py-1 text-[9.5px] text-gold-bright backdrop-blur-sm">
+                        <span className="font-tag shrink-0 rounded-full border border-gold/45 bg-gold/10 px-3 py-1 text-[9.5px] text-gold-bright">
                           Featured
                         </span>
                       )}
                     </span>
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/25 transition-all duration-300 group-hover:border-white group-hover:bg-white group-hover:text-[#7c1a06]">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border transition-all duration-300 group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
                       <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" />
                     </span>
                   </div>
 
                   <h3 className="font-display mt-5 text-xl tracking-tight sm:text-2xl">
                     {p.title}
-                    <span className="text-white/55"> · {p.subtitle}</span>
+                    <span className="text-muted-foreground"> · {p.subtitle}</span>
                   </h3>
                   <p
-                    className={`mt-2.5 text-sm leading-relaxed text-white/70 ${p.flagship ? "max-w-xl" : ""}`}
+                    className={`mt-2.5 text-sm leading-relaxed text-foreground/70 ${p.flagship ? "max-w-xl" : ""}`}
                   >
                     {firstSentence(p.description)}
                   </p>
@@ -152,7 +152,7 @@ export function ProjectsSection() {
                       {p.tech.slice(0, p.flagship ? 5 : 3).map((t) => (
                         <span
                           key={t}
-                          className="glass-chip font-tag rounded-full px-2.5 py-1 text-[9.5px] text-white/75"
+                          className="glass-chip font-tag rounded-full px-2.5 py-1 text-[9.5px] text-muted-foreground"
                         >
                           {t}
                         </span>
@@ -162,7 +162,7 @@ export function ProjectsSection() {
                       {p.metrics.slice(0, p.flagship ? 3 : 2).map((m) => (
                         <span
                           key={m}
-                          className="inline-flex items-center gap-1.5 text-[11.5px] font-medium text-white/75"
+                          className="inline-flex items-center gap-1.5 text-[11.5px] font-medium text-foreground/75"
                         >
                           <span className="h-1 w-1 rounded-full bg-gold" aria-hidden="true" />
                           {m}

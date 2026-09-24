@@ -55,7 +55,7 @@ export function JourneySection() {
       {/* Giant backdrop word — sits behind everything, all breakpoints */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute -right-12 top-[30px] select-none whitespace-nowrap leading-[0.8] tracking-[-0.07em] text-white/[0.035]"
+        className="pointer-events-none absolute -right-12 top-[30px] select-none whitespace-nowrap leading-[0.8] tracking-[-0.07em] text-foreground/[0.04]"
         style={{ ...BLACK, fontSize: "clamp(90px, 18vw, 260px)" }}
       >
         MY JOURNEY
@@ -66,7 +66,7 @@ export function JourneySection() {
         <Reveal>
           <header className="mb-16 max-w-[860px] lg:mb-24">
             <h1
-              className="leading-[0.88] tracking-[-0.055em] text-white"
+              className="leading-[0.88] tracking-[-0.055em] text-foreground"
               style={{ ...BLACK, fontSize: "clamp(44px, 7.5vw, 104px)" }}
             >
               My journey
@@ -100,9 +100,9 @@ export function JourneySection() {
               />
               <defs>
                 <linearGradient id="journey-swash-gold" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#ffe3ae" />
-                  <stop offset="55%" stopColor="#ffb45e" />
-                  <stop offset="100%" stopColor="#ff7a1c" />
+                  <stop offset="0%" stopColor="#ab47bc" />
+                  <stop offset="55%" stopColor="#c955e0" />
+                  <stop offset="100%" stopColor="#e040fb" />
                 </linearGradient>
               </defs>
             </motion.svg>
@@ -114,7 +114,7 @@ export function JourneySection() {
           {/* the spine — center on desktop, left rail on mobile */}
           <span
             aria-hidden="true"
-            className="absolute bottom-0 left-[15px] top-0 w-px bg-[linear-gradient(to_bottom,transparent,rgba(255,255,255,0.45)_5%,rgba(255,255,255,0.35)_95%,transparent)] md:left-1/2 md:-translate-x-1/2"
+            className="absolute bottom-0 left-[15px] top-0 w-px bg-[linear-gradient(to_bottom,transparent,rgba(156,39,176,0.4)_5%,rgba(156,39,176,0.3)_95%,transparent)] md:left-1/2 md:-translate-x-1/2"
           />
 
           {journey.map((era, idx) => {
@@ -136,7 +136,7 @@ export function JourneySection() {
                       (larger sizes clip under the sidebar/rail glass). */}
                   <p
                     aria-hidden="true"
-                    className={`relative z-[1] mb-2.5 block whitespace-nowrap text-[38px] leading-[0.9] tracking-[-0.07em] text-white/[0.16] transition-[color,transform] duration-500 group-hover:-translate-y-1 group-hover:text-white/[0.28] sm:text-[clamp(48px,12vw,72px)] md:absolute md:top-[-42px] md:mb-0 md:text-[clamp(54px,5.5vw,84px)] md:leading-none md:text-white/[0.08] md:group-hover:text-white/[0.15] ${
+                    className={`relative z-[1] mb-2.5 block whitespace-nowrap text-[38px] leading-[0.9] tracking-[-0.07em] text-foreground/[0.14] transition-[color,transform] duration-500 group-hover:-translate-y-1 group-hover:text-foreground/[0.24] sm:text-[clamp(48px,12vw,72px)] md:absolute md:top-[-42px] md:mb-0 md:text-[clamp(54px,5.5vw,84px)] md:leading-none md:text-foreground/[0.07] md:group-hover:text-foreground/[0.13] ${
                       isLeft ? "md:right-[25px]" : "md:left-[25px]"
                     }`}
                     style={BLACK}
@@ -147,7 +147,7 @@ export function JourneySection() {
                   {/* Dot on the spine */}
                   <span
                     aria-hidden="true"
-                    className={`absolute top-[9px] z-[4] h-3 w-3 rounded-full bg-white shadow-[0_0_0_5px_rgba(255,255,255,0.09),0_0_25px_rgba(255,255,255,0.45)] max-md:left-[9px] ${
+                    className={`absolute top-[9px] z-[4] h-3 w-3 rounded-full bg-primary shadow-[0_0_0_5px_rgba(156,39,176,0.14),0_0_25px_rgba(224,64,251,0.45)] max-md:left-[9px] ${
                       isLeft ? "md:-right-[6px]" : "md:-left-[6px]"
                     }`}
                   />
@@ -161,17 +161,17 @@ export function JourneySection() {
                     } ${isLeft ? "" : "md:ml-0"}`}
                   >
                     {era.current && (
-                      <div className="mb-4 inline-flex items-center gap-2.5 font-tag text-[9px] tracking-[0.22em] text-white/90">
+                      <div className="mb-4 inline-flex items-center gap-2.5 font-tag text-[9px] tracking-[0.22em] text-primary">
                         <span
                           aria-hidden="true"
-                          className="journey-pulse h-[7px] w-[7px] rounded-full bg-white shadow-[0_0_0_4px_rgba(255,255,255,0.12),0_0_16px_rgba(255,255,255,0.85)]"
+                          className="journey-pulse h-[7px] w-[7px] rounded-full bg-primary shadow-[0_0_0_4px_rgba(156,39,176,0.14),0_0_16px_rgba(224,64,251,0.8)]"
                         />
                         Currently here
                       </div>
                     )}
 
                     <h2
-                      className={`font-display uppercase leading-[0.95] tracking-[-0.045em] text-white ${
+                      className={`font-display uppercase leading-[0.95] tracking-[-0.045em] text-foreground ${
                         era.current
                           ? "text-[clamp(28px,4vw,50px)]"
                           : "text-[clamp(24px,3.1vw,38px)]"
@@ -187,27 +187,27 @@ export function JourneySection() {
                       {era.title}
                     </h2>
 
-                    <p className="mt-2 text-[15px] font-semibold text-white/85">
+                    <p className="mt-2 text-[15px] font-semibold text-foreground/85">
                       {era.place}
                     </p>
 
                     {era.location && (
-                      <p className="font-tag mt-1.5 text-[10px] text-white/55">
+                      <p className="font-tag mt-1.5 text-[10px] text-muted-foreground">
                         {era.location}
                       </p>
                     )}
 
                     {era.degree && (
-                      <div className="mt-4 border-l-2 border-white/70 bg-white/[0.05] px-3.5 py-2.5 font-mono text-[11px] leading-[1.5] text-white/90">
+                      <div className="mt-4 border-l-2 border-primary/60 bg-primary/[0.06] px-3.5 py-2.5 font-mono text-[11px] leading-[1.5] text-foreground/90">
                         {era.degree}
                       </div>
                     )}
 
-                    <p className="mt-4 max-w-[390px] text-[14px] leading-[1.6] text-white/75">
+                    <p className="mt-4 max-w-[390px] text-[14px] leading-[1.6] text-foreground/70">
                       {era.description}
                     </p>
 
-                    <span className="mt-4 inline-block rounded-full border border-white/25 px-[11px] py-[6px] font-tag text-[8px] tracking-[0.22em] text-white/70">
+                    <span className="mt-4 inline-block rounded-full border border-border bg-[var(--bg2)] px-[11px] py-[6px] font-tag text-[8px] tracking-[0.22em] text-muted-foreground shadow-[var(--shadow-neu-sm)]">
                       {era.tag}
                     </span>
                   </div>
@@ -218,21 +218,21 @@ export function JourneySection() {
 
           {/* ── Future — 2028 · Loading… ──────────────────────── */}
           <Reveal>
-            <div className="relative flex flex-col gap-7 border-y border-white/15 py-14 max-md:pl-[52px] sm:px-0 md:flex-row md:items-center md:gap-11 md:py-[72px] lg:px-[4%]">
+            <div className="relative flex flex-col gap-7 border-y border-border py-14 max-md:pl-[52px] sm:px-0 md:flex-row md:items-center md:gap-11 md:py-[72px] lg:px-[4%]">
               <p
                 aria-hidden="true"
-                className="whitespace-nowrap leading-[0.8] tracking-[-0.08em] text-white/[0.12]"
+                className="whitespace-nowrap leading-[0.8] tracking-[-0.08em] text-foreground/[0.1]"
                 style={{ ...BLACK, fontSize: "clamp(72px, 10vw, 145px)" }}
               >
                 {journeyFuture.year}
               </p>
 
               <div>
-                <p className="font-tag text-[9px] tracking-[0.3em] text-white/60">
+                <p className="font-tag text-[9px] tracking-[0.3em] text-muted-foreground">
                   {journeyFuture.label}
                 </p>
                 <h2
-                  className="my-2.5 leading-[0.9] tracking-[-0.055em] text-white"
+                  className="my-2.5 leading-[0.9] tracking-[-0.055em] text-foreground"
                   style={{ ...BLACK, fontSize: "clamp(38px, 5vw, 70px)" }}
                 >
                   {(() => {
@@ -252,7 +252,7 @@ export function JourneySection() {
                   })()}
                   <span className="opacity-40">...</span>
                 </h2>
-                <p className="text-[15px] leading-relaxed text-white/65">
+                <p className="text-[15px] leading-relaxed text-foreground/65">
                   {journeyFuture.description}
                 </p>
               </div>

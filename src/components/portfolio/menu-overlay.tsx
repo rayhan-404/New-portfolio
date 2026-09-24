@@ -48,7 +48,7 @@ export function MenuOverlay({
           role="dialog"
           aria-modal="true"
           aria-label="Site menu"
-          className="fixed inset-0 z-[80] flex flex-col bg-[rgba(70,12,4,0.55)] backdrop-blur-3xl"
+          className="fixed inset-0 z-[80] flex flex-col bg-[rgba(40,24,64,0.45)] backdrop-blur-3xl"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -62,7 +62,7 @@ export function MenuOverlay({
             <button
               onClick={() => onOpenChange(false)}
               aria-label="Close menu"
-              className="glass-chip flex h-11 w-11 items-center justify-center rounded-full text-foreground transition-all duration-300 hover:bg-white/25 active:scale-95"
+              className="glass-chip flex h-11 w-11 items-center justify-center rounded-full text-primary transition-all duration-300 hover:shadow-[var(--shadow-neu)] active:scale-95"
             >
               <X className="h-5 w-5" />
             </button>
@@ -123,7 +123,7 @@ export function MenuOverlay({
                     href={s.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="font-tag text-[10px] text-white/65 transition-colors duration-300 hover:text-foreground"
+                    className="font-tag text-[10px] text-muted-foreground transition-colors duration-300 hover:text-foreground"
                   >
                     {s.label}
                   </a>
@@ -131,7 +131,7 @@ export function MenuOverlay({
               ))}
             </ul>
             {mounted && (
-              <p className="font-tag text-[10px] text-white/45">
+              <p className="font-tag text-[10px] text-muted-foreground/80">
                 © {new Date().getFullYear()} M Rayhan
               </p>
             )}
