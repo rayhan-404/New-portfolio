@@ -538,3 +538,20 @@ Work Log:
 Stage Summary:
 - Live design = v29 (9303465). v30 (the Task 44 hero-card design) is fully preserved: tag v30, tarball, and inside the bundle — one command brings it back: bash /home/z/backups/restore-version.sh v30.
 - NOTE: the Task 44 worklog entry lives in commit 5c6beae (v30); this file at v29 had not yet included it. Full history remains intact either way.
+
+---
+Task ID: 47 (rollback hero to previous design — user: "ager moto e koro")
+Agent: Main agent
+Task: The user saw the Task 46 "Ember Spotlight" hero redesign and asked to put it back like before. Restore the previous hero design using the same version-store-and-rollback workflow as Task 45.
+
+Work Log:
+- Tagged the Ember Spotlight redesign as v31 (4834ba5) so nothing is lost; restore anytime with: bash /home/z/backups/restore-version.sh v31
+- REBUILT /home/z/backups offline artifacts — the directory had been wiped by a sandbox reset (old v29/v30 bundles/tarballs/restore-version.sh were gone). Recreated: m-rayhan-portfolio-20260924-1057.bundle (all tags v29+v30+v31, verify OK), m-rayhan-v29-20260924-1057.tar.gz, m-rayhan-v31-20260924-1057.tar.gz, restore-version.sh (same semantics: safety-commit + safety-bundle, then git reset --hard).
+- Rolled back: git reset --hard 1306986 (parent of Task 46 code commit a32807a). Working-tree code is byte-identical to v29 (9303465); the Task 45 worklog entry travels with the branch. Task 46's full worklog entry lives in commit 4834ba5 / tag v31.
+- Verified (agent-browser): mobile 390×844 — Hello.. + cutout + name + floating 4-paragraph bio (no card, no ticker) flowing into Journey, overflowX=0; desktop 1440×900 — glass portrait card with CSE Student / Curious Builder chips + nameplate, serif lead + floating bio, SCROLL cue, overflowX=0; section navigation journey↔home lands correctly; browser errors: none; dev.log all 200; lint 0 problems.
+- COMMITTED (this commit).
+
+Stage Summary:
+- Live design = the pre-redesign hero (v29 code, 1306986). The Ember Spotlight cinematic hero is fully preserved as v31 (tag + tarball + inside bundle) — one command brings it back: bash /home/z/backups/restore-version.sh v31
+- Version map now: v29 = 9303465 (current live design) · v30 = 5c6beae (hero-card variant) · v31 = 4834ba5 (Ember Spotlight cinematic hero).
+- Files: none (rollback commit; worklog only).
