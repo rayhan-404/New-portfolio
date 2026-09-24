@@ -126,7 +126,7 @@ export function ContactSection() {
             <Reveal delay={0.12}>
               <div className="glass-ember relative flex flex-col gap-4 overflow-hidden rounded-3xl p-6">
                 <div
-                  className="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(255,152,0,0.25),transparent_70%)] blur-2xl"
+                  className="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(var(--accent-rgb)/0.25),transparent_70%)] blur-2xl"
                   aria-hidden="true"
                 />
                 <div className="flex items-center gap-3.5">
@@ -192,7 +192,7 @@ export function ContactSection() {
                       }}
                       className={`rounded-full px-4 py-2 text-[13px] font-semibold transition-all duration-300 active:scale-95 ${
                         type === t
-                          ? "bg-primary text-primary-foreground shadow-[0_10px_26px_-10px_rgba(230,74,25,0.6)]"
+                          ? "bg-primary text-primary-foreground shadow-[0_10px_26px_-10px_rgba(var(--primary-rgb)/0.6)]"
                           : "glass-chip text-foreground/75 hover:text-primary"
                       }`}
                     >

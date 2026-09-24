@@ -16,8 +16,10 @@ import {
   useScroll,
   useSpring,
 } from "framer-motion";
-import { Volume2, VolumeX } from "lucide-react";
+import { Palette, Volume2, VolumeX } from "lucide-react";
 import { useSoundEngine } from "./portfolio/nav";
+import { cycleAccent, type AccentHue } from "@/lib/accent-pool";
+import { playSound } from "@/lib/sound";
 
 export interface NavCategory {
   id: string;
@@ -126,6 +128,9 @@ export function SidebarNotchNav({
   const cy = useMotionValue(0);
   const { soundOn, toggle } = useSoundEngine();
   const reduceMotion = useReducedMotion();
+  /* Current accent hue — the boot script draws it randomly (ref:
+     "Random on each refresh"); cycleAccent advances the pool. */
+  const [hue, setHue] = useState<AccentHue | null>(null);
 
   /* Deep-orange scroll-progress seam along the top edge — the always-
      visible twin of the desktop right rail's vertical seam (the rail is
@@ -300,7 +305,7 @@ export function SidebarNotchNav({
       <span
         ref={dotRef}
         aria-hidden="true"
-        className="pointer-events-none absolute z-[2] h-[7px] w-[7px] rounded-full bg-[var(--notch-dot)] shadow-[0_1px_6px_rgba(230,74,25,0.55)]"
+        className="pointer-events-none absolute z-[2] h-[7px] w-[7px] rounded-full bg-[var(--notch-dot)] shadow-[0_1px_6px_rgba(var(--primary-rgb)/0.55)]"
         style={{
           right: dims ? Math.max(5, notchGeometryFor(dims.w).R / 2 - 3.5) : 9,
           top: 0,
@@ -314,7 +319,7 @@ export function SidebarNotchNav({
       <motion.div
         aria-hidden="true"
         style={{ scaleX: progress }}
-        className="absolute inset-x-0 top-0 z-[3] h-[2px] origin-left bg-gradient-to-r from-[#f4511e] via-[#ff7043] to-[#ff9800]"
+        className="absolute inset-x-0 top-0 z-[3] h-[2px] origin-left bg-gradient-to-r from-[var(--primary2-ref)] via-[var(--primary)] to-[var(--accent-ref)]"
       />
 
       {/* Top hairline ornament */}
@@ -363,6 +368,30 @@ export function SidebarNotchNav({
 
       {/* Bottom Action Controls */}
       <div className="relative z-[2] mt-auto flex shrink-0 flex-col items-center gap-2 pt-2">
+        {/* Color cycle — the reference's .color-cycle-btn: walks the
+            Material accent pool ("Random on each refresh" system). */}
+        <button
+          id="accent-cycle-btn"
+          type="button"
+          aria-label="Change accent color"
+          title={hue ? `Accent: ${hue.label}` : "Change accent color"}
+          onClick={() => {
+            const next = cycleAccent();
+            setHue(next);
+            playSound("pop");
+          }}
+          className="group relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[var(--nl)] bg-[var(--bg)] text-muted-foreground shadow-[var(--shadow-neu-sm)] transition-all duration-300 hover:text-primary active:scale-90 active:shadow-[var(--shadow-neu-in)]"
+        >
+          <Palette className="h-4 w-4" />
+          {/* live swatch dot — always shows the current hue */}
+          <span
+            aria-hidden="true"
+            className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full border border-[var(--nl)] transition-colors duration-300"
+            style={{
+              background: "linear-gradient(135deg, var(--primary), var(--accent-ref))",
+            }}
+          />
+        </button>
         <button
           id="sound-toggle-btn"
           type="button"

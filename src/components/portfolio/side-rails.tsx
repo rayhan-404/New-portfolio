@@ -97,7 +97,7 @@ export function SideRailRight() {
       >
         <motion.div
           style={{ scaleY: progress }}
-          className="h-full w-full origin-top bg-gradient-to-b from-[#f4511e] via-[#ff7043] to-[#ff9800]"
+          className="h-full w-full origin-top bg-gradient-to-b from-[var(--primary2-ref)] via-[var(--primary)] to-[var(--accent-ref)]"
         />
       </div>
 

@@ -4,12 +4,17 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
-   M RAYHAN — DEEP ORANGE NEUMORPHIC + REF MULTI-COLOR SYSTEM
-   The reference's neumorphic system re-inked in Material Deep
-   Orange (the main color), PLUS the reference's full multi-color
-   palette: the --mc-* Material pool, semantic success/warn/info
-   hues, star yellow, education blue, and contact brand gradients
-   — all at the reference's exact hex values.
+   M RAYHAN — NEUMORPHIC + REF MULTI-COLOR SYSTEM (ROTATING ACCENT)
+   The reference's neumorphic system, PLUS the reference's full
+   multi-color behavior: a random Material hue is drawn from the
+   --mc-* pool on EVERY refresh ("Random on each refresh") and
+   becomes the primary color. The stylesheet consumes the drawn hue
+   through the --hue-* slots (set pre-paint by ACCENT_BOOT_SCRIPT,
+   walked manually by the color-cycle button) and routes it into
+   --primary/--primary2-ref/--accent-ref/--primary-rgb/--accent-rgb
+   per theme. Semantic success/warn/info, star yellow, education
+   blue, contact brand gradients and the linguist dots stay fixed
+   at the reference's exact hexes.
    ============================================================ */
 
 @theme inline {
@@ -90,9 +95,17 @@
   --text3: #b18a67;
   --code-bg: #2a1208;
 
-  --primary-ref: #e64a19;
-  --primary2-ref: #f4511e;
-  --accent-ref: #ff9800;
+  /* ── ROTATING ACCENT SLOTS ──
+     The --hue-* vars are written pre-paint by ACCENT_BOOT_SCRIPT
+     (random pool draw) and by the color-cycle button; the fallbacks
+     are the deep-orange values (pool member "deep-orange") so SSR
+     paint is already on-brand. Light = Material 500/400/A200. */
+  --primary-ref: var(--hue-pri-l, #e64a19);
+  --primary2-ref: var(--hue-pri2-l, #f4511e);
+  --accent-ref: var(--hue-acc-l, #ff9800);
+  /* rgb triplets for tinted shadows/rings/borders — same hue */
+  --primary-rgb: var(--hue-rgb-l, 230 74 25);
+  --accent-rgb: var(--hue-argb-l, 255 152 0);
 
   /* ── MULTI-COLOR SYSTEM — the reference's exact palette ──
      One primary slot (deep orange, the site's main color) plus the
@@ -159,14 +172,15 @@
   --accent: var(--bg3);
   --accent-foreground: var(--text);
   --destructive: #f44336;
-  --border: rgba(230, 74, 25, 0.16);
-  --input: rgba(230, 74, 25, 0.16);
-  --ring: rgba(230, 74, 25, 0.45);
+  --border: rgba(var(--primary-rgb) / 0.16);
+  --input: rgba(var(--primary-rgb) / 0.16);
+  --ring: rgba(var(--primary-rgb) / 0.45);
 
-  /* Brand accent remaps (text-gold etc. carry deep orange in both themes) */
-  --gold: #d84315;
-  --gold-bright: #f4511e;
-  --gold-deep: #bf360c;
+  /* Brand accent remaps — now follow the rotating hue
+     (text-gold gradients & swash lines ride the pool color) */
+  --gold: var(--primary-ref);
+  --gold-bright: var(--primary2-ref);
+  --gold-deep: var(--primary-ref);
 
   /* Apple system accents — live demos */
   --apple-green: #30d158;
@@ -175,7 +189,8 @@
   --apple-rose: #ff375f;
 
   /* Notch well — the round bite shows a deep-ember disc (the original
-     notch look: dark round bite on the light rail, light dot inside) */
+     notch look: dark round bite on the light rail, light dot inside).
+     Deliberately hue-independent: the bite reads as a shadow hole. */
   --notch-core: #8a2a0c;
   --notch-mid: #b03d14;
   --notch-dot: #ffffff;
@@ -213,7 +228,15 @@
   --card-foreground: var(--text);
   --popover: var(--bg2);
   --popover-foreground: var(--text);
-  --primary: #ff7043;
+  /* Dark accent = the same hue lifted to Material 400/300/A200
+     (the pool's dark triples), falling back to deep-orange 400. */
+  --primary-ref: var(--hue-pri-d, #ff7043);
+  --primary2-ref: var(--hue-pri2-d, #ff8a50);
+  --accent-ref: var(--hue-acc-d, #ff9800);
+  --primary-rgb: var(--hue-rgb-d, 255 112 67);
+  --accent-rgb: var(--hue-argb-d, 255 152 0);
+
+  --primary: var(--primary-ref);
   --primary-foreground: #2b1206;
   --secondary: var(--bg2);
   --secondary-foreground: var(--text);
@@ -222,18 +245,18 @@
   --accent: var(--bg3);
   --accent-foreground: var(--text);
   --destructive: #f44336;
-  --border: rgba(230, 74, 25, 0.24);
-  --input: rgba(230, 74, 25, 0.24);
-  --ring: rgba(255, 112, 67, 0.5);
+  --border: rgba(var(--primary-rgb) / 0.24);
+  --input: rgba(var(--primary-rgb) / 0.24);
+  --ring: rgba(var(--primary-rgb) / 0.5);
 
-  --gold: #ffb298;
-  --gold-bright: #ff8a50;
-  --gold-deep: #f4511e;
+  --gold: var(--primary-ref);
+  --gold-bright: var(--primary2-ref);
+  --gold-deep: var(--primary-ref);
 
   /* Notch well — dark theme: the bite becomes a warm glowing orb */
-  --notch-core: rgba(255, 122, 61, 0.55);
-  --notch-mid: rgba(230, 74, 25, 0.22);
-  --notch-dot: #ff8a50;
+  --notch-core: rgba(var(--primary-rgb) / 0.55);
+  --notch-mid: rgba(var(--primary-rgb) / 0.22);
+  --notch-dot: var(--primary);
 
   --apple-green: #30d158;
   --apple-mint: #66d4cf;
@@ -283,7 +306,7 @@
   }
 
   ::selection {
-    background: rgba(230, 74, 25, 0.24);
+    background: rgba(var(--primary-rgb) / 0.24);
     color: var(--text);
   }
 
@@ -339,7 +362,7 @@
   height: 600px;
   background: radial-gradient(
     circle,
-    rgba(230, 74, 25, 0.09) 0%,
+    rgba(var(--primary-rgb) / 0.09) 0%,
     transparent 70%
   );
   border-radius: 50%;
@@ -355,7 +378,7 @@
   height: 520px;
   background: radial-gradient(
     circle,
-    rgba(255, 152, 0, 0.08) 0%,
+    rgba(var(--accent-rgb) / 0.08) 0%,
     transparent 70%
   );
   border-radius: 50%;
@@ -443,7 +466,7 @@
 .glass-input:focus-visible {
   box-shadow:
     var(--shadow-neu-in),
-    0 0 0 2px rgba(230, 74, 25, 0.3);
+    0 0 0 2px rgba(var(--primary-rgb) / 0.3);
 }
 
 /* Small pill chips */
@@ -452,17 +475,17 @@
   box-shadow: var(--shadow-neu-sm);
 }
 
-/* Deep-orange-tinted emphasized panel — highlighted feature cards */
+/* Accent-tinted emphasized panel — highlighted feature cards */
 @utility glass-ember {
   background: linear-gradient(
       135deg,
-      rgba(230, 74, 25, 0.07),
-      rgba(255, 152, 0, 0.05)
+      rgba(var(--primary-rgb) / 0.07),
+      rgba(var(--accent-rgb) / 0.05)
     ),
     var(--bg);
   box-shadow:
     var(--shadow-neu),
-    inset 0 0 0 1.5px rgba(230, 74, 25, 0.22);
+    inset 0 0 0 1.5px rgba(var(--primary-rgb) / 0.22);
 }
 
 /* Hairline divider between rows */
@@ -471,17 +494,17 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(230, 74, 25, 0.28),
+    rgba(var(--primary-rgb) / 0.28),
     transparent
   );
 }
 
-/* Primary action — deep orange, glowing (reference .btn-primary) */
+/* Primary action — pool hue, glowing (reference .btn-primary) */
 @utility btn-light {
   background: var(--primary);
   color: var(--primary-foreground);
   border: none;
-  box-shadow: 0 4px 16px rgba(230, 74, 25, 0.35);
+  box-shadow: 0 4px 16px rgba(var(--primary-rgb) / 0.35);
   transition:
     transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.25s ease,
@@ -489,17 +512,17 @@
 }
 .btn-light:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(230, 74, 25, 0.45);
+  box-shadow: 0 8px 22px rgba(var(--primary-rgb) / 0.45);
   filter: brightness(1.05);
 }
 .btn-light:active {
   transform: scale(0.97);
 }
 
-/* Deep orange gradient text — name dots, highlights.
-   Ref recipe: primary2 → accent (here: gold-bright → accent-ref #ff9800). */
+/* Primary→accent gradient text — name dots, highlights.
+   Ref recipe: primary2 → accent, both riding the rotating hue. */
 @utility text-gold-gradient {
-  background: linear-gradient(100deg, var(--gold-bright) 0%, var(--accent-ref) 100%);
+  background: linear-gradient(100deg, var(--primary2-ref) 0%, var(--accent-ref) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -508,14 +531,14 @@
 /* Soft readable glow for display type */
 @utility text-glow {
   text-shadow:
-    0 1px 16px rgba(230, 74, 25, 0.22),
+    0 1px 16px rgba(var(--primary-rgb) / 0.22),
     0 1px 3px rgba(47, 20, 7, 0.12);
 }
 
 /* Big outlined display text */
 @utility text-outline {
   color: transparent;
-  -webkit-text-stroke: 1px rgba(230, 74, 25, 0.3);
+  -webkit-text-stroke: 1px rgba(var(--primary-rgb) / 0.3);
 }
 
 /* ── Neumorphic helpers (reference component recipes) ── */
@@ -526,7 +549,7 @@
   box-shadow: var(--shadow-neu-in);
 }
 
-/* Primary→accent gradient bar (accent = ref accent slot #ff9800) */
+/* Primary→accent gradient bar (accent rides the rotating hue) */
 @utility grad-fill {
   background: linear-gradient(90deg, var(--primary), var(--accent-ref));
 }
@@ -755,16 +778,16 @@
   box-shadow: var(--shadow-neu-lg);
 }
 
-/* "Currently here" — deep orange focus ring */
+/* "Currently here" — focus ring rides the rotating primary */
 .journey-card--current {
   box-shadow:
     var(--shadow-neu),
-    inset 0 0 0 2px rgba(230, 74, 25, 0.4);
+    inset 0 0 0 2px rgba(var(--primary-rgb) / 0.4);
 }
 .journey-card--current:hover {
   box-shadow:
     var(--shadow-neu-lg),
-    inset 0 0 0 2px rgba(230, 74, 25, 0.4);
+    inset 0 0 0 2px rgba(var(--primary-rgb) / 0.4);
 }
 
 /* Pulsing dot — "CURRENTLY HERE" badge */
@@ -787,4 +810,4 @@
   }
 }
 
-/* recompile nudge t49 — deep orange main color + neumorphic navbar */
+/* recompile nudge t52 — rotating Material accent pool (ref multi-color) */

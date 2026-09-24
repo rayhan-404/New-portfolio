@@ -108,7 +108,7 @@ export function HeroSection() {
       {/* soft light bloom behind the type */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_58%_42%_at_50%_30%,rgba(230,74,25,0.08),transparent_70%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_58%_42%_at_50%_30%,rgba(var(--primary-rgb)/0.08),transparent_70%)]"
       />
 
       {/* ══ MOBILE / TABLET — full-width transparent cutout portrait ══ */}
@@ -123,7 +123,7 @@ export function HeroSection() {
             {/* warm halo behind the cutout */}
             <div
               aria-hidden="true"
-              className="absolute left-1/2 top-[6%] h-[58%] w-[94%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,152,0,0.16),transparent_66%)] blur-2xl"
+              className="absolute left-1/2 top-[6%] h-[58%] w-[94%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(var(--accent-rgb)/0.16),transparent_66%)] blur-2xl"
             />
 
             {/* "Hello.." — anchored to the column (not the scaled photo):
@@ -158,9 +158,9 @@ export function HeroSection() {
                 />
                 <defs>
                   <linearGradient id="hello-swash-gold" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#f4511e" />
-                    <stop offset="55%" stopColor="#ff7043" />
-                    <stop offset="100%" stopColor="#ff9800" />
+                    <stop offset="0%" style={{ stopColor: "var(--primary2-ref)" }} />
+                    <stop offset="55%" style={{ stopColor: "var(--primary)" }} />
+                    <stop offset="100%" style={{ stopColor: "var(--accent-ref)" }} />
                   </linearGradient>
                 </defs>
               </motion.svg>
@@ -252,7 +252,7 @@ export function HeroSection() {
             {/* glow underlay */}
             <div
               aria-hidden="true"
-              className="absolute -inset-8 rounded-[3.5rem] bg-[radial-gradient(circle_at_50%_45%,rgba(255,152,0,0.14),transparent_68%)] blur-2xl"
+              className="absolute -inset-8 rounded-[3.5rem] bg-[radial-gradient(circle_at_50%_45%,rgba(var(--accent-rgb)/0.14),transparent_68%)] blur-2xl"
             />
 
             <div className="glass-strong neu-decor relative overflow-hidden rounded-[2.5rem] p-2.5">
@@ -260,7 +260,7 @@ export function HeroSection() {
                 {/* warm studio backdrop behind the transparent cutout */}
                 <div
                   aria-hidden="true"
-                  className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(255,152,0,0.4),rgba(230,74,25,0.6)_55%,rgba(58,34,20,0.95)_100%)]"
+                  className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(var(--accent-rgb)/0.4),rgba(var(--primary-rgb)/0.6)_55%,rgba(58,34,20,0.95)_100%)]"
                 />
                 <Image
                   src="/generated/m-rayhan-portrait.png"

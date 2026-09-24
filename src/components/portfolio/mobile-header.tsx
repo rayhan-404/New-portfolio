@@ -53,7 +53,7 @@ export function MobileHeader({ onOpenMenu }: { onOpenMenu: () => void }) {
       <motion.div
         aria-hidden="true"
         style={{ scaleX: progress }}
-        className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-gradient-to-r from-[#f4511e] via-[#ff7043] to-[#ff9800]"
+        className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-gradient-to-r from-[var(--primary2-ref)] via-[var(--primary)] to-[var(--accent-ref)]"
       />
     </motion.header>
   );

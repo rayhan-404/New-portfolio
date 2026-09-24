@@ -104,9 +104,9 @@ export function JourneySection() {
               />
               <defs>
                 <linearGradient id="journey-swash-gold" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#f4511e" />
-                  <stop offset="55%" stopColor="#ff7043" />
-                  <stop offset="100%" stopColor="#ff9800" />
+                  <stop offset="0%" style={{ stopColor: "var(--primary2-ref)" }} />
+                  <stop offset="55%" style={{ stopColor: "var(--primary)" }} />
+                  <stop offset="100%" style={{ stopColor: "var(--accent-ref)" }} />
                 </linearGradient>
               </defs>
             </motion.svg>
@@ -118,7 +118,7 @@ export function JourneySection() {
           {/* the spine — center on desktop, left rail on mobile */}
           <span
             aria-hidden="true"
-            className="absolute bottom-0 left-[15px] top-0 w-px bg-[linear-gradient(to_bottom,transparent,rgba(230,74,25,0.4)_5%,rgba(230,74,25,0.3)_95%,transparent)] md:left-1/2 md:-translate-x-1/2"
+            className="absolute bottom-0 left-[15px] top-0 w-px bg-[linear-gradient(to_bottom,transparent,rgba(var(--primary-rgb)/0.4)_5%,rgba(var(--primary-rgb)/0.3)_95%,transparent)] md:left-1/2 md:-translate-x-1/2"
           />
 
           {journey.map((era, idx) => {
@@ -155,7 +155,7 @@ export function JourneySection() {
                     className={`absolute top-[9px] z-[4] h-3 w-3 rounded-full max-md:left-[9px] ${
                       isEdu
                         ? "bg-[#4267B2] shadow-[0_0_0_5px_rgba(66,103,178,0.14),0_0_25px_rgba(66,103,178,0.45)]"
-                        : "bg-primary shadow-[0_0_0_5px_rgba(230,74,25,0.14),0_0_25px_rgba(255,152,0,0.45)]"
+                        : "bg-primary shadow-[0_0_0_5px_rgba(var(--primary-rgb)/0.14),0_0_25px_rgba(var(--accent-rgb)/0.45)]"
                     } ${isLeft ? "md:-right-[6px]" : "md:-left-[6px]"}`}
                   />
 
@@ -185,7 +185,7 @@ export function JourneySection() {
                       <div className="mb-4 inline-flex items-center gap-2.5 font-tag text-[9px] tracking-[0.22em] text-primary">
                         <span
                           aria-hidden="true"
-                          className="journey-pulse h-[7px] w-[7px] rounded-full bg-primary shadow-[0_0_0_4px_rgba(230,74,25,0.14),0_0_16px_rgba(255,152,0,0.8)]"
+                          className="journey-pulse h-[7px] w-[7px] rounded-full bg-primary shadow-[0_0_0_4px_rgba(var(--primary-rgb)/0.14),0_0_16px_rgba(var(--accent-rgb)/0.8)]"
                         />
                         Currently here
                       </div>

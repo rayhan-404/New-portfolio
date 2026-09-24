@@ -80,7 +80,7 @@ export function ProjectsSection() {
                 {filter === f.id && (
                   <motion.span
                     layoutId="project-filter-pill"
-                    className="absolute inset-0 rounded-full bg-primary shadow-[0_6px_18px_-6px_rgba(230,74,25,0.55)]"
+                    className="absolute inset-0 rounded-full bg-primary shadow-[0_6px_18px_-6px_rgba(var(--primary-rgb)/0.55)]"
                     transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
                   />
                 )}
@@ -110,7 +110,7 @@ export function ProjectsSection() {
                 >
                   {/* deep-orange aura on hover */}
                   <div
-                    className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[radial-gradient(circle,rgba(255,152,0,0.22),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-700 group-hover:opacity-100"
+                    className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[radial-gradient(circle,rgba(var(--accent-rgb)/0.22),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-700 group-hover:opacity-100"
                     aria-hidden="true"
                   />
                   {/* index number */}

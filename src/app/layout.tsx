@@ -11,6 +11,7 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import { person } from "@/lib/portfolio-data";
+import { ACCENT_BOOT_SCRIPT } from "@/lib/accent-pool";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -144,6 +145,9 @@ export default function RootLayout({
             __html: `try{if(localStorage.getItem('mr-theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}`,
           }}
         />
+        {/* Accent bootstrap — the reference's "Material Colors — Random on
+            each refresh": draw one pool hue before first paint. */}
+        <script dangerouslySetInnerHTML={{ __html: ACCENT_BOOT_SCRIPT }} />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${nunito.variable} ${instrumentSerif.variable} ${sourceSerif.variable} ${syne.variable} ${lobster.variable} antialiased text-foreground min-h-screen flex flex-col`}
