@@ -87,20 +87,22 @@ function buildNotchPath(w: number, h: number, cy: number, g: NotchGeometry): str
  * • Solid neu shell (same recipe as the site's raised cards: bg2 tone,
  *   dual light/dark depth shadows, warm material elevation cast onto
  *   the content) with rounded right corners.
- * • Background notch: the surface is clipped with a tangent-continuous
- *   S-curve bite whose center glides to the active section on a spring.
- *   The path is rebuilt EVERY FRAME and written straight to the DOM —
- *   no dependence on CSS `path()` interpolation, so the glide is
- *   butter-smooth and retargets instantly in every browser.
- * • Active item sits on a raised neumorphic pill (a card on the rail);
- *   hover lays a material state-layer tint. Instant response: tapping a
- *   destination pins the notch target immediately (no waiting for the
- *   scroll-spy to catch up mid-scroll); the pin releases once the spy
- *   confirms, or after a short timeout.
- * • Vertical category labels (bottom-to-top) — warm ink, deep orange
- *   when active. Measured via layout effects + ResizeObserver +
- *   font-ready. Actions: sound toggle. Visible on mobile (54px)
- *   through desktop (74px).
+ * • Background notch (the navigator): the surface is clipped with a
+ *   tangent-continuous S-curve bite whose center glides to the active
+ *   section on a spring — the signature notch indicator, unchanged.
+ *   A soft pressed-in dimple ring hugs the bite's rim (painted under
+ *   the surface, visible only through the cut-out) so the notch reads
+ *   as a neumorphic well. The path is rebuilt EVERY FRAME and written
+ *   straight to the DOM — no dependence on CSS `path()` interpolation,
+ *   so the glide is butter-smooth and retargets instantly.
+ * • Active item = the notch + deep-orange dot + warm ink turning deep
+ *   orange; hover lays a material state-layer tint. Instant response:
+ *   tapping a destination pins the notch target immediately (no
+ *   waiting for the scroll-spy to catch up mid-scroll); the pin
+ *   releases once the spy confirms, or after a short timeout.
+ * • Vertical category labels (bottom-to-top). Measured via layout
+ *   effects + ResizeObserver + font-ready. Actions: sound toggle.
+ *   Visible on mobile (54px) through desktop (74px).
  */
 export function SidebarNotchNav({
   categories,
@@ -114,6 +116,7 @@ export function SidebarNotchNav({
 
   const asideRef = useRef<HTMLElement>(null);
   const surfaceRef = useRef<HTMLDivElement>(null);
+  const dimpleRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLSpanElement>(null);
   const navContainerRef = useRef<HTMLDivElement>(null);
   const sideItemRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -123,9 +126,9 @@ export function SidebarNotchNav({
   const { soundOn, toggle } = useSoundEngine();
   const reduceMotion = useReducedMotion();
 
-  /* Gold scroll-progress seam along the top edge — the always-visible
-     twin of the desktop right rail's vertical seam (the rail is hidden
-     below md, so this is the only progress indicator on phones).
+  /* Deep-orange scroll-progress seam along the top edge — the always-
+     visible twin of the desktop right rail's vertical seam (the rail is
+     hidden below md, so this is the only progress indicator on phones).
      Transform-only (scaleX) — zero layout work while scrolling. */
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, {
@@ -190,7 +193,8 @@ export function SidebarNotchNav({
     setTargetCy((prev) => (prev !== null && Math.abs(prev - next) < 0.5 ? prev : next));
   }, [dims, effectiveIndex, measureTick, categories.length]);
 
-  /* Paint one frame: rebuild the clip path + move the target dot */
+  /* Paint one frame: rebuild the clip path + move the target dot +
+     repaint the notch's pressed-in dimple ring */
   const paint = useCallback(() => {
     const d = dims;
     const surface = surfaceRef.current;
@@ -202,6 +206,13 @@ export function SidebarNotchNav({
     if (dot) {
       dot.style.top = `${v}px`;
       dot.style.opacity = "1";
+    }
+    const dimple = dimpleRef.current;
+    if (dimple) {
+      /* Neumorphic dimple: a soft dark ring hugging the bite's rim.
+         Painted UNDER the surface, so only the notch cut-out reveals
+         it — the notch reads as a pressed-in well on the rail. */
+      dimple.style.background = `radial-gradient(circle at ${d.w}px ${v}px, transparent ${g.R * 0.45}px, color-mix(in srgb, var(--nd) 55%, transparent) ${g.R * 0.82}px, color-mix(in srgb, var(--nd) 18%, transparent) ${g.R}px, transparent ${g.R * 1.18}px)`;
     }
   }, [cy, dims]);
 
@@ -262,6 +273,14 @@ export function SidebarNotchNav({
         className="pointer-events-none absolute inset-0 rounded-r-[16px] shadow-[22px_0_54px_-30px_rgba(97,49,24,0.5),8px_0_22px_-16px_rgba(97,49,24,0.28)] sm:rounded-r-[18px] md:rounded-r-[22px]"
       />
 
+      {/* Notch dimple — pressed-in ring revealed only through the bite.
+          Sits BELOW the clipped surface; background painted per-frame. */}
+      <div
+        ref={dimpleRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+      />
+
       {/* Neumorphic rail surface — the background bites in through the
           notch clip. clipPath is painted imperatively every frame. */}
       <div
@@ -319,19 +338,8 @@ export function SidebarNotchNav({
               }}
               aria-current={idx === activeIndex ? "page" : undefined}
               title={cat.label}
-              className="group relative z-[2] flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl border-0 bg-transparent px-0 py-2.5 outline-none transition-colors duration-300 focus-visible:ring-1 focus-visible:ring-primary/35 hover:bg-primary/[0.06]"
+              className="group relative z-[2] flex w-full cursor-pointer items-center justify-center rounded-xl border-0 bg-transparent px-0 py-2.5 outline-none transition-colors duration-300 focus-visible:ring-1 focus-visible:ring-primary/35 hover:bg-primary/[0.06]"
             >
-              {/* Neumorphic raised pill — the active item reads as one of
-                  the site's cards sitting on the rail (material selected
-                  state: raised surface + dual shadow + light top edge) */}
-              <span
-                aria-hidden="true"
-                className={`pointer-events-none absolute inset-y-[4px] left-[6px] right-[6px] rounded-2xl border border-[var(--nl)] bg-[var(--bg)] shadow-[var(--shadow-neu-sm)] transition-all duration-300 ease-out ${
-                  isActive
-                    ? "scale-100 opacity-100"
-                    : "scale-75 opacity-0"
-                }`}
-              />
               {/* Vertical Text Label — Tailwind v4 translate/scale compose
                   with the standalone `rotate` property (no transform clash) */}
               <span
