@@ -112,6 +112,12 @@
   --apple-orange: #ff9f0a;
   --apple-rose: #ff375f;
 
+  /* Notch well — the round bite shows a deep-ember disc (the original
+     notch look: dark round bite on the light rail, light dot inside) */
+  --notch-core: #8a2a0c;
+  --notch-mid: #b03d14;
+  --notch-dot: #ffffff;
+
   /* Portrait blend — melts photos into the cream field */
   --img-vignette: linear-gradient(
     to top,
@@ -161,6 +167,11 @@
   --gold: #ffb298;
   --gold-bright: #ff8a50;
   --gold-deep: #f4511e;
+
+  /* Notch well — dark theme: the bite becomes a warm glowing orb */
+  --notch-core: rgba(255, 122, 61, 0.55);
+  --notch-mid: rgba(230, 74, 25, 0.22);
+  --notch-dot: #ff8a50;
 
   --apple-green: #30d158;
   --apple-mint: #66d4cf;

@@ -89,12 +89,13 @@ function buildNotchPath(w: number, h: number, cy: number, g: NotchGeometry): str
  *   the content) with rounded right corners.
  * • Background notch (the navigator): the surface is clipped with a
  *   tangent-continuous S-curve bite whose center glides to the active
- *   section on a spring — the signature notch indicator, unchanged.
- *   A soft pressed-in dimple ring hugs the bite's rim (painted under
- *   the surface, visible only through the cut-out) so the notch reads
- *   as a neumorphic well. The path is rebuilt EVERY FRAME and written
- *   straight to the DOM — no dependence on CSS `path()` interpolation,
- *   so the glide is butter-smooth and retargets instantly.
+ *   section on a spring — the signature round notch, exactly like the
+ *   original. A deep-ember disc is painted UNDER the surface at the
+ *   bite's center, so the cut-out reveals a rich round well with the
+ *   floating dot (light theme = dark ember bite on the cream rail;
+ *   dark theme = warm glowing orb). The path is rebuilt EVERY FRAME
+ *   and written straight to the DOM — butter-smooth, retargets
+ *   instantly.
  * • Active item = the notch + deep-orange dot + warm ink turning deep
  *   orange; hover lays a material state-layer tint. Instant response:
  *   tapping a destination pins the notch target immediately (no
@@ -209,10 +210,13 @@ export function SidebarNotchNav({
     }
     const dimple = dimpleRef.current;
     if (dimple) {
-      /* Neumorphic dimple: a soft dark ring hugging the bite's rim.
-         Painted UNDER the surface, so only the notch cut-out reveals
-         it — the notch reads as a pressed-in well on the rail. */
-      dimple.style.background = `radial-gradient(circle at ${d.w}px ${v}px, transparent ${g.R * 0.45}px, color-mix(in srgb, var(--nd) 55%, transparent) ${g.R * 0.82}px, color-mix(in srgb, var(--nd) 18%, transparent) ${g.R}px, transparent ${g.R * 1.18}px)`;
+      /* The round notch well: a deep-ember disc (light) / warm glow orb
+         (dark) centered on the bite. Painted UNDER the clipped surface,
+         so only the notch cut-out reveals it — the original round
+         notch look, restored. The disc radius generously covers the
+         S-curve fillets; the half outside the rail is clipped by the
+         div's own box. */
+      dimple.style.background = `radial-gradient(circle at ${d.w}px ${v}px, var(--notch-core) 0px, var(--notch-core) ${g.R * 0.85}px, var(--notch-mid) ${g.R * 1.2}px, transparent ${g.R * 1.6}px)`;
     }
   }, [cy, dims]);
 
@@ -273,8 +277,8 @@ export function SidebarNotchNav({
         className="pointer-events-none absolute inset-0 rounded-r-[16px] shadow-[22px_0_54px_-30px_rgba(97,49,24,0.5),8px_0_22px_-16px_rgba(97,49,24,0.28)] sm:rounded-r-[18px] md:rounded-r-[22px]"
       />
 
-      {/* Notch dimple — pressed-in ring revealed only through the bite.
-          Sits BELOW the clipped surface; background painted per-frame. */}
+      {/* Notch well — the round bite's ember disc, revealed only through
+          the clip. Sits BELOW the surface; painted per-frame in paint(). */}
       <div
         ref={dimpleRef}
         aria-hidden="true"
@@ -296,7 +300,7 @@ export function SidebarNotchNav({
       <span
         ref={dotRef}
         aria-hidden="true"
-        className="pointer-events-none absolute z-[2] h-[7px] w-[7px] rounded-full bg-primary shadow-[0_1px_6px_rgba(230,74,25,0.55)]"
+        className="pointer-events-none absolute z-[2] h-[7px] w-[7px] rounded-full bg-[var(--notch-dot)] shadow-[0_1px_6px_rgba(230,74,25,0.55)]"
         style={{
           right: dims ? Math.max(5, notchGeometryFor(dims.w).R / 2 - 3.5) : 9,
           top: 0,
