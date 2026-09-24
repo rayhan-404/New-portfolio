@@ -22,8 +22,8 @@ function subscribeTheme(onChange: () => void) {
 const isDark = () => document.documentElement.classList.contains("dark");
 
 /**
- * Light/dark switch for the purple neumorphic theme.
- * Default is the reference's signature lavender light theme;
+ * Light/dark switch for the deep-orange neumorphic theme.
+ * Default is the signature warm cream light theme;
  * the choice persists in localStorage ("mr-theme").
  */
 export function ThemeToggle({ className = "" }: { className?: string }) {

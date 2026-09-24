@@ -5,9 +5,9 @@ import { person } from "@/lib/portfolio-data";
 import { playSound } from "@/lib/sound";
 
 export function MobileHeader({ onOpenMenu }: { onOpenMenu: () => void }) {
-  /* Gold scroll-progress seam — the mobile twin of the desktop right
-     rail's progress bar. Transform-only (scaleX) so it never triggers
-     layout work while scrolling. */
+  /* Deep-orange scroll-progress seam — the mobile twin of the desktop
+     right rail's progress bar. Transform-only (scaleX) so it never
+     triggers layout work while scrolling. */
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, {
     stiffness: 120,
@@ -20,7 +20,7 @@ export function MobileHeader({ onOpenMenu }: { onOpenMenu: () => void }) {
       initial={{ y: -60, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="glass-nav fixed inset-x-0 top-0 z-40 flex items-center justify-between border-b border-border px-5 py-3 md:hidden"
+      className="glass-nav fixed inset-x-0 top-0 z-40 flex items-center justify-between px-5 py-3 md:hidden"
       aria-label="Mobile navigation"
     >
       <button
@@ -53,7 +53,7 @@ export function MobileHeader({ onOpenMenu }: { onOpenMenu: () => void }) {
       <motion.div
         aria-hidden="true"
         style={{ scaleX: progress }}
-        className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-gradient-to-r from-[#ab47bc] via-[#c26bdc] to-[#e040fb]"
+        className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-gradient-to-r from-[#f4511e] via-[#ff7043] to-[#ff9800]"
       />
     </motion.header>
   );

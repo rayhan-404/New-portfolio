@@ -82,19 +82,22 @@ function buildNotchPath(w: number, h: number, cy: number, g: NotchGeometry): str
 }
 
 /**
- * SidebarNotchNav — full-height WHITE frosted-glass navbar.
+ * SidebarNotchNav — full-height neumorphic + material navbar.
  *
- * • White glass shell (blur + saturate) with rounded right corners and
- *   a warm directional depth shadow cast onto the content.
+ * • Solid neu shell (same recipe as the site's raised cards: bg2 tone,
+ *   dual light/dark depth shadows, warm material elevation cast onto
+ *   the content) with rounded right corners.
  * • Background notch: the surface is clipped with a tangent-continuous
  *   S-curve bite whose center glides to the active section on a spring.
  *   The path is rebuilt EVERY FRAME and written straight to the DOM —
  *   no dependence on CSS `path()` interpolation, so the glide is
  *   butter-smooth and retargets instantly in every browser.
- * • Instant response: tapping a destination pins the notch target
- *   immediately (no waiting for the scroll-spy to catch up mid-scroll);
- *   the pin releases once the spy confirms, or after a short timeout.
- * • Vertical category labels (bottom-to-top) — warm ink, brand-red
+ * • Active item sits on a raised neumorphic pill (a card on the rail);
+ *   hover lays a material state-layer tint. Instant response: tapping a
+ *   destination pins the notch target immediately (no waiting for the
+ *   scroll-spy to catch up mid-scroll); the pin releases once the spy
+ *   confirms, or after a short timeout.
+ * • Vertical category labels (bottom-to-top) — warm ink, deep orange
  *   when active. Measured via layout effects + ResizeObserver +
  *   font-ready. Actions: sound toggle. Visible on mobile (54px)
  *   through desktop (74px).
@@ -252,18 +255,19 @@ export function SidebarNotchNav({
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
       className="fixed inset-y-0 left-0 z-30 flex w-[54px] shrink-0 select-none flex-col items-center py-4 sm:w-[62px] md:w-[74px]"
     >
-      {/* Depth shadow twin — kept unclipped so the cast shadow survives the notch */}
+      {/* Depth shadow twin — kept unclipped so the cast shadow survives
+          the notch. Two layers: wide material elevation + tight contact. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-r-[16px] shadow-[22px_0_54px_-30px_rgba(82,45,110,0.5)] sm:rounded-r-[18px] md:rounded-r-[22px]"
+        className="pointer-events-none absolute inset-0 rounded-r-[16px] shadow-[22px_0_54px_-30px_rgba(97,49,24,0.5),8px_0_22px_-16px_rgba(97,49,24,0.28)] sm:rounded-r-[18px] md:rounded-r-[22px]"
       />
 
-      {/* White glass surface — the background bites in through the notch clip.
-          clipPath is painted imperatively every animation frame. */}
+      {/* Neumorphic rail surface — the background bites in through the
+          notch clip. clipPath is painted imperatively every frame. */}
       <div
         ref={surfaceRef}
         aria-hidden="true"
-        className="glass-rail-white pointer-events-none absolute inset-0 rounded-r-[16px] sm:rounded-r-[18px] md:rounded-r-[22px]"
+        className="glass-rail-neu pointer-events-none absolute inset-0 rounded-r-[16px] sm:rounded-r-[18px] md:rounded-r-[22px]"
         style={{ borderRight: "1px solid var(--nl)" }}
       />
 
@@ -273,7 +277,7 @@ export function SidebarNotchNav({
       <span
         ref={dotRef}
         aria-hidden="true"
-        className="pointer-events-none absolute z-[2] h-[7px] w-[7px] rounded-full bg-primary shadow-[0_1px_6px_rgba(156,39,176,0.55)]"
+        className="pointer-events-none absolute z-[2] h-[7px] w-[7px] rounded-full bg-primary shadow-[0_1px_6px_rgba(230,74,25,0.55)]"
         style={{
           right: dims ? Math.max(5, notchGeometryFor(dims.w).R / 2 - 3.5) : 9,
           top: 0,
@@ -287,7 +291,7 @@ export function SidebarNotchNav({
       <motion.div
         aria-hidden="true"
         style={{ scaleX: progress }}
-        className="absolute inset-x-0 top-0 z-[3] h-[2px] origin-left bg-gradient-to-r from-[#ab47bc] via-[#c26bdc] to-[#e040fb]"
+        className="absolute inset-x-0 top-0 z-[3] h-[2px] origin-left bg-gradient-to-r from-[#f4511e] via-[#ff7043] to-[#ff9800]"
       />
 
       {/* Top hairline ornament */}
@@ -315,8 +319,19 @@ export function SidebarNotchNav({
               }}
               aria-current={idx === activeIndex ? "page" : undefined}
               title={cat.label}
-              className="group relative z-[2] flex w-full cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent px-0 py-2.5 outline-none focus-visible:ring-1 focus-visible:ring-primary/35"
+              className="group relative z-[2] flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl border-0 bg-transparent px-0 py-2.5 outline-none transition-colors duration-300 focus-visible:ring-1 focus-visible:ring-primary/35 hover:bg-primary/[0.06]"
             >
+              {/* Neumorphic raised pill — the active item reads as one of
+                  the site's cards sitting on the rail (material selected
+                  state: raised surface + dual shadow + light top edge) */}
+              <span
+                aria-hidden="true"
+                className={`pointer-events-none absolute inset-y-[4px] left-[6px] right-[6px] rounded-2xl border border-[var(--nl)] bg-[var(--bg)] shadow-[var(--shadow-neu-sm)] transition-all duration-300 ease-out ${
+                  isActive
+                    ? "scale-100 opacity-100"
+                    : "scale-75 opacity-0"
+                }`}
+              />
               {/* Vertical Text Label — Tailwind v4 translate/scale compose
                   with the standalone `rotate` property (no transform clash) */}
               <span
@@ -342,7 +357,7 @@ export function SidebarNotchNav({
           aria-label={soundOn ? "Mute sounds" : "Unmute sounds"}
           aria-pressed={soundOn}
           onClick={toggle}
-          className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-muted-foreground shadow-[var(--shadow-neu-sm)] transition-all duration-300 hover:text-primary active:scale-90"
+          className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-[var(--nl)] bg-[var(--bg)] text-muted-foreground shadow-[var(--shadow-neu-sm)] transition-all duration-300 hover:text-primary active:scale-90 active:shadow-[var(--shadow-neu-in)]"
         >
           {soundOn ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
         </button>

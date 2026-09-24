@@ -4,11 +4,10 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
-   M RAYHAN — PURPLE NEUMORPHIC GLASS
-   Faithful port of the user-provided reference design:
-   soft Material-purple neumorphism on lavender (light) /
-   deep purple-black (dark), Syne + Nunito type, dual-source
-   shadows, primary→accent gradient details.
+   M RAYHAN — DEEP ORANGE NEUMORPHIC
+   The reference's neumorphic system re-inked in Material Deep
+   Orange: warm cream (light) / deep ember-brown (dark), Syne +
+   Nunito type, dual-source shadows, primary→accent gradients.
    ============================================================ */
 
 @theme inline {
@@ -46,32 +45,32 @@
   --color-apple-orange: var(--apple-orange);
   --color-apple-rose: var(--apple-rose);
 
-  /* Brand accents — now purple (token names kept so the whole
+  /* Brand accents — now deep orange (token names kept so the whole
      component tree reskins without class renames) */
   --color-gold: var(--gold);
   --color-gold-bright: var(--gold-bright);
   --color-gold-deep: var(--gold-deep);
 }
 
-/* ── LIGHT — soft lavender neumorphic (the reference's signature) ── */
+/* ── LIGHT — warm cream neumorphic (deep orange's soft side) ── */
 :root {
   --radius: 1rem;
 
-  /* Reference palette */
-  --bg: #f3eefa;
-  --bg2: #ede5f7;
-  --bg3: #e4d8f0;
+  /* Deep-orange palette */
+  --bg: #f7eee3;
+  --bg2: #f1e5d4;
+  --bg3: #ead9c4;
   --nl: #ffffff;
-  --nd: #cdbfe0;
-  --surface: rgba(243, 238, 250, 0.88);
-  --text: #1c0030;
-  --text2: #6d4c80;
-  --text3: #a07cb8;
-  --code-bg: #1a0a2e;
+  --nd: #dcc4a9;
+  --surface: rgba(247, 238, 227, 0.88);
+  --text: #2f1407;
+  --text2: #82573a;
+  --text3: #b18a67;
+  --code-bg: #2a1208;
 
-  --primary-ref: #9c27b0;
-  --primary2-ref: #ab47bc;
-  --accent-ref: #e040fb;
+  --primary-ref: #e64a19;
+  --primary2-ref: #f4511e;
+  --accent-ref: #ff9800;
   --success-ref: #4caf50;
   --warn-ref: #ff9800;
   --info-ref: #2196f3;
@@ -98,14 +97,14 @@
   --accent: var(--bg3);
   --accent-foreground: var(--text);
   --destructive: #f44336;
-  --border: rgba(156, 39, 176, 0.16);
-  --input: rgba(156, 39, 176, 0.16);
-  --ring: rgba(156, 39, 176, 0.45);
+  --border: rgba(230, 74, 25, 0.16);
+  --input: rgba(230, 74, 25, 0.16);
+  --ring: rgba(230, 74, 25, 0.45);
 
-  /* Brand accent remaps (text-gold etc. stay purple in both themes) */
-  --gold: #8e24aa;
-  --gold-bright: #ab47bc;
-  --gold-deep: #7b1fa2;
+  /* Brand accent remaps (text-gold etc. carry deep orange in both themes) */
+  --gold: #d84315;
+  --gold-bright: #f4511e;
+  --gold-deep: #bf360c;
 
   /* Apple system accents — live demos */
   --apple-green: #30d158;
@@ -113,27 +112,27 @@
   --apple-orange: #ff9f0a;
   --apple-rose: #ff375f;
 
-  /* Portrait blend — melts photos into the lavender field */
+  /* Portrait blend — melts photos into the cream field */
   --img-vignette: linear-gradient(
     to top,
-    rgba(237, 229, 247, 0.92) 2%,
-    rgba(237, 229, 247, 0.45) 28%,
-    rgba(237, 229, 247, 0) 58%
+    rgba(241, 229, 212, 0.92) 2%,
+    rgba(241, 229, 212, 0.45) 28%,
+    rgba(241, 229, 212, 0) 58%
   );
 }
 
-/* ── DARK — deep purple-black neumorphic ── */
+/* ── DARK — deep ember-brown neumorphic ── */
 .dark {
-  --bg: #120820;
-  --bg2: #1c1130;
-  --bg3: #261640;
-  --nl: #2d1f45;
-  --nd: #0a0414;
-  --surface: rgba(18, 8, 32, 0.88);
-  --text: #f0e6ff;
-  --text2: #c9a8f0;
-  --text3: #8a6aaa;
-  --code-bg: #0d0418;
+  --bg: #1b0e05;
+  --bg2: #291710;
+  --bg3: #3a2214;
+  --nl: #3f2716;
+  --nd: #0f0703;
+  --surface: rgba(27, 14, 5, 0.88);
+  --text: #fbefe4;
+  --text2: #e6b995;
+  --text3: #b08a6c;
+  --code-bg: #120802;
 
   --shadow-neu: 6px 6px 14px var(--nd), -6px -6px 14px var(--nl);
   --shadow-neu-sm: 4px 4px 10px var(--nd), -4px -4px 10px var(--nl);
@@ -146,8 +145,8 @@
   --card-foreground: var(--text);
   --popover: var(--bg2);
   --popover-foreground: var(--text);
-  --primary: #b64fc8;
-  --primary-foreground: #ffffff;
+  --primary: #ff7043;
+  --primary-foreground: #2b1206;
   --secondary: var(--bg2);
   --secondary-foreground: var(--text);
   --muted: var(--bg2);
@@ -155,13 +154,13 @@
   --accent: var(--bg3);
   --accent-foreground: var(--text);
   --destructive: #f44336;
-  --border: rgba(156, 39, 176, 0.24);
-  --input: rgba(156, 39, 176, 0.24);
-  --ring: rgba(224, 64, 251, 0.5);
+  --border: rgba(230, 74, 25, 0.24);
+  --input: rgba(230, 74, 25, 0.24);
+  --ring: rgba(255, 112, 67, 0.5);
 
-  --gold: #cf8df0;
-  --gold-bright: #e040fb;
-  --gold-deep: #ab47bc;
+  --gold: #ffb298;
+  --gold-bright: #ff8a50;
+  --gold-deep: #f4511e;
 
   --apple-green: #30d158;
   --apple-mint: #66d4cf;
@@ -170,9 +169,9 @@
 
   --img-vignette: linear-gradient(
     to top,
-    rgba(18, 8, 32, 0.92) 2%,
-    rgba(18, 8, 32, 0.45) 28%,
-    rgba(18, 8, 32, 0) 58%
+    rgba(27, 14, 5, 0.92) 2%,
+    rgba(27, 14, 5, 0.45) 28%,
+    rgba(27, 14, 5, 0) 58%
   );
 }
 
@@ -207,7 +206,7 @@
   }
 
   ::selection {
-    background: rgba(156, 39, 176, 0.24);
+    background: rgba(230, 74, 25, 0.24);
     color: var(--text);
   }
 
@@ -243,7 +242,7 @@
 
 /* ============================================================
    AMBIENT BACKGROUND — flat neumorphic field + the reference's
-   two fixed radial blobs (primary top-right, accent bottom-left)
+   two fixed radial blobs (deep orange top-right, amber bottom-left)
    ============================================================ */
 
 .app-background {
@@ -263,7 +262,7 @@
   height: 600px;
   background: radial-gradient(
     circle,
-    rgba(156, 39, 176, 0.09) 0%,
+    rgba(230, 74, 25, 0.09) 0%,
     transparent 70%
   );
   border-radius: 50%;
@@ -279,7 +278,7 @@
   height: 520px;
   background: radial-gradient(
     circle,
-    rgba(224, 64, 251, 0.07) 0%,
+    rgba(255, 152, 0, 0.08) 0%,
     transparent 70%
   );
   border-radius: 50%;
@@ -335,12 +334,10 @@
   box-shadow: var(--shadow-neu-lg);
 }
 
-/* Frosted rail — the fixed side bars keep a touch of translucency
-   so the ambient blobs breathe through the frost */
-@utility glass-rail-white {
-  background: var(--surface);
-  -webkit-backdrop-filter: blur(28px) saturate(160%);
-  backdrop-filter: blur(28px) saturate(160%);
+/* Raised neumorphic rail — full-height navigation surfaces use the
+   card recipe: solid bg2 tone, depth carried by the twin shadows */
+@utility glass-rail-neu {
+  background: var(--bg2);
 }
 
 /* Hide scrollbars while keeping scroll (slim rails) */
@@ -352,11 +349,9 @@
   display: none;
 }
 
-/* Floating navigation bar */
+/* Floating navigation bar — solid neumorphic bar (mobile header) */
 @utility glass-nav {
-  background: var(--surface);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-  backdrop-filter: blur(24px) saturate(160%);
+  background: var(--bg2);
   box-shadow: var(--shadow-neu-sm);
 }
 
@@ -371,7 +366,7 @@
 .glass-input:focus-visible {
   box-shadow:
     var(--shadow-neu-in),
-    0 0 0 2px rgba(156, 39, 176, 0.3);
+    0 0 0 2px rgba(230, 74, 25, 0.3);
 }
 
 /* Small pill chips */
@@ -380,17 +375,17 @@
   box-shadow: var(--shadow-neu-sm);
 }
 
-/* Purple-tinted emphasized panel — highlighted feature cards */
+/* Deep-orange-tinted emphasized panel — highlighted feature cards */
 @utility glass-ember {
   background: linear-gradient(
       135deg,
-      rgba(156, 39, 176, 0.07),
-      rgba(224, 64, 251, 0.05)
+      rgba(230, 74, 25, 0.07),
+      rgba(255, 152, 0, 0.05)
     ),
     var(--bg);
   box-shadow:
     var(--shadow-neu),
-    inset 0 0 0 1.5px rgba(156, 39, 176, 0.22);
+    inset 0 0 0 1.5px rgba(230, 74, 25, 0.22);
 }
 
 /* Hairline divider between rows */
@@ -399,17 +394,17 @@
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(156, 39, 176, 0.28),
+    rgba(230, 74, 25, 0.28),
     transparent
   );
 }
 
-/* Primary action — the reference's .btn-primary (purple, glowing) */
+/* Primary action — deep orange, glowing (reference .btn-primary) */
 @utility btn-light {
   background: var(--primary);
-  color: #ffffff;
+  color: var(--primary-foreground);
   border: none;
-  box-shadow: 0 4px 16px rgba(156, 39, 176, 0.35);
+  box-shadow: 0 4px 16px rgba(230, 74, 25, 0.35);
   transition:
     transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.25s ease,
@@ -417,14 +412,14 @@
 }
 .btn-light:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(156, 39, 176, 0.45);
+  box-shadow: 0 8px 22px rgba(230, 74, 25, 0.45);
   filter: brightness(1.05);
 }
 .btn-light:active {
   transform: scale(0.97);
 }
 
-/* Purple gradient text — name dots, highlights */
+/* Deep orange gradient text — name dots, highlights */
 @utility text-gold-gradient {
   background: linear-gradient(100deg, var(--gold-bright) 0%, var(--accent) 100%);
   -webkit-background-clip: text;
@@ -435,14 +430,14 @@
 /* Soft readable glow for display type */
 @utility text-glow {
   text-shadow:
-    0 1px 16px rgba(156, 39, 176, 0.22),
-    0 1px 3px rgba(28, 0, 48, 0.12);
+    0 1px 16px rgba(230, 74, 25, 0.22),
+    0 1px 3px rgba(47, 20, 7, 0.12);
 }
 
 /* Big outlined display text */
 @utility text-outline {
   color: transparent;
-  -webkit-text-stroke: 1px rgba(156, 39, 176, 0.3);
+  -webkit-text-stroke: 1px rgba(230, 74, 25, 0.3);
 }
 
 /* ── Neumorphic helpers (reference component recipes) ── */
@@ -661,7 +656,7 @@
 
 /* ============================================================
    JOURNEY TIMELINE CARDS — neumorphic re-expression of the
-   timeline card recipe (raised card, lift on hover, purple
+   timeline card recipe (raised card, lift on hover, deep-orange
    ring for the "current" chapter).
    ============================================================ */
 
@@ -677,16 +672,16 @@
   box-shadow: var(--shadow-neu-lg);
 }
 
-/* "Currently here" — purple focus ring */
+/* "Currently here" — deep orange focus ring */
 .journey-card--current {
   box-shadow:
     var(--shadow-neu),
-    inset 0 0 0 2px rgba(156, 39, 176, 0.4);
+    inset 0 0 0 2px rgba(230, 74, 25, 0.4);
 }
 .journey-card--current:hover {
   box-shadow:
     var(--shadow-neu-lg),
-    inset 0 0 0 2px rgba(156, 39, 176, 0.4);
+    inset 0 0 0 2px rgba(230, 74, 25, 0.4);
 }
 
 /* Pulsing dot — "CURRENTLY HERE" badge */
@@ -709,4 +704,4 @@
   }
 }
 
-/* recompile nudge t48 — purple neumorphic reskin (reference port) */
+/* recompile nudge t49 — deep orange main color + neumorphic navbar */

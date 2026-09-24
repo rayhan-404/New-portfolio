@@ -111,7 +111,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#f3eefa",
+  themeColor: "#f7eee3",
 };
 
 const jsonLd = {
@@ -138,7 +138,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Theme bootstrap — runs before paint (default: light lavender) */}
+        {/* Theme bootstrap — runs before paint (default: light cream) */}
         <script
           dangerouslySetInnerHTML={{
             __html: `try{if(localStorage.getItem('mr-theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}`,

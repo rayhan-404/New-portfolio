@@ -80,7 +80,7 @@ export function ProjectsSection() {
                 {filter === f.id && (
                   <motion.span
                     layoutId="project-filter-pill"
-                    className="absolute inset-0 rounded-full bg-primary shadow-[0_6px_18px_-6px_rgba(156,39,176,0.55)]"
+                    className="absolute inset-0 rounded-full bg-primary shadow-[0_6px_18px_-6px_rgba(230,74,25,0.55)]"
                     transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
                   />
                 )}
@@ -108,9 +108,9 @@ export function ProjectsSection() {
                   className="glass neu-decor group relative flex h-full w-full flex-col overflow-hidden rounded-3xl p-6 text-left transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[var(--shadow-neu-lg)] sm:p-7"
                   aria-label={`Open details for ${p.title}`}
                 >
-                  {/* purple aura on hover */}
+                  {/* deep-orange aura on hover */}
                   <div
-                    className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[radial-gradient(circle,rgba(224,64,251,0.22),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-700 group-hover:opacity-100"
+                    className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[radial-gradient(circle,rgba(255,152,0,0.22),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-700 group-hover:opacity-100"
                     aria-hidden="true"
                   />
                   {/* index number */}

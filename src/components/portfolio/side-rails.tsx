@@ -54,9 +54,9 @@ function RailDivider() {
 }
 
 /**
- * RIGHT RAIL — full-height white frosted-glass utility sidebar,
- * mirroring the white left navbar (rounded left corners, warm ink,
- * gold scroll-progress seam on the inner edge).
+ * RIGHT RAIL — full-height neumorphic utility sidebar,
+ * mirroring the neu left navbar (rounded left corners, warm ink,
+ * deep-orange scroll-progress seam on the inner edge).
  * Availability pulse → vertical social links → brand wordmark →
  * "start a project" CTA. (Primary navigation lives in the left rail.)
  */
@@ -80,13 +80,13 @@ export function SideRailRight() {
       {/* Depth shadow twin — cast onto the content side */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-l-[22px] shadow-[-22px_0_54px_-30px_rgba(82,45,110,0.45)]"
+        className="pointer-events-none absolute inset-0 rounded-l-[22px] shadow-[-22px_0_54px_-30px_rgba(97,49,24,0.45),-8px_0_22px_-16px_rgba(97,49,24,0.25)]"
       />
 
-      {/* White glass surface */}
+      {/* Neumorphic rail surface */}
       <div
         aria-hidden="true"
-        className="glass-rail-white pointer-events-none absolute inset-0 rounded-l-[22px]"
+        className="glass-rail-neu pointer-events-none absolute inset-0 rounded-l-[22px]"
         style={{ borderLeft: "1px solid var(--nl)" }}
       />
 
@@ -97,7 +97,7 @@ export function SideRailRight() {
       >
         <motion.div
           style={{ scaleY: progress }}
-          className="h-full w-full origin-top bg-gradient-to-b from-[#ab47bc] via-[#c26bdc] to-[#e040fb]"
+          className="h-full w-full origin-top bg-gradient-to-b from-[#f4511e] via-[#ff7043] to-[#ff9800]"
         />
       </div>
 

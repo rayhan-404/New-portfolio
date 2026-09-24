@@ -48,7 +48,7 @@ export function ServicesSection() {
                 {/* hover aura */}
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute -left-20 -top-20 h-48 w-48 rounded-full bg-[radial-gradient(circle,rgba(224,64,251,0.18),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-700 group-hover:opacity-100"
+                  className="pointer-events-none absolute -left-20 -top-20 h-48 w-48 rounded-full bg-[radial-gradient(circle,rgba(255,152,0,0.18),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-700 group-hover:opacity-100"
                 />
                 <div className="flex items-start justify-between gap-4">
                   <span className="font-display text-4xl text-foreground/15 transition-colors duration-500 group-hover:text-gold/90">
