@@ -35,6 +35,10 @@ const BLACK = {
   fontWeight: 900,
 } as const;
 
+/* Education chapters wear the reference's edu-card blue (#4267B2 family,
+   exact ref values); life chapters stay on the deep-orange primary. */
+const EDU_ICONS = new Set(["shapes", "school", "book", "gradcap"]);
+
 /**
  * JourneySection — "My journey in the world"
  * Transparent field that melts into the site's own background: giant
@@ -120,6 +124,7 @@ export function JourneySection() {
           {journey.map((era, idx) => {
             const isLeft = idx % 2 === 0;
             const TitleIcon = TITLE_ICONS[era.icon];
+            const isEdu = EDU_ICONS.has(era.icon);
             return (
               <Reveal key={era.period}>
                 <article
@@ -144,22 +149,38 @@ export function JourneySection() {
                     {era.period}
                   </p>
 
-                  {/* Dot on the spine */}
+                  {/* Dot on the spine — blue for school chapters, primary for life */}
                   <span
                     aria-hidden="true"
-                    className={`absolute top-[9px] z-[4] h-3 w-3 rounded-full bg-primary shadow-[0_0_0_5px_rgba(230,74,25,0.14),0_0_25px_rgba(255,152,0,0.45)] max-md:left-[9px] ${
-                      isLeft ? "md:-right-[6px]" : "md:-left-[6px]"
-                    }`}
+                    className={`absolute top-[9px] z-[4] h-3 w-3 rounded-full max-md:left-[9px] ${
+                      isEdu
+                        ? "bg-[#4267B2] shadow-[0_0_0_5px_rgba(66,103,178,0.14),0_0_25px_rgba(66,103,178,0.45)]"
+                        : "bg-primary shadow-[0_0_0_5px_rgba(230,74,25,0.14),0_0_25px_rgba(255,152,0,0.45)]"
+                    } ${isLeft ? "md:-right-[6px]" : "md:-left-[6px]"}`}
                   />
 
                   {/* Card — the site's liquid-glass recipe, kept compact */}
                   <div
-                    className={`journey-card relative z-[2] w-full max-w-[470px] rounded-[22px] p-5 text-left sm:p-6 md:ml-auto ${
+                    className={`journey-card relative z-[2] w-full max-w-[470px] overflow-hidden rounded-[22px] p-5 text-left sm:p-6 md:ml-auto ${
                       era.current
                         ? "journey-card--current p-6 sm:p-7"
                         : ""
                     } ${isLeft ? "" : "md:ml-0"}`}
                   >
+                    {/* Education corner blobs — ref .edu-card::before/::after
+                        (blue gradient, 0.08 / 0.06 opacity, exact hues) */}
+                    {isEdu && (
+                      <>
+                        <span
+                          aria-hidden="true"
+                          className="pointer-events-none absolute -right-7 -top-7 h-[110px] w-[110px] rounded-full bg-[linear-gradient(135deg,#4267B2,#898F9C)] opacity-[0.08] blur-[2px]"
+                        />
+                        <span
+                          aria-hidden="true"
+                          className="pointer-events-none absolute -bottom-5 -left-5 h-[72px] w-[72px] rounded-full bg-[linear-gradient(135deg,#4267B2,#898F9C)] opacity-[0.06] blur-[2px]"
+                        />
+                      </>
+                    )}
                     {era.current && (
                       <div className="mb-4 inline-flex items-center gap-2.5 font-tag text-[9px] tracking-[0.22em] text-primary">
                         <span
@@ -181,13 +202,21 @@ export function JourneySection() {
                         <TitleIcon
                           aria-hidden="true"
                           strokeWidth={2.25}
-                          className="mr-2 inline-block h-[0.82em] w-[0.82em] align-[-0.08em]"
+                          className={`mr-2 inline-block h-[0.82em] w-[0.82em] align-[-0.08em] ${
+                            isEdu ? "text-[#4267B2]" : ""
+                          }`}
                         />
                       )}
                       {era.title}
                     </h2>
 
-                    <p className="mt-2 text-[15px] font-semibold text-foreground/85">
+                    {/* School name / sub-title — ref edu-school is #4267B2,
+                        experience places stay primary-toned */}
+                    <p
+                      className={`mt-2 text-[15px] font-semibold ${
+                        isEdu ? "text-[#4267B2]" : "text-foreground/85"
+                      }`}
+                    >
                       {era.place}
                     </p>
 
@@ -198,7 +227,13 @@ export function JourneySection() {
                     )}
 
                     {era.degree && (
-                      <div className="mt-4 border-l-2 border-primary/60 bg-primary/[0.06] px-3.5 py-2.5 font-mono text-[11px] leading-[1.5] text-foreground/90">
+                      <div
+                        className={`mt-4 border-l-2 px-3.5 py-2.5 font-mono text-[11px] leading-[1.5] text-foreground/90 ${
+                          isEdu
+                            ? "border-[#4267B2]/60 bg-[#4267B2]/[0.06]"
+                            : "border-primary/60 bg-primary/[0.06]"
+                        }`}
+                      >
                         {era.degree}
                       </div>
                     )}

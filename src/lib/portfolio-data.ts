@@ -241,6 +241,35 @@ export interface Project {
   accent: "green" | "mint" | "orange" | "rose";
 }
 
+/**
+ * Tech → dot color, exactly the reference CSS's `.lang-*` palette
+ * (GitHub-linguist hues: js #f7df1e, ts #3178c6, py #3572A5, go #00ADD8,
+ * rust #dea584, css #563d7c, html #e34c26, default #8b8b8b).
+ */
+export const TECH_LANG_COLORS: Record<string, string> = {
+  "Next.js 15": "#f7df1e",
+  "React 19": "#f7df1e",
+  React: "#f7df1e",
+  TypeScript: "#3178c6",
+  Prisma: "#3178c6",
+  "Monaco Editor": "#3178c6",
+  "Tailwind CSS": "#563d7c",
+  PostgreSQL: "#3572A5",
+  Docker: "#00ADD8",
+  Figma: "#dea584",
+  Recharts: "#f7df1e",
+  "Framer Motion": "#f7df1e",
+  "Radix UI": "#f7df1e",
+  "D3.js": "#f7df1e",
+  IndexedDB: "#f7df1e",
+  "Service Workers": "#f7df1e",
+  "HTML5 Canvas": "#e34c26",
+  WebSockets: "#8b8b8b",
+} as const;
+
+/** Fallback dot (ref .lang-default). */
+export const TECH_LANG_DEFAULT = "#8b8b8b";
+
 export const projects: Project[] = [
   {
     id: "pulseai",

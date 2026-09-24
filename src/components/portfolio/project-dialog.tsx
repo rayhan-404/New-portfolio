@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { Check, Copy, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
-import type { Project } from "@/lib/portfolio-data";
+import { TECH_LANG_COLORS, TECH_LANG_DEFAULT, type Project } from "@/lib/portfolio-data";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { playSound } from "@/lib/sound";
 
@@ -103,8 +103,14 @@ export function ProjectDialog({
             {project.tech.map((t) => (
               <span
                 key={t}
-                className="glass-chip font-tag rounded-full px-3 py-1.5 text-[9.5px] text-muted-foreground"
+                className="glass-chip font-tag inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[9.5px] text-muted-foreground"
               >
+                {/* linguist dot — reference .lang-* palette (exact) */}
+                <span
+                  aria-hidden="true"
+                  className="h-[7px] w-[7px] shrink-0 rounded-full"
+                  style={{ background: TECH_LANG_COLORS[t] ?? TECH_LANG_DEFAULT }}
+                />
                 {t}
               </span>
             ))}

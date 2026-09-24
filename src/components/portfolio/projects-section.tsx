@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { projects, type Project, type ProjectCategory } from "@/lib/portfolio-data";
+import { projects, TECH_LANG_COLORS, TECH_LANG_DEFAULT, type Project, type ProjectCategory } from "@/lib/portfolio-data";
 import { playSound } from "@/lib/sound";
 import { Reveal } from "./reveal";
 import { ProjectDialog } from "./project-dialog";
@@ -121,13 +121,19 @@ export function ProjectsSection() {
                     {p.id.slice(0, 2).toUpperCase()}
                   </span>
 
+                  {/* primary→accent underline on hover — ref .proj-card::after (exact recipe) */}
+                  <span
+                    aria-hidden="true"
+                    className="grad-underline pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-[3px] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  />
+
                   <div className="flex items-center justify-between gap-3">
                     <span className="flex min-w-0 flex-wrap items-center gap-2">
                       <span className="glass-chip font-tag shrink-0 rounded-full px-3 py-1 text-[9.5px] text-muted-foreground">
                         {p.tag}
                       </span>
                       {p.flagship && (
-                        <span className="font-tag shrink-0 rounded-full border border-gold/45 bg-gold/10 px-3 py-1 text-[9.5px] text-gold-bright">
+                        <span className="font-tag shrink-0 rounded-full border border-star/45 bg-star/10 px-3 py-1 text-[9.5px] text-star">
                           Featured
                         </span>
                       )}
@@ -152,8 +158,14 @@ export function ProjectsSection() {
                       {p.tech.slice(0, p.flagship ? 5 : 3).map((t) => (
                         <span
                           key={t}
-                          className="glass-chip font-tag rounded-full px-2.5 py-1 text-[9.5px] text-muted-foreground"
+                          className="glass-chip font-tag inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[9.5px] text-muted-foreground"
                         >
+                          {/* linguist dot — reference .lang-* palette (exact) */}
+                          <span
+                            aria-hidden="true"
+                            className="h-[7px] w-[7px] shrink-0 rounded-full"
+                            style={{ background: TECH_LANG_COLORS[t] ?? TECH_LANG_DEFAULT }}
+                          />
                           {t}
                         </span>
                       ))}
@@ -164,7 +176,8 @@ export function ProjectsSection() {
                           key={m}
                           className="inline-flex items-center gap-1.5 text-[11.5px] font-medium text-foreground/75"
                         >
-                          <span className="h-1 w-1 rounded-full bg-gold" aria-hidden="true" />
+                          {/* metric bullet — reference star yellow #f9a825 */}
+                          <span className="h-1 w-1 rounded-full bg-star" aria-hidden="true" />
                           {m}
                         </span>
                       ))}

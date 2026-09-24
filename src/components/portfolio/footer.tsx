@@ -5,6 +5,15 @@ import { person, socials } from "@/lib/portfolio-data";
 import { playSound } from "@/lib/sound";
 import { scrollToSection } from "./nav";
 
+/* Brand-colored dots before each social link — the reference's
+   brand-identity pattern (GitHub/X hues flip per theme for contrast). */
+const SOCIAL_DOT: Record<string, string> = {
+  GitHub: "var(--gh)",
+  LinkedIn: "#0A66C2",
+  "X / Twitter": "var(--x)",
+  Dribbble: "#EA4C89",
+};
+
 export function Footer() {
   const year = new Date().getFullYear();
 
@@ -30,8 +39,13 @@ export function Footer() {
                     href={s.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="font-tag text-[10px] text-muted-foreground transition-colors duration-300 hover:text-foreground"
+                    className="font-tag inline-flex items-center gap-2 text-[10px] text-muted-foreground transition-colors duration-300 hover:text-foreground"
                   >
+                    <span
+                      aria-hidden="true"
+                      className="h-[7px] w-[7px] shrink-0 rounded-full"
+                      style={{ background: SOCIAL_DOT[s.label] ?? "var(--primary)" }}
+                    />
                     {s.label}
                   </a>
                 </li>

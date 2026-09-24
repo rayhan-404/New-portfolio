@@ -4,10 +4,12 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
-   M RAYHAN — DEEP ORANGE NEUMORPHIC
+   M RAYHAN — DEEP ORANGE NEUMORPHIC + REF MULTI-COLOR SYSTEM
    The reference's neumorphic system re-inked in Material Deep
-   Orange: warm cream (light) / deep ember-brown (dark), Syne +
-   Nunito type, dual-source shadows, primary→accent gradients.
+   Orange (the main color), PLUS the reference's full multi-color
+   palette: the --mc-* Material pool, semantic success/warn/info
+   hues, star yellow, education blue, and contact brand gradients
+   — all at the reference's exact hex values.
    ============================================================ */
 
 @theme inline {
@@ -50,6 +52,26 @@
   --color-gold: var(--gold);
   --color-gold-bright: var(--gold-bright);
   --color-gold-deep: var(--gold-deep);
+
+  /* Reference multi-color system — Tailwind utilities
+     (text-success, bg-star, text-edu, bg-mc-teal, …) */
+  --color-success: var(--success);
+  --color-warn: var(--warn);
+  --color-info: var(--info);
+  --color-err: var(--err);
+  --color-star: var(--star);
+  --color-edu: var(--edu);
+  --color-edu-2: var(--edu-2);
+  --color-mc-purple: var(--mc-purple);
+  --color-mc-indigo: var(--mc-indigo);
+  --color-mc-teal: var(--mc-teal);
+  --color-mc-deep-orange: var(--mc-deep-orange);
+  --color-mc-pink: var(--mc-pink);
+  --color-mc-cyan: var(--mc-cyan);
+  --color-mc-amber: var(--mc-amber);
+  --color-mc-deep-purple: var(--mc-deep-purple);
+  --color-mc-green: var(--mc-green);
+  --color-mc-blue: var(--mc-blue);
 }
 
 /* ── LIGHT — warm cream neumorphic (deep orange's soft side) ── */
@@ -71,9 +93,49 @@
   --primary-ref: #e64a19;
   --primary2-ref: #f4511e;
   --accent-ref: #ff9800;
-  --success-ref: #4caf50;
-  --warn-ref: #ff9800;
-  --info-ref: #2196f3;
+
+  /* ── MULTI-COLOR SYSTEM — the reference's exact palette ──
+     One primary slot (deep orange, the site's main color) plus the
+     reference's full Material pool and its per-category colors:
+     semantic status hues, star yellow, education blue, contact brand
+     gradients. Theme-independent values, same in light & dark
+     (exactly how the reference declares them). */
+  --mc-purple: #9c27b0;
+  --mc-indigo: #3f51b5;
+  --mc-teal: #009688;
+  --mc-deep-orange: #ff5722;
+  --mc-pink: #e91e63;
+  --mc-cyan: #00bcd4;
+  --mc-amber: #ff9800;
+  --mc-deep-purple: #673ab7;
+  --mc-green: #4caf50;
+  --mc-blue: #2196f3;
+
+  /* Semantic status colors (ref exact) */
+  --success: #4caf50; /* availability / success (ref hero-badge, status dot) */
+  --warn: #ff9800; /* warnings (ref) */
+  --info: #2196f3; /* informational (ref) */
+  --err: #f44336; /* errors (ref login-error) */
+
+  /* GitHub star yellow — featured / metric bullets (ref proj-stars) */
+  --star: #f9a825;
+
+  /* Education — Facebook blue family (ref edu-card) */
+  --edu: #4267b2;
+  --edu-2: #898f9c;
+
+  /* Contact brand gradients (ref contact-btn email / whatsapp / facebook) */
+  --gmail-1: #ea4335;
+  --gmail-2: #fbbc05;
+  --wa-1: #25d366;
+  --wa-2: #128c7e;
+  --fb-1: #1877f2;
+  --fb-2: #4267b2;
+
+  /* Social brand dots — GitHub/X flip per theme for contrast
+     (LinkedIn #0a66c2 / Dribbble #ea4c89 read on both) */
+  --gh: #24292e;
+  --x: #18181b;
 
   /* Neumorphic dual shadows */
   --shadow-neu: 6px 6px 14px var(--nd), -6px -6px 14px var(--nl);
@@ -177,6 +239,10 @@
   --apple-mint: #66d4cf;
   --apple-orange: #ff9f0a;
   --apple-rose: #ff375f;
+
+  /* Social brand dots — light-on-dark flips for contrast */
+  --gh: #e6edf3;
+  --x: #f4f4f5;
 
   --img-vignette: linear-gradient(
     to top,
@@ -430,9 +496,10 @@
   transform: scale(0.97);
 }
 
-/* Deep orange gradient text — name dots, highlights */
+/* Deep orange gradient text — name dots, highlights.
+   Ref recipe: primary2 → accent (here: gold-bright → accent-ref #ff9800). */
 @utility text-gold-gradient {
-  background: linear-gradient(100deg, var(--gold-bright) 0%, var(--accent) 100%);
+  background: linear-gradient(100deg, var(--gold-bright) 0%, var(--accent-ref) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -459,9 +526,14 @@
   box-shadow: var(--shadow-neu-in);
 }
 
-/* Primary→accent gradient bar */
+/* Primary→accent gradient bar (accent = ref accent slot #ff9800) */
 @utility grad-fill {
-  background: linear-gradient(90deg, var(--primary), var(--accent));
+  background: linear-gradient(90deg, var(--primary), var(--accent-ref));
+}
+
+/* Card bottom underline that fades in on hover — ref .proj-card::after */
+@utility grad-underline {
+  background-image: linear-gradient(90deg, var(--primary), var(--accent-ref));
 }
 
 /* Raised icon tile — rounded-square neu container */
@@ -495,7 +567,7 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--accent-ref);
   opacity: 0.05;
   bottom: -18px;
   left: -18px;

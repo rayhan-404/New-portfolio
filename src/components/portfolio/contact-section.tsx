@@ -94,24 +94,32 @@ export function ContactSection() {
             <Reveal>
               <button
                 onClick={copyEmail}
-                className="glass neu-decor group flex w-full items-center gap-4 rounded-3xl p-5 text-left transition-all duration-500 hover:-translate-y-0.5 hover:shadow-[var(--shadow-neu-lg)]"
+                className="glass neu-decor group relative flex w-full items-center gap-4 overflow-hidden rounded-3xl p-5 text-left transition-all duration-500 hover:-translate-y-0.5 hover:shadow-[var(--shadow-neu-lg)]"
               >
-                <span className="glass-chip flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl">
-                  <Mail className="h-4.5 w-4.5 text-gold" />
+                {/* Gmail texture wash — ref .contact-btn.email::before (exact values) */}
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(234,67,53,0.05),rgba(234,67,53,0.02))]"
+                />
+                {/* Gmail gradient tile — ref .contact-btn.email .contact-icon (exact) */}
+                <span
+                  className="relative z-[1] flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#EA4335,#FBBC05)] text-white shadow-[0_4px_12px_rgba(234,67,53,0.3)]"
+                >
+                  <Mail className="h-4.5 w-4.5" />
                 </span>
-                <span className="min-w-0 flex-1">
+                <span className="relative z-[1] min-w-0 flex-1">
                   <span className="font-tag block text-[9.5px] text-muted-foreground">Email</span>
                   <span className="block truncate text-sm font-semibold">{person.email}</span>
                 </span>
-                <Copy className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-gold" />
+                <Copy className="relative z-[1] h-4 w-4 shrink-0 text-muted-foreground transition-colors duration-300 group-hover:text-[#EA4335]" />
               </button>
             </Reveal>
 
             <Reveal delay={0.06}>
               <div className="glass neu-decor grid grid-cols-1 gap-4 rounded-3xl p-5 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-                <ContactFact icon={Clock} label="Response" value="Within 24h" />
+                <ContactFact icon={Clock} label="Response" value="Within 24h" tone="info" />
                 <ContactFact icon={Globe} label="Location" value={person.location} />
-                <ContactFact icon={ArrowUpRight} label="Status" value="Open for work" />
+                <ContactFact icon={ArrowUpRight} label="Status" value="Open for work" tone="success" />
               </div>
             </Reveal>
 
@@ -287,19 +295,30 @@ function ContactFact({
   icon: Icon,
   label,
   value,
+  tone = "primary",
 }: {
   icon: typeof Clock;
   label: string;
   value: string;
+  /** Reference semantic colors: success green, info blue, primary deep orange. */
+  tone?: "primary" | "success" | "info";
 }) {
+  const toneCls =
+    tone === "success" ? "text-success" : tone === "info" ? "text-info" : "text-gold";
   return (
     <div className="flex items-center gap-3">
       <span className="glass-chip flex h-9 w-9 shrink-0 items-center justify-center rounded-xl">
-        <Icon className="h-4 w-4 text-gold" />
+        <Icon className={`h-4 w-4 ${toneCls}`} />
       </span>
       <div>
         <p className="font-tag text-[8.5px] text-muted-foreground">{label}</p>
-        <p className="text-[13px] font-semibold text-foreground">{value}</p>
+        <p
+          className={`text-[13px] font-semibold ${
+            tone === "success" ? "text-success" : "text-foreground"
+          }`}
+        >
+          {value}
+        </p>
       </div>
     </div>
   );
