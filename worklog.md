@@ -596,3 +596,21 @@ Stage Summary:
 - Version map: v29 = 9303465 (ember hero) · v30 = 5c6beae (hero-card variant) · v31 = 4834ba5 (Ember Spotlight) · v32 = 8ba6a8b (purple neumorphic reskin) · v33 = 480773f (deep orange + neu navbar) — restore: bash /home/z/backups/restore-version.sh <tag>
 - Note: MobileHeader/MenuOverlay components remain dormant (sidebar rail is the nav on every breakpoint); their utilities were still re-skinned for consistency.
 - Files: globals.css, layout.tsx, SidebarNotchNav.tsx, side-rails.tsx, mobile-header.tsx, hero/journey/projects/services/contact sections, theme-toggle.tsx (comments).
+
+---
+Task ID: 50 (restore round notch navigator — user: "navigator ta ke ager moto notch style koro… notch style koi?? ota ke ager moto round shape koro" + reference image of the original bite)
+Agent: Main agent
+Task: Bring back the signature ROUND notch (circular bite + floating dot) exactly as before, while keeping the navbar's neumorphic + material surface from Task 49. Also fix a corrupted dev-server CSS state discovered mid-verification.
+
+Work Log:
+- Diagnosis: Task 49's active pill had turned the navigator into a "button", and the bite (bg2 rail vs bg page) was nearly invisible on the cream theme — the round-notch identity was effectively gone. User's reference image: light rail, dark round bite, light dot in the center.
+- Removed the Task 49 raised pill entirely; nav items are plain labels again (hover = subtle material state layer, active = deep-orange label).
+- Restored the round notch as a first-class element: a per-frame-painted "notch well" div sits UNDER the clipped surface, revealing a radial disc through the bite — LIGHT theme: deep-ember disc (--notch-core #8a2a0c → --notch-mid #b03d14) = dark round bite on the cream rail, exactly like the reference; DARK theme: warm glowing orb (rgba(255,122,61,.55) → rgba(230,74,25,.22)). Disc radius 1.6R covers the S-curve fillets; the off-rail half is clipped by the div's own box. Dot recolored per theme via --notch-dot (light #ffffff / dark #ff8a50) with warm glow.
+- Server fix: mid-verification the page rendered a broken orange-gradient state; served CSS contained a Frankenstein mix (deep-orange component utilities but neither theme's token block — Turbopack chunk cache corruption, same class of issue as Task 48). Fix: kill next-server + postcss workers, rm -rf .next, cold restart → served CSS verified (f7eee3/1b0e05/glass-rail-neu/8a2a0c all present, glass-rail-white gone).
+- Verified (agent-browser): mobile 390×844 light — round ember bite + white dot at HOME, cream neu theme intact; JOURNEY nav-click → disc GLIDES to the tapped item (spring, pin); dark — glowing orb notch + orange dot, ember theme intact; desktop 1440×900 light — bite renders crisply in the 74px rail, hero/cards unaffected, overflowX=0. Browser errors: none; dev.log 200s; lint 0 problems.
+- COMMITTED (6f73a0f) + tagged v34; bundle + tarball backups queued in /home/z/backups.
+
+Stage Summary:
+- Navigator = the original round notch again: gliding bite + dot, now expressed in the deep-orange system (ember disc on cream / glow orb on ember-brown). Navbar surface stays neumorphic + material (solid bg2 rails, dual shadows, warm elevation, state-layer hover, neu sound tile).
+- Version map: v29 9303465 · v30 5c6beae · v31 4834ba5 · v32 8ba6a8b (purple) · v33 480773f (deep orange + pill nav) · v34 6f73a0f (round notch restored, current) — restore: bash /home/z/backups/restore-version.sh <tag>
+- Files: SidebarNotchNav.tsx (pill removed, notch well + theme-aware dot), globals.css (--notch-core/--notch-mid/--notch-dot tokens both themes).
