@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: "standalone",
   images: {
-    qualities: [75, 82, 88],
+    qualities: [75, 82, 88, 95],
   },
   devIndicators: false,
   typescript: {

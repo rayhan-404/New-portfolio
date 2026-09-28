@@ -786,3 +786,22 @@ Stage Summary:
 - The mobile hero is now a true cutout-on-ground composition: the portrait lives directly on the rotating hue family, with the accent halo + bokeh playing the lighting the photo's room used to play.
 - rembg toolchain (python3.13 + u2net_human_seg model) is cached on the machine for future re-cuts.
 - Tagged v62; touched hero-section and added the cutout webp asset.
+
+---
+Task ID: 63 (nav revert to quiet list + high-quality cutout master)
+Agent: Main agent
+Task: User two-point feedback on v62 — "nav bar e button gulo remove koro, ager moto koro" (the per-item raised button stack from v61 felt too heavy; go back to the earlier quiet nav) and "image er quality decrease hoise, high quality image use koro" (the 713x952 q88 cutout had no retina headroom and read soft/artifacted on phones).
+
+Work Log:
+- Traced the nav history to define "ager moto": v60 = quiet vertical text items with chrome on the active tile only (but that tile was inset — the original "gorto" complaint); v61 turned EVERY tile into a raised bordered button. Reconciled both user asks: reverted inactive items to v60's plain text (border-transparent, bg-transparent, shadow-none, hover = faint primary tint + neu-sm), while the single active tile KEEPS the v61 raised outset (hue-tinted hairline + shadow-neu) — quiet list, one raised tile, never a pressed-in pit. Doc comment updated; monogram + palette/sound controls untouched (identical pre-v61).
+- Rebuilt the cutout master for quality: took the pristine 713x952 RGBA rembg PNG, upscaled 2x with premultiplied-alpha Lanczos (first attempt multiplied RGB by raw 0-255 alpha and uint8-wrapped into rainbow noise — caught in screenshot verification, redone with alpha-normalized premultiply + unpremultiply), gentle unsharp on RGB only (radius 1.5 / 50% / threshold 2) to protect the alpha matte -> 1426x1904 WebP q95 alpha (242KB master; next/image serves sized variants).
+- Raised serve quality: next.config images.qualities [75,82,88] -> [75,82,88,95]; hero Image quality 88 -> 95, intrinsic dims updated to 1426x1904 (same aspect, zero layout shift).
+- Hit the stale next/image optimizer cache serving the broken rainbow variant even after rm -rf .next/cache/images; a cold restart with full .next rebuild cleared it (dev server also wedged mid-session — listening but never responding after repeated kills; killed the whole tree, cleaned .next, relaunched via .zscripts/dev.sh which is the sanctioned persistent bootstrap).
+- Browser verification exposed a REAL pre-existing nav bug the revert made visible: tapping a section landed 404px short (SlideSection scrolled to the wrapper top, but the inner <section id> starts 404px lower — its top margin/padding is trapped inside the wrapper's permanent will-change-transform containing block), so the spy band (38-45% viewport) stayed inside the tall hero and the tapped tile NEVER activated. Fixed minimally: land flush on the section element itself (rect measured before the reveal transform starts); removed the now-dead wrapper variable.
+- Verified with agent-browser 390x844: light (green draw) + dark (ember-night) — cutout crisp and sitting flush on the theme ground in both, no halo fringe; nav: tap Journey -> lands flush (jTop=0) and activates, tap Projects/Contact -> each activates, tap Home -> returns to 0 and activates; footer natural push intact; console clean; desktop 1440 regression clean (portrait card untouched — desktop still deferred); no horizontal overflow. bun run lint clean.
+
+Stage Summary:
+- Nav reads like "ager moto" again: quiet text destinations, one raised active tile that now reliably follows taps AND scroll (the v61 button-stack look retired without reintroducing the pit).
+- Hero portrait is a 2x retina-grade cutout served at q95 — the "quality decrease" is gone while the subject still sits directly on the rotating hue-family ground.
+- SlideSection flush-landing now targets the section, fixing the long-standing tapped-tile-never-activates quirk.
+- Tagged v63; touched nav-rail, hero-section, next.config, slide-section, and the cutout webp asset.

@@ -17,9 +17,10 @@ import { scrollToSection } from "./nav";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 /* m-rayhan-headshot-cutout.webp intrinsic size (rembg cutout of the
-   uploaded headshot — subject only, alpha edges) */
-const HEADSHOT_W = 713;
-const HEADSHOT_H = 952;
+   uploaded headshot, rebuilt at 2x from the pristine alpha master —
+   premultiplied Lanczos + gentle unsharp, q95) */
+const HEADSHOT_W = 1426;
+const HEADSHOT_H = 1904;
 
 /* ── Personal intro copy ─────────────────────────────────────── */
 
@@ -193,7 +194,7 @@ export function HeroSection() {
                   priority
                   loading="eager"
                   sizes="(max-width: 640px) 100vw, 560px"
-                  quality={88}
+                  quality={95}
                   className="relative h-auto w-full object-contain drop-shadow-[0_30px_42px_rgba(var(--primary-rgb)/0.3)]"
                 />
               </div>

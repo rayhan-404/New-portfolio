@@ -40,19 +40,22 @@ export function SlideSection({
   useEffect(() => {
     const onNavigate = (e: Event) => {
       if ((e as CustomEvent<string>).detail !== id) return;
-      const wrapper = ref.current;
       const el = document.getElementById(id);
-      if (!el || !wrapper) return;
+      if (!el) return;
 
       const rect = el.getBoundingClientRect();
       // Already comfortably on screen → don't replay the reveal.
       const alreadyInView =
         rect.top > -80 && rect.top < window.innerHeight * 0.4;
 
-      // Land flush: scroll so the wrapper's top = viewport top. The
-      // wrapper itself is never transformed, so this is the true
-      // static position of the section.
-      const y = wrapper.getBoundingClientRect().top + window.scrollY;
+      // Land flush: scroll so the SECTION's own top = viewport top.
+      // (Measured before the reveal transform starts, so the rect is
+      // the true static position. Using the outer wrapper here used
+      // to land short whenever the section's top margin/padding was
+      // trapped inside the wrapper's will-change containing block —
+      // the band stayed inside the previous section and the tapped
+      // nav tile never activated.)
+      const y = el.getBoundingClientRect().top + window.scrollY;
       window.scrollTo({ top: y, behavior: "instant" });
 
       if (reduce || alreadyInView) return;
