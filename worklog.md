@@ -839,3 +839,20 @@ Stage Summary:
 - The mobile hero now wears the user's own Photoroom cutout at full quality (lossless PNG master -> 2x q95 alpha webp), with the silhouette light system re-aligned to it.
 - Desktop keeps the approved v64 with-background melt composition.
 - Tagged v65; touched hero-section dims and the three cutout assets.
+
+---
+Task ID: 66 (user's Photoroom cutout — zero-quality-loss serve + cache-bust)
+Agent: Main agent
+Task: User furious that the hero still showed "sei ager image" — demanded their given image be set "without any quality reduce".
+
+Work Log:
+- Root-caused the complaint: the mobile cutout asset had kept the SAME filename (m-rayhan-headshot-cutout.webp) since v62 while its content was overwritten in v63, v64 AND v65 — the user's browser kept serving a stale cached variant of the old soft image under that URL no matter what the server held. (Server-side was verified correct — curl of the optimizer URL returned the v65 asset; the staleness was purely client-side.)
+- Built a provably lossless asset from the user's own Photoroom export: bbox crop +14px pad (983x1349 — trims fully-transparent margins only, framing identical to v65 so all tuned CSS geometry holds) -> LOSSLESS WebP (exact=True) -> automated pixel-diff assertion: max diff 0 across ALL pixels (visible and transparent) vs the source file. 916KB vs 1310KB for PNG.
+- First mask regeneration attempt saved the silhouette as flat grayscale ('L' webp) — CSS webkit masks read the ALPHA channel, so the mask was fully open and the accent tints washed the entire image box (face read purple). Diagnosed by diffing against the v65 mask (RGBA, shape in alpha, mean 159.9 / 0.54% partial tones); rebuilt mask-v2 as RGBA white + shaped alpha with blur 0.5@1x matched to v65's spread (mean 159.7 / 0.61%) -> face tint back to natural.
+- hero-section rewired: new src m-rayhan-cutout-lossless.webp (983x1349), `unoptimized` so next/image can NEVER re-encode or resample it (browser gets original bytes; sizes/quality props removed as meaningless), mask URL -> m-rayhan-cutout-mask-v2.webp, comment documents the cache-bust rule: never overwrite these assets in place.
+- Verification: sha256 of the HTTP-served file == local file (byte-identical); browser img shows currentSrc=m-rayhan-cutout-lossless.webp, naturalWidth 983 (proves no optimizer variant); network log shows direct /generated/ fetch, no /_next/image for it; mobile 390 light+dark screenshots — face natural skin tone under ember draw, hair matte crisp, waist dissolve + halo + bokeh intact; desktop 1440 melt-card regression clean; footer natural push intact (footerBottom 844 == viewport); console clean apart from pre-existing HMR/scroll-offset dev noise; lint 0 problems, tsc src clean.
+
+Stage Summary:
+- The hero now serves the user's own Photoroom cutout with ZERO quality reduction — lossless encode, pixel-diff-verified identical, delivered byte-for-byte unoptimized.
+- The recurring "old image" mystery is solved permanently: version-stamped filenames + a documented never-overwrite-in-place rule.
+- Tagged v66; touched hero-section and added m-rayhan-cutout-lossless.webp + m-rayhan-cutout-mask-v2.webp.

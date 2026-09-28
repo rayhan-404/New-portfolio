@@ -16,10 +16,13 @@ import { scrollToSection } from "./nav";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-/* m-rayhan-headshot-cutout.webp intrinsic size (user's Photoroom cutout
-   of the HD portrait, 2x premultiplied Lanczos + gentle unsharp, q95) */
-const HEADSHOT_W = 1964;
-const HEADSHOT_H = 2698;
+/* m-rayhan-cutout-lossless.webp intrinsic size — the user's own Photoroom
+   export, bbox-trimmed +14px pad, saved LOSSLESS (verified 100%
+   pixel-identical to the source) and served unoptimized, so no optimizer
+   ever re-encodes or resamples a single pixel. Filename is version-stamped:
+   never overwrite this asset in place — browsers cache the old bytes. */
+const HEADSHOT_W = 983;
+const HEADSHOT_H = 1349;
 
 /* ── Desktop card light map ─────────────────────────────────────
    The HD portrait's white lamps (upper-right double strip, left
@@ -208,14 +211,13 @@ export function HeroSection() {
                 }}
               >
                 <Image
-                  src="/generated/m-rayhan-headshot-cutout.webp"
+                  src="/generated/m-rayhan-cutout-lossless.webp"
                   alt="Portrait of M Rayhan"
                   width={HEADSHOT_W}
                   height={HEADSHOT_H}
                   priority
                   loading="eager"
-                  sizes="(max-width: 640px) 100vw, 560px"
-                  quality={95}
+                  unoptimized
                   className="relative h-auto w-full object-contain drop-shadow-[0_30px_42px_rgba(var(--primary-rgb)/0.3)]"
                 />
 
@@ -227,8 +229,8 @@ export function HeroSection() {
                   aria-hidden="true"
                   className="pointer-events-none absolute inset-0"
                   style={{
-                    WebkitMaskImage: "url(/generated/m-rayhan-cutout-mask.webp)",
-                    maskImage: "url(/generated/m-rayhan-cutout-mask.webp)",
+                    WebkitMaskImage: "url(/generated/m-rayhan-cutout-mask-v2.webp)",
+                    maskImage: "url(/generated/m-rayhan-cutout-mask-v2.webp)",
                     WebkitMaskSize: "100% 100%",
                     maskSize: "100% 100%",
                   }}
