@@ -74,6 +74,8 @@ interface Strike {
   /* the bolt's own origin in stage % — the flash radiates from here */
   flashX: number;
   flashY: number;
+  /* depth: far bolts recede into the backdrop — smaller, dimmer, softer */
+  far: boolean;
 }
 
 interface StrikeRanges {
@@ -85,7 +87,7 @@ interface StrikeRanges {
 }
 
 const MOBILE_STRIKE: StrikeRanges = { wMin: 30, wMax: 46, hMin: 40, hMax: 56, pad: 2 };
-const DESKTOP_STRIKE: StrikeRanges = { wMin: 18, wMax: 30, hMin: 22, hMax: 34, pad: 4 };
+const DESKTOP_STRIKE: StrikeRanges = { wMin: 22, wMax: 34, hMin: 26, hMax: 40, pad: 4 };
 
 const clampN = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
@@ -112,15 +114,16 @@ const toPath = (pts: Pt[]) =>
   `M${pts.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join("L")}`;
 
 /* one full strike for one stage: fresh geometry + a fresh landing spot
-   (geometry lives in a 100×150 unit box the placement scales — runs
-   client-side only, after the strike clock mounts, so SSR never sees it) */
-function genStrike(r: StrikeRanges): Strike {
+   on the requested side (geometry lives in a 100×150 unit box the
+   placement scales — runs client-side only, after the strike clock
+   mounts, so SSR never sees it) */
+function genStrike(r: StrikeRanges, side: "left" | "right" | "any"): Strike {
   const sx = 30 + Math.random() * 40; // origin across the box
   const ex = clampN(sx + (Math.random() - 0.5) * 46, 16, 84); // drift
   const mainPts = jagged(sx, 3, ex, 116 + Math.random() * 28, 52);
 
   const branches: BoltBranch[] = [];
-  const forks = 2 + Math.floor(Math.random() * 3);
+  const forks = 3 + Math.floor(Math.random() * 3); // 3–5 forks
   for (let i = 0; i < forks; i++) {
     const t = 0.14 + Math.random() * 0.48; // forks live in the upper ⅔
     const [px, py] = mainPts[Math.floor(t * (mainPts.length - 1))];
@@ -130,7 +133,7 @@ function genStrike(r: StrikeRanges): Strike {
     const by = clampN(py + Math.cos(ang) * len * 0.85, 20, 148);
     const bp = jagged(px, py, bx, by, len * 0.45);
     branches.push({ d: toPath(bp), depth: 0 });
-    if (Math.random() < 0.4) {
+    if (Math.random() < 0.5) {
       const [tx, ty] = bp[Math.floor(bp.length / 2)];
       const tang = ang + (Math.random() - 0.5) * 2.2;
       const tlen = len * (0.35 + Math.random() * 0.25);
@@ -149,13 +152,28 @@ function genStrike(r: StrikeRanges): Strike {
     }
   }
 
-  const width = r.wMin + Math.random() * (r.wMax - r.wMin);
-  const height = r.hMin + Math.random() * (r.hMax - r.hMin);
-  const left = r.pad + Math.random() * (100 - r.pad * 2 - width);
+  /* depth: near bolts dominate the sky; far bolts recede into the
+     backdrop — smaller, dimmer, softer (the render dims them further) */
+  const far = Math.random() < 0.45;
+  let width = r.wMin + Math.random() * (r.wMax - r.wMin);
+  let height = r.hMin + Math.random() * (r.hMax - r.hMin);
+  if (far) {
+    width *= 0.78;
+    height *= 0.78;
+  }
+  /* land on the requested side — bursts roam the whole sky — by placing
+     the bolt's own origin inside that zone */
+  const originTarget =
+    side === "left"
+      ? 6 + Math.random() * 26
+      : side === "right"
+        ? 68 + Math.random() * 26
+        : 12 + Math.random() * 76;
+  const left = clampN(originTarget - (sx / 100) * width, r.pad, 100 - r.pad - width);
   const flashX = left + (sx / 100) * width;
   const flashY = (3 / 150) * height;
 
-  return { main: toPath(mainPts), branches, left, width, height, flashX, flashY };
+  return { main: toPath(mainPts), branches, left, width, height, flashX, flashY, far };
 }
 
 /* real-lightning restrike signature: spike → micro-flicker decay →
@@ -182,14 +200,23 @@ function LightningBolt({ strike: s }: { strike: Strike }) {
         top: 0,
         width: `${s.width}%`,
         height: `${s.height}%`,
-        filter:
-          "drop-shadow(0 0 5px rgba(var(--accent-rgb)/0.9)) drop-shadow(0 0 18px rgba(var(--accent-rgb)/0.5))",
+        filter: s.far
+          ? "blur(1.4px) drop-shadow(0 0 4px rgba(var(--accent-rgb)/0.55)) drop-shadow(0 0 14px rgba(var(--accent-rgb)/0.3))"
+          : "drop-shadow(0 0 5px rgba(var(--accent-rgb)/0.9)) drop-shadow(0 0 18px rgba(var(--accent-rgb)/0.5))",
       }}
       initial={{ opacity: 0 }}
       animate={{ opacity: BOLT_OPACITY }}
-      transition={{ duration: STRIKE_MS, times: BOLT_TIMES, ease: "linear" }}
+      /* the in-cloud flash leads the channel by a beat — the sky lights
+         up before the bolt shows itself, like real lightning */
+      transition={{ duration: STRIKE_MS, times: BOLT_TIMES, ease: "linear", delay: 0.07 }}
     >
-      <g fill="none" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke">
+      <g
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        vectorEffect="non-scaling-stroke"
+        opacity={s.far ? 0.62 : 1}
+      >
         {/* wide accent haze — the bolt's atmosphere */}
         <g stroke="rgb(var(--accent-rgb))" style={{ opacity: 0.5, filter: "blur(6px)" }}>
           <motion.path
@@ -325,35 +352,52 @@ export function HeroSection() {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLElement>(null);
 
-  /* Thunder strike clock — first bolt arrives early so the effect
-     is discoverable, then the storm settles into an irregular
-     natural cadence (7–14s). Reduced motion = clear skies. */
+  /* Thunder strike clock — real storms burst: the first bolt arrives
+     within ~1s, then strikes chain 150–500ms apart (2–4 per burst, no
+     long delay between them), and the sky rests a few seconds before
+     the next burst rolls in. Reduced motion = clear skies. */
   const [strike, setStrike] = useState(0);
+  const chainRef = useRef({ remaining: 0 });
   useEffect(() => {
     if (reduce) return;
+    chainRef.current = { remaining: 1 + Math.floor(Math.random() * 3) };
     let alive = true;
     let t: number;
+    const gap = () => {
+      const c = chainRef.current;
+      if (c.remaining > 0) {
+        c.remaining--;
+        return 150 + Math.random() * 350;
+      }
+      c.remaining = 1 + Math.floor(Math.random() * 3);
+      return 3800 + Math.random() * 4200;
+    };
     const loop = (delay: number) => {
       t = window.setTimeout(() => {
         if (!alive) return;
         setStrike((s) => s + 1);
-        loop(7000 + Math.random() * 7000);
+        loop(gap());
       }, delay);
     };
-    loop(2600 + Math.random() * 2200);
+    loop(900 + Math.random() * 700);
     return () => {
       alive = false;
       clearTimeout(t);
     };
   }, [reduce]);
 
-  /* fresh bolt geometry + fresh landing spot for every strike — the
-     mobile and desktop stages each get their own draw (only one is
+  /* fresh bolt geometry + fresh landing spot for every strike — sides
+     rotate (left → right → anywhere) so bursts roam the whole sky, and
+     each bolt independently draws near or recedes into the backdrop.
+     The mobile and desktop stages each get their own draw (only one is
      ever visible); runs client-side only, never during SSR */
   const strikes = useMemo(
     () =>
       strike > 0
-        ? { m: genStrike(MOBILE_STRIKE), d: genStrike(DESKTOP_STRIKE) }
+        ? (() => {
+            const side = (["left", "right", "any"] as const)[strike % 3];
+            return { m: genStrike(MOBILE_STRIKE, side), d: genStrike(DESKTOP_STRIKE, side) };
+          })()
         : null,
     [strike]
   );
@@ -464,7 +508,7 @@ export function HeroSection() {
                     aria-hidden="true"
                     className="pointer-events-none absolute inset-0 z-0"
                     style={{
-                      background: `radial-gradient(58% 42% at ${strikes.m.flashX.toFixed(1)}% ${strikes.m.flashY.toFixed(1)}%, rgba(var(--accent-rgb)/0.5), rgba(var(--primary-rgb)/0.22) 55%, transparent 78%)`,
+                      background: `radial-gradient(${strikes.m.far ? "74% 54%" : "58% 42%"} at ${strikes.m.flashX.toFixed(1)}% ${strikes.m.flashY.toFixed(1)}%, rgba(var(--accent-rgb)/${strikes.m.far ? 0.3 : 0.5}), rgba(var(--primary-rgb)/${strikes.m.far ? 0.14 : 0.22}) 55%, transparent 78%)`,
                       mixBlendMode: "screen",
                     }}
                     initial={{ opacity: 0 }}
@@ -544,7 +588,7 @@ export function HeroSection() {
                     aria-hidden="true"
                     className="pointer-events-none absolute inset-0"
                     style={{
-                      background: `radial-gradient(48% 16% at 55% 13%, rgba(var(--accent-rgb)/0.55), transparent 72%), linear-gradient(to bottom ${strikes.m.flashX < 50 ? "right" : "left"}, rgba(var(--accent-rgb)/0.32), transparent 46%)`,
+                      background: `radial-gradient(48% 16% at 55% 13%, rgba(var(--accent-rgb)/${strikes.m.far ? 0.34 : 0.55}), transparent 72%), linear-gradient(to bottom ${strikes.m.flashX < 50 ? "right" : "left"}, rgba(var(--accent-rgb)/${strikes.m.far ? 0.2 : 0.32}), transparent 46%)`,
                       mixBlendMode: "screen",
                       WebkitMaskImage: "url(/generated/m-rayhan-cutout-mask-v2.webp)",
                       maskImage: "url(/generated/m-rayhan-cutout-mask-v2.webp)",
@@ -797,7 +841,7 @@ export function HeroSection() {
                         aria-hidden="true"
                         className="pointer-events-none absolute inset-0"
                         style={{
-                          background: `radial-gradient(52% 38% at ${strikes.d.flashX.toFixed(1)}% ${strikes.d.flashY.toFixed(1)}%, rgba(var(--accent-rgb)/0.55), rgba(var(--primary-rgb)/0.25) 55%, transparent 78%)`,
+                          background: `radial-gradient(${strikes.d.far ? "68% 50%" : "52% 38%"} at ${strikes.d.flashX.toFixed(1)}% ${strikes.d.flashY.toFixed(1)}%, rgba(var(--accent-rgb)/${strikes.d.far ? 0.34 : 0.55}), rgba(var(--primary-rgb)/${strikes.d.far ? 0.15 : 0.25}) 55%, transparent 78%)`,
                           mixBlendMode: "screen",
                         }}
                         initial={{ opacity: 0 }}
@@ -811,7 +855,7 @@ export function HeroSection() {
                         aria-hidden="true"
                         className="pointer-events-none absolute inset-0"
                         style={{
-                          background: `radial-gradient(30% 14% at 53% 32%, rgba(var(--accent-rgb)/0.6), transparent 74%), linear-gradient(to bottom ${strikes.d.flashX < 50 ? "right" : "left"}, rgba(var(--accent-rgb)/0.35), transparent 42%)`,
+                          background: `radial-gradient(30% 14% at 53% 32%, rgba(var(--accent-rgb)/${strikes.d.far ? 0.38 : 0.6}), transparent 74%), linear-gradient(to bottom ${strikes.d.flashX < 50 ? "right" : "left"}, rgba(var(--accent-rgb)/${strikes.d.far ? 0.22 : 0.35}), transparent 42%)`,
                           mixBlendMode: "screen",
                         }}
                         initial={{ opacity: 0 }}

@@ -908,3 +908,20 @@ Stage Summary:
 - The storm now behaves like weather: every strike is a newly generated fractal bolt in the drawn hue, at a new place and size, flashing the room and the face from its own origin with a real restrike signature.
 - No fixed positions remain anywhere in the thunder stack; flash and face layers follow the bolt.
 - Tagged v69; touched hero-section only.
+
+---
+Task ID: 70 (thunder v2 — storm bursts, depth, side roaming)
+Agent: Main agent
+Task: User wanted the storm even more realistic: real-thunder feel, bolts entering the picture's background from different sides, and strikes chaining a few hundred ms apart instead of one bolt every 7-14s.
+
+Work Log:
+- Strike clock rewritten as a burst engine (chainRef): first bolt now lands within 0.9-1.6s, then bursts of 2-4 strikes fire 150-500ms apart — no long delay inside a burst — and the sky rests 3.8-8s before the next burst rolls in. Verified live: 4 remounts at t=1.1/1.4/1.9/2.1s (gaps 300/500/200ms), then calm.
+- Depth system: each strike independently draws near (45% -> dominates the sky) or far (recedes into the backdrop: box scaled x0.78, stroke layer dimmed to 0.62 opacity, svg softened with 1.4px blur, glow drop-shadows reduced, flash radial widened 58->74% and dimmed 0.5->0.3, face reflection eased 0.55->0.34). Far bolts read as distant weather behind the scene; near bolts own the foreground.
+- Side roaming: strikes rotate left -> right -> anywhere (strike % 3), and genStrike now places the bolt's own ORIGIN inside the requested zone (left 6-32%, right 68-94%, any 12-88%) so the flash always radiates from the side the bolt actually lands on. Live burst roamed right -> center -> left -> center.
+- Realism extras: 3-5 forks per bolt (was 2-4), 50% twig chance (was 40%), and the in-cloud flash now LEADS the channel by 70ms (bolt svg transition delay) — the sky lights before the bolt shows itself, like real lightning. Desktop bolt box enlarged (22-34% wide x 26-40% tall) after the first desktop screenshot read too thin.
+- Verified with agent-browser freeze harness: mobile dark green draw — far bolt at the far edge (small, dim, atmospheric) vs near bolt beside the head (bright, multi-fork) showing clear depth separation; desktop dark pink draw — jagged forked bolt beside the CSE Student chip at 66.8% landing; console shows no new errors (4 stale entries from a mid-MultiEdit HMR parse state, dev.log clean), lint 0 problems, tsc src clean.
+
+Stage Summary:
+- The hero now has real storm behavior: rapid multi-strike bursts with no long delays, bolts roaming side to side, and a near/far depth mix that sends distant strikes back into the picture's background.
+- Cadence, depth, sides, fork density and the in-cloud lead flash are all data-driven constants in hero-section.tsx; reduced-motion still = clear skies.
+- Tagged v70; touched hero-section only.
