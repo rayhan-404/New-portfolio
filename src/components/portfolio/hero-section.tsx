@@ -16,31 +16,10 @@ import { scrollToSection } from "./nav";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-/* m-rayhan-headshot.webp intrinsic size (uploaded headshot, 4:5) */
-const HEADSHOT_W = 785;
-const HEADSHOT_H = 981;
-
-/* ── Accent light reflections ──────────────────────────────────
-   The headshot's own white lights (upper-right strips, left strip,
-   lower-right glow) re-lit in the drawn accent hue — soft `color`
-   grade unifies the scene, `screen` blooms sit exactly on the light
-   sources so they read as that hue's light reflecting in the room.
-   Everything rides the rotating --accent-rgb / --primary-rgb slots,
-   so every random hue re-lights the room for free. */
-const LIGHT_BLOOMS = [
-  "radial-gradient(38% 9% at 84% 15%, rgba(var(--accent-rgb)/0.5), transparent 72%)",
-  "radial-gradient(30% 8% at 90% 21.5%, rgba(var(--primary-rgb)/0.4), transparent 72%)",
-  "radial-gradient(18% 7% at 2% 33%, rgba(var(--accent-rgb)/0.4), transparent 75%)",
-  "radial-gradient(26% 9% at 97% 69%, rgba(var(--accent-rgb)/0.45), transparent 75%)",
-].join(", ");
-
-/* Ground-fusion wash — bridges the photo's edges into the section
-   ground (var(--bg)) so the mask melt is seamless in every theme
-   and every hue. Top/bottom heavier than the sides. */
-const GROUND_WASH = [
-  "linear-gradient(to bottom, color-mix(in srgb, var(--bg) 96%, transparent) 0%, transparent 26%, transparent 56%, color-mix(in srgb, var(--bg) 58%, transparent) 82%, color-mix(in srgb, var(--bg) 96%, transparent) 99%)",
-  "linear-gradient(to right, color-mix(in srgb, var(--bg) 88%, transparent) 0%, transparent 17%, transparent 83%, color-mix(in srgb, var(--bg) 88%, transparent) 100%)",
-].join(", ");
+/* m-rayhan-headshot-cutout.webp intrinsic size (rembg cutout of the
+   uploaded headshot — subject only, alpha edges) */
+const HEADSHOT_W = 713;
+const HEADSHOT_H = 952;
 
 /* ── Personal intro copy ─────────────────────────────────────── */
 
@@ -142,10 +121,11 @@ export function HeroSection() {
           className="relative"
         >
           <div className="relative mx-auto w-full max-w-[560px]">
-            {/* warm halo behind the headshot */}
+            {/* warm halo behind the subject — the site's own light source
+                now that the photo environment is gone */}
             <div
               aria-hidden="true"
-              className="absolute left-1/2 top-[8%] h-[52%] w-[96%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(var(--accent-rgb)/0.2),transparent_66%)] blur-2xl"
+              className="absolute left-1/2 top-[16%] h-[52%] w-[100%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(var(--accent-rgb)/0.24),transparent_66%)] blur-2xl"
             />
 
             {/* "Hello.." — anchored to the column (not the scaled photo):
@@ -155,7 +135,7 @@ export function HeroSection() {
               initial={reduce ? false : { opacity: 0, x: -16, y: -8 }}
               animate={{ opacity: 1, x: 0, y: 0 }}
               transition={{ duration: 0.7, delay: 0.55, ease: EASE }}
-              className="text-glow absolute left-4 top-1 z-10 sm:left-8 sm:top-3"
+              className="text-glow absolute left-4 top-0 z-10 sm:left-8 sm:top-1"
             >
               <span className="font-fraunces block text-[3.5rem] font-semibold italic leading-[0.95] tracking-[-0.01em] text-foreground sm:text-[4rem]">
                 Hello<span className="text-gold-gradient">..</span>
@@ -188,88 +168,52 @@ export function HeroSection() {
               </motion.svg>
             </motion.span>
 
-            {/* The headshot — a real environmental photo now, so the
-                melt is a full four-edge job: nested alpha masks dissolve
-                the frame (horizontal left/right on the outer div, top +
-                bottom dissolve on the inner), and a ground-fusion wash
-                paints the section's own color back over the fading
-                edges so the photo melts seamlessly into the section —
-                no ghost rectangle, in any theme, in any drawn hue.
-                Accent light layers ride INSIDE the masked box so they
-                stay glued to the photo's own lights. */}
-            <div className="relative">
+            {/* The headshot as a true cutout — background removed, so the
+                subject sits directly on the site's own hue-family ground.
+                Only one mask remains: the bottom dissolve that melts the
+                waist crop into the section, everything else is the real
+                alpha silhouette. Accent halo + drifting bokeh behind the
+                subject now play the role the photo's lights played — the
+                site itself lights the room. */}
+            <div className="relative pt-20 sm:pt-24">
               <div
-                className="relative"
+                className="relative translate-x-[4.5%]"
                 style={{
                   WebkitMaskImage:
-                    "linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%)",
+                    "linear-gradient(to bottom, #000 0%, #000 70%, rgba(0,0,0,0.55) 83%, rgba(0,0,0,0.18) 93%, transparent 100%)",
                   maskImage:
-                    "linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%)",
+                    "linear-gradient(to bottom, #000 0%, #000 70%, rgba(0,0,0,0.55) 83%, rgba(0,0,0,0.18) 93%, transparent 100%)",
                 }}
               >
-                <div
-                  className="relative"
-                  style={{
-                    WebkitMaskImage:
-                      "linear-gradient(to bottom, transparent 0%, #000 9%, #000 68%, rgba(0,0,0,0.6) 80%, rgba(0,0,0,0.24) 91%, transparent 100%)",
-                    maskImage:
-                      "linear-gradient(to bottom, transparent 0%, #000 9%, #000 68%, rgba(0,0,0,0.6) 80%, rgba(0,0,0,0.24) 91%, transparent 100%)",
-                  }}
-                >
-                  <Image
-                    src="/generated/m-rayhan-headshot.webp"
-                    alt="Portrait of M Rayhan"
-                    width={HEADSHOT_W}
-                    height={HEADSHOT_H}
-                    priority
-                    loading="eager"
-                    sizes="(max-width: 640px) 100vw, 560px"
-                    quality={88}
-                    className="relative h-auto w-full object-contain drop-shadow-[0_26px_38px_rgba(var(--primary-rgb)/0.22)]"
-                  />
-
-                  {/* hue grade — the whole room breathes the accent */}
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute inset-0"
-                    style={{
-                      background: "rgba(var(--accent-rgb) / 0.16)",
-                      mixBlendMode: "color",
-                    }}
-                  />
-                  {/* re-lit lights — accent blooms exactly on the photo's
-                      white light sources, reading as reflected light */}
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute inset-0"
-                    style={{ background: LIGHT_BLOOMS, mixBlendMode: "screen" }}
-                  />
-                  {/* drifting accent bokeh — the reflection comes alive */}
-                  <span
-                    aria-hidden="true"
-                    className="orb-float absolute right-[13%] top-[13%] h-3.5 w-3.5 rounded-full bg-[rgba(var(--accent-rgb)/0.85)] blur-[5px]"
-                    style={{ mixBlendMode: "screen" }}
-                  />
-                  <span
-                    aria-hidden="true"
-                    className="orb-float-slow absolute left-[5%] top-[31%] h-2.5 w-2.5 rounded-full bg-[rgba(var(--primary-rgb)/0.8)] blur-[4px]"
-                    style={{ mixBlendMode: "screen", animationDelay: "-3s" }}
-                  />
-                  <span
-                    aria-hidden="true"
-                    className="orb-float absolute right-[5%] top-[67%] h-3 w-3 rounded-full bg-[rgba(var(--accent-rgb)/0.75)] blur-[4px]"
-                    style={{ mixBlendMode: "screen", animationDelay: "-6s" }}
-                  />
-                </div>
+                <Image
+                  src="/generated/m-rayhan-headshot-cutout.webp"
+                  alt="Portrait of M Rayhan"
+                  width={HEADSHOT_W}
+                  height={HEADSHOT_H}
+                  priority
+                  loading="eager"
+                  sizes="(max-width: 640px) 100vw, 560px"
+                  quality={88}
+                  className="relative h-auto w-full object-contain drop-shadow-[0_30px_42px_rgba(var(--primary-rgb)/0.3)]"
+                />
               </div>
 
-              {/* ground-fusion wash — the section's own color melts the
-                  photo edges flush; sits OUTSIDE the alpha masks so it
-                  bridges the exact layout box */}
-              <div
+              {/* accent rim sparks — bokeh drifting around the subject,
+                  reading as the drawn hue's light catching the scene */}
+              <span
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-                style={{ background: GROUND_WASH }}
+                className="orb-float absolute right-[8%] top-[12%] h-3.5 w-3.5 rounded-full bg-[rgba(var(--accent-rgb)/0.85)] blur-[5px]"
+                style={{ mixBlendMode: "screen" }}
+              />
+              <span
+                aria-hidden="true"
+                className="orb-float-slow absolute left-[6%] top-[24%] h-2.5 w-2.5 rounded-full bg-[rgba(var(--primary-rgb)/0.8)] blur-[4px]"
+                style={{ mixBlendMode: "screen", animationDelay: "-3s" }}
+              />
+              <span
+                aria-hidden="true"
+                className="orb-float absolute right-[16%] top-[42%] h-2 w-2 rounded-full bg-[rgba(var(--accent-rgb)/0.7)] blur-[3px]"
+                style={{ mixBlendMode: "screen", animationDelay: "-6s" }}
               />
             </div>
 
