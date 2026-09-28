@@ -140,7 +140,7 @@ export function RepoBrowser() {
           {[0, 1, 2].map((i) => (
             <div
               key={i}
-              className="glass neu-decor h-[168px] animate-pulse rounded-3xl p-6"
+              className="glass neu-decor h-[168px] animate-pulse rounded-2xl md:rounded-3xl p-6"
               aria-hidden="true"
             />
           ))}
@@ -149,7 +149,7 @@ export function RepoBrowser() {
 
       {/* error fallback */}
       {state.phase === "error" && (
-        <div className="glass neu-decor mt-6 flex flex-col items-start gap-3 rounded-3xl p-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="glass neu-decor mt-6 flex flex-col items-start gap-3 rounded-2xl md:rounded-3xl p-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-3">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border">
               <Github className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
@@ -208,7 +208,7 @@ export function RepoBrowser() {
                     setDialogOpen(true);
                   }
                 }}
-                className="glass neu-decor group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-3xl p-6 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[var(--shadow-neu-lg)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/40"
+                className="glass neu-decor group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl md:rounded-3xl p-6 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[var(--shadow-neu-lg)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/40"
                 aria-label={`Browse ${repo.name} — opens the repository browser`}
               >
                 {/* hover aura */}
@@ -290,7 +290,7 @@ export function RepoBrowser() {
 
       {/* done but zero repos */}
       {state.phase === "done" && state.payload.repos.length === 0 && (
-        <div className="glass neu-decor mt-6 rounded-3xl p-6">
+        <div className="glass neu-decor mt-6 rounded-2xl md:rounded-3xl p-6">
           <p className="text-sm font-semibold text-foreground">No public repositories yet</p>
           <p className="mt-1 text-[12.5px] text-muted-foreground">
             New builds land here automatically — check back soon.

@@ -23,9 +23,11 @@ interface NavRailProps {
  * NavRail — full-height neumorphic button navigator.
  *
  * • The old notch "bite" is gone: every destination is a proper
- *   neumorphic BUTTON. The active one reads as pressed-in (inset
- *   depth) while its label scales up past the others — a magnifying
- *   glass over where you are.
+ *   neumorphic BUTTON, and every one of them reads RAISED — soft
+ *   outset depth, never a pressed-in pit. The active one lifts
+ *   harder (deeper outset shadow + hue-tinted hairline) while its
+ *   label scales up past the others — a magnifying glass over
+ *   where you are.
  * • Scroll progress lives IN the rail: a hairline seam along the
  *   rail's inner edge (its border) fills top→bottom as you read.
  *   The old top-edge progress bar is removed.
@@ -78,13 +80,13 @@ export function NavRail({ categories, activeIndex, onSelectCategory }: NavRailPr
       {/* Depth shadow twin — wide material elevation + tight contact */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-r-[16px] shadow-[22px_0_54px_-30px_rgba(var(--primary-rgb)/0.5),8px_0_22px_-16px_rgba(var(--primary-rgb)/0.28)] sm:rounded-r-[18px] md:rounded-r-[22px]"
+        className="pointer-events-none absolute inset-0 rounded-r-[12px] shadow-[22px_0_54px_-30px_rgba(var(--primary-rgb)/0.5),8px_0_22px_-16px_rgba(var(--primary-rgb)/0.28)] sm:rounded-r-[18px] md:rounded-r-[22px]"
       />
 
       {/* Neumorphic rail surface */}
       <div
         aria-hidden="true"
-        className="glass-rail-neu pointer-events-none absolute inset-0 rounded-r-[16px] sm:rounded-r-[18px] md:rounded-r-[22px]"
+        className="glass-rail-neu pointer-events-none absolute inset-0 rounded-r-[12px] sm:rounded-r-[18px] md:rounded-r-[22px]"
         style={{ borderRight: "1px solid var(--nl)" }}
       />
 
@@ -109,7 +111,7 @@ export function NavRail({ categories, activeIndex, onSelectCategory }: NavRailPr
         onClick={() => handleSelect(0)}
         aria-label="Back to top"
         title="M Rayhan — back to top"
-        className="relative z-[2] flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-[var(--nl)] bg-[var(--bg)] shadow-[var(--shadow-neu-sm)] transition-transform duration-300 hover:scale-105 active:scale-95 sm:h-10 sm:w-10"
+        className="relative z-[2] flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-[10px] border border-[var(--nl)] bg-[var(--bg)] shadow-[var(--shadow-neu-sm)] transition-transform duration-300 hover:scale-105 active:scale-95 md:rounded-xl sm:h-10 sm:w-10"
       >
         <span className="font-display text-[13px] font-extrabold leading-none tracking-tight text-foreground sm:text-sm">
           {person.name.split(" ").map((w) => w[0]).join("")}
@@ -139,10 +141,10 @@ export function NavRail({ categories, activeIndex, onSelectCategory }: NavRailPr
               }}
               aria-current={idx === activeIndex ? "page" : undefined}
               title={cat.label}
-              className={`group relative flex w-full cursor-pointer items-center justify-center rounded-xl border px-0 outline-none transition-all duration-300 ease-out focus-visible:ring-1 focus-visible:ring-primary/40 active:scale-[0.97] ${
+              className={`group relative flex w-full cursor-pointer items-center justify-center rounded-[10px] border px-0 outline-none transition-all duration-300 ease-out focus-visible:ring-1 focus-visible:ring-primary/40 active:scale-[0.97] md:rounded-xl ${
                 isActive
-                  ? "border-[var(--nl)] bg-[var(--bg)] py-2.5 shadow-[var(--shadow-neu-in)]"
-                  : "border-transparent bg-transparent py-2.5 shadow-none hover:bg-primary/[0.05] hover:shadow-[var(--shadow-neu-sm)]"
+                  ? "border-[color-mix(in_srgb,var(--primary)_38%,var(--nl))] bg-[var(--bg)] py-2.5 shadow-[var(--shadow-neu)]"
+                  : "border-[var(--nl)] bg-[var(--bg)] py-2.5 shadow-[var(--shadow-neu-sm)] hover:shadow-[var(--shadow-neu)]"
               }`}
             >
               {/* Vertical label — the magnifying-glass read: the active

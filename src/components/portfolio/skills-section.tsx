@@ -32,7 +32,7 @@ export function SkillsSection() {
         <div className="mt-14 grid gap-4 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
           {/* Meters */}
           <Reveal>
-            <div className="glass neu-decor h-full rounded-3xl p-6 sm:p-8">
+            <div className="glass neu-decor h-full rounded-2xl md:rounded-3xl p-6 sm:p-8">
               <p className="font-tag text-[10px] text-accent-ink">Core proficiency</p>
               <div className="mt-7 flex flex-col gap-6">
                 {skillMeters.map((skill, i) => (
@@ -73,7 +73,7 @@ export function SkillsSection() {
 
           {/* Chips + principles */}
           <div className="flex flex-col gap-4">
-            <StaggerGroup className="glass neu-decor rounded-3xl p-6 sm:p-8">
+            <StaggerGroup className="glass neu-decor rounded-2xl md:rounded-3xl p-6 sm:p-8">
               <p className="font-tag text-[10px] text-accent-ink">Also in the toolbox</p>
               <div className="mt-5 flex flex-wrap gap-2">
                 {skillChips.map((chip) => (
@@ -90,7 +90,7 @@ export function SkillsSection() {
             </StaggerGroup>
 
             <Reveal delay={0.1}>
-              <div className="glass-ember relative overflow-hidden rounded-3xl p-6 sm:p-8">
+              <div className="glass-ember relative overflow-hidden rounded-2xl md:rounded-3xl p-6 sm:p-8">
                 <span
                   aria-hidden="true"
                   className="glass-chip orb-float-slow absolute right-6 top-6 rounded-full px-3 py-1.5 text-[10px] font-semibold text-foreground"

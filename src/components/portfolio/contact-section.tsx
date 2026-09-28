@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/select";
 
 const inputCls =
-  "glass-input w-full rounded-2xl px-4 py-3 text-sm text-foreground outline-none placeholder:text-muted-foreground/70";
+  "glass-input w-full rounded-xl md:rounded-2xl px-4 py-3 text-sm text-foreground outline-none placeholder:text-muted-foreground/70";
 
 export function ContactSection() {
   const [bookingOpen, setBookingOpen] = useState(false);
@@ -101,7 +101,7 @@ export function ContactSection() {
             <Reveal>
               <button
                 onClick={copyEmail}
-                className="glass neu-decor group relative flex w-full items-center gap-4 overflow-hidden rounded-3xl p-5 text-left transition-all duration-500 hover:-translate-y-0.5 hover:shadow-[var(--shadow-neu-lg)]"
+                className="glass neu-decor group relative flex w-full items-center gap-4 overflow-hidden rounded-2xl md:rounded-3xl p-5 text-left transition-all duration-500 hover:-translate-y-0.5 hover:shadow-[var(--shadow-neu-lg)]"
               >
                 {/* Gmail texture wash — ref .contact-btn.email::before (exact values) */}
                 <span
@@ -110,7 +110,7 @@ export function ContactSection() {
                 />
                 {/* Gmail gradient tile — ref .contact-btn.email .contact-icon (exact) */}
                 <span
-                  className="relative z-[1] flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#EA4335,#FBBC05)] text-white shadow-[0_4px_12px_rgba(234,67,53,0.3)]"
+                  className="relative z-[1] flex h-11 w-11 shrink-0 items-center justify-center rounded-xl md:rounded-2xl bg-[linear-gradient(135deg,#EA4335,#FBBC05)] text-white shadow-[0_4px_12px_rgba(234,67,53,0.3)]"
                 >
                   <Mail className="h-4.5 w-4.5" />
                 </span>
@@ -123,7 +123,7 @@ export function ContactSection() {
             </Reveal>
 
             <Reveal delay={0.06}>
-              <div className="glass neu-decor grid grid-cols-1 gap-4 rounded-3xl p-5">
+              <div className="glass neu-decor grid grid-cols-1 gap-4 rounded-2xl md:rounded-3xl p-5">
                 <ContactFact icon={Clock} label="Response" value="Within 24h" tone="info" />
                 <ContactFact icon={Globe} label="Location" value={person.location} />
                 <ContactFact icon={ArrowUpRight} label="Status" value="Available" tone="success" />
@@ -131,13 +131,13 @@ export function ContactSection() {
             </Reveal>
 
             <Reveal delay={0.12} className="lg:flex-1">
-              <div className="glass-ember relative flex h-full flex-col justify-center gap-4 overflow-hidden rounded-3xl p-6">
+              <div className="glass-ember relative flex h-full flex-col justify-center gap-4 overflow-hidden rounded-2xl md:rounded-3xl p-6">
                 <div
                   className="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(var(--accent-rgb)/0.25),transparent_70%)] blur-2xl"
                   aria-hidden="true"
                 />
                 <div className="flex items-center gap-3.5">
-                  <span className="glass-chip flex h-11 w-11 items-center justify-center rounded-2xl">
+                  <span className="glass-chip flex h-11 w-11 items-center justify-center rounded-xl md:rounded-2xl">
                     <CalendarClock className="h-4.5 w-4.5 text-accent-ink" />
                   </span>
                   <div>
@@ -167,7 +167,7 @@ export function ContactSection() {
           <Reveal delay={0.08}>
             <form
               onSubmit={submit}
-              className="glass neu-decor relative h-full rounded-[2rem] p-6 sm:p-8"
+              className="glass neu-decor relative h-full rounded-2xl md:rounded-[2rem] p-6 sm:p-8"
               aria-label="Contact form"
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
@@ -374,7 +374,7 @@ function BookingDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[86vh] w-[calc(100vw-2rem)] overflow-y-auto rounded-[1.75rem] border-border bg-[var(--bg)] p-6 shadow-[var(--shadow-neu-lg)] sm:p-8">
+      <DialogContent className="max-h-[86vh] w-[calc(100vw-2rem)] overflow-y-auto rounded-2xl sm:rounded-[1.75rem] border-border bg-[var(--bg)] p-6 shadow-[var(--shadow-neu-lg)] sm:p-8">
         <span className="glass-chip font-tag inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[9px] text-accent-ink">
           <CalendarClock className="h-3 w-3" />
           Instant Scheduling
@@ -391,10 +391,10 @@ function BookingDialog({
           <label className="flex flex-col gap-1.5">
             <span className="text-[13px] font-medium text-foreground/70">Meeting topic</span>
             <Select value={topic} onValueChange={setTopic}>
-              <SelectTrigger className="glass-input w-full rounded-2xl px-4 py-3 text-sm text-foreground">
+              <SelectTrigger className="glass-input w-full rounded-xl md:rounded-2xl px-4 py-3 text-sm text-foreground">
                 <SelectValue placeholder="Select a topic" />
               </SelectTrigger>
-              <SelectContent className="rounded-2xl border-border bg-[var(--bg2)] text-foreground shadow-[var(--shadow-neu-lg)]">
+              <SelectContent className="rounded-xl md:rounded-2xl border-border bg-[var(--bg2)] text-foreground shadow-[var(--shadow-neu-lg)]">
                 {bookingTopics.map((t) => (
                   <SelectItem key={t} value={t}>
                     {t}
@@ -418,10 +418,10 @@ function BookingDialog({
             <label className="flex flex-col gap-1.5">
               <span className="text-[13px] font-medium text-foreground/70">Time slot</span>
               <Select value={slot} onValueChange={setSlot}>
-                <SelectTrigger className="glass-input w-full rounded-2xl px-4 py-3 text-sm text-foreground">
+                <SelectTrigger className="glass-input w-full rounded-xl md:rounded-2xl px-4 py-3 text-sm text-foreground">
                   <SelectValue placeholder="Pick a slot" />
                 </SelectTrigger>
-                <SelectContent className="rounded-2xl border-border bg-[var(--bg2)] text-foreground shadow-[var(--shadow-neu-lg)]">
+                <SelectContent className="rounded-xl md:rounded-2xl border-border bg-[var(--bg2)] text-foreground shadow-[var(--shadow-neu-lg)]">
                   {bookingSlots.map((s) => (
                     <SelectItem key={s} value={s}>
                       {s}

@@ -151,7 +151,7 @@ export function RepoDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="flex max-h-[88vh] w-[min(96vw,64rem)] max-w-[64rem] flex-col gap-0 overflow-hidden rounded-[1.75rem] border-border bg-[var(--bg)] p-0 shadow-[var(--shadow-neu-lg)]">
+      <DialogContent className="flex max-h-[88vh] w-[min(96vw,64rem)] max-w-[64rem] flex-col gap-0 overflow-hidden rounded-2xl sm:rounded-[1.75rem] border-border bg-[var(--bg)] p-0 shadow-[var(--shadow-neu-lg)]">
         {/* ── Header ─────────────────────────────────────────── */}
         <div className="shrink-0 border-b border-border/60 px-5 pb-4 pt-5 sm:px-7">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -341,7 +341,7 @@ export function RepoDialog({
                 </p>
                 {state.payload.file.content ? (
                   <pre
-                    className="max-h-[52vh] overflow-auto rounded-2xl p-4 text-[12px] leading-relaxed lg:max-h-[62vh]"
+                    className="max-h-[52vh] overflow-auto rounded-xl md:rounded-2xl p-4 text-[12px] leading-relaxed lg:max-h-[62vh]"
                     style={{ background: "var(--code-bg)", color: "#f3e7d5" }}
                   >
                     <code>{state.payload.file.content}</code>

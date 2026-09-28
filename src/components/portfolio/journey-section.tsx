@@ -173,7 +173,7 @@ export function JourneySection() {
 
                   {/* Card — the site's liquid-glass recipe, kept compact */}
                   <div
-                    className={`journey-card relative z-[2] w-full max-w-[470px] overflow-hidden rounded-[22px] p-5 text-left sm:p-6 md:ml-auto ${
+                    className={`journey-card relative z-[2] w-full max-w-[470px] overflow-hidden rounded-2xl md:rounded-[22px] p-5 text-left sm:p-6 md:ml-auto ${
                       era.current
                         ? "journey-card--current p-6 sm:p-7"
                         : ""

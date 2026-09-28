@@ -52,7 +52,7 @@ export function ProjectDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[86vh] max-w-2xl gap-0 overflow-y-auto rounded-[1.75rem] border-border bg-[var(--bg)] p-0 shadow-[var(--shadow-neu-lg)]">
+      <DialogContent className="max-h-[86vh] max-w-2xl gap-0 overflow-y-auto rounded-2xl sm:rounded-[1.75rem] border-border bg-[var(--bg)] p-0 shadow-[var(--shadow-neu-lg)]">
         <div className="p-6 sm:p-8">
           <span className="glass-chip font-tag inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[9px] text-accent-ink">
             {project.tag}
@@ -70,7 +70,7 @@ export function ProjectDialog({
             {project.metrics.map((m) => (
               <div
                 key={m}
-                className="glass-chip rounded-2xl px-4 py-3 text-center text-xs font-semibold text-foreground"
+                className="glass-chip rounded-xl md:rounded-2xl px-4 py-3 text-center text-xs font-semibold text-foreground"
               >
                 {m}
               </div>

@@ -106,7 +106,7 @@ export function ProjectsSection() {
               >
                 <button
                   onClick={() => open(p)}
-                  className="glass neu-decor group relative flex h-full w-full flex-col overflow-hidden rounded-3xl p-6 text-left transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[var(--shadow-neu-lg)] sm:p-7"
+                  className="glass neu-decor group relative flex h-full w-full flex-col overflow-hidden rounded-2xl md:rounded-3xl p-6 text-left transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[var(--shadow-neu-lg)] sm:p-7"
                   aria-label={`Open details for ${p.title}`}
                 >
                   {/* deep-orange aura on hover */}

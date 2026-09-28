@@ -16,9 +16,31 @@ import { scrollToSection } from "./nav";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-/* hero-cutout.png intrinsic size (uploaded portrait, Photoroom cutout) */
-const CUTOUT_W = 1369;
-const CUTOUT_H = 1149;
+/* m-rayhan-headshot.webp intrinsic size (uploaded headshot, 4:5) */
+const HEADSHOT_W = 785;
+const HEADSHOT_H = 981;
+
+/* ── Accent light reflections ──────────────────────────────────
+   The headshot's own white lights (upper-right strips, left strip,
+   lower-right glow) re-lit in the drawn accent hue — soft `color`
+   grade unifies the scene, `screen` blooms sit exactly on the light
+   sources so they read as that hue's light reflecting in the room.
+   Everything rides the rotating --accent-rgb / --primary-rgb slots,
+   so every random hue re-lights the room for free. */
+const LIGHT_BLOOMS = [
+  "radial-gradient(38% 9% at 84% 15%, rgba(var(--accent-rgb)/0.5), transparent 72%)",
+  "radial-gradient(30% 8% at 90% 21.5%, rgba(var(--primary-rgb)/0.4), transparent 72%)",
+  "radial-gradient(18% 7% at 2% 33%, rgba(var(--accent-rgb)/0.4), transparent 75%)",
+  "radial-gradient(26% 9% at 97% 69%, rgba(var(--accent-rgb)/0.45), transparent 75%)",
+].join(", ");
+
+/* Ground-fusion wash — bridges the photo's edges into the section
+   ground (var(--bg)) so the mask melt is seamless in every theme
+   and every hue. Top/bottom heavier than the sides. */
+const GROUND_WASH = [
+  "linear-gradient(to bottom, color-mix(in srgb, var(--bg) 96%, transparent) 0%, transparent 26%, transparent 56%, color-mix(in srgb, var(--bg) 58%, transparent) 82%, color-mix(in srgb, var(--bg) 96%, transparent) 99%)",
+  "linear-gradient(to right, color-mix(in srgb, var(--bg) 88%, transparent) 0%, transparent 17%, transparent 83%, color-mix(in srgb, var(--bg) 88%, transparent) 100%)",
+].join(", ");
 
 /* ── Personal intro copy ─────────────────────────────────────── */
 
@@ -120,10 +142,10 @@ export function HeroSection() {
           className="relative"
         >
           <div className="relative mx-auto w-full max-w-[560px]">
-            {/* warm halo behind the cutout */}
+            {/* warm halo behind the headshot */}
             <div
               aria-hidden="true"
-              className="absolute left-1/2 top-[6%] h-[58%] w-[94%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(var(--accent-rgb)/0.16),transparent_66%)] blur-2xl"
+              className="absolute left-1/2 top-[8%] h-[52%] w-[96%] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(var(--accent-rgb)/0.2),transparent_66%)] blur-2xl"
             />
 
             {/* "Hello.." — anchored to the column (not the scaled photo):
@@ -166,45 +188,89 @@ export function HeroSection() {
               </motion.svg>
             </motion.span>
 
-            {/* The photo itself grows a touch beyond the column
-                (transform-only: layout box, text flow and the melt
-                seam all stay exactly where they were) — zoomed in
-                further and nudged left so the subject sits bigger
-                and more centered in frame. Four-edge melt: nested
-                masks — horizontal (left/right) on the outer div,
-                vertical (top + bottom dissolve) on the inner. */}
-            <div className="relative origin-top -translate-x-[4%] scale-[1.16] sm:scale-[1.1]">
+            {/* The headshot — a real environmental photo now, so the
+                melt is a full four-edge job: nested alpha masks dissolve
+                the frame (horizontal left/right on the outer div, top +
+                bottom dissolve on the inner), and a ground-fusion wash
+                paints the section's own color back over the fading
+                edges so the photo melts seamlessly into the section —
+                no ghost rectangle, in any theme, in any drawn hue.
+                Accent light layers ride INSIDE the masked box so they
+                stay glued to the photo's own lights. */}
+            <div className="relative">
               <div
                 className="relative"
                 style={{
                   WebkitMaskImage:
-                    "linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%)",
+                    "linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%)",
                   maskImage:
-                    "linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%)",
+                    "linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%)",
                 }}
               >
                 <div
                   className="relative"
                   style={{
                     WebkitMaskImage:
-                      "linear-gradient(to bottom, transparent 0%, #000 10%, #000 74%, rgba(0,0,0,0.55) 85%, rgba(0,0,0,0.18) 93%, transparent 99%)",
+                      "linear-gradient(to bottom, transparent 0%, #000 9%, #000 68%, rgba(0,0,0,0.6) 80%, rgba(0,0,0,0.24) 91%, transparent 100%)",
                     maskImage:
-                      "linear-gradient(to bottom, transparent 0%, #000 10%, #000 74%, rgba(0,0,0,0.55) 85%, rgba(0,0,0,0.18) 93%, transparent 99%)",
+                      "linear-gradient(to bottom, transparent 0%, #000 9%, #000 68%, rgba(0,0,0,0.6) 80%, rgba(0,0,0,0.24) 91%, transparent 100%)",
                   }}
                 >
                   <Image
-                    src="/generated/m-rayhan-cutout.png"
+                    src="/generated/m-rayhan-headshot.webp"
                     alt="Portrait of M Rayhan"
-                    width={CUTOUT_W}
-                    height={CUTOUT_H}
+                    width={HEADSHOT_W}
+                    height={HEADSHOT_H}
                     priority
                     loading="eager"
                     sizes="(max-width: 640px) 100vw, 560px"
                     quality={88}
-                    className="relative h-auto w-full object-contain drop-shadow-[0_30px_44px_rgba(var(--primary-rgb)/0.32)]"
+                    className="relative h-auto w-full object-contain drop-shadow-[0_26px_38px_rgba(var(--primary-rgb)/0.22)]"
+                  />
+
+                  {/* hue grade — the whole room breathes the accent */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0"
+                    style={{
+                      background: "rgba(var(--accent-rgb) / 0.16)",
+                      mixBlendMode: "color",
+                    }}
+                  />
+                  {/* re-lit lights — accent blooms exactly on the photo's
+                      white light sources, reading as reflected light */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0"
+                    style={{ background: LIGHT_BLOOMS, mixBlendMode: "screen" }}
+                  />
+                  {/* drifting accent bokeh — the reflection comes alive */}
+                  <span
+                    aria-hidden="true"
+                    className="orb-float absolute right-[13%] top-[13%] h-3.5 w-3.5 rounded-full bg-[rgba(var(--accent-rgb)/0.85)] blur-[5px]"
+                    style={{ mixBlendMode: "screen" }}
+                  />
+                  <span
+                    aria-hidden="true"
+                    className="orb-float-slow absolute left-[5%] top-[31%] h-2.5 w-2.5 rounded-full bg-[rgba(var(--primary-rgb)/0.8)] blur-[4px]"
+                    style={{ mixBlendMode: "screen", animationDelay: "-3s" }}
+                  />
+                  <span
+                    aria-hidden="true"
+                    className="orb-float absolute right-[5%] top-[67%] h-3 w-3 rounded-full bg-[rgba(var(--accent-rgb)/0.75)] blur-[4px]"
+                    style={{ mixBlendMode: "screen", animationDelay: "-6s" }}
                   />
                 </div>
               </div>
+
+              {/* ground-fusion wash — the section's own color melts the
+                  photo edges flush; sits OUTSIDE the alpha masks so it
+                  bridges the exact layout box */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0"
+                style={{ background: GROUND_WASH }}
+              />
             </div>
 
             {/* Intro begins where the fade starts — left aligned */}
