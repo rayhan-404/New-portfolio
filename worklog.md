@@ -873,3 +873,20 @@ Stage Summary:
 - Desktop = framed card with only the signature bottom melt; mobile/tablet = true four-edge melt that finally holds in dark mode.
 - The lost v52/v53 work is superseded by this committed equivalent; the version tag advances from v66 to v67 in one step.
 - Tagged v67; touched hero-section and globals.css only.
+
+---
+Task ID: 68 (accent thunder — hue-colored lightning with face reflection)
+Agent: Main agent
+Task: User asked for a thunder effect where the bolt takes the currently drawn accent color and the strike's flash reflects on the face, executed to a professional standard.
+
+Work Log:
+- Built a strike clock on the hero section: first bolt lands early (2.6-4.8s) so the effect is discoverable, then the storm settles into an irregular natural cadence (7-14s random). Reduced-motion users get clear skies — the loop never starts and no layers mount.
+- LightningBolt component: an SVG bolt (main channel plus two branches) drawn in with path-length animation, rendered as three stacked passes — a wide blurred accent haze, a vivid accent channel, and a white-hot core — so it reads as electric heat inside the drawn hue. Glow comes from layered accent drop-shadows; fixed an invalid color function in the core stroke before verification.
+- Each strike re-mounts (keyed) four synchronized layers on whichever stage is visible: the bolt; a sky/room flash radial at the bolt's origin that double-flickers with real lightning's decay signature (spike, partial decay, second flicker, fade); and a face reflection layer animated on the same keyframe times — scoped on the mobile stage by the cutout's own alpha mask so the flash lights only the person, never the ground, and on the desktop card by radials at the established face coordinates.
+- Both stages share one clock, so only the visible stage strikes; mobile bolt sits above/beside the head behind the subject, desktop bolt lives in the card's upper sky band with the flash washing the room in screen blend.
+- Verified with agent-browser strike-catching (promise-poll for the bolt, then burst screenshots): mobile dark green draw — vivid green bolt, face visibly reflecting green light, decay tail natural; mobile light blue draw — bolt turns blue with the drawn hue, sky flash tints the pastel ground; desktop light teal draw — bolt strikes in the card's sky beside the head, room flash + face reflection present; fade-out confirmed on a third frame; console clean; lint 0 problems; tsc src clean.
+
+Stage Summary:
+- The hero now has real weather: every refresh's drawn hue brings its own lightning, and each strike lights the subject's face in that hue on both the cutout and card stages.
+- Effect is visual-only, zero-dependency (framer-motion only), reduced-motion safe, and fully token-driven.
+- Tagged v68; touched hero-section only.
