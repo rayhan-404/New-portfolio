@@ -925,3 +925,19 @@ Stage Summary:
 - The hero now has real storm behavior: rapid multi-strike bursts with no long delays, bolts roaming side to side, and a near/far depth mix that sends distant strikes back into the picture's background.
 - Cadence, depth, sides, fork density and the in-cloud lead flash are all data-driven constants in hero-section.tsx; reduced-motion still = clear skies.
 - Tagged v70; touched hero-section only.
+
+---
+Task ID: 71 (thunder v3 — corner-entry diagonal bolts, long reach)
+Agent: Main agent
+Task: User: "eta to just soja nicher dike astese" — the bolts just dropped straight down. Wanted bolts entering from ANY direction but specifically the right/left TOP CORNERS ("dan bam upor corner j kono dik theke ese"), going into the picture's background, and LONG ("lomba lomba").
+
+Work Log:
+- Rebuilt genStrike geometry as corner-entry diagonals: the channel now STARTS at a top corner of the unit box (sx 1-8 entering from the left, 92-99 from the right, sy 2-10) and drives diagonally to a deep exit on the opposite half (ex 40-78 after a left entry, 22-60 after a right entry), instead of the old near-vertical drift (origin mid-box, drift ±23). Measured live: 4 strikes at 52-65% dx/dy slope — no vertical drops.
+- Length: mobile boxes now 55-80% of stage height (was 40-56), desktop 34-48 (was 26-40), and the channel reaches 86-95% of the box (unit ey 128-148 mobile, 106-128 desktop via new StrikeRanges reachMin/reachMax, which also replaced the now-unused pad field). Branch length bumped to 38-71 units to stay proportional on longer channels.
+- Corner pinning: box left is solved so the bolt's ENTRY lands at the requested corner (cornerX -3..11 for left, 89..103 for right), allowing up to 4% outside the frame so strikes read as arriving from beyond the picture edge; the corner flash radiates from that entry point (flashY now uses the entry sy). Sides alternate strictly left <-> right per strike (strike % 2, the "any" center zone retired) so every burst rakes across the frame from both top corners.
+- Verification note: document.querySelector('[data-bolt]') grabs the MOBILE stage's bolt even on desktop viewports (mobile block precedes desktop in the DOM) — desktop freezes must target querySelectorAll(...)[1]. Caught when a "desktop" freeze reported h=70% (mobile range); redone correctly.
+- Verified with freeze harness: mobile dark amber draw — left-corner bolt angling past the Hello lockup deep into the frame, right-corner bolt at 78% height sweeping in from outside the top-right; desktop dark blue draw — far bolt entering the card's top-right corner diagonally with forks. lint 0, tsc src clean, console shows no new errors.
+
+Stage Summary:
+- Bolts are now corner-entering diagonals with long reach: every strike rakes in from a top corner (alternating sides), crosses the sky at 50-65% slope, and reaches deep into the picture; the corner flash and face reflection follow the entry point.
+- Tagged v71; touched hero-section only.

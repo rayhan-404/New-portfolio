@@ -48,15 +48,15 @@ const CARD_LIGHT_RECOLOR = [
 
 /* ── Thunder — procedural lightning in the drawn hue ───────────
    No canned bolt: every strike runs a midpoint-displacement
-   recursion that jags a fresh main channel, forks 2–4 branches
-   (some carrying twigs), and drops the whole thing at a random
-   spot in a random size — new shape, new place, every time, the
-   way real storms behave. Three stacked passes (accent haze,
-   vivid channel, white-hot core) read as electric heat inside
-   the drawn hue; the strike flickers with a real restrike
-   signature (spike → micro-flicker decay → blackout → re-strike
-   → fade) and the sky/room flash — positioned at the bolt's own
-   origin — reflects on the face. Reduced motion = clear skies. */
+   recursion that jags a fresh main channel — entered DIAGONALLY
+   from a top corner of the frame (left ↔ right alternating),
+   reaching LONG down into the picture — with 3–5 forks, some
+   carrying twigs. Three stacked passes (accent haze, vivid
+   channel, white-hot core) read as electric heat inside the
+   drawn hue; the strike flickers with a real restrike signature
+   (spike → micro-flicker decay → blackout → re-strike → fade)
+   and the corner flash — positioned at the bolt's own entry —
+   reflects on the face. Reduced motion = clear skies. */
 type Pt = [number, number];
 
 interface BoltBranch {
@@ -83,11 +83,13 @@ interface StrikeRanges {
   wMax: number;
   hMin: number;
   hMax: number;
-  pad: number;
+  /* how deep the channel reaches, in unit-space y (150 = box bottom) */
+  reachMin: number;
+  reachMax: number;
 }
 
-const MOBILE_STRIKE: StrikeRanges = { wMin: 30, wMax: 46, hMin: 40, hMax: 56, pad: 2 };
-const DESKTOP_STRIKE: StrikeRanges = { wMin: 22, wMax: 34, hMin: 26, hMax: 40, pad: 4 };
+const MOBILE_STRIKE: StrikeRanges = { wMin: 42, wMax: 62, hMin: 55, hMax: 80, reachMin: 128, reachMax: 148 };
+const DESKTOP_STRIKE: StrikeRanges = { wMin: 30, wMax: 48, hMin: 34, hMax: 48, reachMin: 106, reachMax: 128 };
 
 const clampN = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
@@ -113,14 +115,21 @@ function jagged(x1: number, y1: number, x2: number, y2: number, disp: number): P
 const toPath = (pts: Pt[]) =>
   `M${pts.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join("L")}`;
 
-/* one full strike for one stage: fresh geometry + a fresh landing spot
-   on the requested side (geometry lives in a 100×150 unit box the
-   placement scales — runs client-side only, after the strike clock
-   mounts, so SSR never sees it) */
-function genStrike(r: StrikeRanges, side: "left" | "right" | "any"): Strike {
-  const sx = 30 + Math.random() * 40; // origin across the box
-  const ex = clampN(sx + (Math.random() - 0.5) * 46, 16, 84); // drift
-  const mainPts = jagged(sx, 3, ex, 116 + Math.random() * 28, 52);
+/* one full strike for one stage: fresh geometry that ENTERS at a top
+   corner and drives diagonally across the sky, reaching long into the
+   picture (geometry lives in a 100×150 unit box the placement scales
+   — runs client-side only, after the strike clock mounts, so SSR
+   never sees it) */
+function genStrike(r: StrikeRanges, side: "left" | "right"): Strike {
+  const fromLeft = side === "left";
+  /* entry pinned to a top corner, exit deep on the opposite half —
+     the diagonal trend is what makes it read as weather, not a
+     straight vertical drop */
+  const sx = fromLeft ? 1 + Math.random() * 7 : 92 + Math.random() * 7;
+  const sy = 2 + Math.random() * 8;
+  const ex = fromLeft ? 40 + Math.random() * 38 : 22 + Math.random() * 38;
+  const ey = r.reachMin + Math.random() * (r.reachMax - r.reachMin);
+  const mainPts = jagged(sx, sy, ex, ey, 56);
 
   const branches: BoltBranch[] = [];
   const forks = 3 + Math.floor(Math.random() * 3); // 3–5 forks
@@ -128,7 +137,7 @@ function genStrike(r: StrikeRanges, side: "left" | "right" | "any"): Strike {
     const t = 0.14 + Math.random() * 0.48; // forks live in the upper ⅔
     const [px, py] = mainPts[Math.floor(t * (mainPts.length - 1))];
     const ang = (Math.random() - 0.5) * 1.9; // ±~54° off the channel
-    const len = 34 + Math.random() * 30;
+    const len = 38 + Math.random() * 34;
     const bx = clampN(px + Math.sin(ang) * len, 4, 96);
     const by = clampN(py + Math.cos(ang) * len * 0.85, 20, 148);
     const bp = jagged(px, py, bx, by, len * 0.45);
@@ -161,17 +170,13 @@ function genStrike(r: StrikeRanges, side: "left" | "right" | "any"): Strike {
     width *= 0.78;
     height *= 0.78;
   }
-  /* land on the requested side — bursts roam the whole sky — by placing
-     the bolt's own origin inside that zone */
-  const originTarget =
-    side === "left"
-      ? 6 + Math.random() * 26
-      : side === "right"
-        ? 68 + Math.random() * 26
-        : 12 + Math.random() * 76;
-  const left = clampN(originTarget - (sx / 100) * width, r.pad, 100 - r.pad - width);
+  /* pin the bolt's entry to the requested top corner — a touch beyond
+     the frame edge reads as the strike arriving from outside the
+     picture; the flash then radiates from that corner */
+  const cornerX = fromLeft ? -3 + Math.random() * 14 : 89 + Math.random() * 14;
+  const left = clampN(cornerX - (sx / 100) * width, -4, 100 - width + 4);
   const flashX = left + (sx / 100) * width;
-  const flashY = (3 / 150) * height;
+  const flashY = (sy / 150) * height;
 
   return { main: toPath(mainPts), branches, left, width, height, flashX, flashY, far };
 }
@@ -386,16 +391,17 @@ export function HeroSection() {
     };
   }, [reduce]);
 
-  /* fresh bolt geometry + fresh landing spot for every strike — sides
-     rotate (left → right → anywhere) so bursts roam the whole sky, and
-     each bolt independently draws near or recedes into the backdrop.
-     The mobile and desktop stages each get their own draw (only one is
-     ever visible); runs client-side only, never during SSR */
+  /* fresh bolt geometry + fresh corner entry for every strike — sides
+     alternate left ↔ right so bursts rake across the frame from both
+     top corners, and each bolt independently draws near or recedes
+     into the backdrop. The mobile and desktop stages each get their
+     own draw (only one is ever visible); runs client-side only, never
+     during SSR */
   const strikes = useMemo(
     () =>
       strike > 0
         ? (() => {
-            const side = (["left", "right", "any"] as const)[strike % 3];
+            const side = (["left", "right"] as const)[strike % 2];
             return { m: genStrike(MOBILE_STRIKE, side), d: genStrike(DESKTOP_STRIKE, side) };
           })()
         : null,
