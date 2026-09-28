@@ -973,3 +973,20 @@ Work Log:
 Stage Summary:
 - Everything is staged for a one-shot push: origin remote wired, credentials store active, legacy-static-site archive branch ready. When the user issues a token with Contents: Read and write on portfolio (or a classic token with repo scope), run: git push origin legacy-static-site && git push -u origin main --force && git push origin --tags.
 - Local durability is unaffected meanwhile: working repo (v71), bare remote /home/z/backups/my-project.git, bundle my-project-v71.bundle, tarballs v62–v71.
+
+---
+Task ID: git-push-github-2
+Agent: Main agent
+Task: User supplied a second GitHub PAT; push to GitHub still the goal. (Between attempts user said "ok ami manually push korchi" — manual route prepared as fallback.)
+
+Work Log:
+- Verified the second token: identity rayhan-404, but the write probe on rayhan-404/portfolio contents API failed again ("Resource not accessible by personal access token") — it is READ-ONLY too. Both fine-grained tokens were created without the "Contents: Read and write" repository permission.
+- Safety audit before any push: .env tracked blob 769ebf2 = only "DATABASE_URL=file:/home/z/my-project/db/custom.db" (no secrets, confirmed via git cat-file); db/custom.db contained only obviously fake demo contacts (fintech.io / bluenile.dev test entries). Also found tool-results/ and auto-snapshot commits (e.g. 26c5b54) had been swept into history by the sandbox.
+- Cleanup commit 8a73b4c: untracked .env, db/custom.db and tool-results/ (files kept on disk), extended .gitignore (db/, tool-results/, public artifact entries); verified all ignore rules with git check-ignore. Note: past commits still contain those blobs (harmless contents; purging history would rewrite all v-tags — not done).
+- Built manual-push packages: git archive zip → public/portfolio-source-v71.zip (56MB, clean HEAD source with portfolio/ prefix) and refreshed full bundle (now includes legacy-static-site) → /home/z/backups/my-project-v71.bundle copied to public/my-project-v71.bundle (61.5MB). Test-cloned the bundle: HEAD 8a73b4c, main + legacy-static-site + 23 tags (v29–v36, v57–v71).
+- Both artifacts serve via the dev server (HTTP 200 on /portfolio-source-v71.zip and /my-project-v71.bundle) so the user can download them through the Preview panel.
+- Synced the local bare remote: main 8c5ae29..8a73b4c, tags up-to-date, legacy-static-site pushed.
+
+Stage Summary:
+- Push to GitHub remains blocked solely by token permissions. One-shot push is ready: git push origin legacy-static-site && git push -u origin main --force && git push origin --tags — works the moment a token with Contents: Read and write (classic token with repo scope) is installed in ~/.git-credentials.
+- Self-serve fallback delivered: download /portfolio-source-v71.zip (source snapshot) or /my-project-v71.bundle (full history + tags + legacy branch) from the preview URL and push from any machine with git.
