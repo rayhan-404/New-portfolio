@@ -195,21 +195,30 @@ export function HeroSection() {
 
             {/* The headshot as a true cutout — background removed, so the
                 subject sits directly on the site's own hue-family ground.
-                Only one mask remains: the bottom dissolve that melts the
-                waist crop into the section, everything else is the real
-                alpha silhouette. Accent halo + drifting bokeh behind the
-                subject now play the role the photo's lights played — the
-                site itself lights the room. */}
+                Four-edge melt: sides 12% and top 10% dissolve the crop-cut
+                arms and crown exactly the way the bottom dissolve melts the
+                waist — the figure reads lit from within, never pasted.
+                Accent halo + drifting bokeh behind the subject play the
+                role the photo's lights used to — the site lights the room. */}
             <div className="relative pt-20 sm:pt-24">
               <div
                 className="relative translate-x-[4.5%]"
                 style={{
                   WebkitMaskImage:
-                    "linear-gradient(to bottom, #000 0%, #000 70%, rgba(0,0,0,0.55) 83%, rgba(0,0,0,0.18) 93%, transparent 100%)",
+                    "linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%)",
                   maskImage:
-                    "linear-gradient(to bottom, #000 0%, #000 70%, rgba(0,0,0,0.55) 83%, rgba(0,0,0,0.18) 93%, transparent 100%)",
+                    "linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%)",
                 }}
               >
+                <div
+                  className="relative"
+                  style={{
+                    WebkitMaskImage:
+                      "linear-gradient(to bottom, transparent 0%, #000 10%, #000 70%, rgba(0,0,0,0.55) 83%, rgba(0,0,0,0.18) 93%, transparent 100%)",
+                    maskImage:
+                      "linear-gradient(to bottom, transparent 0%, #000 10%, #000 70%, rgba(0,0,0,0.55) 83%, rgba(0,0,0,0.18) 93%, transparent 100%)",
+                  }}
+                >
                 <Image
                   src="/generated/m-rayhan-cutout-lossless.webp"
                   alt="Portrait of M Rayhan"
@@ -251,6 +260,7 @@ export function HeroSection() {
                       mixBlendMode: "screen",
                     }}
                   />
+                </div>
                 </div>
               </div>
 
@@ -384,30 +394,20 @@ export function HeroSection() {
                   className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(var(--accent-rgb)/0.4),rgba(var(--primary-rgb)/0.6)_55%,rgba(var(--primary-rgb)/0.85)_100%)]"
                 />
 
-                {/* ── the real headshot, melt-masked into the backdrop ──
-                    Nested edge fades (sides 24% / top 12% over mirrored
-                    headroom / bottom dissolve) erase every rectangle
-                    boundary — the photo becomes the card's scene in any
-                    theme and any drawn hue. Accent light layers ride
-                    INSIDE the masks, glued to the photo's own lamps. */}
+                {/* ── the real headshot, framed — no side or top fades ──
+                    The photo keeps its true edges inside the card frame;
+                    only the bottom still dissolves into the backdrop (the
+                    melt that always worked). Accent light layers ride
+                    INSIDE the mask, glued to the photo's own lamps. */}
                 <div
                   className="absolute inset-0"
                   style={{
                     WebkitMaskImage:
-                      "linear-gradient(to right, transparent 0%, #000 16%, #000 84%, transparent 100%)",
+                      "linear-gradient(to bottom, #000 0%, #000 66%, rgba(0,0,0,0.6) 85%, rgba(0,0,0,0.3) 95%, transparent 100%)",
                     maskImage:
-                      "linear-gradient(to right, transparent 0%, #000 16%, #000 84%, transparent 100%)",
+                      "linear-gradient(to bottom, #000 0%, #000 66%, rgba(0,0,0,0.6) 85%, rgba(0,0,0,0.3) 95%, transparent 100%)",
                   }}
                 >
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      WebkitMaskImage:
-                        "linear-gradient(to bottom, transparent 0%, #000 10%, #000 66%, rgba(0,0,0,0.6) 85%, rgba(0,0,0,0.3) 95%, transparent 100%)",
-                      maskImage:
-                        "linear-gradient(to bottom, transparent 0%, #000 10%, #000 66%, rgba(0,0,0,0.6) 85%, rgba(0,0,0,0.3) 95%, transparent 100%)",
-                    }}
-                  >
                     <Image
                       src="/generated/m-rayhan-portrait-hd.webp"
                       alt={`Portrait of ${person.name}`}
@@ -489,7 +489,6 @@ export function HeroSection() {
                           "linear-gradient(to bottom, rgba(var(--primary-rgb)/0.18), transparent 16%)",
                       }}
                     />
-                  </div>
                 </div>
 
                 {/* bottom nameplate */}

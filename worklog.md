@@ -856,3 +856,20 @@ Stage Summary:
 - The hero now serves the user's own Photoroom cutout with ZERO quality reduction — lossless encode, pixel-diff-verified identical, delivered byte-for-byte unoptimized.
 - The recurring "old image" mystery is solved permanently: version-stamped filenames + a documented never-overwrite-in-place rule.
 - Tagged v66; touched hero-section and added m-rayhan-cutout-lossless.webp + m-rayhan-cutout-mask-v2.webp.
+
+---
+Task ID: 67 (desktop fades off, mobile four-edge melt — dark-mode edge fix)
+Agent: Main agent
+Task: Session continuation — the previous window described a v52/v53 arc (user: hero edges still separate from the background in dark mode; final instruction: desktop is fine but remove its fades, mobile is the real problem) but none of it persisted: git had no such commits, tags or backups, tree was clean at v66. Re-implemented the final requested state from scratch and verified it.
+
+Work Log:
+- Confirmed the lost-work diagnosis first (missing commits, tags, backups, worklog entries) so no stale assumptions survived; the user's last three messages were treated as the authoritative spec.
+- Desktop card (>=1024px): removed both nested edge fades — the horizontal side ramp and the vertical top ramp — leaving ONE mask that keeps only the bottom dissolve (solid to 66%, then the familiar melt into the backdrop). The card is now a clean framed photo with true edges inside its rounded frame; the studio backdrop, lamp recolor, blooms, face kiss, bokeh, dark suit bounce and the soft ceiling tint all stay. Stale comment (said 24% sides) rewritten; one redundant wrapper div removed.
+- Mobile/tablet cutout (<1024px): rebuilt as nested masks — outer horizontal ramp dissolving the outer 12% per side, inner vertical ramp fading the top 10% while keeping the proven bottom dissolve unchanged. The crop-chopped elbows, sleeves and crown now dissolve into the ground exactly like the waist; silhouette tint layer stays inside so it fades with the body. (A partially-applied edit had briefly left the bokeh sparks anchored to the wrong container — caught by re-reading the block, fixed before verifying.)
+- globals.css: deleted the two dead portrait-blend gradient variables (defined since the old card era, referenced nowhere) from both theme blocks.
+- Verified with agent-browser + pixel scans: mobile 390 dark (pink draw) — scanline across the elbow row shows ZERO hard luminance jumps, right sleeve shows only faint fabric shading; crown crop shows a soft studio-style fade, no ghost cut; tablet 820 dark — figure sits in the maroon ground, no slab, no pasted rectangle (the exact historical complaint); desktop 1440 dark + light — framed card, bottom melt only; mobile/tablet light regression clean; tsc src clean, lint 0, console clean.
+
+Stage Summary:
+- Desktop = framed card with only the signature bottom melt; mobile/tablet = true four-edge melt that finally holds in dark mode.
+- The lost v52/v53 work is superseded by this committed equivalent; the version tag advances from v66 to v67 in one step.
+- Tagged v67; touched hero-section and globals.css only.

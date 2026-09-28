@@ -212,14 +212,6 @@
   --notch-core: #8a2a0c;
   --notch-mid: #b03d14;
   --notch-dot: #ffffff; /* kept for legacy theme tooling */
-
-  /* Portrait blend — melts photos into the family field */
-  --img-vignette: linear-gradient(
-    to top,
-    rgba(var(--hue-bgr-l, 244 235 220) / 0.92) 2%,
-    rgba(var(--hue-bgr-l, 244 235 220) / 0.45) 28%,
-    rgba(var(--hue-bgr-l, 244 235 220) / 0) 58%
-  );
 }
 
 /* ── DARK — deep ember-night charcoal: rich, defined, never muddy ──
@@ -293,13 +285,6 @@
   /* Social brand dots — light-on-dark flips for contrast */
   --gh: #e6edf3;
   --x: #f4f4f5;
-
-  --img-vignette: linear-gradient(
-    to top,
-    rgba(var(--hue-bgr-d, 35 21 17) / 0.92) 2%,
-    rgba(var(--hue-bgr-d, 35 21 17) / 0.45) 28%,
-    rgba(var(--hue-bgr-d, 35 21 17) / 0) 58%
-  );
 }
 
 @layer base {
