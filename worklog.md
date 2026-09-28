@@ -890,3 +890,21 @@ Stage Summary:
 - The hero now has real weather: every refresh's drawn hue brings its own lightning, and each strike lights the subject's face in that hue on both the cutout and card stages.
 - Effect is visual-only, zero-dependency (framer-motion only), reduced-motion safe, and fully token-driven.
 - Tagged v68; touched hero-section only.
+
+---
+Task ID: 69 (thunder rework — procedural realistic lightning, randomized landing)
+Agent: Main agent
+Task: User rejected v68's bolt ("erokom na, realistic thunder chai, just ekta position a na, randomly position change korbe") — the v68 bolt was a single fixed-path SVG lightning shape that always struck at the same spot (right 5% mobile / right 4% desktop). Reworked to procedural, realistic, position-randomizing lightning.
+
+Work Log:
+- Replaced the canned BOLT_MAIN/BRANCH path constants with a midpoint-displacement generator: jagged() recursively subdivides the channel, kicking each midpoint sideways by a random share of a halving displacement budget, producing the irregular multi-segment geometry real stepped leaders have (32 points on the main channel).
+- genStrike() builds a complete strike per stage: main channel with random origin (30-70 across a 100x150 unit box), random drift endpoint, then 2-4 forks off the upper two-thirds at ±~54°, each fork jagged with its own budget, ~40% of forks carrying a thinner twig. Every branch is a fresh polyline, so no two strikes share a shape.
+- The landing spot is drawn per strike too: bolt box width/height/left randomized inside per-stage ranges (mobile 30-46% wide x 40-56% tall, desktop 18-30% x 22-36%, edge-padded), so position AND size change every strike. The sky/room flash radial's center is computed from the bolt's own origin (left + sx% of width), so the light always radiates from where the bolt actually hangs; the face reflection's diagonal wash now leans toward whichever side the bolt landed on.
+- Realistic restrike timeline replaces the single fade: spike -> micro-flicker decay -> blackout at 42% -> re-strike surge at ~56% -> fade, over 1.15s (BOLT_OPACITY 12 keyframes, linear for crisp flickers); the room flash answers softer on 9 keyframes, the face softer still. Strokes use vector-effect non-scaling-stroke so the stretched 100x150 viewBox keeps crisp constant-width channels; three passes (accent haze blur 6, vivid accent channel, white-hot core) unchanged in spirit.
+- strikes useMemo (guarded strike > 0, client-only, SSR-safe) draws fresh geometry for both stages per strike; bolt keyed by strike so framer replays draw-in + flicker each remount. Reduced motion still = clear skies (clock never starts).
+- Verified with agent-browser: bolt position across 8+ strikes observed at 44.9/51.7/26.0/17.8/54.8/25.2/27.0/47.9% — every strike lands somewhere new. Built a freeze harness (stylesheet !important + dasharray pin) to hold strikes at full brightness for screenshots: mobile light teal — jagged bolt with fork left of subject; mobile dark teal — bolt + fork right of the head, sky flash glowing at the bolt origin, face/shirt/suit carrying the teal reflection (frozen at peak); desktop light ember — golden bolt in the card's upper sky; desktop dark teal — bolt beside the head in the card. Console clean, footer push intact, lint 0 problems, tsc src clean.
+
+Stage Summary:
+- The storm now behaves like weather: every strike is a newly generated fractal bolt in the drawn hue, at a new place and size, flashing the room and the face from its own origin with a real restrike signature.
+- No fixed positions remain anywhere in the thunder stack; flash and face layers follow the bolt.
+- Tagged v69; touched hero-section only.

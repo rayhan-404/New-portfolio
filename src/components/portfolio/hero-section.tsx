@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   motion,
   useMotionValue,
@@ -46,57 +46,219 @@ const CARD_LIGHT_RECOLOR = [
   "radial-gradient(22% 8% at 97% 79%, rgba(var(--accent-rgb)/0.5), transparent 76%)",
 ];
 
-/* ── Thunder — the drawn hue's own weather ─────────────────────
-   Every strike is accent-colored by construction: a jagged bolt
-   draws itself in above the subject (white-hot core inside an
-   accent haze), the sky double-flickers like real lightning, and
-   the flash reflects on the face — silhouette-masked on the
-   cutout stage, face-scoped radials inside the card. All layers
-   ride the accent tokens, so every drawn hue brings its own
-   storm. Visual only; honors reduced motion (no strikes). */
-const BOLT_MAIN = "M80 4 L54 100 L70 106 L40 200 L58 206 L26 298";
-const BOLT_BRANCH_A = "M62 104 L88 148 L76 150 L98 196";
-const BOLT_BRANCH_B = "M56 150 L34 186";
-const FLASH_TIMES = [0, 0.07, 0.2, 0.32, 0.5, 1];
+/* ── Thunder — procedural lightning in the drawn hue ───────────
+   No canned bolt: every strike runs a midpoint-displacement
+   recursion that jags a fresh main channel, forks 2–4 branches
+   (some carrying twigs), and drops the whole thing at a random
+   spot in a random size — new shape, new place, every time, the
+   way real storms behave. Three stacked passes (accent haze,
+   vivid channel, white-hot core) read as electric heat inside
+   the drawn hue; the strike flickers with a real restrike
+   signature (spike → micro-flicker decay → blackout → re-strike
+   → fade) and the sky/room flash — positioned at the bolt's own
+   origin — reflects on the face. Reduced motion = clear skies. */
+type Pt = [number, number];
 
-function LightningBolt({ className = "", strikeKey }: { className?: string; strikeKey: number }) {
+interface BoltBranch {
+  d: string;
+  depth: 0 | 1; // 0 = fork off the channel, 1 = twig off a fork
+}
+
+interface Strike {
+  main: string;
+  branches: BoltBranch[];
+  /* landing spot across the stage, in % */
+  left: number;
+  width: number;
+  height: number;
+  /* the bolt's own origin in stage % — the flash radiates from here */
+  flashX: number;
+  flashY: number;
+}
+
+interface StrikeRanges {
+  wMin: number;
+  wMax: number;
+  hMin: number;
+  hMax: number;
+  pad: number;
+}
+
+const MOBILE_STRIKE: StrikeRanges = { wMin: 30, wMax: 46, hMin: 40, hMax: 56, pad: 2 };
+const DESKTOP_STRIKE: StrikeRanges = { wMin: 18, wMax: 30, hMin: 22, hMax: 34, pad: 4 };
+
+const clampN = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
+
+/* midpoint-displacement recursion — subdivides the segment, kicks
+   each midpoint sideways by a random share of the displacement
+   budget, halves the budget, recurses until fine-grained */
+function jagged(x1: number, y1: number, x2: number, y2: number, disp: number): Pt[] {
+  const pts: Pt[] = [[x1, y1]];
+  const split = (ax: number, ay: number, bx: number, by: number, d: number) => {
+    if (d < 2.4) {
+      pts.push([bx, by]);
+      return;
+    }
+    const mx = (ax + bx) / 2 + (Math.random() - 0.5) * d;
+    const my = (ay + by) / 2 + (Math.random() - 0.5) * d * 0.55;
+    split(ax, ay, mx, my, d / 2);
+    split(mx, my, bx, by, d / 2);
+  };
+  split(x1, y1, x2, y2, disp);
+  return pts;
+}
+
+const toPath = (pts: Pt[]) =>
+  `M${pts.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join("L")}`;
+
+/* one full strike for one stage: fresh geometry + a fresh landing spot
+   (geometry lives in a 100×150 unit box the placement scales — runs
+   client-side only, after the strike clock mounts, so SSR never sees it) */
+function genStrike(r: StrikeRanges): Strike {
+  const sx = 30 + Math.random() * 40; // origin across the box
+  const ex = clampN(sx + (Math.random() - 0.5) * 46, 16, 84); // drift
+  const mainPts = jagged(sx, 3, ex, 116 + Math.random() * 28, 52);
+
+  const branches: BoltBranch[] = [];
+  const forks = 2 + Math.floor(Math.random() * 3);
+  for (let i = 0; i < forks; i++) {
+    const t = 0.14 + Math.random() * 0.48; // forks live in the upper ⅔
+    const [px, py] = mainPts[Math.floor(t * (mainPts.length - 1))];
+    const ang = (Math.random() - 0.5) * 1.9; // ±~54° off the channel
+    const len = 34 + Math.random() * 30;
+    const bx = clampN(px + Math.sin(ang) * len, 4, 96);
+    const by = clampN(py + Math.cos(ang) * len * 0.85, 20, 148);
+    const bp = jagged(px, py, bx, by, len * 0.45);
+    branches.push({ d: toPath(bp), depth: 0 });
+    if (Math.random() < 0.4) {
+      const [tx, ty] = bp[Math.floor(bp.length / 2)];
+      const tang = ang + (Math.random() - 0.5) * 2.2;
+      const tlen = len * (0.35 + Math.random() * 0.25);
+      branches.push({
+        d: toPath(
+          jagged(
+            tx,
+            ty,
+            clampN(tx + Math.sin(tang) * tlen, 4, 96),
+            clampN(ty + Math.cos(tang) * tlen * 0.8, 24, 148),
+            tlen * 0.4
+          )
+        ),
+        depth: 1,
+      });
+    }
+  }
+
+  const width = r.wMin + Math.random() * (r.wMax - r.wMin);
+  const height = r.hMin + Math.random() * (r.hMax - r.hMin);
+  const left = r.pad + Math.random() * (100 - r.pad * 2 - width);
+  const flashX = left + (sx / 100) * width;
+  const flashY = (3 / 150) * height;
+
+  return { main: toPath(mainPts), branches, left, width, height, flashX, flashY };
+}
+
+/* real-lightning restrike signature: spike → micro-flicker decay →
+   blackout → re-strike → fade; the room answers softer than the bolt,
+   the face softer still */
+const STRIKE_MS = 1.15;
+const BOLT_TIMES = [0, 0.05, 0.11, 0.17, 0.25, 0.33, 0.42, 0.48, 0.56, 0.68, 0.82, 1];
+const BOLT_OPACITY = [0, 1, 0.5, 0.88, 0.4, 0.72, 0.1, 0.08, 0.62, 0.3, 0.12, 0];
+const FLASH_TIMES = [0, 0.05, 0.13, 0.22, 0.33, 0.48, 0.56, 0.72, 1];
+const FLASH_OPACITY = [0, 0.95, 0.3, 0.7, 0.15, 0.12, 0.55, 0.2, 0];
+const FACE_TIMES = FLASH_TIMES;
+const FACE_OPACITY = [0, 1, 0.35, 0.8, 0.3, 0.25, 0.7, 0.25, 0];
+
+function LightningBolt({ strike: s }: { strike: Strike }) {
   return (
     <motion.svg
-      key={strikeKey}
-      viewBox="0 0 120 300"
+      viewBox="0 0 100 150"
+      preserveAspectRatio="none"
       aria-hidden="true"
-      className={`pointer-events-none overflow-visible ${className}`}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: [0, 1, 1, 0.85, 0] }}
-      transition={{ duration: 0.85, times: [0, 0.05, 0.42, 0.6, 1], ease: "easeOut" }}
+      data-bolt="1"
+      className="pointer-events-none absolute z-0 overflow-visible"
       style={{
+        left: `${s.left}%`,
+        top: 0,
+        width: `${s.width}%`,
+        height: `${s.height}%`,
         filter:
-          "drop-shadow(0 0 5px rgba(var(--accent-rgb)/0.9)) drop-shadow(0 0 16px rgba(var(--accent-rgb)/0.5))",
+          "drop-shadow(0 0 5px rgba(var(--accent-rgb)/0.9)) drop-shadow(0 0 18px rgba(var(--accent-rgb)/0.5))",
       }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: BOLT_OPACITY }}
+      transition={{ duration: STRIKE_MS, times: BOLT_TIMES, ease: "linear" }}
     >
-      <g fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <g fill="none" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke">
         {/* wide accent haze — the bolt's atmosphere */}
-        <motion.g
-          stroke="rgb(var(--accent-rgb))"
-          strokeWidth={9}
-          style={{ opacity: 0.5, filter: "blur(5px)" }}
-        >
-          <motion.path d={BOLT_MAIN} initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.2, ease: "easeOut" }} />
-          <motion.path d={BOLT_BRANCH_A} initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.16, delay: 0.07, ease: "easeOut" }} />
-          <motion.path d={BOLT_BRANCH_B} initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.12, delay: 0.1, ease: "easeOut" }} />
-        </motion.g>
+        <g stroke="rgb(var(--accent-rgb))" style={{ opacity: 0.5, filter: "blur(6px)" }}>
+          <motion.path
+            d={s.main}
+            strokeWidth={7.5}
+            vectorEffect="non-scaling-stroke"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 0.14, ease: "easeOut" }}
+          />
+          {s.branches.map((b, i) => (
+            <motion.path
+              key={i}
+              d={b.d}
+              strokeWidth={b.depth === 0 ? 4.4 : 3}
+              vectorEffect="non-scaling-stroke"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 0.11, delay: 0.03 + i * 0.012, ease: "easeOut" }}
+            />
+          ))}
+        </g>
         {/* vivid accent channel */}
-        <motion.g stroke="var(--accent-ref)" strokeWidth={3.4}>
-          <motion.path d={BOLT_MAIN} initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.2, ease: "easeOut" }} />
-          <motion.path d={BOLT_BRANCH_A} initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.16, delay: 0.07, ease: "easeOut" }} />
-          <motion.path d={BOLT_BRANCH_B} initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.12, delay: 0.1, ease: "easeOut" }} />
-        </motion.g>
+        <g stroke="var(--accent-ref)">
+          <motion.path
+            d={s.main}
+            strokeWidth={2.7}
+            vectorEffect="non-scaling-stroke"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 0.14, ease: "easeOut" }}
+          />
+          {s.branches.map((b, i) => (
+            <motion.path
+              key={i}
+              d={b.d}
+              strokeWidth={b.depth === 0 ? 1.7 : 1.1}
+              vectorEffect="non-scaling-stroke"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 0.11, delay: 0.03 + i * 0.012, ease: "easeOut" }}
+            />
+          ))}
+        </g>
         {/* white-hot core — the electric heat inside the hue */}
-        <motion.g stroke="rgba(255, 255, 255, 0.85)" strokeWidth={1.3}>
-          <motion.path d={BOLT_MAIN} initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.2, ease: "easeOut" }} />
-          <motion.path d={BOLT_BRANCH_A} initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.16, delay: 0.07, ease: "easeOut" }} />
-          <motion.path d={BOLT_BRANCH_B} initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.12, delay: 0.1, ease: "easeOut" }} />
-        </motion.g>
+        <g stroke="rgba(255, 255, 255, 0.92)">
+          <motion.path
+            d={s.main}
+            strokeWidth={1.15}
+            vectorEffect="non-scaling-stroke"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 0.14, ease: "easeOut" }}
+          />
+          {s.branches
+            .filter((b) => b.depth === 0)
+            .map((b, i) => (
+              <motion.path
+                key={i}
+                d={b.d}
+                strokeWidth={0.8}
+                stroke="rgba(255, 255, 255, 0.65)"
+                vectorEffect="non-scaling-stroke"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 0.11, delay: 0.03 + i * 0.012, ease: "easeOut" }}
+              />
+            ))}
+        </g>
       </g>
     </motion.svg>
   );
@@ -184,6 +346,17 @@ export function HeroSection() {
       clearTimeout(t);
     };
   }, [reduce]);
+
+  /* fresh bolt geometry + fresh landing spot for every strike — the
+     mobile and desktop stages each get their own draw (only one is
+     ever visible); runs client-side only, never during SSR */
+  const strikes = useMemo(
+    () =>
+      strike > 0
+        ? { m: genStrike(MOBILE_STRIKE), d: genStrike(DESKTOP_STRIKE) }
+        : null,
+    [strike]
+  );
 
   /* Gentle parallax on the desktop portrait card */
   const mx = useMotionValue(0);
@@ -279,26 +452,26 @@ export function HeroSection() {
                 Accent halo + drifting bokeh behind the subject play the
                 role the photo's lights used to — the site lights the room. */}
             <div className="relative pt-20 sm:pt-24">
-              {/* thunder — the drawn hue's bolt behind the subject + sky
-                  flash; the strike clock lives on the section, so both
-                  stages share one storm */}
-              {strike > 0 && (
-                <LightningBolt strikeKey={strike} className="absolute right-[5%] top-0 z-0 h-[44%] w-auto" />
-              )}
-              {strike > 0 && (
-                <motion.div
-                  key={`sky-${strike}`}
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 z-0"
-                  style={{
-                    background:
-                      "radial-gradient(58% 42% at 76% 6%, rgba(var(--accent-rgb)/0.5), rgba(var(--primary-rgb)/0.22) 55%, transparent 78%)",
-                    mixBlendMode: "screen",
-                  }}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: [0, 0.9, 0.25, 0.7, 0.28, 0] }}
-                  transition={{ duration: 0.9, times: FLASH_TIMES, ease: "easeOut" }}
-                />
+              {/* thunder — a fresh bolt at a fresh spot every strike
+                  (procedural geometry, random landing); the strike clock
+                  lives on the section so both stages share one storm,
+                  and the sky flash radiates from the bolt's own origin */}
+              {strike > 0 && strikes && (
+                <>
+                  <LightningBolt key={`mb-${strike}`} strike={strikes.m} />
+                  <motion.div
+                    key={`sky-${strike}`}
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 z-0"
+                    style={{
+                      background: `radial-gradient(58% 42% at ${strikes.m.flashX.toFixed(1)}% ${strikes.m.flashY.toFixed(1)}%, rgba(var(--accent-rgb)/0.5), rgba(var(--primary-rgb)/0.22) 55%, transparent 78%)`,
+                      mixBlendMode: "screen",
+                    }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: FLASH_OPACITY }}
+                    transition={{ duration: STRIKE_MS, times: FLASH_TIMES, ease: "easeOut" }}
+                  />
+                </>
               )}
               <div
                 className="relative translate-x-[4.5%]"
@@ -363,15 +536,15 @@ export function HeroSection() {
 
                 {/* the strike reflects on the face/body — scoped by the
                     cutout's own alpha so the flash lights the person,
-                    never the ground around them */}
-                {strike > 0 && (
+                    never the ground around them; the diagonal wash leans
+                    toward whichever side the bolt landed on */}
+                {strike > 0 && strikes && (
                   <motion.div
                     key={`mface-${strike}`}
                     aria-hidden="true"
                     className="pointer-events-none absolute inset-0"
                     style={{
-                      background:
-                        "radial-gradient(48% 16% at 55% 13%, rgba(var(--accent-rgb)/0.55), transparent 72%), linear-gradient(to bottom left, rgba(var(--accent-rgb)/0.32), transparent 46%)",
+                      background: `radial-gradient(48% 16% at 55% 13%, rgba(var(--accent-rgb)/0.55), transparent 72%), linear-gradient(to bottom ${strikes.m.flashX < 50 ? "right" : "left"}, rgba(var(--accent-rgb)/0.32), transparent 46%)`,
                       mixBlendMode: "screen",
                       WebkitMaskImage: "url(/generated/m-rayhan-cutout-mask-v2.webp)",
                       maskImage: "url(/generated/m-rayhan-cutout-mask-v2.webp)",
@@ -379,8 +552,8 @@ export function HeroSection() {
                       maskSize: "100% 100%",
                     }}
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: [0, 1, 0.3, 0.85, 0.35, 0] }}
-                    transition={{ duration: 0.9, times: FLASH_TIMES, ease: "easeOut" }}
+                    animate={{ opacity: FACE_OPACITY }}
+                    transition={{ duration: STRIKE_MS, times: FACE_TIMES, ease: "easeOut" }}
                   />
                 )}
                 </div>
@@ -611,41 +784,39 @@ export function HeroSection() {
                           "linear-gradient(to bottom, rgba(var(--primary-rgb)/0.18), transparent 16%)",
                       }}
                     />
-                    {/* thunder in the room — the hue's bolt above the
-                        subject, the strike washing the space, and the
-                        flash reflecting on the face (the established
-                        face coordinates) */}
-                    {strike > 0 && (
-                      <LightningBolt strikeKey={strike} className="absolute right-[4%] top-0 h-[30%] w-auto" />
+                    {/* thunder in the room — a fresh bolt at a fresh spot
+                        every strike, the room flash radiating from the
+                        bolt's own origin, and the reflection leaning
+                        toward the bolt on the established face */}
+                    {strike > 0 && strikes && (
+                      <LightningBolt key={`db-${strike}`} strike={strikes.d} />
                     )}
-                    {strike > 0 && (
+                    {strike > 0 && strikes && (
                       <motion.div
                         key={`droom-${strike}`}
                         aria-hidden="true"
                         className="pointer-events-none absolute inset-0"
                         style={{
-                          background:
-                            "radial-gradient(52% 38% at 86% 4%, rgba(var(--accent-rgb)/0.55), rgba(var(--primary-rgb)/0.25) 55%, transparent 78%)",
+                          background: `radial-gradient(52% 38% at ${strikes.d.flashX.toFixed(1)}% ${strikes.d.flashY.toFixed(1)}%, rgba(var(--accent-rgb)/0.55), rgba(var(--primary-rgb)/0.25) 55%, transparent 78%)`,
                           mixBlendMode: "screen",
                         }}
                         initial={{ opacity: 0 }}
-                        animate={{ opacity: [0, 0.85, 0.22, 0.65, 0.26, 0] }}
-                        transition={{ duration: 0.9, times: FLASH_TIMES, ease: "easeOut" }}
+                        animate={{ opacity: FLASH_OPACITY }}
+                        transition={{ duration: STRIKE_MS, times: FLASH_TIMES, ease: "easeOut" }}
                       />
                     )}
-                    {strike > 0 && (
+                    {strike > 0 && strikes && (
                       <motion.div
                         key={`dface-${strike}`}
                         aria-hidden="true"
                         className="pointer-events-none absolute inset-0"
                         style={{
-                          background:
-                            "radial-gradient(30% 14% at 53% 32%, rgba(var(--accent-rgb)/0.6), transparent 74%), linear-gradient(to bottom left, rgba(var(--accent-rgb)/0.35), transparent 42%)",
+                          background: `radial-gradient(30% 14% at 53% 32%, rgba(var(--accent-rgb)/0.6), transparent 74%), linear-gradient(to bottom ${strikes.d.flashX < 50 ? "right" : "left"}, rgba(var(--accent-rgb)/0.35), transparent 42%)`,
                           mixBlendMode: "screen",
                         }}
                         initial={{ opacity: 0 }}
-                        animate={{ opacity: [0, 1, 0.3, 0.85, 0.35, 0] }}
-                        transition={{ duration: 0.9, times: FLASH_TIMES, ease: "easeOut" }}
+                        animate={{ opacity: FACE_OPACITY }}
+                        transition={{ duration: STRIKE_MS, times: FACE_TIMES, ease: "easeOut" }}
                       />
                     )}
                 </div>
