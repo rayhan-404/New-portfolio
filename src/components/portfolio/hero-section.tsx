@@ -24,9 +24,9 @@ const CUTOUT_H = 1149;
 
 function IntroBio({ className = "" }: { className?: string }) {
   return (
-    <div className={`flex flex-col gap-4 ${className}`}>
-      {/* Lead line — bigger, editorial serif italic, the "special" opener */}
-      <p className="font-serif text-[1.3rem] italic leading-[1.35] tracking-[-0.01em] text-foreground/80 sm:text-[1.5rem]">
+    <div className={`flex flex-col gap-3.5 ${className}`}>
+      {/* Lead deck — Fraunces italic, pairs with the greeting above */}
+      <p className="font-fraunces text-[1.35rem] italic leading-[1.4] tracking-[-0.01em] text-foreground/85 sm:text-[1.55rem]">
         I&apos;m a CSE student at{" "}
         <span className="font-medium text-foreground">
           North Western University, Khulna
@@ -34,8 +34,8 @@ function IntroBio({ className = "" }: { className?: string }) {
         , and originally from{" "}
         <span className="font-medium text-foreground">Shyamnagar, Satkhira, Bangladesh</span>.
       </p>
-      <p className="font-bio text-pretty text-[14.5px] leading-[1.78] text-foreground/75 sm:text-[15.5px]">
-        I&apos;m basically a boring and curious guy who wants to know{" "}
+      <p className="font-book text-justify text-[15px] leading-[1.72] text-foreground/80 [hyphens:auto] sm:text-[16px]">
+        <span className="dropcap">I</span>&apos;m basically a boring and curious guy who wants to know{" "}
         <strong className="font-semibold text-foreground">
           how everything works, from my cell, brain, everything surrounding me,
           to the universe, and what&apos;s going on behind the screen
@@ -44,19 +44,19 @@ function IntroBio({ className = "" }: { className?: string }) {
         I&apos;ll spend hours trying to figure it out and understand how it
         works.
       </p>
-      <p className="font-bio text-pretty text-[14.5px] leading-[1.78] text-foreground/75 sm:text-[15.5px]">
+      <p className="font-book text-justify text-[15px] leading-[1.72] text-foreground/80 [hyphens:auto] sm:text-[16px]">
         I like learning new things, trying random ideas, and building stuff
         just to see if I can actually make it work. I&apos;ve already built a
         few small projects because of this habit, and honestly, I enjoy the
         process more than the final result, and it satisfies me more than
         anything.
       </p>
-      <p className="font-bio text-pretty text-[14.5px] leading-[1.78] text-foreground/75 sm:text-[15.5px]">
+      <p className="font-book text-justify text-[15px] leading-[1.72] text-foreground/80 [hyphens:auto] sm:text-[16px]">
         Sometimes I build something useful. Sometimes I build something
         completely unnecessary. And sometimes I break something and then spend
         the next few hours figuring out how it actually works. 🧐
       </p>
-      <p className="font-bio text-pretty text-[14.5px] leading-[1.78] text-foreground/75 sm:text-[15.5px]">
+      <p className="font-book text-justify text-[15px] leading-[1.72] text-foreground/80 [hyphens:auto] sm:text-[16px]">
         If you ask,{" "}
         <strong className="font-semibold text-foreground">
           what is this guy interested in?
@@ -69,7 +69,7 @@ function IntroBio({ className = "" }: { className?: string }) {
         . I don&apos;t know where this curiosity will take me yet, but I&apos;m
         having fun finding out.
       </p>
-      <p className="font-bio text-pretty text-[14.5px] font-semibold leading-[1.78] text-foreground sm:text-[15.5px]">
+      <p className="font-book text-justify text-[15px] font-semibold leading-[1.72] text-foreground [hyphens:auto] sm:text-[16px]">
         I&apos;m curious about almost everything, and I love building things
         just to see what happens.
       </p>
@@ -133,9 +133,9 @@ export function HeroSection() {
               initial={reduce ? false : { opacity: 0, x: -16, y: -8 }}
               animate={{ opacity: 1, x: 0, y: 0 }}
               transition={{ duration: 0.7, delay: 0.55, ease: EASE }}
-              className="text-glow absolute left-5 top-4 z-10 sm:left-8 sm:top-6"
+              className="text-glow absolute left-4 top-1 z-10 sm:left-8 sm:top-3"
             >
-              <span className="font-serif block text-[3rem] font-normal italic leading-[0.95] tracking-[-0.015em] text-foreground sm:text-[3.6rem]">
+              <span className="font-fraunces block text-[3.5rem] font-semibold italic leading-[0.95] tracking-[-0.01em] text-foreground sm:text-[4rem]">
                 Hello<span className="text-gold-gradient">..</span>
               </span>
               <motion.svg
@@ -215,11 +215,11 @@ export function HeroSection() {
               className="relative z-10 -mt-20 px-5 pb-2 text-left sm:-mt-28 sm:px-8"
             >
               {/* Name — "I am," on top, the signature name on its own line below */}
-              <p className="font-serif text-[1.7rem] font-normal italic leading-none tracking-[-0.02em] text-foreground/85 sm:text-[2.1rem]">
+              <p className="font-fraunces text-[1.7rem] font-semibold italic leading-none tracking-[-0.02em] text-foreground/85 sm:text-[2.1rem]">
                 I am<span className="text-gold-gradient">,</span>
               </p>
 
-              <h1 className="font-script text-glow mt-2 text-[3.5rem] leading-[1.12] text-foreground sm:text-[4.3rem]">
+              <h1 className="font-script text-glow mt-1 text-[4.25rem] leading-[1.08] text-foreground sm:text-[5rem]">
                 M Rayhan
               </h1>
 
@@ -234,12 +234,45 @@ export function HeroSection() {
         <div className="grid items-center grid-cols-[minmax(0,7fr)_minmax(0,5fr)] gap-12">
           {/* ── Intro column ───────────────────────────────────── */}
           <div className="text-left">
+            {/* Greeting — Fraunces italic + hand-drawn swash, the same
+                lockup the mobile hero wears; bigger cascade on desktop */}
+            <motion.div
+              initial={reduce ? false : { opacity: 0, x: -14 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.12, ease: EASE }}
+              className="text-glow"
+            >
+              <p className="font-fraunces text-[3.75rem] font-semibold italic leading-[0.95] tracking-[-0.01em] text-foreground xl:text-[4.25rem]">
+                Hello<span className="text-gold-gradient">..</span>
+              </p>
+              <svg
+                viewBox="0 0 140 14"
+                aria-hidden="true"
+                className="mt-1.5 block h-[14px] w-[140px] drop-shadow-[0_2px_6px_rgba(var(--primary-rgb)/0.35)]"
+              >
+                <path
+                  d="M3 9 C 30 3, 58 12.5, 86 7.5 S 128 4.5, 137 7"
+                  fill="none"
+                  stroke="url(#hello-swash-gold-desktop)"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                />
+                <defs>
+                  <linearGradient id="hello-swash-gold-desktop" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" style={{ stopColor: "var(--primary2-ref)" }} />
+                    <stop offset="55%" style={{ stopColor: "var(--primary)" }} />
+                    <stop offset="100%" style={{ stopColor: "var(--accent-ref)" }} />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </motion.div>
+
             {/* Name — "I am," on top, the script name on its own line below */}
             <motion.p
               initial={reduce ? false : { opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
-              className="font-serif text-[2.3rem] font-normal italic leading-none tracking-[-0.02em] text-foreground/85"
+              className="font-fraunces mt-5 text-[2.3rem] font-semibold italic leading-none tracking-[-0.02em] text-foreground/85"
             >
               I am<span className="text-gold-gradient">,</span>
             </motion.p>
@@ -248,7 +281,7 @@ export function HeroSection() {
               initial={reduce ? false : { opacity: 0, y: 26 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.85, delay: 0.32, ease: EASE }}
-              className="font-script text-glow mt-2.5 text-[5.4rem] leading-[1.1] text-foreground xl:text-[6rem]"
+              className="font-script text-glow mt-2 text-[6.25rem] leading-[1.05] text-foreground xl:text-[7rem]"
             >
               M Rayhan
             </motion.h1>

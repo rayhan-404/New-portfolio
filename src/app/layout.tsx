@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import {
-  Dancing_Script,
+  Bonheur_Royale,
+  Fraunces,
   Geist,
   Geist_Mono,
   Instrument_Serif,
@@ -59,11 +60,22 @@ const syne = Syne({
   display: "swap",
 });
 
-/* Elegant signature script — the name mark, professional flow */
-const dancingScript = Dancing_Script({
+/* High-contrast editorial display serif — the greeting lockup
+   ("Hello.." / lead deck): optical-size axis, luxury letterforms */
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
+/* Signature script — the name mark. Bonheur Royale is a flowing,
+   high-contrast calligraphic face; carried at its real 400 weight
+   and fattened optically with a hairline stroke at the usage site. */
+const bonheurRoyale = Bonheur_Royale({
   variable: "--font-script",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: "400",
   display: "swap",
 });
 
@@ -150,7 +162,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: ACCENT_BOOT_SCRIPT }} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${nunito.variable} ${instrumentSerif.variable} ${sourceSerif.variable} ${syne.variable} ${dancingScript.variable} antialiased text-foreground min-h-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} ${nunito.variable} ${instrumentSerif.variable} ${sourceSerif.variable} ${syne.variable} ${bonheurRoyale.variable} ${fraunces.variable} antialiased text-foreground min-h-screen flex flex-col`}
       >
         <script
           type="application/ld+json"

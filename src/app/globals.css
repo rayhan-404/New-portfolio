@@ -211,7 +211,7 @@
      Deliberately hue-independent: the bite reads as a shadow hole. */
   --notch-core: #8a2a0c;
   --notch-mid: #b03d14;
-  --notch-dot: #ffffff;
+  --notch-dot: #ffffff; /* kept for legacy theme tooling */
 
   /* Portrait blend — melts photos into the family field */
   --img-vignette: linear-gradient(
@@ -671,12 +671,42 @@
 }
 
 /* Elegant signature script — the "M Rayhan" name mark.
-   Dancing Script carries real weights; 600 reads confident without
-   looking retro, and slight negative tracking keeps it tidy. */
+   Bonheur Royale: flowing calligraphic display with dramatic
+   thick-thin strokes. Single real weight (400); the mark is
+   fattened optically with a hairline stroke so it reads bold
+   without the browser's smudged synthetic bold. */
 @utility font-script {
   font-family: var(--font-script), var(--font-syne), cursive;
+  font-weight: 400;
+  -webkit-text-stroke: 0.016em currentColor;
+  letter-spacing: 0.01em;
+}
+
+/* High-contrast editorial display serif — greetings and decks.
+   Optical sizing left to the browser for luxury letterforms. */
+@utility font-fraunces {
+  font-family: var(--font-fraunces), var(--font-instrument-serif), ui-serif, Georgia, serif;
+  font-optical-sizing: auto;
+}
+
+/* Book-quality reading serif — long-form editorial body copy */
+@utility font-book {
+  font-family: var(--font-source-serif), ui-serif, Georgia, serif;
+}
+
+/* Editorial drop cap — the first letter of the intro's opening
+   paragraph, floated across two text lines in the accent ink. */
+.dropcap {
+  float: left;
+  font-family: var(--font-fraunces), var(--font-instrument-serif), serif;
+  font-optical-sizing: auto;
+  font-style: italic;
   font-weight: 600;
-  letter-spacing: -0.01em;
+  font-size: 3.15em;
+  line-height: 0.78;
+  padding-right: 0.14em;
+  padding-top: 0.06em;
+  color: var(--accent-ink);
 }
 
 /* ============================================================

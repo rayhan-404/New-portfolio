@@ -732,3 +732,21 @@ Stage Summary:
 - Contrast is now structural, not per-hue luck: any future pool addition inherits readable labels automatically through the accent-ink tone.
 - The numbered-section system runs two through five with zero gaps, the project grid rows read as one aligned band, and the contact columns meet flush at the bottom.
 - Tagged v59; touched the stylesheet token layer plus the journey, projects, contact, hero, skills, section-heading, repository browser and dialog components.
+
+---
+Task ID: 60 (hero type system rebuild — signature name, editorial greeting, justified intro)
+Agent: Main agent
+Task: The user's four-point hero brief — remove the navigator's active dot, tighten and justify the intro copy, switch the name mark to Bonheur Royale in a bold read, restyle and lift the greeting, and reformat the whole introduction with premium typography.
+
+Work Log:
+- Removed the small glowing dot that rode the active navigator button; the pressed-in tile with its magnified vertical label now carries the active state alone. (The phone header never had the dot, so no twin change was needed.)
+- Swapped the name mark's typeface to Bonheur Royale, the flowing calligraphic face the user linked. It ships a single hairline weight, so the bold read comes from an optical hairline stroke that scales with the size instead of the browser's smudged synthetic bold; sizes were raised on both mobile and desktop because the face runs optically small, and the footer wordmark took the same face at a matching bump.
+- Rebuilt the greeting: Hello now sits bigger and higher on the mobile cutout (top corner of the photo, swash tucked beneath), and the desktop intro column gained the same greeting lockup it never had — a three-line cascade of greeting, then the "I am," beat, then the script name, each in the new editorial display serif (Fraunces, high-contrast letterforms with optical sizing) so the whole lockup shares one voice.
+- Reformatted the introduction as proper editorial matter: the lead line pairs with the greeting in the same serif italic; the five body paragraphs moved onto a book-quality reading serif at sixteen pixels with a tighter line rhythm per the user's "spacing aro komaw"; the text is now fully justified as requested — but with automatic hyphenation (the document language is set) so the justification never opens rivers; and the opening paragraph wears a true drop cap — a two-line italic capital in the hue-following accent ink, magazine style.
+- Hit the recurring stale-stylesheet episode again (new rules invisible to the served CSS); cured with the usual clean cache cold restart before verifying.
+- Verified across dark and light and two accent draws on desktop plus a 390-pixel phone: the greeting cascade, bold signature, drop cap, hyphenated justified lines (checked computed styles directly), zero console errors and no horizontal overflow. Typecheck and lint clean.
+
+Stage Summary:
+- Type system now: greeting and lead deck in Fraunces italic; the name in stroke-fattened Bonheur Royale; the intro body in Source Serif reading serif, justified with hyphenation and an accent-ink drop cap; UI labels stay Nunito.
+- The navigator reads dot-free: active state = pressed tile + magnified label only.
+- Tagged v60; touched the font loader, the stylesheet type layer, the hero, the footer wordmark and the navigator rail.

@@ -23,7 +23,7 @@ export function Footer() {
         <div className="flex flex-wrap items-start justify-between gap-8">
           <div>
             {/* Script wordmark — echoes the hero's Lobster name lockup */}
-            <p className="font-script text-[1.65rem] leading-none text-foreground">
+            <p className="font-script text-[2.1rem] leading-none text-foreground">
               M<span className="text-gold"> Rayhan</span>
             </p>
             <p className="font-tag mt-2.5 text-[9.5px] text-muted-foreground">

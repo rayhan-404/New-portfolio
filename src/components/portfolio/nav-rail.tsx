@@ -157,13 +157,6 @@ export function NavRail({ categories, activeIndex, onSelectCategory }: NavRailPr
               >
                 {cat.label}
               </span>
-              {/* active dot */}
-              <span
-                aria-hidden="true"
-                className={`absolute -left-0.5 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-[var(--notch-dot)] shadow-[0_1px_6px_rgba(var(--primary-rgb)/0.55)] transition-all duration-300 ${
-                  isActive ? "scale-100 opacity-100" : "scale-0 opacity-0"
-                }`}
-              />
             </button>
           );
         })}
