@@ -52,3 +52,9 @@ prompt
 server.log
 # Skills directory
 /skills/tool-results/
+
+# runtime data & local artifacts
+/db/
+/tool-results/
+/public/portfolio-source-v71.zip
+/public/my-project-v71.bundle
