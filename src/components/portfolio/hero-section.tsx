@@ -16,10 +16,10 @@ import { scrollToSection } from "./nav";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-/* m-rayhan-headshot-cutout.webp intrinsic size (rembg cutout of the HD
-   portrait source, 2x premultiplied Lanczos + gentle unsharp, q95) */
-const HEADSHOT_W = 2014;
-const HEADSHOT_H = 2710;
+/* m-rayhan-headshot-cutout.webp intrinsic size (user's Photoroom cutout
+   of the HD portrait, 2x premultiplied Lanczos + gentle unsharp, q95) */
+const HEADSHOT_W = 1964;
+const HEADSHOT_H = 2698;
 
 /* ── Desktop card light map ─────────────────────────────────────
    The HD portrait's white lamps (upper-right double strip, left

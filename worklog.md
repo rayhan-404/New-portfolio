@@ -823,3 +823,19 @@ Stage Summary:
 - The approved v47-v50 composition is fully ported to the current design system at HD quality: desktop card = the real photo melted flush into its backdrop with the accent literally re-lighting the photo's lamps; mobile = the HD cutout with silhouette-scoped accent light.
 - Every layer rides --accent-rgb/--primary-rgb, so all 10 rotating hues re-light both stages for free; dark mode adds the suit bounce light.
 - Tagged v64; touched hero-section and added portrait-hd.webp + cutout mask assets (mobile cutout master regenerated).
+
+---
+Task ID: 65 (user's Photoroom cutout, full quality)
+Agent: Main agent
+Task: User supplied their own background-removed export of the HD portrait ("ChatGPT Image Sep 27, 2026, 10_32_28 PM-Photoroom.png", 1122x1402 RGBA) — "ei image implement koro with full quality".
+
+Work Log:
+- File was absent from upload/ on disk; downloaded from the CDN upload URL. Verified a proper alpha matte: 46.7% transparent / 52.2% opaque / 1.14% anti-aliased partial edge, subject bbox x82-1036 y67-1401 (955x1335).
+- Ran the full-quality pipeline on it: bbox crop +14px pad (982x1349) -> pristine PNG master (1.39MB, lossless source of truth) -> 2x premultiplied Lanczos + gentle unsharp -> q95 alpha webp master 1964x2698 (573KB); regenerated the matching silhouette mask asset (23KB) so the face/suit accent tints stay aligned with the new framing.
+- Overwrote the three mobile assets in place (same filenames) and updated the hero's intrinsic dims to 1964x2698; purged .next/cache/images preemptively (v63's stale-optimizer lesson) — new asset served immediately, no cold restart needed.
+- Verified with agent-browser: mobile 390 light (teal draw) + dark (ember draw) — Photoroom's hair matte is visibly cleaner than the previous rembg edge, face natural, silhouette tints + halo + bokeh + waist dissolve all intact, Hello clears the head; desktop 1440 light (green draw) melt card untouched and regression-free; console clean; lint clean.
+
+Stage Summary:
+- The mobile hero now wears the user's own Photoroom cutout at full quality (lossless PNG master -> 2x q95 alpha webp), with the silhouette light system re-aligned to it.
+- Desktop keeps the approved v64 with-background melt composition.
+- Tagged v65; touched hero-section dims and the three cutout assets.
