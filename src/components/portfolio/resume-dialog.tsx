@@ -53,7 +53,7 @@ export default function ResumeDialog({ open, onOpenChange }: ResumeDialogProps) 
             <DialogTitle className="font-display text-lg tracking-tight">
               Rayhan&apos;s Resume
             </DialogTitle>
-            <span className="glass-chip font-tag shrink-0 rounded-full px-2.5 py-1 text-[9px] text-gold-bright">
+            <span className="glass-chip font-tag shrink-0 rounded-full px-2.5 py-1 text-[9px] text-accent-ink">
               2026 Edition
             </span>
           </div>

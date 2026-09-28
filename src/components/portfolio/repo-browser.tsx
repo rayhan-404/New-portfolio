@@ -108,7 +108,7 @@ export function RepoBrowser() {
               style={{ background: "linear-gradient(90deg, transparent, var(--gold))" }}
               aria-hidden="true"
             />
-            <p className="font-tag text-[10.5px] font-bold text-gold-bright">
+            <p className="font-tag text-[10.5px] font-bold text-accent-ink">
               Live from GitHub
             </p>
             <span className="status-dot" aria-hidden="true" />
@@ -272,7 +272,7 @@ export function RepoBrowser() {
                       <span className="text-muted-foreground">Updated {updated}</span>
                     )}
                   </div>
-                  <p className="font-tag mt-2.5 flex items-center gap-1.5 text-[9.5px] font-bold uppercase tracking-[1.2px] text-gold-bright">
+                  <p className="font-tag mt-2.5 flex items-center gap-1.5 text-[9.5px] font-bold uppercase tracking-[1.2px] text-accent-ink">
                     Browse files
                     {repo.homepage && (
                       <span className="inline-flex items-center gap-1 text-muted-foreground">

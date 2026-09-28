@@ -33,7 +33,7 @@ export function SkillsSection() {
           {/* Meters */}
           <Reveal>
             <div className="glass neu-decor h-full rounded-3xl p-6 sm:p-8">
-              <p className="font-tag text-[10px] text-gold-bright">Core proficiency</p>
+              <p className="font-tag text-[10px] text-accent-ink">Core proficiency</p>
               <div className="mt-7 flex flex-col gap-6">
                 {skillMeters.map((skill, i) => (
                   <div key={skill.name}>
@@ -74,7 +74,7 @@ export function SkillsSection() {
           {/* Chips + principles */}
           <div className="flex flex-col gap-4">
             <StaggerGroup className="glass neu-decor rounded-3xl p-6 sm:p-8">
-              <p className="font-tag text-[10px] text-gold-bright">Also in the toolbox</p>
+              <p className="font-tag text-[10px] text-accent-ink">Also in the toolbox</p>
               <div className="mt-5 flex flex-wrap gap-2">
                 {skillChips.map((chip) => (
                   <StaggerItem key={chip}>
@@ -97,7 +97,7 @@ export function SkillsSection() {
                 >
                   WCAG 2.1 AA
                 </span>
-                <p className="font-tag text-[10px] text-gold-bright">How I work</p>
+                <p className="font-tag text-[10px] text-accent-ink">How I work</p>
                 <ul className="mt-4 flex flex-col gap-3.5">
                   {[
                     "Type-safe from database to pixel",

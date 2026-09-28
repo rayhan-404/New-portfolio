@@ -427,7 +427,7 @@ export function RepoDialog({
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => playSound("chime")}
-              className="font-tag inline-flex shrink-0 items-center gap-1 text-[9.5px] font-bold text-gold-bright hover:underline"
+              className="font-tag inline-flex shrink-0 items-center gap-1 text-[9.5px] font-bold text-accent-ink hover:underline"
             >
               <ExternalLink className="h-3 w-3" aria-hidden="true" />
               Live demo

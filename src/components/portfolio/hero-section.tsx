@@ -257,7 +257,7 @@ export function HeroSection() {
               initial={reduce ? false : { opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.85, delay: 0.44, ease: EASE }}
-              className="mt-7 max-w-xl"
+              className="mt-7 max-w-[33rem]"
             >
               <IntroBio />
             </motion.div>

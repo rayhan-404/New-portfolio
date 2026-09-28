@@ -22,7 +22,7 @@ export function SectionHeading({
           style={{ background: "linear-gradient(90deg, transparent, var(--gold))" }}
           aria-hidden="true"
         />
-        <p className="font-tag text-[10.5px] font-bold text-gold-bright">{eyebrow}</p>
+        <p className="font-tag text-[10.5px] font-bold text-accent-ink">{eyebrow}</p>
         {centered && (
           <span
             className="h-px w-10"

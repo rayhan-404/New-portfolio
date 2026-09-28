@@ -54,7 +54,7 @@ export function ProjectDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[86vh] max-w-2xl gap-0 overflow-y-auto rounded-[1.75rem] border-border bg-[var(--bg)] p-0 shadow-[var(--shadow-neu-lg)]">
         <div className="p-6 sm:p-8">
-          <span className="glass-chip font-tag inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[9px] text-gold-bright">
+          <span className="glass-chip font-tag inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[9px] text-accent-ink">
             {project.tag}
           </span>
           <DialogTitle className="font-display mt-4 text-2xl tracking-tight">
@@ -90,7 +90,7 @@ export function ProjectDialog({
               {project.features.map((f) => (
                 <li key={f} className="flex items-start gap-2.5 text-sm text-foreground/75">
                   <span className="mt-0.5 flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-full border border-gold/40 bg-gold/10">
-                    <Check className="h-3 w-3 text-gold-bright" />
+                    <Check className="h-3 w-3 text-accent-ink" />
                   </span>
                   {f}
                 </li>

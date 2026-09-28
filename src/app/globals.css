@@ -61,6 +61,9 @@
   /* Reference multi-color system — Tailwind utilities
      (text-success, bg-star, text-edu, bg-mc-teal, …) */
   --color-success: var(--success);
+  --color-success-text: var(--success-text);
+  --color-star-ink: var(--star-ink);
+  --color-accent-ink: var(--accent-ink);
   --color-warn: var(--warn);
   --color-info: var(--info);
   --color-err: var(--err);
@@ -188,6 +191,15 @@
   --gold-bright: var(--primary2-ref);
   --gold-deep: var(--primary-ref);
 
+  /* Hue-aware ink tones — small accent text must stay readable when
+     the pool draws a light Material shade onto the pale ground.
+     accent-ink folds the hue into the theme's own ink (same family,
+     never a foreign ground); star/success get deepened light-theme
+     stand-ins and their bright values back in the dark. */
+  --accent-ink: color-mix(in oklab, var(--primary-ref) 58%, var(--text));
+  --star-ink: #9a6b00;
+  --success-text: #2e7d32;
+
   /* Apple system accents — live demos */
   --apple-green: #30d158;
   --apple-mint: #66d4cf;
@@ -244,6 +256,12 @@
   --accent-ref: var(--hue-acc-d, #ff9800);
   --primary-rgb: var(--hue-rgb-d, 255 112 67);
   --accent-rgb: var(--hue-argb-d, 255 152 0);
+
+  /* Ink tones lifted for the dark ground — the hue rides at 400/300
+     brightness here, so it already clears contrast against charcoal. */
+  --accent-ink: color-mix(in oklab, var(--primary2-ref) 72%, var(--text));
+  --star-ink: var(--star);
+  --success-text: #66bb6a;
 
   --primary: var(--primary-ref);
   --primary-foreground: #2b1206;

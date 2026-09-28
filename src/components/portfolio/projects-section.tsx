@@ -74,7 +74,7 @@ export function ProjectsSection() {
                   playSound("tap");
                   setFilter(f.id);
                 }}
-                className={`relative rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors duration-300 ${
+                className={`relative min-h-11 rounded-full px-4 py-1.5 text-[13px] font-medium transition-colors duration-300 sm:min-h-0 ${
                   filter === f.id ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -134,7 +134,7 @@ export function ProjectsSection() {
                         {p.tag}
                       </span>
                       {p.flagship && (
-                        <span className="font-tag shrink-0 rounded-full border border-star/45 bg-star/10 px-3 py-1 text-[9.5px] text-star">
+                        <span className="font-tag shrink-0 rounded-full border border-star-ink/45 bg-star-ink/10 px-3 py-1 text-[9.5px] text-star-ink">
                           Featured
                         </span>
                       )}
@@ -144,7 +144,7 @@ export function ProjectsSection() {
                     </span>
                   </div>
 
-                  <h3 className="font-display mt-5 text-xl tracking-tight sm:text-2xl">
+                  <h3 className="font-display mt-5 text-xl tracking-tight sm:min-h-[3.2rem] sm:text-2xl lg:min-h-[3.9rem]">
                     {p.title}
                     <span className="text-muted-foreground"> · {p.subtitle}</span>
                   </h3>

@@ -123,25 +123,25 @@ export function ContactSection() {
             </Reveal>
 
             <Reveal delay={0.06}>
-              <div className="glass neu-decor grid grid-cols-1 gap-4 rounded-3xl p-5 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+              <div className="glass neu-decor grid grid-cols-1 gap-4 rounded-3xl p-5">
                 <ContactFact icon={Clock} label="Response" value="Within 24h" tone="info" />
                 <ContactFact icon={Globe} label="Location" value={person.location} />
                 <ContactFact icon={ArrowUpRight} label="Status" value="Available" tone="success" />
               </div>
             </Reveal>
 
-            <Reveal delay={0.12}>
-              <div className="glass-ember relative flex flex-col gap-4 overflow-hidden rounded-3xl p-6">
+            <Reveal delay={0.12} className="lg:flex-1">
+              <div className="glass-ember relative flex h-full flex-col justify-center gap-4 overflow-hidden rounded-3xl p-6">
                 <div
                   className="pointer-events-none absolute -right-14 -top-14 h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(var(--accent-rgb)/0.25),transparent_70%)] blur-2xl"
                   aria-hidden="true"
                 />
                 <div className="flex items-center gap-3.5">
                   <span className="glass-chip flex h-11 w-11 items-center justify-center rounded-2xl">
-                    <CalendarClock className="h-4.5 w-4.5 text-gold-bright" />
+                    <CalendarClock className="h-4.5 w-4.5 text-accent-ink" />
                   </span>
                   <div>
-                    <p className="font-tag text-[9.5px] text-gold-bright">Prefer talking?</p>
+                    <p className="font-tag text-[9.5px] text-accent-ink">Prefer talking?</p>
                     <h3 className="text-[15px] font-semibold">30-min discovery call</h3>
                   </div>
                 </div>
@@ -172,7 +172,7 @@ export function ContactSection() {
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <p className="font-tag text-[10px] text-gold-bright">Direct Message</p>
+                  <p className="font-tag text-[10px] text-accent-ink">Direct Message</p>
                   <h3 className="font-display mt-2 text-xl tracking-tight">
                     Tell me about your project
                   </h3>
@@ -311,7 +311,7 @@ function ContactFact({
   tone?: "primary" | "success" | "info";
 }) {
   const toneCls =
-    tone === "success" ? "text-success" : tone === "info" ? "text-info" : "text-gold";
+    tone === "success" ? "text-success-text" : tone === "info" ? "text-info" : "text-gold";
   return (
     <div className="flex items-center gap-3">
       <span className="glass-chip flex h-9 w-9 shrink-0 items-center justify-center rounded-xl">
@@ -321,7 +321,7 @@ function ContactFact({
         <p className="font-tag text-[9.5px] text-muted-foreground">{label}</p>
         <p
           className={`text-[13px] font-semibold ${
-            tone === "success" ? "text-success" : "text-foreground"
+            tone === "success" ? "text-success-text" : "text-foreground"
           }`}
         >
           {value}
@@ -375,7 +375,7 @@ function BookingDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[86vh] w-[calc(100vw-2rem)] overflow-y-auto rounded-[1.75rem] border-border bg-[var(--bg)] p-6 shadow-[var(--shadow-neu-lg)] sm:p-8">
-        <span className="glass-chip font-tag inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[9px] text-gold-bright">
+        <span className="glass-chip font-tag inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[9px] text-accent-ink">
           <CalendarClock className="h-3 w-3" />
           Instant Scheduling
         </span>

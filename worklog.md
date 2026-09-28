@@ -712,3 +712,23 @@ Work Log:
 Stage Summary:
 - The site reads like a set publication: honest left rags, a correct heading outline for assistive tech, aligned numeric columns, a consistent numbered-section system, and no sub-nine-pixel type anywhere.
 - Tagged v58; files touched were the hero, journey, contact, skills, projects, repository browser, section heading and footer components.
+
+---
+Task ID: 59 (deep polish pass two — hue-aware ink tones and grid-level alignment)
+Agent: Main agent
+Task: Second professional polish sweep, this time at the token and layout-geometry level: contrast-proof the tiny accent labels across all ten random accent hues, complete the numbered-section system, align card internals across grid rows, and balance the contact columns.
+
+Work Log:
+- Root-caused the readability ceiling: the small accent labels (section eyebrows, card kickers, dialog chips) all rode the bright secondary accent shade, which is fine on charcoal but drops to roughly two-to-one contrast when a light hue lands on the pale porcelain ground. Added a hue-aware accent-ink tone that folds the drawn hue into the theme's own ink color inside the same family — deep hue-ink in light, lifted hue-ink in dark — so every hue stays readable without ever mixing into foreign ground. Routed every small accent label through it: section eyebrows, the skills kickers, the contact and booking labels, the repository strip header and its browse-files tag, the dialog chips and check marks, and the journey's current-chapter badge.
+- Gave the featured badge and the success text their own ink-aware stand-ins too: deep bronze amber and deep green in light (both clear contrast now), the original bright values back in dark.
+- Completed the numbered-section system: journey now carries the missing eyebrow row (section two) with the same hairline-plus-label recipe as sections three through five, in the new accent ink.
+- Aligned the project grid rows: card titles now reserve a two-line block on tablet and desktop so a one-line title no longer yanks its description and tech chips higher than its neighbor's — descriptions across a row share a baseline.
+- Rebalanced the contact left column: the three fact rows stack as tidy single lines at every width (the location value no longer squeezes into a wrap), and the discovery-call card now stretches to the form's height with its content vertically centered, so the two columns land flush instead of leaving dead space.
+- Hero intro column measure tightened to roughly sixty-eight characters — a comfortable editorial line length instead of the wide sweep it had.
+- Filter pills grew a forty-four-pixel touch height on phones only (desktop keeps the compact pill), and the featured badge tints follow the new star ink in both themes.
+- Verified with the headless browser across three fresh accent draws (indigo, green, deep orange — the hardest cool and warm cases), desktop and mobile, light and dark: eyebrows crisp in every theme, rows aligned, columns flush, zero page errors, no horizontal overflow. Typecheck and lint clean.
+
+Stage Summary:
+- Contrast is now structural, not per-hue luck: any future pool addition inherits readable labels automatically through the accent-ink tone.
+- The numbered-section system runs two through five with zero gaps, the project grid rows read as one aligned band, and the contact columns meet flush at the bottom.
+- Tagged v59; touched the stylesheet token layer plus the journey, projects, contact, hero, skills, section-heading, repository browser and dialog components.

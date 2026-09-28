@@ -69,6 +69,18 @@ export function JourneySection() {
         {/* ── Header — just the title ────────────────────────── */}
         <Reveal>
           <header className="mb-16 max-w-[860px] lg:mb-24">
+            {/* Eyebrow — the numbered-section system (02–05) lands on
+                journey too, same recipe as the SectionHeading rows */}
+            <div className="mb-5 flex items-center gap-3">
+              <span
+                className="h-px w-10"
+                style={{ background: "linear-gradient(90deg, transparent, var(--gold))" }}
+                aria-hidden="true"
+              />
+              <p className="font-tag text-[10.5px] font-bold text-accent-ink">
+                02 · The Story So Far
+              </p>
+            </div>
             <h2
               className="leading-[0.88] tracking-[-0.055em] text-foreground"
               style={{ ...BLACK, fontSize: "clamp(44px, 7.5vw, 104px)" }}
@@ -182,7 +194,7 @@ export function JourneySection() {
                       </>
                     )}
                     {era.current && (
-                      <div className="mb-4 inline-flex items-center gap-2.5 font-tag text-[9px] tracking-[0.22em] text-primary">
+                      <div className="mb-4 inline-flex items-center gap-2.5 font-tag text-[9px] tracking-[0.22em] text-accent-ink">
                         <span
                           aria-hidden="true"
                           className="journey-pulse h-[7px] w-[7px] rounded-full bg-primary shadow-[0_0_0_4px_rgba(var(--primary-rgb)/0.14),0_0_16px_rgba(var(--accent-rgb)/0.8)]"
