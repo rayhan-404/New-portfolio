@@ -2,7 +2,7 @@
 
 import { AppBackground } from "./app-background";
 import { NAV_ITEMS, scrollToSection, useActiveSection } from "./nav";
-import { SidebarNotchNav, type NavCategory } from "@/components/SidebarNotchNav";
+import { NavRail, type NavCategory } from "./nav-rail";
 import { SideRailRight } from "./side-rails";
 import { playSound } from "@/lib/sound";
 import { SlideSection } from "./slide-section";
@@ -10,7 +10,6 @@ import { HeroSection } from "./hero-section";
 import { JourneySection } from "./journey-section";
 import { ProjectsSection } from "./projects-section";
 import { SkillsSection } from "./skills-section";
-import { ServicesSection } from "./services-section";
 import { ContactSection } from "./contact-section";
 import { Footer } from "./footer";
 
@@ -30,8 +29,8 @@ export function PortfolioApp() {
     <>
       <AppBackground />
 
-      {/* Glassmorphic sidebar with sliding notch — visible on mobile (54px) too */}
-      <SidebarNotchNav
+      {/* Neumorphic button rail with border progress — mobile (54px) too */}
+      <NavRail
         categories={CATEGORIES}
         activeIndex={activeIndex}
         onSelectCategory={(index) => {
@@ -57,9 +56,6 @@ export function PortfolioApp() {
           </SlideSection>
           <SlideSection id="skills">
             <SkillsSection />
-          </SlideSection>
-          <SlideSection id="services">
-            <ServicesSection />
           </SlideSection>
           <SlideSection id="contact">
             <ContactSection />

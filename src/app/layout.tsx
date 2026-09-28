@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import {
+  Dancing_Script,
   Geist,
   Geist_Mono,
   Instrument_Serif,
-  Lobster,
   Nunito,
   Source_Serif_4,
   Syne,
@@ -59,11 +59,11 @@ const syne = Syne({
   display: "swap",
 });
 
-/* Bold retro script — the user's "Rebel" reference, for the name mark */
-const lobster = Lobster({
-  variable: "--font-lobster",
+/* Elegant signature script — the name mark, professional flow */
+const dancingScript = Dancing_Script({
+  variable: "--font-script",
   subsets: ["latin"],
-  weight: "400",
+  weight: ["500", "600", "700"],
   display: "swap",
 });
 
@@ -112,7 +112,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#f7eee3",
+  themeColor: "#faf3ea",
 };
 
 const jsonLd = {
@@ -150,7 +150,7 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: ACCENT_BOOT_SCRIPT }} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${nunito.variable} ${instrumentSerif.variable} ${sourceSerif.variable} ${syne.variable} ${lobster.variable} antialiased text-foreground min-h-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} ${nunito.variable} ${instrumentSerif.variable} ${sourceSerif.variable} ${syne.variable} ${dancingScript.variable} antialiased text-foreground min-h-screen flex flex-col`}
       >
         <script
           type="application/ld+json"

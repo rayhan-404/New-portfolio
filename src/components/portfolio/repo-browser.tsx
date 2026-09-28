@@ -1,11 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Github, GitFork, Globe, RefreshCw, Star } from "lucide-react";
 import { playSound } from "@/lib/sound";
 import { Reveal } from "./reveal";
-import type { ReposPayload } from "@/app/api/github/repos/route";
+import { RepoDialog } from "./repo-dialog";
+import type { GithubRepo, ReposPayload } from "@/app/api/github/repos/route";
 
 /**
  * RepoBrowser — "Live from GitHub" strip under the project cards.
@@ -65,27 +66,36 @@ function shortDate(iso: string | null) {
 export function RepoBrowser() {
   const reduce = useReducedMotion();
   const [state, setState] = useState<LoadState>({ phase: "loading" });
+  const [selected, setSelected] = useState<{ repo: GithubRepo; serial: string } | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
 
-  const load = useCallback(async () => {
-    setState({ phase: "loading" });
-    try {
-      const res = await fetch("/api/github/repos", { cache: "no-store" });
-      const payload = (await res.json()) as ReposPayload;
-      if (!res.ok) {
-        setState({ phase: "error", message: payload.error ?? "GitHub request failed" });
-      } else if (payload.error && payload.repos.length === 0) {
-        setState({ phase: "error", message: payload.error });
-      } else {
-        setState({ phase: "done", payload });
-      }
-    } catch {
-      setState({ phase: "error", message: "Could not reach the GitHub service." });
-    }
-  }, []);
-
+  /* Fetch on mount and whenever the retry button bumps reloadKey.
+     setState only runs in the async continuation / event handlers —
+     never synchronously inside the effect body. */
   useEffect(() => {
-    void load();
-  }, [load]);
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/github/repos", { cache: "no-store" });
+        const payload = (await res.json()) as ReposPayload;
+        if (cancelled) return;
+        if (!res.ok) {
+          setState({ phase: "error", message: payload.error ?? "GitHub request failed" });
+        } else if (payload.error && payload.repos.length === 0) {
+          setState({ phase: "error", message: payload.error });
+        } else {
+          setState({ phase: "done", payload });
+        }
+      } catch {
+        if (!cancelled)
+          setState({ phase: "error", message: "Could not reach the GitHub service." });
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [reloadKey]);
 
   return (
     <div className="mt-16">
@@ -158,7 +168,8 @@ export function RepoBrowser() {
             type="button"
             onClick={() => {
               playSound("tap");
-              void load();
+              setState({ phase: "loading" });
+              setReloadKey((k) => k + 1);
             }}
             className="glass-chip inline-flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-[12px] font-semibold text-foreground transition-transform duration-300 hover:scale-[1.03] active:scale-95"
           >
@@ -176,17 +187,29 @@ export function RepoBrowser() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
-          {state.payload.repos.slice(0, 6).map((repo, i) => {
+          {state.payload.repos.map((repo, i) => {
             const updated = shortDate(repo.updated_at);
+            const serial = serialOf(i);
             return (
-              <a
+              <div
                 key={repo.name}
-                href={repo.homepage || repo.html_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => playSound("chime")}
-                className="glass neu-decor group relative flex h-full flex-col overflow-hidden rounded-3xl p-6 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[var(--shadow-neu-lg)]"
-                aria-label={`Open ${repo.name} on GitHub`}
+                role="button"
+                tabIndex={0}
+                onClick={() => {
+                  playSound("chime");
+                  setSelected({ repo, serial });
+                  setDialogOpen(true);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    playSound("chime");
+                    setSelected({ repo, serial });
+                    setDialogOpen(true);
+                  }
+                }}
+                className="glass neu-decor group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-3xl p-6 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[var(--shadow-neu-lg)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/40"
+                aria-label={`Browse ${repo.name} — opens the repository browser`}
               >
                 {/* hover aura */}
                 <div
@@ -198,7 +221,7 @@ export function RepoBrowser() {
                   aria-hidden="true"
                   className="pointer-events-none absolute -bottom-5 -right-2 font-display text-[6rem] leading-none text-foreground/[0.05] transition-colors duration-500 group-hover:text-foreground/[0.09]"
                 >
-                  {serialOf(i)}
+                  {serial}
                 </span>
                 {/* primary→accent underline on hover */}
                 <span
@@ -208,9 +231,12 @@ export function RepoBrowser() {
 
                 <div className="flex items-center justify-between gap-3">
                   <span className="font-tag glass-chip shrink-0 rounded-full px-3 py-1 text-[9.5px] text-muted-foreground">
-                    {serialOf(i)}
+                    {serial}
                   </span>
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border transition-all duration-300 group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
+                  <span
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border transition-all duration-300 group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground"
+                    aria-hidden="true"
+                  >
                     <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" />
                   </span>
                 </div>
@@ -246,14 +272,17 @@ export function RepoBrowser() {
                       <span className="text-muted-foreground">Updated {updated}</span>
                     )}
                   </div>
-                  {repo.homepage && (
-                    <p className="font-tag mt-2 flex items-center gap-1 text-[9.5px] text-gold-bright">
-                      <Globe className="h-3 w-3" aria-hidden="true" />
-                      Live demo
-                    </p>
-                  )}
+                  <p className="font-tag mt-2.5 flex items-center gap-1.5 text-[9.5px] font-bold uppercase tracking-[1.2px] text-gold-bright">
+                    Browse files
+                    {repo.homepage && (
+                      <span className="inline-flex items-center gap-1 text-muted-foreground">
+                        <Globe className="h-3 w-3" aria-hidden="true" />
+                        demo inside
+                      </span>
+                    )}
+                  </p>
                 </div>
-              </a>
+              </div>
             );
           })}
         </motion.div>
@@ -268,6 +297,14 @@ export function RepoBrowser() {
           </p>
         </div>
       )}
+
+      {/* GitHub-style inside view — file tree + README, site-themed */}
+      <RepoDialog
+        repo={selected?.repo ?? null}
+        serial={selected?.serial ?? ""}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
     </div>
   );
 }

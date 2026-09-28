@@ -144,7 +144,7 @@ export function HeroSection() {
                 initial={reduce ? false : { opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 1 }}
-                className="mt-1.5 block h-[13px] w-[118px] drop-shadow-[0_2px_6px_rgba(97,49,24,0.35)] sm:h-[15px] sm:w-[142px]"
+                className="mt-1.5 block h-[13px] w-[118px] drop-shadow-[0_2px_6px_rgba(var(--primary-rgb)/0.35)] sm:h-[15px] sm:w-[142px]"
               >
                 <motion.path
                   d="M3 9 C 30 3, 58 12.5, 86 7.5 S 128 4.5, 137 7"
@@ -201,7 +201,7 @@ export function HeroSection() {
                     loading="eager"
                     sizes="(max-width: 640px) 100vw, 560px"
                     quality={88}
-                    className="relative h-auto w-full object-contain drop-shadow-[0_30px_44px_rgba(58,28,84,0.35)]"
+                    className="relative h-auto w-full object-contain drop-shadow-[0_30px_44px_rgba(var(--primary-rgb)/0.32)]"
                   />
                 </div>
               </div>
@@ -214,12 +214,12 @@ export function HeroSection() {
               transition={{ duration: 0.95, delay: 0.32, ease: EASE }}
               className="relative z-10 -mt-20 px-5 pb-2 text-left sm:-mt-28 sm:px-8"
             >
-              {/* Name — "I am," on top, the script name on its own line below */}
-              <p className="font-serif text-[1.7rem] font-normal italic leading-none text-foreground sm:text-[2.1rem]">
+              {/* Name — "I am," on top, the signature name on its own line below */}
+              <p className="font-serif text-[1.7rem] font-normal italic leading-none tracking-[-0.02em] text-foreground/85 sm:text-[2.1rem]">
                 I am<span className="text-gold-gradient">,</span>
               </p>
 
-              <h1 className="font-script text-glow mt-2.5 text-[2.7rem] leading-[1.05] text-foreground sm:text-6xl">
+              <h1 className="font-script text-glow mt-2 text-[3.5rem] leading-[1.12] text-foreground sm:text-[4.3rem]">
                 M Rayhan
               </h1>
 
@@ -239,7 +239,7 @@ export function HeroSection() {
               initial={reduce ? false : { opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
-              className="font-serif text-[2.3rem] font-normal italic leading-none text-foreground"
+              className="font-serif text-[2.3rem] font-normal italic leading-none tracking-[-0.02em] text-foreground/85"
             >
               I am<span className="text-gold-gradient">,</span>
             </motion.p>
@@ -248,7 +248,7 @@ export function HeroSection() {
               initial={reduce ? false : { opacity: 0, y: 26 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.85, delay: 0.32, ease: EASE }}
-              className="font-script text-glow mt-3 text-[4.4rem] leading-[1.05] text-foreground xl:text-[4.9rem]"
+              className="font-script text-glow mt-2.5 text-[5.4rem] leading-[1.1] text-foreground xl:text-[6rem]"
             >
               M Rayhan
             </motion.h1>
@@ -282,7 +282,7 @@ export function HeroSection() {
                 {/* warm studio backdrop behind the transparent cutout */}
                 <div
                   aria-hidden="true"
-                  className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(var(--accent-rgb)/0.4),rgba(var(--primary-rgb)/0.6)_55%,rgba(58,34,20,0.95)_100%)]"
+                  className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(var(--accent-rgb)/0.4),rgba(var(--primary-rgb)/0.6)_55%,rgba(var(--primary-rgb)/0.85)_100%)]"
                 />
                 <Image
                   src="/generated/m-rayhan-portrait.png"

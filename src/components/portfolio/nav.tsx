@@ -26,7 +26,6 @@ export const NAV_ITEMS = [
   { id: "journey", label: "Journey" },
   { id: "projects", label: "Projects" },
   { id: "skills", label: "Skills" },
-  { id: "services", label: "Services" },
   { id: "contact", label: "Contact" },
 ] as const;
 

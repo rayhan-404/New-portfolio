@@ -79,20 +79,26 @@
   --color-mc-blue: var(--mc-blue);
 }
 
-/* ── LIGHT — warm cream neumorphic (deep orange's soft side) ── */
+/* ── LIGHT — airy warm porcelain neumorphic (clean, never muddy) ──
+   Every surface token reads its --hue-* slot: the boot script hands
+   the drawn hue's OWN surface family (lilac, periwinkle, sage-mint,
+   honey sand…), so the accent never blends into foreign ground.
+   Fallbacks = the brand's deep-orange terracotta-sand family. */
 :root {
   --radius: 1rem;
 
-  /* Deep-orange palette */
-  --bg: #f7eee3;
-  --bg2: #f1e5d4;
-  --bg3: #ead9c4;
-  --nl: #ffffff;
-  --nd: #dcc4a9;
-  --surface: rgba(247, 238, 227, 0.88);
-  --text: #2f1407;
-  --text2: #82573a;
-  --text3: #b18a67;
+  /* Deep-orange family (fallback) — routed to the drawn hue */
+  --bg: var(--hue-bg-l, #faf3ea);
+  --bg2: var(--hue-bg2-l, #f4ebdc);
+  --bg3: var(--hue-bg3-l, #eee1cd);
+  --nl: var(--hue-nl-l, #fffdf8);
+  --nd: var(--hue-nd-l, #e0cbb0);
+  --surface: rgba(var(--hue-bgr-l, 244 235 220) / 0.88);
+  --text: var(--hue-text-l, #341a0b);
+  --text2: var(--hue-text2-l, #8a5c3d);
+  --text3: var(--hue-text3-l, #b18a67);
+  /* ink triplet for glow/shadows that must follow the family */
+  --text-rgb: var(--hue-textr-l, 52 26 11);
   --code-bg: #2a1208;
 
   /* ── ROTATING ACCENT SLOTS ──
@@ -195,27 +201,30 @@
   --notch-mid: #b03d14;
   --notch-dot: #ffffff;
 
-  /* Portrait blend — melts photos into the cream field */
+  /* Portrait blend — melts photos into the family field */
   --img-vignette: linear-gradient(
     to top,
-    rgba(241, 229, 212, 0.92) 2%,
-    rgba(241, 229, 212, 0.45) 28%,
-    rgba(241, 229, 212, 0) 58%
+    rgba(var(--hue-bgr-l, 244 235 220) / 0.92) 2%,
+    rgba(var(--hue-bgr-l, 244 235 220) / 0.45) 28%,
+    rgba(var(--hue-bgr-l, 244 235 220) / 0) 58%
   );
 }
 
-/* ── DARK — deep ember-brown neumorphic ── */
+/* ── DARK — deep ember-night charcoal: rich, defined, never muddy ──
+   The dark family follows the drawn hue too (deep rose-ember,
+   deep teal-ember, deep indigo night…). */
 .dark {
-  --bg: #1b0e05;
-  --bg2: #291710;
-  --bg3: #3a2214;
-  --nl: #3f2716;
-  --nd: #0f0703;
-  --surface: rgba(27, 14, 5, 0.88);
-  --text: #fbefe4;
-  --text2: #e6b995;
-  --text3: #b08a6c;
-  --code-bg: #120802;
+  --bg: var(--hue-bg-d, #160d08);
+  --bg2: var(--hue-bg2-d, #231511);
+  --bg3: var(--hue-bg3-d, #332216);
+  --nl: var(--hue-nl-d, #4a3320);
+  --nd: var(--hue-nd-d, #070302);
+  --surface: rgba(var(--hue-bgr-d, 35 21 17) / 0.88);
+  --text: var(--hue-text-d, #fdf4e8);
+  --text2: var(--hue-text2-d, #f0c9a2);
+  --text3: var(--hue-text3-d, #c69c78);
+  --text-rgb: var(--hue-textr-d, 253 244 232);
+  --code-bg: #0d0603;
 
   --shadow-neu: 6px 6px 14px var(--nd), -6px -6px 14px var(--nl);
   --shadow-neu-sm: 4px 4px 10px var(--nd), -4px -4px 10px var(--nl);
@@ -269,9 +278,9 @@
 
   --img-vignette: linear-gradient(
     to top,
-    rgba(27, 14, 5, 0.92) 2%,
-    rgba(27, 14, 5, 0.45) 28%,
-    rgba(27, 14, 5, 0) 58%
+    rgba(var(--hue-bgr-d, 35 21 17) / 0.92) 2%,
+    rgba(var(--hue-bgr-d, 35 21 17) / 0.45) 28%,
+    rgba(var(--hue-bgr-d, 35 21 17) / 0) 58%
   );
 }
 
@@ -350,7 +359,42 @@
   inset: 0;
   z-index: -1;
   overflow: hidden;
-  background: var(--bg);
+  /* Layered warm field: flat base + two wide corner washes so the
+     neumorphic surfaces sit on something alive, never flat/muddy */
+  background:
+    radial-gradient(
+      1100px 760px at 88% -12%,
+      rgba(var(--primary-rgb) / 0.1),
+      transparent 62%
+    ),
+    radial-gradient(
+      950px 680px at -12% 112%,
+      rgba(var(--accent-rgb) / 0.09),
+      transparent 60%
+    ),
+    var(--bg);
+}
+
+/* Dark theme gets a touch more luminosity — deep charcoal stays
+   rich and eye-catching instead of flat brown */
+.dark .app-background {
+  background:
+    radial-gradient(
+      1150px 800px at 88% -12%,
+      rgba(var(--primary-rgb) / 0.14),
+      transparent 62%
+    ),
+    radial-gradient(
+      1000px 720px at -12% 112%,
+      rgba(var(--accent-rgb) / 0.11),
+      transparent 60%
+    ),
+    radial-gradient(
+      700px 500px at 50% 118%,
+      rgba(var(--primary-rgb) / 0.06),
+      transparent 65%
+    ),
+    var(--bg);
 }
 
 .app-background::before {
@@ -362,7 +406,7 @@
   height: 600px;
   background: radial-gradient(
     circle,
-    rgba(var(--primary-rgb) / 0.09) 0%,
+    rgba(var(--primary-rgb) / 0.12) 0%,
     transparent 70%
   );
   border-radius: 50%;
@@ -378,7 +422,7 @@
   height: 520px;
   background: radial-gradient(
     circle,
-    rgba(var(--accent-rgb) / 0.08) 0%,
+    rgba(var(--accent-rgb) / 0.1) 0%,
     transparent 70%
   );
   border-radius: 50%;
@@ -512,7 +556,7 @@
 @utility text-glow {
   text-shadow:
     0 1px 16px rgba(var(--primary-rgb) / 0.22),
-    0 1px 3px rgba(47, 20, 7, 0.12);
+    0 1px 3px rgba(var(--text-rgb, 52 26 11) / 0.12);
 }
 
 /* Big outlined display text */
@@ -608,11 +652,13 @@
   letter-spacing: -0.015em;
 }
 
-/* Bold retro script — the "M Rayhan" name mark (kept: the user's signature).
-   No letter-spacing tweaks: Lobster's letters are meant to connect. */
+/* Elegant signature script — the "M Rayhan" name mark.
+   Dancing Script carries real weights; 600 reads confident without
+   looking retro, and slight negative tracking keeps it tidy. */
 @utility font-script {
-  font-family: var(--font-lobster), var(--font-syne), cursive;
-  font-weight: 400;
+  font-family: var(--font-script), var(--font-syne), cursive;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 /* ============================================================

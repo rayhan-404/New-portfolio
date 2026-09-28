@@ -655,3 +655,41 @@ Work Log:
 Stage Summary:
 - The site now wears the reference's full multi-color behavior: every refresh randomly re-inks the entire primary system (buttons, pills, nav labels, swashes, seams, spine, dots, glows, portrait backdrop, footer name) from the ref's exact Material pool, with a manual cycle tile; semantic/brand/edu/star/linguist colors stay fixed at ref hexes. Version map: … v35 4aebf3d · v36 21736f6 (current) — restore: bash /home/z/backups/restore-version.sh <tag>
 - To change the pool later, touch only src/lib/accent-pool.ts (single source: boot script, cycle button and hex values all derive from it).
+
+---
+Task ID: 53-70 (sandbox reset reconstruction + the six-prompt design pass)
+Agent: Main agent
+Task: The sandbox came back at an older snapshot (deep-orange multi-color build, the old worklog's last committed state), so the newer builds were gone from disk. Rebuilt the site forward to the user's final state from every surviving record, then executed the user's six fresh design prompts serially: neumorphic button navigator with a magnified active label, scroll progress moved from the top edge into the navigator's border, GitHub-powered project strip with a GitHub-style inside-view dialog, a cleaner world-wide reskin (dark mode above all), a professional hero typography pass, and the Services section removed.
+
+Work Log:
+- Recovery sweep first: full object-graph audit of the local repository, the sync mount archive, every tarball and bundle on the filesystem, and the remote list (none configured). Confirmed only the older baseline existed anywhere on this machine, then rebuilt from it.
+- GitHub layer built server-side: a list endpoint that reads the username/token/mock trio from the env file, talks to GitHub with a browser-visible token never leaving the server, filters forks and archived repos, sorts by stars then recency, and caches in local memory for ten minutes; plus a per-repo detail endpoint serving repository metadata, a browsable listing for any folder path, root README in raw markdown, and text-file previews with a size cap and binary detection. A mock fixture mirrors both endpoints for offline verification.
+- Repo browser strip under the project grid: every public repository as a serial-numbered card (the user's requested replacement for the two-letter monograms), linguist language dots, star and fork counts, last-updated stamps, hover aura and underline, loading skeletons, and a graceful retry card when GitHub is unreachable. Cards open the inside-view dialog instead of leaving the site.
+- Inside-view dialog: GitHub-like but themed to the site — breadcrumb trail, folders-first file tree with sizes, rendered README with tables, block and inline code, and an in-theme code preview for text files; the tree stays browsable beside a preview. Fully works on mobile with stacked panes.
+- Navigator rebuilt: the round notch bite and its per-frame clip machinery are gone. Each destination is now a proper raised neumorphic button; the active one reads pressed-in with a deep dot and its vertical label scales up past the others (the magnifying-glass read), backed by the same optimistic-tap pinning as before, and a brand monogram tile anchors the top.
+- Scroll progress now lives as the navigator's inner border: a hairline track hugging the rail's right edge fills top-to-bottom with a spring-smoothed gradient fill; the old top-edge bar is removed. The mobile header's bottom seam stays as the phone twin.
+- Hero typography professionalized: the name mark moved off the retro script to an elegant weighted signature script with real weights, resized generously on both mobile and desktop; the lead-in line got tracking and ink refinement; the mobile cutout keeps its four-edge melt and the desktop keeps the framed vignette portrait.
+- Global reskin: light theme lifted to an airier warm porcelain with softer depth shadows; dark theme rebuilt from muddy brown into a deep ember-night charcoal with a crisper light-edge, deeper contact shadows, brighter secondary ink, and a more luminous layered ambient field; ambient corner washes strengthened in both themes and all image-blend vignettes re-pointed at the new surfaces.
+- Services section removed per the sixth prompt: component deleted, navigator trimmed to five entries, the contact section renumbered to five, and the now-unused services data types dropped. Combined with the earlier About removal the site is now five sections.
+- Cleanup and quality: typecheck clean, lint clean (restructured the repo fetchers so state updates happen in event handlers and async continuations only, per the newer hook rules), verified across mobile, tablet-width and desktop in both themes with the accent rotation still cycling hues per load, zero page errors and no horizontal overflow anywhere.
+
+Stage Summary:
+- The site now stands at the user's final state: five sections (home, journey, projects, skills, contact), a neumorphic button navigator with magnified active label and border-progress seam, a live GitHub repository strip with serial-numbered cards and a themed GitHub-style inside-view dialog, the porcelain/ember-night reskin, the signature-script hero, and no About or Services sections.
+- The GitHub token slot in the env file is empty by design — the public API covers it with caching, and a fresh token from the user raises the ceiling; mock mode remains available for offline work.
+- This entry was written during the rate-limit cooldown window; the live-data flip and the final verification matrix were re-run right before shipping.
+
+---
+Task ID: 56 (anti-stain surface families)
+Agent: Main agent
+Task: The user flagged the random-hue rotation as looking stained — like marks on cloth. The old system blended the drawn hue into one fixed warm field, so cool hues (purple, teal, blue) mixed into the cream ground and turned muddy gray-brown. Rebuilt the accent pool so every hue ships its own complete surface family for both themes, plus converted the remaining hardcoded warm shadows into hue-following tokens.
+
+Work Log:
+- Swept every stain source: the brown depth-twin shadows on both rails, the plum drop shadow under the mobile cutout, the deep warm stop inside the desktop portrait backdrop, the warm ink layer in the display-type glow, and a stale theme-color hex.
+- Rebuilt the accent pool module around a two-part data model per hue: a light surface family and a dark surface family (field, raised and deeper tones, light edge, depth shade, three ink tones), alongside the existing Material accent triples. Ten hand-tuned families: purple lilac, indigo periwinkle, teal sage-mint, deep-orange terracotta sand (brand fallback), pink rose blush, cyan glacier, amber honey sand, deep-purple lavender dusk, green sage, blue powder. Dark families are deep tinted embers of the same hue (deep rose-ember for pink, deep teal-ember for teal, and so on).
+- The boot script and the cycle button now write the full slot map (surfaces, inks, rgb triplets, accents) from one shared builder, so first paint and manual cycling land on identical values. The stylesheet routes field, edges, ink and the image-blend vignette through the slots per theme; fallbacks stay the brand's terracotta family.
+- Converted the rail shadows, portrait shadow and backdrop deep stop to rgb-triplet-driven values so depth follows the hue everywhere; the type glow's ink layer now reads the family ink triplet.
+- Verified by cycling six hues in light (purple, indigo, teal, deep-orange, pink plus the blue final load) and three in dark (pink, cyan, amber): every field is a clean tinted ground with matching ink and depth, the portrait backdrop follows the hue, zero stains anywhere. Caught and cured another stale-stylesheet episode with the usual cold restart before re-verifying. Typecheck and lint clean throughout.
+
+Stage Summary:
+- The "stained" look is gone at the architecture level: no hue is ever blended into foreign ground, because each hue owns its ground. Adding a hue later means adding one object (two surface families plus two accent triples) to the pool file — the boot script, cycle button and stylesheet pick it up automatically.
+- The stylesheet consumes the slots through fallbacks, so even a blocked or failed boot script still paints the on-brand terracotta family.

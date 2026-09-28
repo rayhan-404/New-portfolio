@@ -31,44 +31,6 @@ export const socials = [
   { label: "Dribbble", handle: "@rayhan.ahmed", href: "https://dribbble.com" },
 ] as const;
 
-export interface ServiceItem {
-  index: string;
-  title: string;
-  description: string;
-  deliverables: string[];
-}
-
-export const services: ServiceItem[] = [
-  {
-    index: "01",
-    title: "Full-Stack Development",
-    description:
-      "End-to-end product engineering — from database schema to deploy pipeline. Type-safe, tested, and built to scale past your first hundred thousand users.",
-    deliverables: ["Next.js / React Apps", "APIs & Integrations", "PostgreSQL / Prisma"],
-  },
-  {
-    index: "02",
-    title: "UI/UX & Interface Design",
-    description:
-      "Interfaces engineered like products, not decoration. Design systems, motion language, and accessibility baked in from the first wireframe.",
-    deliverables: ["Design Systems", "Prototyping", "WCAG 2.1 AA"],
-  },
-  {
-    index: "03",
-    title: "SaaS & MVP Builds",
-    description:
-      "Ship a validated MVP in weeks, not quarters. Opinionated architecture, billing, auth, and analytics wired on day one.",
-    deliverables: ["Rapid Scoping", "Stripe & Auth", "Analytics Ready"],
-  },
-  {
-    index: "04",
-    title: "Technical Consulting",
-    description:
-      "Architecture reviews, performance audits, and team enablement. Honest engineering talk — no slides, just measurable outcomes.",
-    deliverables: ["Perf Audits", "Architecture Review", "Team Mentoring"],
-  },
-];
-
 export const heroBadges = [
   { icon: "code", label: "Full-Stack Engineer" },
   { icon: "palette", label: "UI/UX Specialist" },

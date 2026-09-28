@@ -80,7 +80,7 @@ export function SideRailRight() {
       {/* Depth shadow twin — cast onto the content side */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-l-[22px] shadow-[-22px_0_54px_-30px_rgba(97,49,24,0.45),-8px_0_22px_-16px_rgba(97,49,24,0.25)]"
+        className="pointer-events-none absolute inset-0 rounded-l-[22px] shadow-[-22px_0_54px_-30px_rgba(var(--primary-rgb)/0.45),-8px_0_22px_-16px_rgba(var(--primary-rgb)/0.25)]"
       />
 
       {/* Neumorphic rail surface */}
