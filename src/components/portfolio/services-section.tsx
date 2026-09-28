@@ -17,14 +17,14 @@ export function ServicesSection() {
     >
       {/* ghost numeral — 5% backward parallax */}
       <SectionNumber
-        index="06"
+        index="05"
         className="-top-4 left-0 hidden text-[11rem] lg:block"
       />
 
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <SectionHeading
-            eyebrow="06 · What I Can Do For You"
+            eyebrow="05 · What I Can Do For You"
             title="Services built around outcomes."
           />
           <Reveal delay={0.15}>

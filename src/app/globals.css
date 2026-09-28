@@ -396,26 +396,6 @@
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
 }
 
-/* Mobile hero cutout — the portrait's bottom edge dissolves softly
-   into the raw page background; the name block starts exactly where
-   this fade begins (multi-stop easing = no visible seam) */
-@utility hero-cutout-fade {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    #000 74%,
-    rgba(0, 0, 0, 0.55) 85%,
-    rgba(0, 0, 0, 0.18) 93%,
-    transparent 99%
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    #000 74%,
-    rgba(0, 0, 0, 0.55) 85%,
-    rgba(0, 0, 0, 0.18) 93%,
-    transparent 99%
-  );
-}
-
 /* ============================================================
    NEUMORPHIC SURFACES — the core reference recipe.
    Card background == page background; depth comes entirely

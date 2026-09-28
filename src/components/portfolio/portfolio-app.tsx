@@ -9,7 +9,6 @@ import { SlideSection } from "./slide-section";
 import { HeroSection } from "./hero-section";
 import { JourneySection } from "./journey-section";
 import { ProjectsSection } from "./projects-section";
-import { AboutSection } from "./about-section";
 import { SkillsSection } from "./skills-section";
 import { ServicesSection } from "./services-section";
 import { ContactSection } from "./contact-section";
@@ -55,9 +54,6 @@ export function PortfolioApp() {
           </SlideSection>
           <SlideSection id="projects">
             <ProjectsSection />
-          </SlideSection>
-          <SlideSection id="about">
-            <AboutSection />
           </SlideSection>
           <SlideSection id="skills">
             <SkillsSection />

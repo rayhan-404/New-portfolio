@@ -18,13 +18,13 @@ export function SkillsSection() {
     >
       {/* ghost numeral — 5% backward parallax */}
       <SectionNumber
-        index="05"
+        index="04"
         className="-top-4 right-0 hidden text-[11rem] lg:block"
       />
 
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          eyebrow="05 · Weapons Of Choice"
+          eyebrow="04 · Weapons Of Choice"
           title="A stack sharpened by shipping."
           description="Depth where it matters — architecture, performance, and interfaces that feel inevitable."
         />

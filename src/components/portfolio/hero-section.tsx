@@ -167,22 +167,44 @@ export function HeroSection() {
             </motion.span>
 
             {/* The photo itself grows a touch beyond the column
-                (transform-only: layout box, text flow and the fade
+                (transform-only: layout box, text flow and the melt
                 seam all stay exactly where they were) — zoomed in
                 further and nudged left so the subject sits bigger
-                and more centered in frame */}
-            <div className="hero-cutout-fade relative origin-top -translate-x-[4%] scale-[1.16] sm:scale-[1.1]">
-              <Image
-                src="/generated/m-rayhan-cutout.png"
-                alt="Portrait of M Rayhan"
-                width={CUTOUT_W}
-                height={CUTOUT_H}
-                priority
-                loading="eager"
-                sizes="(max-width: 640px) 100vw, 560px"
-                quality={88}
-                className="relative h-auto w-full object-contain drop-shadow-[0_30px_44px_rgba(58,28,84,0.35)]"
-              />
+                and more centered in frame. Four-edge melt: nested
+                masks — horizontal (left/right) on the outer div,
+                vertical (top + bottom dissolve) on the inner. */}
+            <div className="relative origin-top -translate-x-[4%] scale-[1.16] sm:scale-[1.1]">
+              <div
+                className="relative"
+                style={{
+                  WebkitMaskImage:
+                    "linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%)",
+                  maskImage:
+                    "linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%)",
+                }}
+              >
+                <div
+                  className="relative"
+                  style={{
+                    WebkitMaskImage:
+                      "linear-gradient(to bottom, transparent 0%, #000 10%, #000 74%, rgba(0,0,0,0.55) 85%, rgba(0,0,0,0.18) 93%, transparent 99%)",
+                    maskImage:
+                      "linear-gradient(to bottom, transparent 0%, #000 10%, #000 74%, rgba(0,0,0,0.55) 85%, rgba(0,0,0,0.18) 93%, transparent 99%)",
+                  }}
+                >
+                  <Image
+                    src="/generated/m-rayhan-cutout.png"
+                    alt="Portrait of M Rayhan"
+                    width={CUTOUT_W}
+                    height={CUTOUT_H}
+                    priority
+                    loading="eager"
+                    sizes="(max-width: 640px) 100vw, 560px"
+                    quality={88}
+                    className="relative h-auto w-full object-contain drop-shadow-[0_30px_44px_rgba(58,28,84,0.35)]"
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Intro begins where the fade starts — left aligned */}

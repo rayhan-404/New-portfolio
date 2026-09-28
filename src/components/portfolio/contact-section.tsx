@@ -83,7 +83,7 @@ export function ContactSection() {
     >
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          eyebrow="07 · Get In Touch"
+          eyebrow="06 · Get In Touch"
           title="Let's build something worth signing."
           description="Have a project, role, or idea worth obsessing over? My inbox is open — and I reply fast."
         />

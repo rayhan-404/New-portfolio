@@ -14,14 +14,6 @@ export const person = {
   role: "CSE Student · North Western University",
   email: "rayhan6355@gmail.com",
   bio: "CSE student at North Western University, Khulna — curious about almost everything, building things just to see what happens.",
-  /** About bio — one entry per paragraph (rendered tight, see about-section) */
-  longBio: [
-    "I'm basically a boring and curious guy who wants to know how everything works, from my cell, brain, everything surrounding me, to the universe, and what's going on behind the screen 🤔 If I find something interesting, there's a pretty good chance I'll spend hours trying to figure it out and understand how it works.",
-    "I like learning new things, trying random ideas, and building stuff just to see if I can actually make it work. I've already built a few small projects because of this habit, and honestly, I enjoy the process more than the final result, and it satisfies me more than anything.",
-    "Sometimes I build something useful. Sometimes I build something completely unnecessary. And sometimes I break something and then spend the next few hours figuring out how it actually works. 🧐",
-    "If you ask, what is this guy interested in? 🤨 Then I'm interested in Artificial Intelligence, Robotics, Electronics, new gadgets and technologies. I don't know where this curiosity will take me yet, but I'm having fun finding out.",
-  ],
-  philosophy: "I'm curious about almost everything, and I love building things just to see what happens.",
   location: "Khulna, Bangladesh",
   availability: "Open to internships & collabs",
   responseTime: "Fast 24h response",
@@ -76,12 +68,6 @@ export const services: ServiceItem[] = [
     deliverables: ["Perf Audits", "Architecture Review", "Team Mentoring"],
   },
 ];
-
-export const stats = [
-  { label: "Years Craft", value: 4, suffix: "+", detail: "35+ shipped apps" },
-  { label: "Apps Shipped", value: 35, suffix: "+", detail: "production builds" },
-  { label: "Satisfaction", value: 99.8, suffix: "%", detail: "client score" },
-] as const;
 
 export const heroBadges = [
   { icon: "code", label: "Full-Stack Engineer" },

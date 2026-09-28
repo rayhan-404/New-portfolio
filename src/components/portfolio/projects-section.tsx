@@ -7,6 +7,7 @@ import { projects, TECH_LANG_COLORS, TECH_LANG_DEFAULT, type Project, type Proje
 import { playSound } from "@/lib/sound";
 import { Reveal } from "./reveal";
 import { ProjectDialog } from "./project-dialog";
+import { RepoBrowser } from "./repo-browser";
 import { SectionHeading } from "./section-heading";
 import { SectionNumber } from "./section-number";
 
@@ -93,7 +94,7 @@ export function ProjectsSection() {
         {/* Grid */}
         <motion.div layout className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <AnimatePresence mode="popLayout">
-            {visible.map((p) => (
+            {visible.map((p, cardIndex) => (
               <motion.article
                 layout
                 key={p.id}
@@ -113,12 +114,12 @@ export function ProjectsSection() {
                     className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[radial-gradient(circle,rgba(var(--accent-rgb)/0.22),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-700 group-hover:opacity-100"
                     aria-hidden="true"
                   />
-                  {/* index number */}
+                  {/* index number — serial by display order (01, 02, …) */}
                   <span
                     aria-hidden="true"
                     className="pointer-events-none absolute -bottom-5 -right-2 font-display text-[6rem] leading-none text-foreground/[0.05] transition-colors duration-500 group-hover:text-foreground/[0.09]"
                   >
-                    {p.id.slice(0, 2).toUpperCase()}
+                    {(cardIndex + 1).toString().padStart(2, "0")}
                   </span>
 
                   {/* primary→accent underline on hover — ref .proj-card::after (exact recipe) */}
@@ -188,6 +189,9 @@ export function ProjectsSection() {
             ))}
           </AnimatePresence>
         </motion.div>
+
+        {/* Live GitHub repositories — server-proxied, serial-numbered */}
+        <RepoBrowser />
       </div>
 
       <ProjectDialog project={selected} open={dialogOpen} onOpenChange={setDialogOpen} />
