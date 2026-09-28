@@ -693,3 +693,22 @@ Work Log:
 Stage Summary:
 - The "stained" look is gone at the architecture level: no hue is ever blended into foreign ground, because each hue owns its ground. Adding a hue later means adding one object (two surface families plus two accent triples) to the pool file — the boot script, cycle button and stylesheet pick it up automatically.
 - The stylesheet consumes the slots through fallbacks, so even a blocked or failed boot script still paints the on-brand terracotta family.
+
+---
+Task ID: 58 (professional polish pass — "full site ta aro polish koro")
+Agent: Main agent
+Task: A full designer-grade polish sweep of the whole site — typography, hierarchy, layout rhythm, micro readability — treating every section on desktop and mobile in both themes.
+
+Work Log:
+- Audited every component against a professional punch list before touching anything; found the biggest typography sin still live: five biography paragraphs in the hero were set as justified text, which punched stale rivers of whitespace through every line on both mobile and desktop. Re-set all of them with a natural left rag plus pretty text wrapping so the last line of each paragraph never strands a single word.
+- Fixed the page's heading outline: the journey title had been a second top-level heading competing with the hero name (bad for screen readers and SEO). It is now a level-two heading with pixel-identical visuals, and every journey chapter card and the future strip stepped down one level accordingly. Verified in the accessibility tree: exactly one level-one heading on the page now.
+- Added the missing giant ghost numeral to the contact section, matching the same top-right parallax recipe the projects and skills sections already wore, so the numbered-section system now reads consistently from three through five.
+- Sprinkled tabular numerals anywhere digits align across rows: the ghost timeline years and the future year, the skill meter percentages, the case-study counter, the repository star/fork/date meta rows, and the footer copyright line, so columns of numbers tick into alignment instead of wobbling.
+- Lifted the smallest type: tag chips, fact labels, the portrait nameplate role line and the footer legal rows that sat at eight to nine pixels were nudged up to nine and a half pixels — still whisper-quiet captions, but past the illegibility threshold.
+- Contact status fact shortened to a single word so the green value never wraps to two lines inside its cell.
+- Footer now respects the bottom safe-area inset on notched devices, and section descriptions get the same pretty wrapping treatment as body copy.
+- Verified with the headless browser across desktop and a 390-pixel phone in both light and dark themes, across two random accent draws: natural rag everywhere, one heading outline, ghost numerals consistent, no console or page errors, no horizontal overflow, footer pushed naturally below the fold. Typecheck and lint clean.
+
+Stage Summary:
+- The site reads like a set publication: honest left rags, a correct heading outline for assistive tech, aligned numeric columns, a consistent numbered-section system, and no sub-nine-pixel type anywhere.
+- Tagged v58; files touched were the hero, journey, contact, skills, projects, repository browser, section heading and footer components.

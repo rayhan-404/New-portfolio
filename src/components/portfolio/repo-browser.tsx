@@ -249,7 +249,7 @@ export function RepoBrowser() {
                 </p>
 
                 <div className="mt-auto pt-4">
-                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11.5px] font-medium text-foreground/75">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[11.5px] font-medium tabular-nums text-foreground/75">
                     {repo.language && (
                       <span className="inline-flex items-center gap-1.5">
                         <span

@@ -39,7 +39,7 @@ export function SkillsSection() {
                   <div key={skill.name}>
                     <div className="flex items-baseline justify-between gap-3">
                       <span className="text-sm font-medium text-foreground/95">{skill.name}</span>
-                      <span className="font-tag text-[10px] text-muted-foreground">
+                      <span className="font-tag text-[10px] tabular-nums text-muted-foreground">
                         {skill.level}%
                       </span>
                     </div>

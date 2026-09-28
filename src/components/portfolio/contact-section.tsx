@@ -16,6 +16,7 @@ import { bookingSlots, bookingTopics, person, projectTypes } from "@/lib/portfol
 import { playSound } from "@/lib/sound";
 import { Reveal } from "./reveal";
 import { SectionHeading } from "./section-heading";
+import { SectionNumber } from "./section-number";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import {
   Select,
@@ -81,6 +82,12 @@ export function ContactSection() {
       aria-label="Contact"
       className="relative scroll-mt-20 overflow-hidden px-5 py-24 sm:px-8 md:px-10 lg:py-32"
     >
+      {/* ghost numeral — 5% backward parallax, same recipe as projects/skills */}
+      <SectionNumber
+        index="05"
+        className="-top-4 right-0 hidden text-[11rem] lg:block"
+      />
+
       <div className="mx-auto max-w-6xl">
         <SectionHeading
           eyebrow="05 · Get In Touch"
@@ -119,7 +126,7 @@ export function ContactSection() {
               <div className="glass neu-decor grid grid-cols-1 gap-4 rounded-3xl p-5 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
                 <ContactFact icon={Clock} label="Response" value="Within 24h" tone="info" />
                 <ContactFact icon={Globe} label="Location" value={person.location} />
-                <ContactFact icon={ArrowUpRight} label="Status" value="Open for work" tone="success" />
+                <ContactFact icon={ArrowUpRight} label="Status" value="Available" tone="success" />
               </div>
             </Reveal>
 
@@ -311,7 +318,7 @@ function ContactFact({
         <Icon className={`h-4 w-4 ${toneCls}`} />
       </span>
       <div>
-        <p className="font-tag text-[8.5px] text-muted-foreground">{label}</p>
+        <p className="font-tag text-[9.5px] text-muted-foreground">{label}</p>
         <p
           className={`text-[13px] font-semibold ${
             tone === "success" ? "text-success" : "text-foreground"

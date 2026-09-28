@@ -36,7 +36,7 @@ export function SectionHeading({
       </h2>
       {description && (
         <p
-          className={`mt-4 max-w-2xl text-[15px] leading-relaxed text-muted-foreground ${centered ? "mx-auto" : ""}`}
+          className={`mt-4 max-w-2xl text-pretty text-[15px] leading-relaxed text-muted-foreground ${centered ? "mx-auto" : ""}`}
         >
           {description}
         </p>

@@ -69,7 +69,7 @@ export function JourneySection() {
         {/* ── Header — just the title ────────────────────────── */}
         <Reveal>
           <header className="mb-16 max-w-[860px] lg:mb-24">
-            <h1
+            <h2
               className="leading-[0.88] tracking-[-0.055em] text-foreground"
               style={{ ...BLACK, fontSize: "clamp(44px, 7.5vw, 104px)" }}
             >
@@ -78,7 +78,7 @@ export function JourneySection() {
               <em className="font-serif font-normal italic tracking-[-0.04em]">
                 in the world
               </em>
-            </h1>
+            </h2>
 
             {/* Gold swash — the same hand-drawn stroke as the hero's
                 "Hello..", drawing itself in when the title lands */}
@@ -141,7 +141,7 @@ export function JourneySection() {
                       (larger sizes clip under the sidebar/rail glass). */}
                   <p
                     aria-hidden="true"
-                    className={`relative z-[1] mb-2.5 block whitespace-nowrap text-[38px] leading-[0.9] tracking-[-0.07em] text-foreground/[0.14] transition-[color,transform] duration-500 group-hover:-translate-y-1 group-hover:text-foreground/[0.24] sm:text-[clamp(48px,12vw,72px)] md:absolute md:top-[-42px] md:mb-0 md:text-[clamp(54px,5.5vw,84px)] md:leading-none md:text-foreground/[0.07] md:group-hover:text-foreground/[0.13] ${
+                    className={`relative z-[1] mb-2.5 block whitespace-nowrap text-[38px] leading-[0.9] tracking-[-0.07em] text-foreground/[0.14] tabular-nums transition-[color,transform] duration-500 group-hover:-translate-y-1 group-hover:text-foreground/[0.24] sm:text-[clamp(48px,12vw,72px)] md:absolute md:top-[-42px] md:mb-0 md:text-[clamp(54px,5.5vw,84px)] md:leading-none md:text-foreground/[0.07] md:group-hover:text-foreground/[0.13] ${
                       isLeft ? "md:right-[25px]" : "md:left-[25px]"
                     }`}
                     style={BLACK}
@@ -191,7 +191,7 @@ export function JourneySection() {
                       </div>
                     )}
 
-                    <h2
+                    <h3
                       className={`font-display uppercase leading-[0.95] tracking-[-0.045em] text-foreground ${
                         era.current
                           ? "text-[clamp(28px,4vw,50px)]"
@@ -208,7 +208,7 @@ export function JourneySection() {
                         />
                       )}
                       {era.title}
-                    </h2>
+                    </h3>
 
                     {/* School name / sub-title — ref edu-school is #4267B2,
                         experience places stay primary-toned */}
@@ -242,7 +242,7 @@ export function JourneySection() {
                       {era.description}
                     </p>
 
-                    <span className="mt-4 inline-block rounded-full border border-border bg-[var(--bg2)] px-[11px] py-[6px] font-tag text-[8px] tracking-[0.22em] text-muted-foreground shadow-[var(--shadow-neu-sm)]">
+                    <span className="mt-4 inline-block rounded-full border border-border bg-[var(--bg2)] px-[11px] py-[6px] font-tag text-[9.5px] tracking-[0.22em] text-muted-foreground shadow-[var(--shadow-neu-sm)]">
                       {era.tag}
                     </span>
                   </div>
@@ -256,7 +256,7 @@ export function JourneySection() {
             <div className="relative flex flex-col gap-7 border-y border-border py-14 max-md:pl-[52px] sm:px-0 md:flex-row md:items-center md:gap-11 md:py-[72px] lg:px-[4%]">
               <p
                 aria-hidden="true"
-                className="whitespace-nowrap leading-[0.8] tracking-[-0.08em] text-foreground/[0.1]"
+                className="whitespace-nowrap leading-[0.8] tracking-[-0.08em] text-foreground/[0.1] tabular-nums"
                 style={{ ...BLACK, fontSize: "clamp(72px, 10vw, 145px)" }}
               >
                 {journeyFuture.year}
@@ -266,7 +266,7 @@ export function JourneySection() {
                 <p className="font-tag text-[9px] tracking-[0.3em] text-muted-foreground">
                   {journeyFuture.label}
                 </p>
-                <h2
+                <h3
                   className="my-2.5 leading-[0.9] tracking-[-0.055em] text-foreground"
                   style={{ ...BLACK, fontSize: "clamp(38px, 5vw, 70px)" }}
                 >
@@ -286,7 +286,7 @@ export function JourneySection() {
                     );
                   })()}
                   <span className="opacity-40">...</span>
-                </h2>
+                </h3>
                 <p className="text-[15px] leading-relaxed text-foreground/65">
                   {journeyFuture.description}
                 </p>

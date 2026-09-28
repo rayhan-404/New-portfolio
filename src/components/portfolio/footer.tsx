@@ -19,7 +19,7 @@ export function Footer() {
 
   return (
     <footer className="relative mt-auto overflow-hidden border-t border-border">
-      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 pb-8 pt-12 sm:px-8 md:px-10">
+      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 pb-[max(2rem,env(safe-area-inset-bottom))] pt-12 sm:px-8 md:px-10">
         <div className="flex flex-wrap items-start justify-between gap-8">
           <div>
             {/* Script wordmark — echoes the hero's Lobster name lockup */}
@@ -74,10 +74,10 @@ export function Footer() {
         </p>
 
         <div className="flex flex-col items-center justify-between gap-2 border-t border-border pt-5 sm:flex-row">
-          <p className="font-tag text-[9px] text-muted-foreground">
+          <p className="font-tag text-[9.5px] tabular-nums text-muted-foreground">
             © {year} M Rayhan
           </p>
-          <p className="font-tag text-[9px] text-muted-foreground">
+          <p className="font-tag text-[9.5px] text-muted-foreground">
             Designed & engineered with obsession
           </p>
         </div>

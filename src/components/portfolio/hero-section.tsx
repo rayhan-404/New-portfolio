@@ -34,7 +34,7 @@ function IntroBio({ className = "" }: { className?: string }) {
         , and originally from{" "}
         <span className="font-medium text-foreground">Shyamnagar, Satkhira, Bangladesh</span>.
       </p>
-      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-foreground/75 sm:text-[15.5px]">
+      <p className="font-bio text-pretty text-[14.5px] leading-[1.78] text-foreground/75 sm:text-[15.5px]">
         I&apos;m basically a boring and curious guy who wants to know{" "}
         <strong className="font-semibold text-foreground">
           how everything works, from my cell, brain, everything surrounding me,
@@ -44,19 +44,19 @@ function IntroBio({ className = "" }: { className?: string }) {
         I&apos;ll spend hours trying to figure it out and understand how it
         works.
       </p>
-      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-foreground/75 sm:text-[15.5px]">
+      <p className="font-bio text-pretty text-[14.5px] leading-[1.78] text-foreground/75 sm:text-[15.5px]">
         I like learning new things, trying random ideas, and building stuff
         just to see if I can actually make it work. I&apos;ve already built a
         few small projects because of this habit, and honestly, I enjoy the
         process more than the final result, and it satisfies me more than
         anything.
       </p>
-      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-foreground/75 sm:text-[15.5px]">
+      <p className="font-bio text-pretty text-[14.5px] leading-[1.78] text-foreground/75 sm:text-[15.5px]">
         Sometimes I build something useful. Sometimes I build something
         completely unnecessary. And sometimes I break something and then spend
         the next few hours figuring out how it actually works. 🧐
       </p>
-      <p className="font-bio text-justify text-[14.5px] leading-[1.78] text-foreground/75 sm:text-[15.5px]">
+      <p className="font-bio text-pretty text-[14.5px] leading-[1.78] text-foreground/75 sm:text-[15.5px]">
         If you ask,{" "}
         <strong className="font-semibold text-foreground">
           what is this guy interested in?
@@ -69,7 +69,7 @@ function IntroBio({ className = "" }: { className?: string }) {
         . I don&apos;t know where this curiosity will take me yet, but I&apos;m
         having fun finding out.
       </p>
-      <p className="font-bio text-justify text-[14.5px] font-semibold leading-[1.78] text-foreground sm:text-[15.5px]">
+      <p className="font-bio text-pretty text-[14.5px] font-semibold leading-[1.78] text-foreground sm:text-[15.5px]">
         I&apos;m curious about almost everything, and I love building things
         just to see what happens.
       </p>
@@ -301,7 +301,7 @@ export function HeroSection() {
                     <p className="truncate text-[15px] font-semibold leading-tight text-foreground">
                       {person.name}
                     </p>
-                    <p className="font-tag mt-0.5 truncate text-[8.5px] text-muted-foreground">
+                    <p className="font-tag mt-0.5 truncate text-[9.5px] text-muted-foreground">
                       {person.role}
                     </p>
                   </div>

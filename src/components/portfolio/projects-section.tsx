@@ -52,7 +52,7 @@ export function ProjectsSection() {
             description="A selection of systems I designed and built end-to-end — each one ships with real telemetry, accessibility, and performance budgets."
           />
           <Reveal delay={0.15}>
-            <p className="font-tag hidden text-[10px] text-muted-foreground lg:block">
+            <p className="font-tag hidden text-[10px] tabular-nums text-muted-foreground lg:block">
               {projects.length} case studies — 2021 / {new Date().getFullYear()}
             </p>
           </Reveal>
