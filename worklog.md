@@ -769,3 +769,20 @@ Stage Summary:
 - The mobile hero now wears the real environmental headshot, melted flush into the section, with the site's rotating accent literally re-lighting the photo's lamps — the reflection follows every refresh's hue draw and both themes.
 - Nav reads raised-everywhere; mobile geometry is tighter (smaller radii) while desktop keeps its rounder voice for the later desktop pass.
 - Tagged v61 (c4bb350); touched hero-section, nav-rail, skills/projects/repo-browser/journey/contact/projects+repo dialogs, plus the new webp asset.
+
+---
+Task ID: 62 (headshot background removal — subject on site ground)
+Agent: Main agent
+Task: User: "image er background remove kore bosaw, jate website er background a bose" — strip the headshot's office background so the portrait sits directly on the website's own rotating hue-family background.
+
+Work Log:
+- Installed rembg (pip user-site is Python 3.13 while python3 is 3.12 — ran via python3.13) and removed the background with the u2net_human_seg session model (176MB auto-download); cropped to alpha bbox +14px pad → 713x952 RGBA; hair and suit edges clean, zero background residue.
+- Optimized to public/generated/m-rayhan-headshot-cutout.webp (alpha, q88, 64K); kept the full-photo webp for a possible later desktop use.
+- Mobile hero rebuilt around the cutout: retired the four-edge rect masks, ground-fusion wash and the photo-light bloom layers (no photo environment anymore); kept only the bottom dissolve that melts the waist crop; subject gets the accent halo behind and three drifting bokeh sparks (screen blend) as the site's own light; slightly stronger halo (0.24) now that it is the only light source; subject nudged +4.5% right so the type clears the quiff.
+- Debugged a margin-collapse bug the first spacing attempt hit: the photo wrapper's mt-20 collapsed through the unbuffered parent, pushing the entire hero column (Hello included) down 80px instead of separating text from hair — measured rects proved hello and img tops identical. Switched to padding (pt-20 sm:pt-24) which cannot collapse; measured gap hello-bottom → hair-top = 38px.
+- Verified with agent-browser at 390px: light (purple draw) and dark — subject sits flush on the theme ground in both, Hello fully clear of the head, intro overlaps the dissolved waist cleanly, no console errors. bun run lint clean.
+
+Stage Summary:
+- The mobile hero is now a true cutout-on-ground composition: the portrait lives directly on the rotating hue family, with the accent halo + bokeh playing the lighting the photo's room used to play.
+- rembg toolchain (python3.13 + u2net_human_seg model) is cached on the machine for future re-cuts.
+- Tagged v62; touched hero-section and added the cutout webp asset.
