@@ -990,3 +990,19 @@ Work Log:
 Stage Summary:
 - Push to GitHub remains blocked solely by token permissions. One-shot push is ready: git push origin legacy-static-site && git push -u origin main --force && git push origin --tags — works the moment a token with Contents: Read and write (classic token with repo scope) is installed in ~/.git-credentials.
 - Self-serve fallback delivered: download /portfolio-source-v71.zip (source snapshot) or /my-project-v71.bundle (full history + tags + legacy branch) from the preview URL and push from any machine with git.
+
+---
+Task ID: git-push-github-3
+Agent: Main agent
+Task: User supplied a classic token (ghp_…) with the instruction: "portfolio new repo te kaj korbe, onno kothao touch o korbe na" — push to the New-portfolio repo ONLY, touch nothing else.
+
+Work Log:
+- Installed the classic token in ~/.git-credentials (replacing the read-only fine-grained ones); verified identity rayhan-404.
+- "portfolio-new" returned 404; the repo-name scan found the user's actual repo rayhan-404/New-portfolio — created minutes earlier, public, size 0, completely empty ("This repository is empty"), default branch main.
+- Retargeted origin to https://github.com/rayhan-404/New-portfolio.git (old portfolio origin URL removed — that repo stays untouched per the user's instruction).
+- Appended this worklog entry and committed it so the pushed main includes the full record, then pushed main + all tags to New-portfolio. No force needed (empty repo). legacy-static-site NOT pushed there (it archives the old portfolio repo's site, which remains untouched in its own repo).
+- Push scope respected: only rayhan-404/New-portfolio received main + tags; no other GitHub repo, branch or setting was modified.
+
+Stage Summary:
+- GitHub now hosts the complete project: full v0→v71 history + chore commits on main, all 23 version tags (v29–v36, v57–v71), pushed to rayhan-404/New-portfolio.
+- Old rayhan-404/portfolio (legacy static site) untouched; local backup remote and bundle remain in sync for future versions (git push backup main --tags for local, git push origin for GitHub).
