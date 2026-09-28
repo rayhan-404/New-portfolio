@@ -750,3 +750,22 @@ Stage Summary:
 - Type system now: greeting and lead deck in Fraunces italic; the name in stroke-fattened Bonheur Royale; the intro body in Source Serif reading serif, justified with hyphenation and an accent-ink drop cap; UI labels stay Nunito.
 - The navigator reads dot-free: active state = pressed tile + magnified label only.
 - Tagged v60; touched the font loader, the stylesheet type layer, the hero, the footer wordmark and the navigator rail.
+
+---
+Task ID: 61 (mobile hero photo + raised nav + mobile radius pass)
+Agent: Main agent
+Task: User's three-point mobile brief — use the new professional headshot (navy suit, warm bokeh office background), perfectly mask it into the section, give the photo's white lights the accent hue's vibe so they read as that color's light reflection; nav buttons felt sunken, make them feel raised; reduce corner radius on mobile. Desktop explicitly deferred.
+
+Work Log:
+- Downloaded the user's headshot (785x981 JPEG via CDN, upload file absent from disk), optimized to public/generated/m-rayhan-headshot.webp at native resolution q84 (40KB — exactly 390px-phone @2x).
+- Rebuilt the mobile hero photo unit: nested alpha masks dissolve all four edges (horizontal 9% fades outer, top 9% + bottom 68%-to-0 dissolve inner), and a new ground-fusion wash — two linear gradients of color-mix(var(--bg)) painted OUTSIDE the masks — bridges the fading edges into the section's own ground so there is no ghost rectangle in any theme or hue.
+- Accent light-reflection system, all inside the masked box so layers stay glued to the photo: a full-bleed `color`-blend grade (accent at 0.16) breathes the hue into the room; four `screen`-blend radial blooms sit exactly on the photo's light sources (upper-right double strip, left strip, lower-right glow) so the whites read as the drawn hue's reflected light; three drifting blurred bokeh dots (orb-float, screen blend) animate the reflection. Everything rides --accent-rgb/--primary-rgb so all 10 rotating hues re-light the room for free.
+- NavRail de-pitted: the active button's inset shadow (the "hole") is gone — every destination tile is now raised (outset neu-sm + bg + hairline border), the active lifts harder (outset neu + primary-tinted border), labels unchanged (magnified primary on active). Verified the active state still tracks scroll-spy on mobile.
+- Mobile radius sweep: rail edge 16->12px, brand+nav tiles rounded-xl -> 10px on mobile (md keeps xl); journey cards 22px->2xl, all section cards rounded-3xl -> rounded-2xl on mobile across skills/projects/repo-browser/contact; contact form 2rem->2xl, dialogs 1.75rem->2xl, inputs/selects 2xl->xl — all stepping back up at md/sm breakpoints so desktop is untouched.
+- Fixed a next/image quality warning (90 -> 88, configured set).
+- Verified with agent-browser: 390px mobile in light (pink draw) + dark (pink) + light (cyan draw — cool hue correctly re-lights the warm lights); photo melt seamless, Hello legible over the faded top, intro overlaps the dissolved suit cleanly; journey/projects/footer scroll-through with active nav tracking; footer natural-push intact; desktop 1440px hero + projects regression clean; stale-HMR console noise about the long-deleted about-section.tsx identified as cache residue (source, tsc, lint all clean). bun run lint 0 problems, tsc clean.
+
+Stage Summary:
+- The mobile hero now wears the real environmental headshot, melted flush into the section, with the site's rotating accent literally re-lighting the photo's lamps — the reflection follows every refresh's hue draw and both themes.
+- Nav reads raised-everywhere; mobile geometry is tighter (smaller radii) while desktop keeps its rounder voice for the later desktop pass.
+- Tagged v61 (c4bb350); touched hero-section, nav-rail, skills/projects/repo-browser/journey/contact/projects+repo dialogs, plus the new webp asset.
