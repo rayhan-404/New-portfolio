@@ -16,11 +16,32 @@ import { scrollToSection } from "./nav";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-/* m-rayhan-headshot-cutout.webp intrinsic size (rembg cutout of the
-   uploaded headshot, rebuilt at 2x from the pristine alpha master —
-   premultiplied Lanczos + gentle unsharp, q95) */
-const HEADSHOT_W = 1426;
-const HEADSHOT_H = 1904;
+/* m-rayhan-headshot-cutout.webp intrinsic size (rembg cutout of the HD
+   portrait source, 2x premultiplied Lanczos + gentle unsharp, q95) */
+const HEADSHOT_W = 2014;
+const HEADSHOT_H = 2710;
+
+/* ── Desktop card light map ─────────────────────────────────────
+   The HD portrait's white lamps (upper-right double strip, left
+   strip, lower-right glow) re-lit as the drawn accent's reflected
+   light. v61 tuned these on the same composition; the card's
+   mirrored headroom shifts every photo feature +10% down. */
+const CARD_LIGHT_BLOOMS = [
+  "radial-gradient(38% 9% at 84% 25%, rgba(var(--accent-rgb)/0.5), transparent 72%)",
+  "radial-gradient(30% 8% at 90% 31.5%, rgba(var(--primary-rgb)/0.4), transparent 72%)",
+  "radial-gradient(18% 7% at 2% 43%, rgba(var(--accent-rgb)/0.4), transparent 75%)",
+  "radial-gradient(26% 9% at 97% 79%, rgba(var(--accent-rgb)/0.45), transparent 75%)",
+];
+
+/* Direct recolor pass — `color`-blend radials painted exactly ON the
+   lamp strips so their warm gold takes the drawn hue as its own;
+   luminance is preserved, so they still read as lit surfaces. */
+const CARD_LIGHT_RECOLOR = [
+  "radial-gradient(34% 8% at 84% 25%, rgba(var(--accent-rgb)/0.6), transparent 74%)",
+  "radial-gradient(26% 7% at 90% 31.5%, rgba(var(--primary-rgb)/0.5), transparent 74%)",
+  "radial-gradient(16% 6% at 2% 43%, rgba(var(--accent-rgb)/0.55), transparent 76%)",
+  "radial-gradient(22% 8% at 97% 79%, rgba(var(--accent-rgb)/0.5), transparent 76%)",
+];
 
 /* ── Personal intro copy ─────────────────────────────────────── */
 
@@ -197,6 +218,38 @@ export function HeroSection() {
                   quality={95}
                   className="relative h-auto w-full object-contain drop-shadow-[0_30px_42px_rgba(var(--primary-rgb)/0.3)]"
                 />
+
+                {/* silhouette-masked accent light — a key-light kiss on
+                    the face and a bounce on the shirt/suit, masked by
+                    the cutout's own alpha so the tint can never spill
+                    onto the transparent ground */}
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0"
+                  style={{
+                    WebkitMaskImage: "url(/generated/m-rayhan-cutout-mask.webp)",
+                    maskImage: "url(/generated/m-rayhan-cutout-mask.webp)",
+                    WebkitMaskSize: "100% 100%",
+                    maskSize: "100% 100%",
+                  }}
+                >
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "radial-gradient(46% 13% at 52% 14%, rgba(var(--accent-rgb)/0.20), transparent 76%)",
+                      mixBlendMode: "screen",
+                    }}
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "radial-gradient(64% 20% at 50% 66%, rgba(var(--accent-rgb)/0.13), transparent 78%)",
+                      mixBlendMode: "screen",
+                    }}
+                  />
+                </div>
               </div>
 
               {/* accent rim sparks — bokeh drifting around the subject,
@@ -323,22 +376,120 @@ export function HeroSection() {
 
             <div className="glass-strong neu-decor relative overflow-hidden rounded-[2.5rem] p-2.5">
               <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem]">
-                {/* warm studio backdrop behind the transparent cutout */}
+                {/* warm studio backdrop — the room the photo melts into */}
                 <div
                   aria-hidden="true"
                   className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(var(--accent-rgb)/0.4),rgba(var(--primary-rgb)/0.6)_55%,rgba(var(--primary-rgb)/0.85)_100%)]"
                 />
-                <Image
-                  src="/generated/m-rayhan-portrait.png"
-                  alt={`Portrait of ${person.name}`}
-                  fill
-                  priority
-                  loading="eager"
-                  sizes="440px"
-                  quality={88}
-                  className="origin-top -translate-x-[6%] scale-[1.18] object-cover object-top"
-                />
-                <div className="absolute inset-0 bg-[image:var(--img-vignette)]" />
+
+                {/* ── the real headshot, melt-masked into the backdrop ──
+                    Nested edge fades (sides 24% / top 12% over mirrored
+                    headroom / bottom dissolve) erase every rectangle
+                    boundary — the photo becomes the card's scene in any
+                    theme and any drawn hue. Accent light layers ride
+                    INSIDE the masks, glued to the photo's own lamps. */}
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    WebkitMaskImage:
+                      "linear-gradient(to right, transparent 0%, #000 16%, #000 84%, transparent 100%)",
+                    maskImage:
+                      "linear-gradient(to right, transparent 0%, #000 16%, #000 84%, transparent 100%)",
+                  }}
+                >
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      WebkitMaskImage:
+                        "linear-gradient(to bottom, transparent 0%, #000 10%, #000 66%, rgba(0,0,0,0.6) 85%, rgba(0,0,0,0.3) 95%, transparent 100%)",
+                      maskImage:
+                        "linear-gradient(to bottom, transparent 0%, #000 10%, #000 66%, rgba(0,0,0,0.6) 85%, rgba(0,0,0,0.3) 95%, transparent 100%)",
+                    }}
+                  >
+                    <Image
+                      src="/generated/m-rayhan-portrait-hd.webp"
+                      alt={`Portrait of ${person.name}`}
+                      fill
+                      priority
+                      loading="eager"
+                      sizes="440px"
+                      quality={95}
+                      className="object-cover object-top"
+                    />
+
+                    {/* hue grade — the whole room breathes the accent */}
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0"
+                      style={{
+                        background: "rgba(var(--accent-rgb) / 0.14)",
+                        mixBlendMode: "color",
+                      }}
+                    />
+                    {/* lamp recolor — the strips take the hue as their own
+                        light, luminance kept (reads as real lit surfaces) */}
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0"
+                      style={{ background: CARD_LIGHT_RECOLOR.join(", "), mixBlendMode: "color" }}
+                    />
+                    {/* re-lit lamps — accent blooms exactly on the photo's
+                        white light sources, reading as reflected light */}
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0"
+                      style={{ background: CARD_LIGHT_BLOOMS.join(", "), mixBlendMode: "screen" }}
+                    />
+                    {/* accent key-light kiss on the face */}
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0"
+                      style={{
+                        background:
+                          "radial-gradient(30% 13% at 53% 34%, rgba(var(--accent-rgb)/0.13), transparent 76%)",
+                        mixBlendMode: "screen",
+                      }}
+                    />
+                    {/* drifting accent bokeh — the reflection comes alive */}
+                    <span
+                      aria-hidden="true"
+                      className="orb-float absolute right-[13%] top-[23%] h-3.5 w-3.5 rounded-full bg-[rgba(var(--accent-rgb)/0.85)] blur-[5px]"
+                      style={{ mixBlendMode: "screen" }}
+                    />
+                    <span
+                      aria-hidden="true"
+                      className="orb-float-slow absolute left-[5%] top-[41%] h-2.5 w-2.5 rounded-full bg-[rgba(var(--primary-rgb)/0.8)] blur-[4px]"
+                      style={{ mixBlendMode: "screen", animationDelay: "-3s" }}
+                    />
+                    <span
+                      aria-hidden="true"
+                      className="orb-float absolute right-[5%] top-[77%] h-2 w-2 rounded-full bg-[rgba(var(--accent-rgb)/0.7)] blur-[3px]"
+                      style={{ mixBlendMode: "screen", animationDelay: "-6s" }}
+                    />
+                    {/* night mode — accent bounce light climbing the suit */}
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 hidden dark:block"
+                      style={{
+                        background:
+                          "linear-gradient(to top, rgba(var(--accent-rgb)/0.30), transparent 48%)",
+                        mixBlendMode: "screen",
+                      }}
+                    />
+                    {/* ceiling melt wash — the card's own hue bleeds over
+                        the top edge, turning the mirrored headroom into
+                        atmosphere */}
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0"
+                      style={{
+                        background:
+                          "linear-gradient(to bottom, rgba(var(--primary-rgb)/0.18), transparent 16%)",
+                      }}
+                    />
+                  </div>
+                </div>
+
                 {/* bottom nameplate */}
                 <div className="glass-strong absolute bottom-3.5 left-3.5 right-3.5 flex items-center justify-between gap-3 rounded-2xl px-4 py-3">
                   <div className="min-w-0">

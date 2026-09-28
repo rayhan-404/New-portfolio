@@ -805,3 +805,21 @@ Stage Summary:
 - Hero portrait is a 2x retina-grade cutout served at q95 — the "quality decrease" is gone while the subject still sits directly on the rotating hue-family ground.
 - SlideSection flush-landing now targets the section, fixing the long-standing tapped-tile-never-activates quirk.
 - Tagged v63; touched nav-rail, hero-section, next.config, slide-section, and the cutout webp asset.
+
+---
+Task ID: 64 (HD portrait everywhere — desktop card melt + HD mobile cutout)
+Agent: Main agent
+Task: User re-sent the approved brief with the higher-resolution portrait (1122x1402 ChatGPT render, CDN): "Eta use koro, and parfectly mass kro section er sathe, white light gulo accent colour er vibe daw, jate look like oi colour er lite reflection hoise" — plus the full v47-v50 session transcript as the design reference (desktop card = photo WITH background melted into the card, light reflections; mobile = cutout).
+
+Work Log:
+- Downloaded the HD source (1122x1402 — same composition as the v61 photo at ~1.4x resolution) from the CDN upload URL to upload/m-rayhan-portrait-hd.png.
+- Desktop card rebuilt around the real photo (the old AI m-rayhan-portrait.png retired): new melt asset with +10% mirrored blurred headroom (public/generated/m-rayhan-portrait-hd.webp, 1122x1542 q92) so the top fade band lives in background, never touching the hair; nested edge masks on the image only (sides 16% after tuning down from 24 — light mode's pastel backdrop bleeds too hard at v50's widths — top 10%, bottom dissolve 66%->0) leaving the backdrop radial unmasked; removed the AI-tuned --img-vignette overlay and the old scale/translate framing.
+- Accent light-reflection stack INSIDE the masks, all hue-token driven: full-room color grade (0.14), a direct `color`-blend RECOLOR pass painting the four lamp strips (upper-right double, left, lower-right) so the warm gold takes the drawn hue with luminance kept — strips read as the accent's own lit surfaces (the v47-approved technique; screen blooms alone left them gold), screen blooms on the same coordinates (+10% headroom shift from the v61 map), accent key-light kiss on the face, three drifting bokeh orbs, dark-only suit bounce light (linear screen gradient climbing from the bottom, `hidden dark:block`), and a primary ceiling melt wash over the mirrored headroom.
+- Mobile cutout regenerated from the HD source: rembg u2net_human_seg at native res -> bbox+14px crop (1007x1355, ~1.4x the old subject pixels) -> 2x premultiplied Lanczos + gentle unsharp -> q95 alpha webp master (2014x2710); added silhouette-masked accent tints (face key-light kiss + shirt/suit bounce) using a lightweight alpha-only mask asset (m-rayhan-cutout-mask.webp, 38KB) so the tint can never spill onto the transparent ground.
+- Fixed two real TS errors (framer CSSProperties rejects string[] for background) by joining the gradient constants; sandbox skills/ tsc noise ignored as pre-existing.
+- Verified with agent-browser across FIVE random hue draws x both themes: desktop 1440 light (blue, teal, green — strips recolor correctly each draw) + dark (blue — suit glow + blue strips), mobile 390 light (purple) + dark (green, ember) — melts seamless everywhere, no rectangle boundary, face/suit natural, HD cutout visibly sharper; console clean, nav/scroll-spy intact; lint clean, tsc src clean.
+
+Stage Summary:
+- The approved v47-v50 composition is fully ported to the current design system at HD quality: desktop card = the real photo melted flush into its backdrop with the accent literally re-lighting the photo's lamps; mobile = the HD cutout with silhouette-scoped accent light.
+- Every layer rides --accent-rgb/--primary-rgb, so all 10 rotating hues re-light both stages for free; dark mode adds the suit bounce light.
+- Tagged v64; touched hero-section and added portrait-hd.webp + cutout mask assets (mobile cutout master regenerated).
