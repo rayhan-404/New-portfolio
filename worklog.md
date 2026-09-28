@@ -941,3 +941,19 @@ Work Log:
 Stage Summary:
 - Bolts are now corner-entering diagonals with long reach: every strike rakes in from a top corner (alternating sides), crosses the sky at 50-65% slope, and reaches deep into the picture; the corner flash and face reflection follow the entry point.
 - Tagged v71; touched hero-section only.
+
+---
+Task ID: git-backup
+Agent: Main agent
+Task: User: "now push it on git, jeno hariye na jay" — push the work to git so nothing gets lost.
+
+Work Log:
+- Confirmed v71 was already committed (8c5ae29) with a clean working tree and a complete Task 71 worklog entry; found NO git remote configured and no GitHub credentials on this machine (no gh CLI, no tokens, no SSH keys).
+- Created a dedicated bare remote at /home/z/backups/my-project.git, wired it as remote "backup" on the project, and pushed main plus all tags.
+- Noticed tag v66 was missing from the tag list (its commit c046829 was already in history); backfilled the tag on that exact commit and pushed it — the v29→v71 sequence is now complete.
+- Created a single-file bundle /home/z/backups/my-project-v71.bundle with --all (full history + tags); bundle verify reports "records a complete history", and a test clone from the bundle landed on 8c5ae29 with a clean status.
+- Verified with ls-remote: backup remote main = v71 = 8c5ae29; all refs (main + tags v29..v71) present on the remote.
+
+Stage Summary:
+- Work is now durable in three git-native forms: the working repo (tagged v71), the bare remote /home/z/backups/my-project.git (update anytime with `git push backup main --tags`), and the portable single-file bundle /home/z/backups/my-project-v71.bundle (restore anywhere with `git clone my-project-v71.bundle`).
+- True off-site hosting (GitHub/GitLab) still needs the user's repo URL + personal access token, or the user can run: git remote add origin <url> && git push -u origin main --tags.
