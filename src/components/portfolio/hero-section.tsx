@@ -430,7 +430,7 @@ export function HeroSection() {
       ref={ref}
       aria-label="Introduction"
       onMouseMove={onMouseMove}
-      className="relative flex min-h-svh flex-col justify-center overflow-hidden px-5 pb-14 pt-20 sm:px-8 sm:pt-24 md:px-10 lg:pt-28"
+      className="relative flex min-h-svh flex-col justify-start overflow-hidden px-5 pb-14 pt-5 sm:px-8 sm:pt-5 md:px-10 lg:justify-center lg:pt-28"
     >
       {/* soft light bloom behind the type */}
       <div
@@ -461,7 +461,7 @@ export function HeroSection() {
               initial={reduce ? false : { opacity: 0, x: -16, y: -8 }}
               animate={{ opacity: 1, x: 0, y: 0 }}
               transition={{ duration: 0.7, delay: 0.55, ease: EASE }}
-              className="text-glow absolute left-4 top-0 z-10 sm:left-8 sm:top-1"
+              className="text-glow absolute left-4 top-0 z-10 sm:left-8"
             >
               <span className="font-fraunces block text-[3.5rem] font-semibold italic leading-[0.95] tracking-[-0.01em] text-foreground sm:text-[4rem]">
                 Hello<span className="text-gold-gradient">..</span>
@@ -535,7 +535,7 @@ export function HeroSection() {
                 </>
               )}
               <div
-                className="relative translate-x-[4.5%]"
+                className="relative -translate-x-[2%]"
                 style={{
                   WebkitMaskImage:
                     "linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%)",

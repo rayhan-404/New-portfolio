@@ -151,10 +151,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Theme bootstrap — runs before paint (default: light cream) */}
+        {/* Theme bootstrap — runs before paint (default: dark; a saved
+            "light" choice is the only way to stay light) */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{if(localStorage.getItem('mr-theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}`,
+            __html: `try{if(localStorage.getItem('mr-theme')!=='light')document.documentElement.classList.add('dark')}catch(e){document.documentElement.classList.add('dark')}var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',document.documentElement.classList.contains('dark')?'#160d08':'#faf3ea')`,
           }}
         />
         {/* Accent bootstrap — the reference's "Material Colors — Random on

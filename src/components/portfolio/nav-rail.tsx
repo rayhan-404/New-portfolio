@@ -6,7 +6,6 @@ import { Palette, Volume2, VolumeX } from "lucide-react";
 import { useSoundEngine } from "./nav";
 import { cycleAccent, type AccentHue } from "@/lib/accent-pool";
 import { playSound } from "@/lib/sound";
-import { person } from "@/lib/portfolio-data";
 
 export interface NavCategory {
   id: string;
@@ -105,27 +104,10 @@ export function NavRail({ categories, activeIndex, onSelectCategory }: NavRailPr
         />
       </div>
 
-      {/* Brand monogram tile */}
-      <button
-        type="button"
-        onClick={() => handleSelect(0)}
-        aria-label="Back to top"
-        title="M Rayhan — back to top"
-        className="relative z-[2] flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-[10px] border border-[var(--nl)] bg-[var(--bg)] shadow-[var(--shadow-neu-sm)] transition-transform duration-300 hover:scale-105 active:scale-95 md:rounded-xl sm:h-10 sm:w-10"
-      >
-        <span className="font-display text-[13px] font-extrabold leading-none tracking-tight text-foreground sm:text-sm">
-          {person.name.split(" ").map((w) => w[0]).join("")}
-        </span>
-        <span
-          aria-hidden="true"
-          className="absolute -bottom-[3px] left-1/2 h-[3px] w-5 -translate-x-1/2 rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent-ref)]"
-        />
-      </button>
-
       {/* ── Neumorphic nav buttons ──────────────────────────────── */}
       <nav
         aria-label="Sections"
-        className="relative z-[2] flex w-full flex-1 flex-col items-center justify-center gap-1.5 px-1.5 py-3 sm:gap-2 md:px-2.5"
+        className="relative z-[2] flex w-full flex-1 flex-col items-center justify-evenly gap-1 px-1.5 py-3 md:px-2.5"
       >
         {categories.map((cat, idx) => {
           const isActive = idx === effectiveIndex;

@@ -23,8 +23,8 @@ const isDark = () => document.documentElement.classList.contains("dark");
 
 /**
  * Light/dark switch for the deep-orange neumorphic theme.
- * Default is the signature warm cream light theme;
- * the choice persists in localStorage ("mr-theme").
+ * Dark is the default; a saved "light" choice wins,
+ * persisted in localStorage ("mr-theme").
  */
 export function ThemeToggle({ className = "" }: { className?: string }) {
   const dark = useSyncExternalStore(subscribeTheme, isDark, () => false);

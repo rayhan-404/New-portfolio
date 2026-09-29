@@ -1023,3 +1023,20 @@ Work Log:
 Stage Summary:
 - Thunder now lights the WORLD, not the photograph: sky flash around the card, thin bolt arcs in the picture, small face kiss — and the framed portrait's own background stays exactly as calm as it was before the storm.
 - Both stages share the same flash architecture (corner-anchored self-contained glow boxes); data-flash/data-face attributes left in place for future freeze-harness work.
+
+---
+Task ID: 73 (dark default + hero top-pack + nav rail cleanup)
+Agent: Main agent
+Task: User asked four things: make dark mode the default; shift the image a bit left; raise BOTH the Hello text and the image ("hello text top theke 20px niche thakbe, then image"); remove MR from the left nav and space the nav items evenly with more air.
+
+Work Log:
+- Dark default: rewrote the pre-paint bootstrap in layout.tsx — now adds the dark class UNLESS localStorage explicitly says "light" (private-mode fallback also dark), and the same script flips meta theme-color (#160d08 dark / #faf3ea light). Updated the ThemeToggle doc comment. Verified with localStorage cleared: html gets dark on both 390px and 1440px loads.
+- Mobile/tablet hero top-pack: section changed from pt-20 sm:pt-24 + justify-center to pt-5 sm:pt-5 + justify-start (lg:justify-center lg:pt-28 keeps the desktop grid centered). Hello (absolute top-0, sm:top-1 removed) now sits ~20px from the viewport top; the image slot (pt-20 sm:pt-24) keeps it right after the Hello. Both elements rose 60px, matching "2 ta e aro upore uthaw".
+- Image shift: the cutout block's translate-x-[4.5%] (a rightward nudge) became -translate-x-[2%] — a modest left shift, 6.5% net.
+- Nav rail: deleted the MR brand monogram tile (and the now-unused person import) — its "back to top" duty is covered by the HOME item; the items column changed from justify-center + gap-1.5/2 to justify-evenly + gap-1, so HOME/JOURNEY/PROJECTS/SKILLS/CONTACT now spread evenly down the full rail height with generous air; bottom palette/sound controls stay pinned via mt-auto.
+- Note: this environment's MultiEdit applied partial batches twice — cleaned up duplicate ref/IIFE leftovers from the v72 round and did the nav removal via a line-based python edit; tsc confirms no broken references.
+- Verification: mobile 390 dark (MR gone, items even, helloTop ≈12-20px, imgTop 92 / imgLeft 47 — left-shifted), desktop 1440 dark (rail even + spacious, hero unchanged); lint 0 errors, tsc 0 errors in src, console 0 errors after fresh reload.
+
+Stage Summary:
+- Dark is now the signature first impression (survives private mode; a saved "light" still wins), the mobile hero hugs the top (Hello 20px → image → name/bio) with the cutout drifting slightly left, and the nav rail reads as a clean evenly-rhythmed spine without the monogram.
+- Tagged v73; touched layout.tsx, theme-toggle.tsx, hero-section.tsx, nav-rail.tsx.
