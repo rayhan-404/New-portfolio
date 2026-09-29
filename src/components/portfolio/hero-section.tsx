@@ -20,6 +20,7 @@ import {
   portraitVariant,
 } from "@/lib/hero-variants";
 import { playSound } from "@/lib/sound";
+import { playThunder } from "@/lib/thunder-sound";
 import { scrollToSection } from "./nav";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -165,7 +166,7 @@ const toPath = (pts: Pt[]) =>
    picture (geometry lives in a 100×150 unit box the placement scales
    — runs client-side only, after the strike clock mounts, so SSR
    never sees it) */
-function genStrike(r: StrikeRanges, side: "left" | "right"): Strike {
+export function genStrike(r: StrikeRanges, side: "left" | "right"): Strike {
   const fromLeft = side === "left";
   /* entry pinned to a top corner, exit deep on the opposite half —
      the diagonal trend is what makes it read as weather, not a
@@ -229,15 +230,15 @@ function genStrike(r: StrikeRanges, side: "left" | "right"): Strike {
 /* real-lightning restrike signature: spike → micro-flicker decay →
    blackout → re-strike → fade; the room answers softer than the bolt,
    the face softer still */
-const STRIKE_MS = 1.15;
+export const STRIKE_MS = 1.15;
 const BOLT_TIMES = [0, 0.05, 0.11, 0.17, 0.25, 0.33, 0.42, 0.48, 0.56, 0.68, 0.82, 1];
 const BOLT_OPACITY = [0, 1, 0.5, 0.88, 0.4, 0.72, 0.1, 0.08, 0.62, 0.3, 0.12, 0];
-const FLASH_TIMES = [0, 0.05, 0.13, 0.22, 0.33, 0.48, 0.56, 0.72, 1];
-const FLASH_OPACITY = [0, 0.95, 0.3, 0.7, 0.15, 0.12, 0.55, 0.2, 0];
+export const FLASH_TIMES = [0, 0.05, 0.13, 0.22, 0.33, 0.48, 0.56, 0.72, 1];
+export const FLASH_OPACITY = [0, 0.95, 0.3, 0.7, 0.15, 0.12, 0.55, 0.2, 0];
 const FACE_TIMES = FLASH_TIMES;
 const FACE_OPACITY = [0, 1, 0.35, 0.8, 0.3, 0.25, 0.7, 0.25, 0];
 
-function LightningBolt({ strike: s }: { strike: Strike }) {
+export function LightningBolt({ strike: s }: { strike: Strike }) {
   return (
     <motion.svg
       viewBox="0 0 100 150"
@@ -437,11 +438,10 @@ export function HeroSection() {
     };
   }, [accentId, stage]);
 
-  /* Thunder strike clock — the storm NEVER goes quiet: the first bolt
-     arrives within ~1s, strikes chain 130–420ms apart in rolling
-     bursts of 2–5, and between bursts the sky only breathes for a
-     beat (~0.55–1.6s) before the next chain rolls in — continuous
-     lightning, end to end. Reduced motion = clear skies. */
+  /* Thunder strike clock — real storms burst: the first bolt arrives
+     within ~1s, strikes chain 150–500ms apart (2–4 per burst), and the
+     sky rests a few seconds before the next burst rolls in — storm
+     like before, with room to breathe. Reduced motion = clear skies. */
   const [strike, setStrike] = useState(0);
   const chainRef = useRef({ remaining: 0 });
   useEffect(() => {
@@ -453,10 +453,10 @@ export function HeroSection() {
       const c = chainRef.current;
       if (c.remaining > 0) {
         c.remaining--;
-        return 130 + Math.random() * 290;
+        return 150 + Math.random() * 350;
       }
       c.remaining = 1 + Math.floor(Math.random() * 3);
-      return 550 + Math.random() * 1050;
+      return 3800 + Math.random() * 4200;
     };
     const loop = (delay: number) => {
       t = window.setTimeout(() => {
@@ -488,6 +488,14 @@ export function HeroSection() {
         : null,
     [strike]
   );
+
+  /* the sound answers the light — thunder trails the flash by the
+     strike's own distance (near cracks land fast; far rumbles lag) */
+  useEffect(() => {
+    if (!strike || !strikes) return;
+    const s = stage === "desktop" ? strikes.d : strikes.m;
+    playThunder(s.far ? "far" : "near");
+  }, [strike, strikes, stage]);
 
   /* Gentle parallax on the desktop portrait card */
   const mx = useMotionValue(0);

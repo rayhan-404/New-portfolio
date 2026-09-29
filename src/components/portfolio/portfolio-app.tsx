@@ -1,6 +1,7 @@
 "use client";
 
 import { AppBackground } from "./app-background";
+import { GlobalThunder } from "./global-thunder";
 import { NAV_ITEMS, scrollToSection, useActiveSection } from "./nav";
 import { NavRail, type NavCategory } from "./nav-rail";
 import { SideRailRight } from "./side-rails";
@@ -41,6 +42,9 @@ export function PortfolioApp() {
 
       {/* Utility rail (socials / status / CTA) — desktop only */}
       <SideRailRight />
+
+      {/* site-wide storm — bolts + room flash over every section */}
+      <GlobalThunder />
 
       {/* Content column: left pad = notch sidebar width, right pad = rail */}
       <div className="flex min-h-svh flex-col pl-[54px] sm:pl-[62px] md:pl-[74px] md:pr-[88px]">
