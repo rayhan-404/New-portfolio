@@ -1114,3 +1114,23 @@ Work Log:
 Stage Summary:
 - The journey now reads as a living milestone trail: a comet-lit progress spine with icon medallions, gradient-poured years and side-sliding cards — same words, entirely new presence.
 - Tagged v77; touched src/components/portfolio/journey-section.tsx only.
+
+---
+Task ID: 78 (journey section — Journey Cinema: one pinned screen, horizontal reel)
+Agent: Main agent
+Task: User: "nice, but ei section ta onk height hoye geche, ami chassi onno kono layout and design jeta aro besi eye catching and animated hobe" — the v77 Milestone Trail ate too much vertical page; wanted a different, more eye-catching and animated layout.
+
+Work Log:
+- Rewrote journey-section.tsx as the "Journey Cinema": the section is now a scroll runway (100svh + travel*0.85) whose inner stage sticks to the viewport — the whole story plays on ONE pinned screen (desktop 3337px total vs ~4700+ before; mobile 2568px vs ~3800+; visible height exactly 100svh on both).
+- The seven stops (6 chapters + 2028 future) slide sideways through the frame, scroll-linked 1:1 (direct useTransform, no spring — zero lag between finger and reel). Track travel is measured from real layout so the reel opens with chapter 01 at the left edge and closes with the 2028 stop perfectly centred; re-measured on resize / fonts.ready / ResizeObserver with a signature guard against state churn.
+- Focus system: the centred stop is full-size and sharp while neighbours dim to 0.4, scale to 0.93 and (desktop) soften with a 3px blur — pure CSS transitions, no per-frame JS. Ghost outlined chapter indices (01–06) float behind the cards, fading with focus.
+- Years are huge BLACK numerals always poured with the brand gradient; medallion discs spring-pop when their stop becomes active and idle on a slow staggered float; cards keep the journey-card recipe (glass/neu, current ring, "Currently here" pulse, edu-blue #4267B2 tints and corner blobs, gradient crown, index chip, tag chip) with every word of the original copy verbatim.
+- Bottom rail: hairline track + gradient fill (scaleX = progress) + a glowing comet head (left = progress %) + seven CLICKABLE stop dots that smooth-glide the runway so that stop centres (verified: clicking dot 02 lands at measured p=0.072 exactly); ambient blobs and the giant "MY JOURNEY" backdrop parallax against the travel.
+- Header compacted to one line ("My journey in the world" + gold swash) with an animated stop counter top-right whose number flips 01→07 via AnimatePresence as chapters pass.
+- Reduced motion: no pinning, no transforms — calm vertical stack, medallions static, rail/counter hidden.
+- Verified (fresh browser session): pinned stage exactly 100svh at 1440×900 and 390×844; mid-travel and end-state screenshots (counter 04/07, 2028 stop centred, comet at 100%); dot-click glide; nav-click landing exact (scrollY == section top, reel at p=0 — an initial 200px offset was traced to my test dispatching on document without bubbles + history restoration, not the app); scroll-spy keeps Journey active through the runway; dark + light (pink hue) themes; 0 page errors on fresh load, dev.log clean (a "non-static position" framer dev warning proved pre-existing on v77 via stash test); lint 0 errors; tsc clean in src.
+- Lightning geometry/burst system, nav rail contracts and theme bootstrap untouched.
+
+Stage Summary:
+- The journey now plays as a pinned horizontal film reel: one screen of stage, seven animated stops, comet-lit progress rail with clickable years, flipping counter, focus-pulled depth — dramatically shorter page, far more motion.
+- Tagged v78; touched src/components/portfolio/journey-section.tsx only.
