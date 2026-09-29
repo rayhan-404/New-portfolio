@@ -1095,3 +1095,22 @@ Work Log:
 Stage Summary:
 - The site reads richer without changing its identity: deeper hue-tinted ambient field, ghost marks that finally read, one brand gradient shared by CTAs / filter pill / meters, and left-aligned hero copy for comfortable reading.
 - Tagged v76; touched globals.css, hero-section.tsx, journey-section.tsx, skills-section.tsx, projects-section.tsx.
+
+---
+Task ID: 77 (journey section redesign — Milestone Trail: same words, new visual language)
+Agent: Main agent
+Task: User: "journey section o thik koro, sob text thakbe, but onno kono style daw, jeta sundor nd eye catching hobe" — redesign the journey section into a different, beautiful, eye-catching style while keeping every piece of text.
+
+Work Log:
+- Rewrote journey-section.tsx as the "Milestone Trail" (all era content preserved verbatim: periods, titles, places, locations, degree, descriptions, tags, header copy, and the 2028 · Loading… chapter).
+- Trail spine: the static hairline gained a scroll-driven accent POUR — a scaleY (origin-top, springed like the nav rail's seam) gradient bar capped by a comet head (bright accent cap + radial glow blob at the bar's foot) that travels down the timeline as you read (useScroll target = the timeline container, offset start 0.78 → end 0.6). Hidden entirely for reduced-motion users.
+- Icon medallions: each era's glyph (baby/home/shapes/school/book/gradcap) moved OUT of the headline into a raised neu disc pinned to the spine — spring-popped on landing, tinted edu-blue for school chapters, pool-primary for life chapters. Chapter 06/current + the future chapter's rocket get the same treatment (future medallion straddles the future card's top edge where the trail arrives).
+- Connector arms: desktop-only gradient hairlines bridging medallion → card (direction-aware, ebbing away from the node).
+- Years: giant BLACK numerals re-cut as outline→gradient crossfades — text-outline base with a text-gold-gradient duplicate (aria-hidden) fading in (+1.05→1 scale) when the chapter enters view. Sizes live on the wrapper so the overlay matches exactly (caught and fixed a 16px-inherited overlay in the future-year block during verification).
+- Cards: journey-card recipe unchanged (glass, hover lift, current ring) + a gradient crown hairline along the top edge, a chapter index (01–06) in the corner, and the tag chip re-tinted (primary/25 border + primary/7% fill + accent-ink text). Cards now slide in from their own side of the trail (x ∓48 → 0).
+- Future block: glass card with rocket medallion, gradient "2028", NEXT CHAPTER label, and a softly blinking ellipsis (three staggered opacity loops; static "..." for reduced motion).
+- Verification: screenshots at desktop 1440 (trail top, mid, end/future) + mobile 390, across three random accent hues (green, amber, blue) — medallions, pour, crossfade years, arms, indices and tags all render correctly; fixed the future-year overlay size bug found in screenshots; page errors none; dev.log clean; lint 0 errors; tsc clean in src.
+
+Stage Summary:
+- The journey now reads as a living milestone trail: a comet-lit progress spine with icon medallions, gradient-poured years and side-sliding cards — same words, entirely new presence.
+- Tagged v77; touched src/components/portfolio/journey-section.tsx only.
