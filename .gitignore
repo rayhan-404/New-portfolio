@@ -58,3 +58,4 @@ server.log
 /tool-results/
 /public/portfolio-source-v71.zip
 /public/my-project-v71.bundle
+.zscripts/
