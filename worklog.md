@@ -1040,3 +1040,19 @@ Work Log:
 Stage Summary:
 - Dark is now the signature first impression (survives private mode; a saved "light" still wins), the mobile hero hugs the top (Hello 20px → image → name/bio) with the cutout drifting slightly left, and the nav rail reads as a clean evenly-rhythmed spine without the monogram.
 - Tagged v73; touched layout.tsx, theme-toggle.tsx, hero-section.tsx, nav-rail.tsx.
+
+---
+Task ID: 74 (nav rail — hover is colour-only, the tile belongs to the active item)
+Agent: Main agent
+Task: User: "nav bar a hover korle je button style dekha jay ota active thakle dekhabe, r hover korle just color change hobe" — the button style that appears on hover should only appear on the ACTIVE item; hovering should just change colour.
+
+Work Log:
+- Removed the hover tile from idle rail items in nav-rail.tsx: the inactive branch dropped `hover:bg-primary/[0.05] hover:shadow-[var(--shadow-neu-sm)]` and is now permanently surface-free (transparent bg, border-transparent, shadow-none). Hover feedback on idle items is the label's existing `group-hover:text-foreground` brightening (muted tan #f0c9a2 → near-white #fdf4e8) — colour only, exactly as asked.
+- Active item unchanged: raised tile (solid --bg surface, primary-tinted border, --shadow-neu outset, larger primary-coloured label). Updated the component doc comment to state the contract: hover never raises a tile; the button treatment belongs to the active destination alone.
+- Browser verification had a trap worth recording: agent-browser's headless context reports `matchMedia('(hover: hover)')` = false / `(pointer: fine)` = false, and Tailwind 4 wraps every hover variant in `@media (hover: hover)` — so NO hover utility fires in this sandbox at first. A CSSOM scan initially suggested hover rules were missing entirely; that was a scan bug (empty CSSStyleRule.cssRules is truthy in modern Chrome, so outer selectors were skipped). Raw CSS fetch proved all rules exist. Proof of behaviour: injected the same `.group-hover\:text-foreground:is(:where(.group):hover *)` rule without the media gate, hovered an idle item → :hover matched, label computed #fdf4e8, bg stayed transparent, no shadow, aria-current unchanged. Then removed the probe. (Real desktop browsers match hover:hover, so the native path behaves identically; touch devices get no sticky-hover, which is desirable.)
+- Click test: clicking PROJECTS moved the tile — solid rgb(22,13,8) bg, visible outset shadow, accent label; HOME dropped back to idle transparent. Screenshot /tmp/v74-active-tile.png shows PROJECTS as the rail's only raised tile.
+- Verification: lint 0 errors, tsc clean in src, page errors none, console clean (pre-existing framer-motion dev hint only).
+
+Stage Summary:
+- Nav rail contract is now: idle items are pure text that brightens on hover, and the raised neumorphic tile exists only under the active section. No geometry, burst, or theme code touched.
+- Tagged v74; touched src/components/portfolio/nav-rail.tsx only.

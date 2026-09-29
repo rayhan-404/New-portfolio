@@ -27,6 +27,9 @@ interface NavRailProps {
  *   it reads RAISED — soft outset depth, never a pressed-in pit.
  *   Its label scales up past the others — a magnifying glass over
  *   where you are.
+ * • Hover is colour-only: gliding over an idle item never raises a
+ *   tile — the label simply brightens toward the foreground. The
+ *   button treatment belongs to the active destination alone.
  * • Scroll progress lives IN the rail: a hairline seam along the
  *   rail's inner edge (its border) fills top→bottom as you read.
  *   The old top-edge progress bar is removed.
@@ -126,11 +129,12 @@ export function NavRail({ categories, activeIndex, onSelectCategory }: NavRailPr
               className={`group relative flex w-full cursor-pointer items-center justify-center rounded-[10px] border px-0 outline-none transition-all duration-300 ease-out focus-visible:ring-1 focus-visible:ring-primary/40 active:scale-[0.97] md:rounded-xl ${
                 isActive
                   ? "border-[color-mix(in_srgb,var(--primary)_38%,var(--nl))] bg-[var(--bg)] py-2.5 shadow-[var(--shadow-neu)]"
-                  : "border-transparent bg-transparent py-2.5 shadow-none hover:bg-primary/[0.05] hover:shadow-[var(--shadow-neu-sm)]"
+                  : "border-transparent bg-transparent py-2.5 shadow-none"
               }`}
             >
               {/* Vertical label — the magnifying-glass read: the active
-                  button's text grows past all the others */}
+                  button's text grows past all the others. On idle items
+                  hovering only shifts this label's colour — no surface. */}
               <span
                 className={`pointer-events-none relative whitespace-nowrap font-bold uppercase transition-all duration-300 ease-out ${
                   isActive
