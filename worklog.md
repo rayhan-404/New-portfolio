@@ -1204,3 +1204,18 @@ Work Log:
 Stage Summary:
 - Thunder now sounds like weather: four real, loudness-matched recordings with distance-aware voices and natural tails — decoded once, varied per strike, first strike included.
 - Tagged v82; touched lib/thunder-sound.ts (rewrite), added public/sounds/thunder-{crack,clap,rumble,roll}.mp3.
+
+---
+Task ID: 83 (thunder sound = event, not a wall — capped tails, one voice per burst)
+Agent: Main agent
+Task: User: "e to al time sound hocche, jokhon thunder hobe tokhon sound hobe" — v82's long real-clip tails (6.5–12s) overlapping across bursts from BOTH storms made a continuous drone; sound should only mark visible thunder.
+
+Work Log:
+- Capped every clap at play time: near ≤ 3.0s, far ≤ 4.2s (buf.duration/rate min'd against cap), finished by a 0.55s gain fade into silence + source.stop — natural attack kept, drone impossible.
+- One voice per burst: min gap between thunder starts raised 600ms → 1800ms, and a new audio-clock busy guard (audioBusyUntil = at+dur) refuses a clap while the previous tail still rolls — chained strikes in one burst answer with a single thunder; hero/global collisions collapse into one voice.
+- Verified with start-timestamp instrumentation: 6 thunders in 25s, start gaps 5.3 / 3.3 / 3.4 / 6.6 / 6.7s — every sound a distinct event synced to a visible strike; lint 0 errors; tsc clean in src; no page errors.
+- Infrastructure incident during delivery: the sandbox had been reset between turns (/tmp artifacts and /home/z/backups vanished, git credentials gone). Recreated the backup bare repo at /home/z/backups/my-project.git and pushed main + all tags (verified v83 = 25dc9c2 on backup). Origin (GitHub) push BLOCKED: "could not read Username for https://github.com" — no credential store, no gh config, no ssh keys, no token env/profile anywhere in the reset container; reads still work (ls-remote ok), pushes need auth to be provided again.
+
+Stage Summary:
+- Thunder audio now reads as weather events: one clean, tail-capped clap per burst that never overlaps the next — sound exactly when thunder happens.
+- Tagged v83 locally + pushed to backup; origin push pending until GitHub credentials are restored in the environment (nothing lost — commit 25dc9c2 holds the full change).
