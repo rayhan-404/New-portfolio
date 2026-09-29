@@ -1219,3 +1219,17 @@ Work Log:
 Stage Summary:
 - Thunder audio now reads as weather events: one clean, tail-capped clap per burst that never overlaps the next — sound exactly when thunder happens.
 - Tagged v83 locally + pushed to backup; origin push pending until GitHub credentials are restored in the environment (nothing lost — commit 25dc9c2 holds the full change).
+
+---
+Task ID: 83-push-sync (infra addendum: backup re-created after second reset)
+Agent: Main agent
+Task: User asked "latest version github a push korecho?" — verify push status and sync everything possible.
+
+Work Log:
+- Confirmed local state: v83 (25dc9c2, distinct thunder events) + worklog commit b5f960e present, tag v83 exists; origin/main still at 0ca166f (v82) — v83 NOT on GitHub yet.
+- Origin push re-attempted and still blocked: "could not read Username for 'https://github.com'" — the classic PAT from ~/.git-credentials was wiped by the second container reset (no credential helper, no gh config, no ssh keys, no token env anywhere).
+- /home/z/backups vanished again in the same reset — recreated bare repo and re-pushed main + all tags (verified: backup/main = b5f960e, backup tag v83 = 25dc9c2).
+- Dev server still healthy (localhost:3000 → 200).
+
+Stage Summary:
+- Everything is safely committed: v83 lives in local main + local backup remote. GitHub (origin) push remains the ONLY pending step and needs a fresh classic PAT (repo scope) from the user — then: git push origin main v83 (one command, nothing else pending).
