@@ -883,3 +883,25 @@
 }
 
 /* recompile nudge t52 — rotating Material accent pool (ref multi-color) */
+
+/* ============================================================
+   JOURNEY CINEMA — active-year shimmer. The gradient pour
+   stretches to 2× width and sweeps across the numerals like a
+   slow shine. Unlayered so background-size beats the
+   @utility background shorthand it rides on.
+   ============================================================ */
+@keyframes year-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+.year-shimmer {
+  background-size: 200% 100%;
+  animation: year-shimmer 3.6s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .year-shimmer {
+    animation: none;
+    background-size: 100% 100%;
+  }
+}

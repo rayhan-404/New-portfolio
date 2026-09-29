@@ -1134,3 +1134,20 @@ Work Log:
 Stage Summary:
 - The journey now plays as a pinned horizontal film reel: one screen of stage, seven animated stops, comet-lit progress rail with clickable years, flipping counter, focus-pulled depth — dramatically shorter page, far more motion.
 - Tagged v78; touched src/components/portfolio/journey-section.tsx only.
+
+---
+Task ID: 79 (journey cinema v2 — coverflow depth, shimmer, halo, breathing comet)
+Agent: Main agent
+Task: User: "nice, but polish koro aro, aro improve koro" — push the Journey Cinema further.
+
+Work Log:
+- Reel geometry now measures centre-to-centre travel so the reel OPENS with chapter 01 centred under the header and CLOSES with the 2028 stop centred — symmetric cinematic framing (was left-anchored at start).
+- True 3D coverflow: the track is a 1500px perspective stage and every panel is a ReelStop whose pose is a continuous function of scroll — side stops tilt ±13° into a −130px depth plane at 0.92 scale and relax to flat as their stop centres (verified live: left panels read +13°, right −13°, relaxing through ±5° at centre). Opacity + desktop focus blur stay CSS-driven; transform is framer's alone — no property fights.
+- Active stop juice: the gradient year stretches to 2× width and sweeps a slow shimmer (new .year-shimmer keyframes in globals.css, reduce-gated); the medallion wears a spinning dashed halo (9s, fades in only while active); card crown hairlines brighten 40% → 90% on landing.
+- Rail polish: comet head now breathes (scale/opacity loop), stop dots grew focus rings (0 0 0 3px primary/18) and reveal their year label on hover via a floating font-tag chip; buttons carry full aria-labels ("Go to stop N — <year>").
+- ReelStop extracted as a component (hooks-per-panel done legally); measurement signature now includes xStart/xEnd; goToStop unchanged (stop-space math still exact).
+- Verified: centered opening + mid-travel + between-stops screenshots at 1440 (light amber hue), rotateY matrix readback confirming tilt direction, mobile 390 mid-reel, dark theme (pink hue) opening frame; 0 page errors on fresh loads; dev.log clean; lint 0 errors; tsc clean in src. Lightning/nav/theme systems untouched.
+
+Stage Summary:
+- The cinema now has genuine depth: panels physically turn through a perspective stage, the active stop shimmers/haloes/glows, and both ends of the reel frame themselves symmetrically. Same words, same single-screen footprint — considerably more motion craft.
+- Tagged v79; touched src/components/portfolio/journey-section.tsx + a .year-shimmer block appended to globals.css.

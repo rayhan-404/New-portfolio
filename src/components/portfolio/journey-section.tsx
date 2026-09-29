@@ -18,8 +18,9 @@ import {
   useReducedMotion,
   useScroll,
   useTransform,
+  type MotionValue,
 } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { journey, journeyFuture } from "@/lib/portfolio-data";
 import { playSound } from "@/lib/sound";
 import { Reveal } from "./reveal";
@@ -52,6 +53,9 @@ const EDU_ICONS = new Set(["shapes", "school", "book", "gradcap"]);
 /* 6 chapters + the 2028 "Loading…" future stop */
 const STOPS = journey.length + 1;
 
+/* Year labels for the rail dots (hover) */
+const STOP_LABELS = [...journey.map((e) => e.period), journeyFuture.year];
+
 /* Initial even spacing — replaced by measured stops right after mount */
 const EVEN_STOPS = Array.from({ length: STOPS }, (_, i) => i / (STOPS - 1));
 
@@ -63,33 +67,89 @@ const MEDALLION = {
 
 /* Panel widths — one card per stop, next card peeking from the edge */
 const PANEL_W =
-  "w-[min(80vw,340px)] sm:w-[420px] md:w-[460px] lg:w-[500px]";
+  "w-[min(80vw,340px)] sm:w-[420px] md:w-[460px] lg:w-[520px]";
+
+/* Coverflow range — how far (in scroll progress) a stop's 3D pose
+   relaxes from edge-tilt to flat-centre */
+const TILT = 0.24;
+const TILT_DEG = 13;
+const TILT_Z = -130;
+const TILT_SCALE = 0.92;
 
 /**
- * JourneySection — "My journey in the world", Journey Cinema edition.
+ * ReelStop — one panel of the film reel, with true 3D coverflow.
  *
- * The old vertical trail ate ~5 viewports of page height; this rebuild
- * compresses the whole story into ONE pinned screen. The section owns a
- * scroll runway (100svh + travel) while its inner stage sticks to the
- * viewport — scrolling down drives the seven chapter stops sideways
- * through the frame like a film reel:
+ * The panel's pose is a continuous function of the page scroll: as its
+ * stop value approaches the viewport centre it un-rotates (±13° → 0°),
+ * rises from the depth plane (−130px → 0) and grows to full scale — a
+ * card travelling through a perspective stage. Opacity + the desktop
+ * focus blur stay CSS-transition driven off the active flag; transform
+ * is framer's alone, so nothing fights over the same property.
+ */
+function ReelStop({
+  progress,
+  stop,
+  pinned,
+  isActive,
+  ariaLabel,
+  children,
+}: {
+  progress: MotionValue<number>;
+  stop: number;
+  pinned: boolean;
+  isActive: boolean;
+  ariaLabel: string;
+  children: ReactNode;
+}) {
+  const rotateY = useTransform(
+    progress,
+    [stop - TILT, stop, stop + TILT],
+    [-TILT_DEG, 0, TILT_DEG]
+  );
+  const z = useTransform(
+    progress,
+    [stop - TILT, stop, stop + TILT],
+    [TILT_Z, 0, TILT_Z]
+  );
+  const scale = useTransform(
+    progress,
+    [stop - TILT, stop, stop + TILT],
+    [TILT_SCALE, 1, TILT_SCALE]
+  );
+
+  return (
+    <motion.article
+      data-panel
+      aria-label={ariaLabel}
+      style={pinned ? { rotateY, z, scale } : undefined}
+      className={`group relative shrink-0 ${PANEL_W} transition-[opacity,filter] duration-700 ease-out ${
+        pinned ? (isActive ? "opacity-100" : "opacity-40 md:blur-[3px]") : ""
+      }`}
+    >
+      {children}
+    </motion.article>
+  );
+}
+
+/**
+ * JourneySection — "My journey in the world", Journey Cinema v2.
  *
- * • Track — scroll-linked 1:1 translate (no spring: the reel is always
- *   exactly where your finger is). Opens with chapter 01 at the left
- *   edge, closes with the 2028 stop perfectly centred.
- * • Focus — the centred stop is full-size and sharp; neighbours dim,
- *   shrink and (desktop) soften out of focus. Depth without a single
- *   per-frame layout write.
- * • Years — huge BLACK numerals poured with the brand gradient; a ghost
- *   outlined chapter index floats behind each card.
- * • Medallions — the era glyph in a raised neu disc that spring-pops
- *   when its stop becomes active, then idles on a slow float.
- * • Rail — a comet head rides a hairline progress track; the chapter
- *   stops are clickable dots that glide the reel to that year.
- * • Counter — the top-right stop number flips (01→07) as chapters pass.
- * • Reduced motion — no pinning, no transforms: a calm vertical stack.
- *
- * Every word of the original content is preserved verbatim.
+ * One pinned screen; seven stops travel sideways, scroll-linked 1:1.
+ * v79 polish layer:
+ * • Cinematic symmetry — the reel now OPENS with chapter 01 centred
+ *   under the header and CLOSES with the 2028 stop centred (travel is
+ *   measured centre-to-centre; no more left-anchored opening frame).
+ * • Coverflow — panels ride a 1500px perspective stage: side stops
+ *   tilt 13° into the depth plane at 92% scale and relax to flat as
+ *   they become the active stop (see ReelStop).
+ * • The active year's brand gradient stretches to 2× and sweeps in a
+ *   slow shimmer; a dashed halo spins around the active medallion.
+ * • Rail: comet head breathes (scale/opacity loop), stop dots grew a
+ *   focus ring and reveal their year label on hover.
+ * • Card crown hairlines brighten from 40% → 90% when their stop
+ *   lands.
+ * Reduced motion: no pinning, no transforms, no shimmer — a calm
+ * vertical stack. Every word of the original copy is verbatim.
  */
 export function JourneySection() {
   const reduce = useReducedMotion();
@@ -99,9 +159,10 @@ export function JourneySection() {
   const stageRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  /* Horizontal travel (px) and the scroll progress where each stop
-     centres — measured from the real layout after mount / resize. */
-  const [range, setRange] = useState(2400);
+  /* Reel travel in px: [xStart, xEnd] — the track's translateX at
+     scroll progress 0 and 1, measured so BOTH end stops sit centred.
+     Stops[i] = the scroll progress where panel i is centred. */
+  const [xRange, setXRange] = useState<[number, number]>([0, -2400]);
   const [stops, setStops] = useState<number[]>(EVEN_STOPS);
   const [active, setActive] = useState(0);
 
@@ -111,7 +172,7 @@ export function JourneySection() {
   });
 
   /* Direct 1:1 mapping — zero lag between scroll and reel. */
-  const x = useTransform(scrollYProgress, [0, 1], [0, -range]);
+  const x = useTransform(scrollYProgress, [0, 1], xRange);
   const headLeft = useTransform(
     scrollYProgress,
     (v) => `${(v * 100).toFixed(3)}%`
@@ -141,11 +202,10 @@ export function JourneySection() {
     setActive((prev) => (prev === best ? prev : best));
   });
 
-  /* Measure the real travel + stop positions. The reel travels far
-     enough that the LAST panel ends centred (its right padding no
-     longer matters). Re-measured on resize / font load / panel size
-     change; a signature guard keeps identical measurements from
-     re-rendering. */
+  /* Measure the real geometry: centre-to-centre travel with symmetric
+     centring of the first and last stops. Re-measured on resize /
+     font load / panel size change; a signature guard keeps identical
+     measurements from re-rendering. */
   useEffect(() => {
     if (!pinned) return;
     let signature = "";
@@ -158,22 +218,22 @@ export function JourneySection() {
         track.querySelectorAll<HTMLElement>("[data-panel]")
       );
       if (panels.length === 0) return;
-      const last = panels[panels.length - 1];
       const view = stage.clientWidth;
-      const r = Math.max(
-        1,
-        last.offsetLeft + last.offsetWidth / 2 - view / 2
-      );
-      const nextStops = panels.map((p) =>
+      const centers = panels.map((p) => p.offsetLeft + p.offsetWidth / 2);
+      const xStart = view / 2 - centers[0];
+      const xEnd = -(centers[centers.length - 1] - view / 2);
+      const nextStops = centers.map((c) =>
         Math.min(
           1,
-          Math.max(0, (p.offsetLeft + p.offsetWidth / 2 - view / 2) / r)
+          Math.max(0, (-(c - view / 2) - xStart) / (xEnd - xStart))
         )
       );
-      const sig = `${Math.round(r)}|${nextStops.map((s) => s.toFixed(4)).join(",")}`;
+      const sig = `${Math.round(xStart)}|${Math.round(xEnd)}|${nextStops
+        .map((s) => s.toFixed(4))
+        .join(",")}`;
       if (sig === signature) return;
       signature = sig;
-      setRange(r);
+      setXRange([xStart, xEnd]);
       setStops(nextStops);
     };
 
@@ -206,12 +266,7 @@ export function JourneySection() {
     window.scrollTo({ top, behavior: "smooth" });
   };
 
-  const focusClass = (isActive: boolean) =>
-    pinned
-      ? isActive
-        ? "scale-100 opacity-100"
-        : "scale-[0.93] opacity-40 md:blur-[3px]"
-      : "";
+  const travel = Math.max(0, xRange[0] - xRange[1]);
 
   return (
     <section
@@ -220,9 +275,7 @@ export function JourneySection() {
       aria-label="My journey"
       className="relative"
       style={
-        pinned
-          ? { height: `calc(100svh + ${Math.round(range * 0.85)}px)` }
-          : undefined
+        pinned ? { height: `calc(100svh + ${Math.round(travel * 0.85)}px)` } : undefined
       }
     >
       {/* ── The pinned stage — one screen of cinema ─────────────── */}
@@ -369,7 +422,7 @@ export function JourneySection() {
           style={pinned ? { x } : undefined}
           className={`relative z-[1] min-h-0 flex-1 gap-6 px-6 sm:gap-8 sm:px-10 lg:px-16 ${
             pinned
-              ? "flex items-center pt-6"
+              ? "flex items-center pt-6 [perspective:1500px]"
               : "flex flex-col gap-16 py-24"
           }`}
         >
@@ -382,11 +435,13 @@ export function JourneySection() {
               ? "text-[#4267B2] shadow-[0_0_0_5px_rgba(66,103,178,0.13),0_0_24px_rgba(66,103,178,0.4),var(--shadow-neu-sm)]"
               : "text-primary shadow-[0_0_0_5px_rgba(var(--primary-rgb)/0.13),0_0_24px_rgba(var(--accent-rgb)/0.4),var(--shadow-neu-sm)]";
             return (
-              <article
+              <ReelStop
                 key={era.period}
-                data-panel
-                aria-label={`${era.period} — ${era.title}`}
-                className={`group relative shrink-0 ${PANEL_W} transition-[opacity,transform,filter] duration-700 ease-out ${focusClass(isActive)}`}
+                progress={scrollYProgress}
+                stop={stops[idx] ?? 0}
+                pinned={pinned}
+                isActive={isActive}
+                ariaLabel={`${era.period} — ${era.title}`}
               >
                 {/* Ghost chapter index behind the card */}
                 <span
@@ -399,9 +454,12 @@ export function JourneySection() {
                   {chapter}
                 </span>
 
-                {/* Year — poured with the brand gradient */}
+                {/* Year — poured with the brand gradient; the active
+                    stop's pour stretches 2× and sweeps a slow shimmer */}
                 <p
-                  className="text-gold-gradient relative z-[1] mb-5 mt-3 whitespace-nowrap leading-[0.85] tracking-[-0.055em] tabular-nums"
+                  className={`text-gold-gradient relative z-[1] mb-5 mt-3 whitespace-nowrap leading-[0.85] tracking-[-0.055em] tabular-nums ${
+                    pinned && isActive && !reduce ? "year-shimmer" : ""
+                  }`}
                   style={{
                     ...BLACK,
                     fontSize: "clamp(38px, 4.2vw, 64px)",
@@ -411,8 +469,9 @@ export function JourneySection() {
                 </p>
 
                 <div className="relative z-[1]">
-                  {/* Medallion — spring-pops on activation, then idles
-                      on a slow float */}
+                  {/* Medallion — spring-pops on activation, idles on a
+                      slow float, wears a spinning dashed halo while
+                      its stop is the active one */}
                   <motion.span
                     aria-hidden="true"
                     initial={reduce ? false : { scale: 0.4, opacity: 0 }}
@@ -426,12 +485,15 @@ export function JourneySection() {
                     transition={{ type: "spring", stiffness: 320, damping: 20 }}
                     className={`absolute -top-8 left-6 z-[2] flex items-center justify-center rounded-full bg-[var(--bg2)] ${MEDALLION.disc} ${medallionTint}`}
                   >
+                    {!reduce && (
+                      <span
+                        className={`absolute -inset-[5px] rounded-full border border-dashed border-primary/45 animate-spin [animation-duration:9s] transition-opacity duration-500 ${
+                          pinned && isActive ? "opacity-100" : "opacity-0"
+                        }`}
+                      />
+                    )}
                     <motion.span
-                      animate={
-                        reduce
-                          ? undefined
-                          : { y: [0, -5, 0] }
-                      }
+                      animate={reduce ? undefined : { y: [0, -5, 0] }}
                       transition={{
                         duration: 4.6,
                         repeat: Infinity,
@@ -456,10 +518,12 @@ export function JourneySection() {
                       era.current ? "journey-card--current" : ""
                     }`}
                   >
-                    {/* Gradient crown hairline */}
+                    {/* Gradient crown hairline — brightens on landing */}
                     <span
                       aria-hidden="true"
-                      className="grad-underline pointer-events-none absolute inset-x-0 top-0 h-[2px] opacity-50"
+                      className={`grad-underline pointer-events-none absolute inset-x-0 top-0 h-[2px] transition-opacity duration-700 ${
+                        pinned && !isActive ? "opacity-40" : "opacity-90"
+                      }`}
                     />
 
                     {/* Education corner blobs — ref hues */}
@@ -539,102 +603,116 @@ export function JourneySection() {
                     </span>
                   </div>
                 </div>
-              </article>
+              </ReelStop>
             );
           })}
 
           {/* ── Stop 07 — 2028 · Loading… ────────────────────────── */}
-          {(() => {
-            const isActiveFuture = !pinned || active === journey.length;
-            return (
-              <article
-                data-panel
-                aria-label={`${journeyFuture.year} — next chapter`}
-                className={`group relative shrink-0 ${PANEL_W} transition-[opacity,transform,filter] duration-700 ease-out ${focusClass(isActiveFuture)}`}
+          <ReelStop
+            progress={scrollYProgress}
+            stop={stops[journey.length] ?? 1}
+            pinned={pinned}
+            isActive={!pinned || active === journey.length}
+            ariaLabel={`${journeyFuture.year} — next chapter`}
+          >
+            <p
+              className={`text-gold-gradient relative z-[1] mb-5 mt-3 whitespace-nowrap leading-[0.85] tracking-[-0.055em] tabular-nums ${
+                pinned && active === journey.length && !reduce
+                  ? "year-shimmer"
+                  : ""
+              }`}
+              style={{
+                ...BLACK,
+                fontSize: "clamp(38px, 4.2vw, 64px)",
+              }}
+            >
+              {journeyFuture.year}
+            </p>
+
+            <div className="relative z-[1]">
+              <motion.span
+                aria-hidden="true"
+                initial={reduce ? false : { scale: 0.4, opacity: 0 }}
+                animate={
+                  reduce
+                    ? undefined
+                    : active === journey.length
+                      ? { scale: 1, opacity: 1 }
+                      : { scale: 0.55, opacity: 0 }
+                }
+                transition={{ type: "spring", stiffness: 320, damping: 20 }}
+                className={`absolute -top-8 left-6 z-[2] flex items-center justify-center rounded-full bg-[var(--bg2)] text-primary shadow-[0_0_0_5px_rgba(var(--primary-rgb)/0.13),0_0_24px_rgba(var(--accent-rgb)/0.4),var(--shadow-neu-sm)] ${MEDALLION.disc}`}
               >
-                <p
-                  className="text-gold-gradient relative z-[1] mb-5 mt-3 whitespace-nowrap leading-[0.85] tracking-[-0.055em] tabular-nums"
-                  style={{
-                    ...BLACK,
-                    fontSize: "clamp(38px, 4.2vw, 64px)",
+                {!reduce && (
+                  <span
+                    className={`absolute -inset-[5px] rounded-full border border-dashed border-primary/45 animate-spin [animation-duration:9s] transition-opacity duration-500 ${
+                      pinned && active === journey.length
+                        ? "opacity-100"
+                        : "opacity-0"
+                    }`}
+                  />
+                )}
+                <motion.span
+                  animate={reduce ? undefined : { y: [0, -6, 0] }}
+                  transition={{
+                    duration: 3.8,
+                    repeat: Infinity,
+                    ease: "easeInOut",
                   }}
+                  className="flex"
                 >
-                  {journeyFuture.year}
-                </p>
-
-                <div className="relative z-[1]">
-                  <motion.span
+                  <Rocket
                     aria-hidden="true"
-                    initial={reduce ? false : { scale: 0.4, opacity: 0 }}
-                    animate={
-                      reduce
-                        ? undefined
-                        : isActiveFuture
-                          ? { scale: 1, opacity: 1 }
-                          : { scale: 0.55, opacity: 0 }
-                    }
-                    transition={{ type: "spring", stiffness: 320, damping: 20 }}
-                    className={`absolute -top-8 left-6 z-[2] flex items-center justify-center rounded-full bg-[var(--bg2)] text-primary shadow-[0_0_0_5px_rgba(var(--primary-rgb)/0.13),0_0_24px_rgba(var(--accent-rgb)/0.4),var(--shadow-neu-sm)] ${MEDALLION.disc}`}
-                  >
-                    <motion.span
-                      animate={reduce ? undefined : { y: [0, -6, 0] }}
-                      transition={{
-                        duration: 3.8,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                      className="flex"
-                    >
-                      <Rocket
-                        aria-hidden="true"
-                        strokeWidth={2.25}
-                        className={`${MEDALLION.icon} -rotate-12`}
-                      />
-                    </motion.span>
-                  </motion.span>
+                    strokeWidth={2.25}
+                    className={`${MEDALLION.icon} -rotate-12`}
+                  />
+                </motion.span>
+              </motion.span>
 
-                  <div className="journey-card relative w-full overflow-hidden rounded-2xl p-5 text-left sm:p-6 md:rounded-[22px]">
-                    <span
-                      aria-hidden="true"
-                      className="grad-underline pointer-events-none absolute inset-x-0 top-0 h-[2px] opacity-50"
-                    />
-                    <p className="font-tag text-[9px] tracking-[0.3em] text-muted-foreground">
-                      {journeyFuture.label}
-                    </p>
-                    <h3
-                      className="my-2.5 leading-[0.9] tracking-[-0.05em] text-foreground"
-                      style={{ ...BLACK, fontSize: "clamp(34px, 3.6vw, 54px)" }}
-                    >
-                      {journeyFuture.title}
-                      {reduce ? (
-                        <span className="opacity-40">...</span>
-                      ) : (
-                        <span className="opacity-40" aria-hidden="true">
-                          {[0, 1, 2].map((d) => (
-                            <motion.span
-                              key={d}
-                              animate={{ opacity: [0.25, 1, 0.25] }}
-                              transition={{
-                                duration: 1.4,
-                                repeat: Infinity,
-                                delay: d * 0.22,
-                                ease: "easeInOut",
-                              }}
-                            >
-                              .
-                            </motion.span>
-                          ))}
-                        </span>
-                      )}
-                    </h3>
-                    <p className="text-[14.5px] leading-relaxed text-foreground/65">
-                      {journeyFuture.description}
-                    </p>
-                  </div>
-                </div>
-              </article>
-            );
-          })()}
+              <div className="journey-card relative w-full overflow-hidden rounded-2xl p-5 text-left sm:p-6 md:rounded-[22px]">
+                <span
+                  aria-hidden="true"
+                  className={`grad-underline pointer-events-none absolute inset-x-0 top-0 h-[2px] transition-opacity duration-700 ${
+                    pinned && active !== journey.length
+                      ? "opacity-40"
+                      : "opacity-90"
+                  }`}
+                />
+                <p className="font-tag text-[9px] tracking-[0.3em] text-muted-foreground">
+                  {journeyFuture.label}
+                </p>
+                <h3
+                  className="my-2.5 leading-[0.9] tracking-[-0.05em] text-foreground"
+                  style={{ ...BLACK, fontSize: "clamp(34px, 3.6vw, 54px)" }}
+                >
+                  {journeyFuture.title}
+                  {reduce ? (
+                    <span className="opacity-40">...</span>
+                  ) : (
+                    <span className="opacity-40" aria-hidden="true">
+                      {[0, 1, 2].map((d) => (
+                        <motion.span
+                          key={d}
+                          animate={{ opacity: [0.25, 1, 0.25] }}
+                          transition={{
+                            duration: 1.4,
+                            repeat: Infinity,
+                            delay: d * 0.22,
+                            ease: "easeInOut",
+                          }}
+                        >
+                          .
+                        </motion.span>
+                      ))}
+                    </span>
+                  )}
+                </h3>
+                <p className="text-[14.5px] leading-relaxed text-foreground/65">
+                  {journeyFuture.description}
+                </p>
+              </div>
+            </div>
+          </ReelStop>
         </motion.div>
 
         {/* ── Rail — comet head, clickable stops, scroll hint ─────── */}
@@ -658,7 +736,7 @@ export function JourneySection() {
               </motion.span>
             </span>
 
-            <div className="relative h-8 flex-1">
+            <div className="relative h-9 flex-1">
               {/* hairline track */}
               <span
                 aria-hidden="true"
@@ -670,32 +748,43 @@ export function JourneySection() {
                 style={{ scaleX: scrollYProgress }}
                 className="grad-fill absolute inset-x-0 top-1/2 h-[2px] origin-left -translate-y-1/2 rounded-full opacity-80"
               />
-              {/* comet head */}
+              {/* comet head — glowing, breathing */}
               <motion.div
                 aria-hidden="true"
                 style={{ left: headLeft }}
                 className="absolute top-1/2 z-[1] -translate-x-1/2 -translate-y-1/2"
               >
                 <span className="block h-3.5 w-3.5 rounded-full bg-[var(--accent-ref)] shadow-[0_0_18px_rgba(var(--accent-rgb)/0.9)]" />
-                <span className="absolute -inset-2 -z-[1] rounded-full bg-[radial-gradient(circle,rgba(var(--accent-rgb)/0.4),transparent_65%)] blur-sm" />
+                <motion.span
+                  animate={
+                    reduce
+                      ? undefined
+                      : { scale: [1, 1.3, 1], opacity: [0.75, 1, 0.75] }
+                  }
+                  transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute -inset-2 -z-[1] rounded-full bg-[radial-gradient(circle,rgba(var(--accent-rgb)/0.4),transparent_65%)] blur-sm"
+                />
               </motion.div>
-              {/* stop dots — clickable, glide to the year */}
+              {/* stop dots — clickable, glide to the year, label on hover */}
               {stops.map((s, i) => (
                 <button
                   key={i}
                   type="button"
                   onClick={() => goToStop(i)}
-                  aria-label={`Go to stop ${String(i + 1).padStart(2, "0")}`}
-                  className="absolute top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                  aria-label={`Go to stop ${String(i + 1).padStart(2, "0")} — ${STOP_LABELS[i]}`}
+                  className="group absolute top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full"
                   style={{ left: `${(s * 100).toFixed(2)}%` }}
                 >
                   <span
-                    className={`mx-auto block h-2 w-2 rounded-full transition-all duration-500 ${
+                    className={`mx-auto block h-2.5 w-2.5 rounded-full transition-all duration-500 ${
                       i <= active
-                        ? "scale-110 bg-primary shadow-[0_0_10px_rgba(var(--accent-rgb)/0.7)]"
+                        ? "bg-primary shadow-[0_0_0_3px_rgba(var(--primary-rgb)/0.18),0_0_10px_rgba(var(--accent-rgb)/0.7)]"
                         : "bg-primary/25"
-                    } ${i === active ? "!scale-150" : ""}`}
+                    } ${i === active ? "!scale-125" : ""}`}
                   />
+                  <span className="font-tag pointer-events-none absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-border bg-[var(--bg)] px-2 py-0.5 text-[8px] tracking-[0.18em] text-accent-ink opacity-0 shadow-[var(--shadow-neu-sm)] transition-opacity duration-300 group-hover:opacity-100">
+                    {STOP_LABELS[i]}
+                  </span>
                 </button>
               ))}
             </div>
