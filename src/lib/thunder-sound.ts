@@ -1,24 +1,33 @@
 "use client";
 
 /**
- * Procedural thunder — WebAudio synthesis, zero external assets.
- * Four flavors so the storm never repeats itself:
- *   crack  — close hit: bright snap into a tight body + sub thump
- *   clap   — medium strike: mid burst with a short tail
- *   rumble — far strike: deep wash that slowly breathes
- *   roll   — distant echo: two offset rumble layers rolling away
- * The sound trails the flash by the strike's distance (near lands
- * almost with the light; far rumbles arrive late). Respects the
- * site's sound preference (rayhan_sound_fx) — silence when muted,
- * no machine-gunning when both storms fire close together.
+ * Real thunder — four recorded storm voices served from /sounds,
+ * decoded once and cached as WebAudio buffers:
+ *   crack  — "Close explosion thunder": the near hit, snap first
+ *   clap   — "Fast thunder impact": a tight medium strike
+ *   rumble — "Thunder deep rumble": the far sky washing out
+ *   roll   — "Distant thunder storm explosion": echo rolling away
+ * The voice is chosen by the strike's distance, and the sound trails
+ * the flash the way weather does — near lands almost with the light,
+ * far rumbles arrive late. Rate + gain are varied per play so the
+ * storm never repeats itself. Respects the site's sound preference
+ * (rayhan_sound_fx); 600ms guard so overlapping storms don't stack.
  */
 
 import { isSoundEnabled } from "./sound";
 
 export type ThunderDistance = "near" | "far";
 
+const CLIPS: Record<"crack" | "clap" | "rumble" | "roll", string> = {
+  crack: "/sounds/thunder-crack.mp3",
+  clap: "/sounds/thunder-clap.mp3",
+  rumble: "/sounds/thunder-rumble.mp3",
+  roll: "/sounds/thunder-roll.mp3",
+};
+
 let ctx: AudioContext | null = null;
-let noiseBuf: AudioBuffer | null = null;
+const buffers = new Map<string, AudioBuffer>();
+const pending = new Map<string, Promise<AudioBuffer | null>>();
 let lastScheduled = 0;
 
 function getCtx(): AudioContext | null {
@@ -35,159 +44,72 @@ function getCtx(): AudioContext | null {
   return ctx;
 }
 
-/* one shared noise buffer — white snap fuel tilted toward brown so
-   the low layers have real body without a second buffer */
-function getNoise(ac: AudioContext): AudioBuffer {
-  if (!noiseBuf) {
-    noiseBuf = ac.createBuffer(1, ac.sampleRate * 4, ac.sampleRate);
-    const d = noiseBuf.getChannelData(0);
-    let brown = 0;
-    for (let i = 0; i < d.length; i++) {
-      const white = Math.random() * 2 - 1;
-      brown = (brown + 0.02 * white) / 1.02;
-      d[i] = white * 0.4 + brown * 2.4;
+function fetchClip(key: string): Promise<AudioBuffer | null> {
+  const cached = buffers.get(key);
+  if (cached) return Promise.resolve(cached);
+  const inFlight = pending.get(key);
+  if (inFlight) return inFlight;
+  const job = (async () => {
+    try {
+      const ac = getCtx();
+      if (!ac) return null;
+      const res = await fetch(CLIPS[key as keyof typeof CLIPS]);
+      if (!res.ok) return null;
+      const buf = await ac.decodeAudioData(await res.arrayBuffer());
+      buffers.set(key, buf);
+      return buf;
+    } catch {
+      return null;
+    } finally {
+      pending.delete(key);
     }
+  })();
+  pending.set(key, job);
+  return job;
+}
+
+function warmAll() {
+  (Object.keys(CLIPS) as (keyof typeof CLIPS)[]).forEach((k) => {
+    void fetchClip(k);
+  });
+}
+
+/* decode everything up front when the storm is already unmuted, so
+   the first thunder lands in sync with its flash */
+if (typeof window !== "undefined" && isSoundEnabled()) warmAll();
+
+function schedule(
+  flavor: keyof typeof CLIPS,
+  buf: AudioBuffer,
+  d: ThunderDistance
+) {
+  const ac = getCtx();
+  if (!ac || ac.state === "closed") return;
+  /* light travels first — sound trails the flash by distance */
+  const lag =
+    d === "near" ? 0.06 + Math.random() * 0.16 : 0.42 + Math.random() * 0.6;
+  const at = ac.currentTime + lag;
+  try {
+    const s = ac.createBufferSource();
+    s.buffer = buf;
+    s.playbackRate.value = 0.92 + Math.random() * 0.16;
+    const g = ac.createGain();
+    const v = (d === "near" ? 0.55 : 0.45) * (0.85 + Math.random() * 0.3);
+    g.gain.setValueAtTime(0.0001, at);
+    g.gain.linearRampToValueAtTime(v, at + 0.012); // 12ms — kills any click
+    s.connect(g);
+    g.connect(ac.destination);
+    s.start(at);
+  } catch {
+    /* audio unavailable — stay silent */
   }
-  return noiseBuf;
 }
-
-function src(
-  ac: AudioContext,
-  at: number,
-  dur: number,
-  rate: number
-): AudioBufferSourceNode {
-  const s = ac.createBufferSource();
-  s.buffer = getNoise(ac);
-  s.playbackRate.value = rate;
-  s.start(at, Math.random() * 1.5, dur + 0.05);
-  return s;
-}
-
-/* attack → peak → exponential rest */
-function env(
-  ac: AudioContext,
-  at: number,
-  attack: number,
-  peak: number,
-  decay: number
-): GainNode {
-  const g = ac.createGain();
-  g.gain.setValueAtTime(0.0001, at);
-  g.gain.linearRampToValueAtTime(peak, at + attack);
-  g.gain.exponentialRampToValueAtTime(0.0001, at + attack + decay);
-  return g;
-}
-
-/* slow tremolo in its own stage (always-positive gain around 1) so
-   the storm breathes inside the tail without fighting the envelope */
-function trem(
-  ac: AudioContext,
-  at: number,
-  dur: number,
-  depth: number
-): GainNode {
-  const g = ac.createGain();
-  g.gain.value = 1;
-  const lfo = ac.createOscillator();
-  lfo.frequency.value = 4.5 + Math.random() * 3.5;
-  const amt = ac.createGain();
-  amt.gain.value = depth;
-  lfo.connect(amt);
-  amt.connect(g.gain);
-  lfo.start(at);
-  lfo.stop(at + dur);
-  return g;
-}
-
-function filter(
-  ac: AudioContext,
-  type: BiquadFilterType,
-  freq: number,
-  q = 0.8
-): BiquadFilterNode {
-  const f = ac.createBiquadFilter();
-  f.type = type;
-  f.frequency.value = freq;
-  f.Q.value = q;
-  return f;
-}
-
-function chain(ac: AudioContext, ...nodes: AudioNode[]) {
-  for (let i = 0; i < nodes.length - 1; i++) nodes[i].connect(nodes[i + 1]);
-}
-
-/* ── the four flavors ─────────────────────────────────────────── */
-
-function crack(ac: AudioContext, at: number, v: number) {
-  const rate = 0.92 + Math.random() * 0.2;
-  /* bright snap */
-  chain(
-    ac,
-    src(ac, at, 0.5, rate),
-    filter(ac, "highpass", 1100),
-    env(ac, at, 0.004, v, 0.34),
-    ac.destination
-  );
-  /* tight body */
-  chain(
-    ac,
-    src(ac, at, 1.8, rate * 0.9),
-    filter(ac, "lowpass", 320),
-    env(ac, at + 0.01, 0.014, v * 1.5, 1.5),
-    ac.destination
-  );
-  /* sub thump */
-  chain(
-    ac,
-    src(ac, at, 2.2, 0.7),
-    filter(ac, "lowpass", 90),
-    env(ac, at + 0.015, 0.03, v * 1.7, 1.9),
-    ac.destination
-  );
-}
-
-function clap(ac: AudioContext, at: number, v: number) {
-  const rate = 0.9 + Math.random() * 0.2;
-  chain(
-    ac,
-    src(ac, at, 1.4, rate),
-    filter(ac, "bandpass", 520, 0.6),
-    env(ac, at, 0.01, v * 1.2, 1.05),
-    ac.destination
-  );
-  chain(
-    ac,
-    src(ac, at, 2, 0.8),
-    filter(ac, "lowpass", 140),
-    env(ac, at + 0.02, 0.04, v, 1.7),
-    ac.destination
-  );
-}
-
-function rumble(ac: AudioContext, at: number, v: number, decay = 3.4) {
-  const g = env(ac, at, 0.3 + Math.random() * 0.25, v * 1.8, decay);
-  chain(
-    ac,
-    src(ac, at, decay + 0.6, 0.62 + Math.random() * 0.18),
-    filter(ac, "lowpass", 105),
-    trem(ac, at, decay + 0.9, 0.22 + Math.random() * 0.12),
-    g,
-    ac.destination
-  );
-}
-
-function roll(ac: AudioContext, at: number, v: number) {
-  rumble(ac, at, v, 2.6);
-  rumble(ac, at + 0.55 + Math.random() * 0.35, v * 0.55, 2.8);
-}
-
-/* ── public ───────────────────────────────────────────────────── */
 
 /**
- * Schedule one thunderclap. `distance` maps the visible strike to its
- * voice (near → crack/clap, far → rumble/roll); omitted = coin toss.
- * Returns the distance actually scheduled, or null when muted/skipped.
+ * Play one real thunderclap. `distance` maps the visible strike to
+ * its voice (near → crack/clap, far → rumble/roll); omitted = coin
+ * toss. Returns the distance actually scheduled, or null when
+ * muted/skipped/buffer still loading.
  */
 export function playThunder(
   distance?: ThunderDistance
@@ -199,19 +121,25 @@ export function playThunder(
   if (now - lastScheduled < 600) return null; // never machine-gun
   lastScheduled = now;
 
-  const d: ThunderDistance =
-    distance ?? (Math.random() < 0.5 ? "near" : "far");
-  /* light travels first — sound trails the flash by distance */
-  const lag =
-    d === "near" ? 0.06 + Math.random() * 0.16 : 0.42 + Math.random() * 0.6;
-  const at = ac.currentTime + lag;
-  const v = (d === "near" ? 0.055 : 0.05) * (0.8 + Math.random() * 0.4);
-
-  try {
-    if (d === "near") (Math.random() < 0.62 ? crack : clap)(ac, at, v);
-    else (Math.random() < 0.5 ? rumble : roll)(ac, at, v);
-  } catch {
-    /* audio unavailable — stay silent */
+  const d: ThunderDistance = distance ?? (Math.random() < 0.5 ? "near" : "far");
+  const flavor: keyof typeof CLIPS =
+    d === "near"
+      ? Math.random() < 0.55
+        ? "crack"
+        : "clap"
+      : Math.random() < 0.5
+        ? "rumble"
+        : "roll";
+  const buf = buffers.get(flavor);
+  if (buf) {
+    schedule(flavor, buf, d);
+    return d;
   }
+  /* cold cache — warm every voice now, and sing THIS strike the
+     moment its clip lands (fetch is usually quicker than the lag) */
+  warmAll();
+  void fetchClip(flavor).then((b) => {
+    if (b && isSoundEnabled()) schedule(flavor, b, d);
+  });
   return d;
 }
