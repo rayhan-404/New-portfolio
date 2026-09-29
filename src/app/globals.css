@@ -384,13 +384,18 @@
   background:
     radial-gradient(
       1150px 800px at 88% -12%,
-      rgba(var(--primary-rgb) / 0.14),
+      rgba(var(--primary-rgb) / 0.17),
       transparent 62%
     ),
     radial-gradient(
       1000px 720px at -12% 112%,
-      rgba(var(--accent-rgb) / 0.11),
+      rgba(var(--accent-rgb) / 0.13),
       transparent 60%
+    ),
+    radial-gradient(
+      820px 560px at 6% 40%,
+      rgba(var(--primary-rgb) / 0.05),
+      transparent 62%
     ),
     radial-gradient(
       700px 500px at 50% 118%,
@@ -526,9 +531,10 @@
   );
 }
 
-/* Primary action — pool hue, glowing (reference .btn-primary) */
+/* Primary action — pool hue, brand gradient, glowing (ref .btn-primary).
+   The 160° pour keeps a lit top edge; gradient rides the rotating hue. */
 @utility btn-light {
-  background: var(--primary);
+  background: linear-gradient(160deg, var(--primary2-ref), var(--primary-ref) 62%);
   color: var(--primary-foreground);
   border: none;
   box-shadow: 0 4px 16px rgba(var(--primary-rgb) / 0.35);
@@ -565,7 +571,14 @@
 /* Big outlined display text */
 @utility text-outline {
   color: transparent;
-  -webkit-text-stroke: 1px rgba(var(--primary-rgb) / 0.3);
+  -webkit-text-stroke: 1px rgba(var(--primary-rgb) / 0.34);
+}
+/* Dark ground swallows thin strokes — the ghost numerals get a
+   stronger, slightly glowing outline so the section marks actually
+   read instead of whispering. */
+.dark .text-outline {
+  -webkit-text-stroke: 1px rgba(var(--primary-rgb) / 0.46);
+  filter: drop-shadow(0 0 26px rgba(var(--primary-rgb) / 0.14));
 }
 
 /* ── Neumorphic helpers (reference component recipes) ── */

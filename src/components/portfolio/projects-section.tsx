@@ -81,7 +81,7 @@ export function ProjectsSection() {
                 {filter === f.id && (
                   <motion.span
                     layoutId="project-filter-pill"
-                    className="absolute inset-0 rounded-full bg-primary shadow-[0_6px_18px_-6px_rgba(var(--primary-rgb)/0.55)]"
+                    className="absolute inset-0 rounded-full bg-[linear-gradient(160deg,var(--primary2-ref),var(--primary-ref)_62%)] shadow-[0_6px_18px_-6px_rgba(var(--primary-rgb)/0.55)]"
                     transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
                   />
                 )}

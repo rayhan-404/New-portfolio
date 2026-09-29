@@ -1073,3 +1073,25 @@ Work Log:
 Stage Summary:
 - The nav rail now reads as: small borderless text items, one genuine site-card that glides fluidly between them as the active section changes. Hover stays colour-only (v74 contract).
 - Tagged v75; touched src/components/portfolio/nav-rail.tsx only.
+
+---
+Task ID: 76 (full-site polish — richer colour & theme, UI/UX refinements)
+Agent: Main agent
+Task: User: "full website ta aro polish koro, specially colour gulo, colour and theme, ui ux aro better koro" — a site-wide polish pass focused on colour/theme richness and general UX.
+
+Work Log:
+- Surveyed every section via full screenshots (desktop 1440 + mobile 390, dark + light, several random accent hues: blue, green, purple, pink, deep-orange) and audited the design system (glass utilities, hue-rotation slots, ambient background, ghost numeral recipe) before touching anything.
+- Theme/colour layer (globals.css):
+  · Ghost numerals & outlined marks (text-outline): stroke alpha 0.3 → 0.34, plus a dark-theme override at 0.46 with a soft primary drop-glow — section marks 03/04/05 and repo-card digits now actually read on the charcoal ground instead of whispering.
+  · Dark ambient field (.dark .app-background): corner washes lifted (primary 0.14→0.17, accent 0.11→0.13) and a new asymmetric mid-left wash (820×560 at 6% 40%, primary/0.05) — the flat charcoal now carries gentle hue depth in every section.
+  · Primary CTAs (btn-light): flat var(--primary) fill became the brand's 160° pour (primary2-ref → primary-ref at 62%) with the same glow — Send Message, Book a Call, side-rail CTA and dialog buttons all inherit it.
+- UI/UX layer (components):
+  · Hero bio: five paragraphs moved from text-justify to text-left (killed the stretched word-rivers; the [hyphens:auto] crutch removed with them). Drop cap and emphasis spans untouched.
+  · Journey timeline: desktop ghost years 0.07 → 0.10 alpha (hover 0.13 → 0.17) — the era numerals participate in the theme instead of vanishing.
+  · Skill meters: gradient fill gained a soft primary glow (0 0 12px / 0.4 + 1px contact shadow) so the bars lift off the inset track.
+  · Projects filter pill: active pill now carries the same 160° brand gradient as the CTAs (was flat bg-primary) — one consistent accent language.
+- Verification: dark desktop screenshots of home/journey/projects/skills/contact + light home + mobile 390 across two accent hues; page errors none, console clean; lint 0 errors; tsc clean in src. No geometry, burst, nav-rail or theme-bootstrap logic touched.
+
+Stage Summary:
+- The site reads richer without changing its identity: deeper hue-tinted ambient field, ghost marks that finally read, one brand gradient shared by CTAs / filter pill / meters, and left-aligned hero copy for comfortable reading.
+- Tagged v76; touched globals.css, hero-section.tsx, journey-section.tsx, skills-section.tsx, projects-section.tsx.

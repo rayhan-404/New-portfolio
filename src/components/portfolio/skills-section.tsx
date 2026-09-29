@@ -52,7 +52,7 @@ export function SkillsSection() {
                       aria-label={`${skill.name} proficiency`}
                     >
                       <motion.div
-                        className="relative h-full rounded-full bg-gradient-to-r from-gold-deep via-gold to-gold-bright"
+                        className="relative h-full rounded-full bg-gradient-to-r from-gold-deep via-gold to-gold-bright shadow-[0_0_12px_rgba(var(--primary-rgb)/0.4),0_1px_2px_rgba(var(--primary-rgb)/0.5)]"
                         initial={reduce ? false : { width: 0 }}
                         whileInView={{ width: `${skill.level}%` }}
                         viewport={{ once: true, margin: "-40px" }}

@@ -153,7 +153,7 @@ export function JourneySection() {
                       (larger sizes clip under the sidebar/rail glass). */}
                   <p
                     aria-hidden="true"
-                    className={`relative z-[1] mb-2.5 block whitespace-nowrap text-[38px] leading-[0.9] tracking-[-0.07em] text-foreground/[0.14] tabular-nums transition-[color,transform] duration-500 group-hover:-translate-y-1 group-hover:text-foreground/[0.24] sm:text-[clamp(48px,12vw,72px)] md:absolute md:top-[-42px] md:mb-0 md:text-[clamp(54px,5.5vw,84px)] md:leading-none md:text-foreground/[0.07] md:group-hover:text-foreground/[0.13] ${
+                    className={`relative z-[1] mb-2.5 block whitespace-nowrap text-[38px] leading-[0.9] tracking-[-0.07em] text-foreground/[0.14] tabular-nums transition-[color,transform] duration-500 group-hover:-translate-y-1 group-hover:text-foreground/[0.24] sm:text-[clamp(48px,12vw,72px)] md:absolute md:top-[-42px] md:mb-0 md:text-[clamp(54px,5.5vw,84px)] md:leading-none md:text-foreground/[0.10] md:group-hover:text-foreground/[0.17] ${
                       isLeft ? "md:right-[25px]" : "md:left-[25px]"
                     }`}
                     style={BLACK}
