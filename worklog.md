@@ -1006,3 +1006,20 @@ Work Log:
 Stage Summary:
 - GitHub now hosts the complete project: full v0→v71 history + chore commits on main, all 23 version tags (v29–v36, v57–v71), pushed to rayhan-404/New-portfolio.
 - Old rayhan-404/portfolio (legacy static site) untouched; local backup remote and bundle remain in sync for future versions (git push backup main --tags for local, git push origin for GitHub).
+
+---
+Task ID: 72 (thunder v4 — the photo's own background no longer flares during strikes)
+Agent: Main agent
+Task: User: "thunder er somoy image er background dekha jacche" — during lightning, the image's background became visible/glaring. Find it, fix it.
+
+Work Log:
+- Reproduced with the freeze harness (now also pinning the flash layers via new data-flash / data-face attributes alongside data-bolt). Desktop dark was unambiguous: the desktop portrait card shows the REAL framed photo (with its own room background), and the droom + dface flash layers were UNMASKED screen-blend washes sitting ON the photo — every strike flared the photo's own background (bokeh room lights blazing). Mobile was verified clean: bolt + sky flash sit BEHIND the cutout, and mface is scoped by the cutout alpha.
+- Asset audit (mobile suspicion chased and cleared): sampled m-rayhan-cutout-lossless.webp alpha in background regions and diffed it against m-rayhan-cutout-mask-v2.webp — 0 pixels opaque outside the silhouette; the alpha map is a perfect person cutout. The "rectangle" seen in one mobile freeze was the subject's dark suit plus an old freeze over-pin, not a real artifact.
+- Fix (desktop): deleted the droom flash from inside the photo container entirely; added a dsky flash at the CARD level lighting the sky AROUND the card (like mobile lights the sky around the cutout); dface lost its big diagonal linear wash (which painted 42% of the photo) and is now a small tight radial kiss (26% 12% at 53% 32%, alpha 0.45 near / 0.3 far).
+- Seam fix (both stages): a corner-centered radial sized in % of its own box clips a hard straight edge at the element boundary. Rebuilt both sky flashes as self-contained glow boxes anchored at the bolt's entry corner — left/top = flashX/flashY %, x/y = -50%, fixed px size per near/far, radial-gradient(closest-side) so the glow always dies inside its own box. Verified: no seams on desktop dark, desktop light, mobile dark.
+- First attempt used refs + clientWidth measurement during render; react-compiler lint correctly rejected it ("Cannot access refs during render", 6 errors) — replaced with the refree geometry approach (also removes a layout read per strike).
+- Verification: freeze screenshots desktop dark + desktop light + mobile dark all clean (photo bg calm, glow around card/cutout, no seams); fresh reload 0 page errors 0 console errors; footer sticks at viewport bottom at full scroll (footerAtBottom true, scrollY 9174 + 900 = docH 10074). lint 0 errors, tsc src clean.
+
+Stage Summary:
+- Thunder now lights the WORLD, not the photograph: sky flash around the card, thin bolt arcs in the picture, small face kiss — and the framed portrait's own background stays exactly as calm as it was before the storm.
+- Both stages share the same flash architecture (corner-anchored self-contained glow boxes); data-flash/data-face attributes left in place for future freeze-harness work.

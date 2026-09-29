@@ -509,12 +509,23 @@ export function HeroSection() {
               {strike > 0 && strikes && (
                 <>
                   <LightningBolt key={`mb-${strike}`} strike={strikes.m} />
+                  {/* sky flash — a self-contained glow box centered on the
+                      bolt's own entry corner (left/top % + translate), so
+                      the radial always dies inside its own box and never
+                      clips a hard seam at an element edge */}
                   <motion.div
                     key={`sky-${strike}`}
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 z-0"
+                    data-flash="1"
+                    className="pointer-events-none absolute z-0"
                     style={{
-                      background: `radial-gradient(${strikes.m.far ? "74% 54%" : "58% 42%"} at ${strikes.m.flashX.toFixed(1)}% ${strikes.m.flashY.toFixed(1)}%, rgba(var(--accent-rgb)/${strikes.m.far ? 0.3 : 0.5}), rgba(var(--primary-rgb)/${strikes.m.far ? 0.14 : 0.22}) 55%, transparent 78%)`,
+                      left: `${strikes.m.flashX.toFixed(2)}%`,
+                      top: `${strikes.m.flashY.toFixed(2)}%`,
+                      width: strikes.m.far ? 500 : 390,
+                      height: strikes.m.far ? 584 : 454,
+                      x: "-50%",
+                      y: "-50%",
+                      background: `radial-gradient(closest-side, rgba(var(--accent-rgb)/${strikes.m.far ? 0.3 : 0.5}), rgba(var(--primary-rgb)/${strikes.m.far ? 0.14 : 0.22}) 55%, transparent 100%)`,
                       mixBlendMode: "screen",
                     }}
                     initial={{ opacity: 0 }}
@@ -592,6 +603,7 @@ export function HeroSection() {
                   <motion.div
                     key={`mface-${strike}`}
                     aria-hidden="true"
+                    data-face="1"
                     className="pointer-events-none absolute inset-0"
                     style={{
                       background: `radial-gradient(48% 16% at 55% 13%, rgba(var(--accent-rgb)/${strikes.m.far ? 0.34 : 0.55}), transparent 72%), linear-gradient(to bottom ${strikes.m.flashX < 50 ? "right" : "left"}, rgba(var(--accent-rgb)/${strikes.m.far ? 0.2 : 0.32}), transparent 46%)`,
@@ -731,6 +743,32 @@ export function HeroSection() {
               className="absolute -inset-8 rounded-[3.5rem] bg-[radial-gradient(circle_at_50%_45%,rgba(var(--accent-rgb)/0.14),transparent_68%)] blur-2xl"
             />
 
+            {/* thunder sky flash — a self-contained glow box centered on
+                the bolt's entry corner, lighting the sky AROUND the card
+                (never the photo: a screen wash over the framed portrait
+                used to flare the photo's own background every strike) */}
+            {strike > 0 && strikes && (
+              <motion.div
+                key={`dsky-${strike}`}
+                aria-hidden="true"
+                data-flash="1"
+                className="pointer-events-none absolute"
+                style={{
+                  left: `${strikes.d.flashX.toFixed(2)}%`,
+                  top: `${strikes.d.flashY.toFixed(2)}%`,
+                  width: strikes.d.far ? 708 : 540,
+                  height: strikes.d.far ? 650 : 494,
+                  x: "-50%",
+                  y: "-50%",
+                  background: `radial-gradient(closest-side, rgba(var(--accent-rgb)/${strikes.d.far ? 0.3 : 0.5}), rgba(var(--primary-rgb)/${strikes.d.far ? 0.14 : 0.22}) 55%, transparent 100%)`,
+                  mixBlendMode: "screen",
+                }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: FLASH_OPACITY }}
+                transition={{ duration: STRIKE_MS, times: FLASH_TIMES, ease: "easeOut" }}
+              />
+            )}
+
             <div className="glass-strong neu-decor relative overflow-hidden rounded-[2.5rem] p-2.5">
               <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem]">
                 {/* warm studio backdrop — the room the photo melts into */}
@@ -835,33 +873,21 @@ export function HeroSection() {
                       }}
                     />
                     {/* thunder in the room — a fresh bolt at a fresh spot
-                        every strike, the room flash radiating from the
-                        bolt's own origin, and the reflection leaning
-                        toward the bolt on the established face */}
+                        every strike; the sky flash lives OUTSIDE the photo
+                        (card level, behind the glass) so the portrait's own
+                        background stays calm, and the reflection on the face
+                        leans toward the bolt's corner */}
                     {strike > 0 && strikes && (
                       <LightningBolt key={`db-${strike}`} strike={strikes.d} />
                     )}
                     {strike > 0 && strikes && (
                       <motion.div
-                        key={`droom-${strike}`}
-                        aria-hidden="true"
-                        className="pointer-events-none absolute inset-0"
-                        style={{
-                          background: `radial-gradient(${strikes.d.far ? "68% 50%" : "52% 38%"} at ${strikes.d.flashX.toFixed(1)}% ${strikes.d.flashY.toFixed(1)}%, rgba(var(--accent-rgb)/${strikes.d.far ? 0.34 : 0.55}), rgba(var(--primary-rgb)/${strikes.d.far ? 0.15 : 0.25}) 55%, transparent 78%)`,
-                          mixBlendMode: "screen",
-                        }}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: FLASH_OPACITY }}
-                        transition={{ duration: STRIKE_MS, times: FLASH_TIMES, ease: "easeOut" }}
-                      />
-                    )}
-                    {strike > 0 && strikes && (
-                      <motion.div
                         key={`dface-${strike}`}
                         aria-hidden="true"
+                        data-face="1"
                         className="pointer-events-none absolute inset-0"
                         style={{
-                          background: `radial-gradient(30% 14% at 53% 32%, rgba(var(--accent-rgb)/${strikes.d.far ? 0.38 : 0.6}), transparent 74%), linear-gradient(to bottom ${strikes.d.flashX < 50 ? "right" : "left"}, rgba(var(--accent-rgb)/${strikes.d.far ? 0.22 : 0.35}), transparent 42%)`,
+                          background: `radial-gradient(26% 12% at 53% 32%, rgba(var(--accent-rgb)/${strikes.d.far ? 0.3 : 0.45}), transparent 74%)`,
                           mixBlendMode: "screen",
                         }}
                         initial={{ opacity: 0 }}
