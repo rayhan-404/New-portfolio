@@ -437,10 +437,11 @@ export function HeroSection() {
     };
   }, [accentId, stage]);
 
-  /* Thunder strike clock — real storms burst: the first bolt arrives
-     within ~1s, then strikes chain 150–500ms apart (2–4 per burst, no
-     long delay between them), and the sky rests a few seconds before
-     the next burst rolls in. Reduced motion = clear skies. */
+  /* Thunder strike clock — the storm NEVER goes quiet: the first bolt
+     arrives within ~1s, strikes chain 130–420ms apart in rolling
+     bursts of 2–5, and between bursts the sky only breathes for a
+     beat (~0.55–1.6s) before the next chain rolls in — continuous
+     lightning, end to end. Reduced motion = clear skies. */
   const [strike, setStrike] = useState(0);
   const chainRef = useRef({ remaining: 0 });
   useEffect(() => {
@@ -452,10 +453,10 @@ export function HeroSection() {
       const c = chainRef.current;
       if (c.remaining > 0) {
         c.remaining--;
-        return 150 + Math.random() * 350;
+        return 130 + Math.random() * 290;
       }
       c.remaining = 1 + Math.floor(Math.random() * 3);
-      return 3800 + Math.random() * 4200;
+      return 550 + Math.random() * 1050;
     };
     const loop = (delay: number) => {
       t = window.setTimeout(() => {
