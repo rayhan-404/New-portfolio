@@ -1151,3 +1151,22 @@ Work Log:
 Stage Summary:
 - The cinema now has genuine depth: panels physically turn through a perspective stage, the active stop shimmers/haloes/glows, and both ends of the reel frame themselves symmetrically. Same words, same single-screen footprint — considerably more motion craft.
 - Tagged v79; touched src/components/portfolio/journey-section.tsx + a .year-shimmer block appended to globals.css.
+
+---
+Task ID: 80 (theme-reactive hero — the suit wears the accent)
+Agent: Main agent
+Task: User: "Arekta complex kaj korte hobe. first, total j koyta theme ache sei koyta hero image make korte hobe, image gulo same hobe, just suit er colour accent colour hobe. i mean, jokhon j colour er theme select thakbe, suit er colour eo sei vibe thakbe" — one hero image per accent theme, identical except the suit takes the theme's color.
+
+Work Log:
+- Chose DETERMINISTIC programmatic recolor over AI image editing: every variant must be pixel-identical to the base photo ("image gulo same hobe") and the real face can never drift — 20 AI edits would each gamble on face fidelity; math doesn't.
+- Sampled both hero photos (scripts/sample-suit.mjs): suit is dark navy h≈232-249°, s 0.10-0.21, l 0.11-0.23; identified the mask hazards — shadowed hand skin reads chromatically navy, bg bokeh glass is h≈220, hair sheen sits at h≈200-215 (inside the navy window), bottom-left monitor is dark+cool+sharp.
+- Built scripts/recolor-suit.mjs: mask = hue gaussian (σ42° around 234°) × saturation gate × luma window × region polygon × texture gate (sobel blur-8; σ2 speckled the fabric) − holes; recolor = hue/sat swapped at preserved luminance + gentle midtone lift so dark fabric still reads the hue, specular ridges desaturate; feathered mask, alpha untouched.
+- Iterated debug masks 4 rounds (red-overlay visualizations): fixed shoulder wedges (poly hugging above shoulder lines), removed rect hand holes (shadowed skin now takes a whisper of hue = physically correct bounce light from a colored suit), protected hair with a head-shaped hole, deepened the cutout's luma floor to reach the collar's deepest shadows, holed the portrait's monitor corner.
+- Generated 20 variants (10 ACCENT_POOL hues × portrait-hd + cutout), lossy webp: portraits 75-100KB, cutouts 103-133KB with alpha (both smaller than the originals they overlay). Spot-verified amber/teal/pink/green/deep-purple/purple visually — faces, shirts, hands, backgrounds untouched.
+- src/lib/hero-variants.ts: id list + variant path helpers (sync note with accent-pool.ts).
+- hero-section.tsx: useAccentId() MutationObserver on documentElement[data-accent] (catches both the pre-paint boot script and the nav cycle button); matchMedia stage gate so only the visible stage's variants are fetched; decode-before-mount via img.decode() then AnimatePresence crossfade over the navy original (exit holds 2.4s so a slow decode can never flash navy mid-cycle); variant layers sit UNDER the existing grade/lamp overlays so the room tints them identically; idle prewarm decodes the remaining 9 hues staggered so cycling is instant; reduced motion = instant swap.
+- Verified (fresh sessions): drawn accent (deep-purple) suits up on first paint; cycled ALL 10 accents programmatically — correct portrait variant mounted for every hue (first sweep's "MISSING" was my test comparing relative vs absolute src, not an app bug); mobile 390 cutout swaps teal→cyan; light + dark themes; console clean (pre-existing non-static warning only); dev.log clean; lint 0 errors; tsc clean in src. Lightning/nav/theme bootstrap untouched.
+
+Stage Summary:
+- The hero now dresses for the theme: ten hand-mathed suit recolors crossfade in as the accent changes, pixel-identical photos except the fabric — no AI dice roll, no face drift, no flash on switch.
+- Tagged v80; touched src/components/portfolio/hero-section.tsx + new src/lib/hero-variants.ts + scripts/{recolor-suit,sample-suit,crop-regions}.mjs + 20 public/generated variants.

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  AnimatePresence,
   motion,
   useMotionValue,
   useReducedMotion,
@@ -11,6 +12,13 @@ import {
 } from "framer-motion";
 import { ChevronDown, GraduationCap, Telescope } from "lucide-react";
 import { person } from "@/lib/portfolio-data";
+import {
+  CUTOUT_BASE,
+  HERO_ACCENT_IDS,
+  PORTRAIT_BASE,
+  cutoutVariant,
+  portraitVariant,
+} from "@/lib/hero-variants";
 import { playSound } from "@/lib/sound";
 import { scrollToSection } from "./nav";
 
@@ -45,6 +53,43 @@ const CARD_LIGHT_RECOLOR = [
   "radial-gradient(16% 6% at 2% 43%, rgba(var(--accent-rgb)/0.55), transparent 76%)",
   "radial-gradient(22% 8% at 97% 79%, rgba(var(--accent-rgb)/0.5), transparent 76%)",
 ];
+
+/* ── Suit that follows the theme ───────────────────────────────────
+   The accent pool draws one of ten hues on every refresh (the nav
+   cycle button walks them). For EACH hue a deterministic recolor of
+   the hero photos exists — same pixels, suit re-tinted to the hue —
+   so the drawn accent dresses the suit to match. Each variant mounts
+   only after the browser has decoded it, then crossfades over the
+   navy original, so no theme switch ever flashes an empty frame. */
+
+/* the drawn accent id, kept live — the pre-paint boot script and the
+   nav cycle button both write documentElement.dataset.accent */
+function useAccentId(): string | null {
+  const [id, setId] = useState<string | null>(null);
+  useEffect(() => {
+    const el = document.documentElement;
+    const read = () => setId(el.dataset.accent ?? null);
+    read();
+    const mo = new MutationObserver(read);
+    mo.observe(el, { attributes: true, attributeFilter: ["data-accent"] });
+    return () => mo.disconnect();
+  }, []);
+  return id;
+}
+
+/* resolve when the browser has the pixels ready (errors resolve too —
+   the base photo stays underneath as the permanent fallback) */
+const decodeImage = (src: string) =>
+  new Promise<void>((resolve) => {
+    if (typeof window === "undefined") return resolve();
+    const img = new window.Image();
+    img.src = src;
+    if (typeof img.decode === "function") img.decode().then(resolve, resolve);
+    else {
+      img.onload = () => resolve();
+      img.onerror = () => resolve();
+    }
+  });
 
 /* ── Thunder — procedural lightning in the drawn hue ───────────
    No canned bolt: every strike runs a midpoint-displacement
@@ -357,6 +402,41 @@ export function HeroSection() {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLElement>(null);
 
+  /* ── suit follows the theme ──
+     `stage` gates which of the two photos' variants to decode (the
+     other stage's variant would be wasted bytes). The chosen variant
+     mounts ONLY once decoded, crossfading over the navy original. */
+  const accentId = useAccentId();
+  const [stage, setStage] = useState<"mobile" | "desktop" | null>(null);
+  const [suitShown, setSuitShown] = useState<string | null>(null);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const update = () => setStage(mq.matches ? "desktop" : "mobile");
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+  useEffect(() => {
+    if (!accentId || !stage) return;
+    let alive = true;
+    const variantOf = stage === "desktop" ? portraitVariant : cutoutVariant;
+    decodeImage(variantOf(accentId)).then(() => {
+      if (alive) setSuitShown(accentId);
+    });
+    /* progressive idle prewarm — after the drawn suit is on, quietly
+       decode the remaining hues so cycling the theme is instant */
+    const timers = HERO_ACCENT_IDS.filter((a) => a !== accentId).map(
+      (a, i) =>
+        window.setTimeout(() => {
+          decodeImage(variantOf(a));
+        }, 1400 + i * 700)
+    );
+    return () => {
+      alive = false;
+      timers.forEach(clearTimeout);
+    };
+  }, [accentId, stage]);
+
   /* Thunder strike clock — real storms burst: the first bolt arrives
      within ~1s, then strikes chain 150–500ms apart (2–4 per burst, no
      long delay between them), and the sky rests a few seconds before
@@ -562,6 +642,33 @@ export function HeroSection() {
                   unoptimized
                   className="relative h-auto w-full object-contain drop-shadow-[0_30px_42px_rgba(var(--primary-rgb)/0.3)]"
                 />
+
+                {/* the accent-suited twin — mounted only once decoded,
+                    crossfading over the navy original; the base photo
+                    below stays as the permanent fallback */}
+                <AnimatePresence>
+                  {suitShown && (
+                    <motion.div
+                      key={suitShown}
+                      aria-hidden="true"
+                      className="absolute inset-0"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 1, transition: { duration: 2.4 } }}
+                      transition={{ duration: reduce ? 0 : 0.7, ease: EASE }}
+                    >
+                      <Image
+                        src={cutoutVariant(suitShown)}
+                        alt=""
+                        width={HEADSHOT_W}
+                        height={HEADSHOT_H}
+                        loading="eager"
+                        unoptimized
+                        className="h-full w-full object-contain"
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
                 {/* silhouette-masked accent light — a key-light kiss on
                     the face and a bounce on the shirt/suit, masked by
@@ -801,6 +908,34 @@ export function HeroSection() {
                       quality={95}
                       className="object-cover object-top"
                     />
+
+                    {/* the accent-suited twin — decoded before mount,
+                        crossfaded over the navy original; sits UNDER
+                        the grade/lamp layers so the room still tints
+                        it exactly like it tints the original */}
+                    <AnimatePresence>
+                      {suitShown && (
+                        <motion.div
+                          key={suitShown}
+                          aria-hidden="true"
+                          className="absolute inset-0"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 1, transition: { duration: 2.4 } }}
+                          transition={{ duration: reduce ? 0 : 0.7, ease: EASE }}
+                        >
+                          <Image
+                            src={portraitVariant(suitShown)}
+                            alt=""
+                            fill
+                            loading="eager"
+                            sizes="440px"
+                            unoptimized
+                            className="object-cover object-top"
+                          />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
 
                     {/* hue grade — the whole room breathes the accent */}
                     <div
