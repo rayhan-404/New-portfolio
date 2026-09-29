@@ -1170,3 +1170,20 @@ Work Log:
 Stage Summary:
 - The hero now dresses for the theme: ten hand-mathed suit recolors crossfade in as the accent changes, pixel-identical photos except the fabric — no AI dice roll, no face drift, no flash on switch.
 - Tagged v80; touched src/components/portfolio/hero-section.tsx + new src/lib/hero-variants.ts + scripts/{recolor-suit,sample-suit,crop-regions}.mjs + 20 public/generated variants.
+
+---
+Task ID: 81 (site-wide thunder — restored rhythm, storm everywhere, procedural thunder sounds)
+Agent: Main agent
+Task: User: "nah, tunder ager moto ektu delay koro / full website a thunder daw / thunder er sound add koro, ekta single sound na, koyek dhoroner sound, jate realstic lage" — slow the storm back down, take it site-wide, and give it multiple realistic voices.
+
+Work Log:
+- Reverted the hero strike clock to the v80 rhythm (chain 150–500ms, 2–4 per burst, rest 3800–8200ms) after the interim continuous clock (0.55–1.6s breath) read as too hyperactive; measured live: hero max gap 7.26s, global 8.38s — storms burst and breathe again.
+- Exported the existing v71 bolt kit from hero-section.tsx (genStrike, LightningBolt, STRIKE_MS, FLASH_TIMES/OPACITY — bodies untouched) so both storms share one geometry engine.
+- New global-thunder.tsx: fixed pointer-events-none overlay (z-[25], under the nav rail z-30) mounted in PortfolioApp; own independent clock (first bolt 2.4–4.2s in, rest 4.4–9s so hero and global bursts alternate); bolts sized relative to the viewport (desktop 17–28% wide, mobile 32–50%) with the full-viewport room flash centered on the bolt's entry corner (screen blend) — verified visually striking over the pinned Journey Cinema and the hero bio on mobile.
+- New lib/thunder-sound.ts: procedural WebAudio thunder, zero assets — 4 flavors (crack = highpass snap + body + sub thump, clap = bandpass burst + tail, rumble = lowpass wash with tremolo breathing, roll = two offset rumble layers), shared hybrid white/brown noise buffer, per-play pitch variation. Distance-aware: near bolts crack ~60–220ms after the flash, far bolts rumble 420ms–1s late. Respects the existing rayhan_sound_fx mute toggle; 600ms machine-gun guard collapses hero+global collisions.
+- Hero + global clocks each call playThunder keyed to their strike's own far flag (hero uses the visible stage's strike).
+- Verified (fresh session): bolt-gap telemetry for both clocks; AudioContext instrumented via prototype patch — toggle chime (3 osc) then 22 buffer sources + 22 biquads + 9 tremolo LFOs scheduled by real strikes; wait --fn flash-catch screenshots at desktop journey + mobile bio; page errors none (pre-existing framer non-static warning only); dev.log clean; lint 0 errors; tsc clean in src. v71 geometry, theme bootstrap, nav contracts untouched.
+
+Stage Summary:
+- The storm now owns the whole site: the hero keeps its original burst-and-rest pulse, a second storm rolls across every section on its own clock, and every flash answers with one of four synthesized thunder voices that lag by distance — all behind the site's sound toggle.
+- Tagged v81; touched hero-section.tsx (clock values + exports + sound hook), portfolio-app.tsx (mount), new global-thunder.tsx + lib/thunder-sound.ts.
