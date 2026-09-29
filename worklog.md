@@ -1187,3 +1187,20 @@ Work Log:
 Stage Summary:
 - The storm now owns the whole site: the hero keeps its original burst-and-rest pulse, a second storm rolls across every section on its own clock, and every flash answers with one of four synthesized thunder voices that lag by distance — all behind the site's sound toggle.
 - Tagged v81; touched hero-section.tsx (clock values + exports + sound hook), portfolio-app.tsx (mount), new global-thunder.tsx + lib/thunder-sound.ts.
+
+---
+Task ID: 82 (real thunder sounds — recorded storm voices replace synthesis)
+Agent: Main agent
+Task: User: "sound gulo thik moto kaj korche na, fix koro, real sound daw" — the synthesized WebAudio thunder wasn't landing; wanted real recorded sounds.
+
+Work Log:
+- Root causes found in the v81 synthesis: the rumble/roll voices lowpassed noise at 105Hz at ~0.05 gain — effectively inaudible on laptop speakers (pure sine chimes read loud, filtered noise doesn't); plus a buffer-window bug (random start offset up to 1.5s + duration up to 4s on a 4s noise buffer) truncated the long tails.
+- Sourced real recordings from Mixkit's free thunder library (scraped the item grid, mapped ids→names, picked 4 distinct characters by name): 1299 Close explosion thunder (crack), 1279 Fast thunder impact (clap), 1296 Thunder deep rumble (rumble), 1292 Distant thunder storm explosion (roll). Mixkit license: free commercial use, no attribution.
+- Processed each with ffmpeg: head-silence trim (−45dB), duration cap (6.5–12s), fade-out tail, loudnorm to −16 LUFS / TP −1.5 → consistent levels (mean −20~−22dB, max ≈ −2dB), 44.1kHz 96kbps — total 430KB in public/sounds/.
+- Rewrote lib/thunder-sound.ts around real buffers, same public API (playThunder(distance?) — hero + global-thunder untouched): fetch → decodeAudioData → Map cache; near → crack/clap, far → rumble/roll; per-play playbackRate 0.92–1.08 + gain variation so repeats differ; distance lag preserved (near 60–220ms, far 420–1020ms); 12ms gain ramp kills clicks; 600ms machine-gun guard kept.
+- Cold-cache fix found in live testing: v81 fetched only the requested flavor and silently skipped the first strike — now a cold first call warms ALL four voices and schedules THIS strike as soon as its clip lands (usually inside the thunder lag).
+- Verified end-to-end (fresh session): all four mp3s served 200; instrumented decodeAudioData/createBufferSource → 4/4 voices decoded, 8 real buffer sources scheduled across 20s of storms after unmuting; network log clean; page errors none; lint 0 errors; tsc clean in src; dev.log clean. v71 geometry, theme bootstrap, nav contracts untouched.
+
+Stage Summary:
+- Thunder now sounds like weather: four real, loudness-matched recordings with distance-aware voices and natural tails — decoded once, varied per strike, first strike included.
+- Tagged v82; touched lib/thunder-sound.ts (rewrite), added public/sounds/thunder-{crack,clap,rumble,roll}.mp3.
