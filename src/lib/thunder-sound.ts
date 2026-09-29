@@ -10,8 +10,10 @@
  * The voice is chosen by the strike's distance, and the sound trails
  * the flash the way weather does — near lands almost with the light,
  * far rumbles arrive late. Rate + gain are varied per play so the
- * storm never repeats itself. Respects the site's sound preference
- * (rayhan_sound_fx); 600ms guard so overlapping storms don't stack.
+ * storm never repeats itself. Each clap is an EVENT, never a wall:
+ * tails are capped with a fade-out, only one voice plays at a time,
+ * and a burst of chained strikes answers with a single thunder.
+ * Respects the site's sound preference (rayhan_sound_fx).
  */
 
 import { isSoundEnabled } from "./sound";
@@ -29,6 +31,7 @@ let ctx: AudioContext | null = null;
 const buffers = new Map<string, AudioBuffer>();
 const pending = new Map<string, Promise<AudioBuffer | null>>();
 let lastScheduled = 0;
+let audioBusyUntil = 0; // audio-clock time the current clap fades out
 
 function getCtx(): AudioContext | null {
   if (typeof window === "undefined") return null;
@@ -92,14 +95,23 @@ function schedule(
   try {
     const s = ac.createBufferSource();
     s.buffer = buf;
-    s.playbackRate.value = 0.92 + Math.random() * 0.16;
+    const rate = 0.92 + Math.random() * 0.16;
+    s.playbackRate.value = rate;
     const g = ac.createGain();
     const v = (d === "near" ? 0.55 : 0.45) * (0.85 + Math.random() * 0.3);
+    /* keep each thunder inside the storm's rhythm: cap the tail and
+       fade it into silence so it never drones past the next burst */
+    const dur = Math.min(buf.duration / rate, d === "near" ? 3 : 4.2);
+    const fadeStart = at + dur - 0.55;
     g.gain.setValueAtTime(0.0001, at);
     g.gain.linearRampToValueAtTime(v, at + 0.012); // 12ms — kills any click
+    g.gain.setValueAtTime(v, fadeStart);
+    g.gain.linearRampToValueAtTime(0.0001, at + dur);
     s.connect(g);
     g.connect(ac.destination);
     s.start(at);
+    s.stop(at + dur + 0.05);
+    audioBusyUntil = at + dur;
   } catch {
     /* audio unavailable — stay silent */
   }
@@ -118,7 +130,10 @@ export function playThunder(
   const ac = getCtx();
   if (!ac || ac.state === "closed") return null;
   const now = performance.now();
-  if (now - lastScheduled < 600) return null; // never machine-gun
+  /* one clean voice per burst — chained strikes stay silent, and a
+     new clap never starts while the previous tail is still rolling */
+  if (now - lastScheduled < 1800) return null;
+  if (ac.currentTime < audioBusyUntil) return null;
   lastScheduled = now;
 
   const d: ThunderDistance = distance ?? (Math.random() < 0.5 ? "near" : "far");
