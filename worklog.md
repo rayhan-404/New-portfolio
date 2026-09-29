@@ -1056,3 +1056,20 @@ Work Log:
 Stage Summary:
 - Nav rail contract is now: idle items are pure text that brightens on hover, and the raised neumorphic tile exists only under the active section. No geometry, burst, or theme code touched.
 - Tagged v74; touched src/components/portfolio/nav-rail.tsx only.
+
+---
+Task ID: 75 (nav rail — smaller borderless buttons in the card recipe, fluid sliding active card)
+Agent: Main agent
+Task: User: "button gulo aro soto koro, border dio na, card gulor moto same style er daw and animation slide flui animation daw" — smaller nav buttons, no border, style them exactly like the site's cards, and add a fluid slide animation.
+
+Work Log:
+- Sizing: button padding py-2.5 → py-1.5 (md:py-2), radius 10px/xl → 9px/11px; labels one step smaller (active 12/13/14px → 11/12/13px, idle 9.5/10.5/11px → 9/10/11px→ md 10.5px), tracking tightened.
+- Border removed: the `border` class is gone from the button base (computed border-width 0px verified on both viewports); idle items remain fully surface-free.
+- Card style: the active treatment is now a real element using the site's `glass` utility (background var(--bg) + box-shadow var(--shadow-neu), no border) — the exact recipe of the standard raised cards — absolutely positioned inside the active button (inset-0, rounded to match).
+- Fluid slide: the card is ONE shared framer-motion element (layoutId "nav-active-card", initial={false}) rendered inside whichever item is active. When the active section changes — click (optimistic pin), scroll-spy update, or accent-independent — framer-motion physically animates it from the old button's bounding box to the new one on a soft spring (stiffness 380, damping 32, mass 0.8). Reduced-motion users get {duration: 0}.
+- Proof of the glide: clicked SKILLS while PROJECTS was active; immediately after the click the card read transform translate3d(0px, -65.66px, 0) scale(1, 1.264) — sitting near the old button, stretched mid-travel — and 900ms later transform: none inside SKILLS. The stretch is the fluid part: the card deforms while it travels, then lands.
+- Verification: desktop 1440 (SKILLS card: solid bg, twin neu shadows, no border, bigger accent label) + mobile 390 (PROJECTS card, border 0px, pad 6px) screenshots; page errors none; lint 0 errors; tsc clean in src.
+
+Stage Summary:
+- The nav rail now reads as: small borderless text items, one genuine site-card that glides fluidly between them as the active section changes. Hover stays colour-only (v74 contract).
+- Tagged v75; touched src/components/portfolio/nav-rail.tsx only.

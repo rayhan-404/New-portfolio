@@ -22,14 +22,18 @@ interface NavRailProps {
  * NavRail — full-height navigator, quiet by default.
  *
  * • The section items are NOT a stack of buttons: an unvisited
- *   destination is plain vertical text (transparent, no border,
- *   no shadow) — the only tile in the rail is the ACTIVE one, and
- *   it reads RAISED — soft outset depth, never a pressed-in pit.
+ *   destination is plain small vertical text (surface-free, borderless)
+ *   — the only treatment in the rail is the ACTIVE one, rendered as a
+ *   genuine site card (the glass recipe: --bg surface + twin neu
+ *   shadows, NO border) slightly smaller than the rail's width.
  *   Its label scales up past the others — a magnifying glass over
  *   where you are.
+ * • The card is one shared framer-motion element (layoutId): when the
+ *   active section changes it PHYSICALLY SLIDES from the old item to
+ *   the new one on a soft spring — a fluid glide, not a swap.
  * • Hover is colour-only: gliding over an idle item never raises a
- *   tile — the label simply brightens toward the foreground. The
- *   button treatment belongs to the active destination alone.
+ *   surface — the label simply brightens toward the foreground. The
+ *   card belongs to the active destination alone.
  * • Scroll progress lives IN the rail: a hairline seam along the
  *   rail's inner edge (its border) fills top→bottom as you read.
  *   The old top-edge progress bar is removed.
@@ -126,20 +130,39 @@ export function NavRail({ categories, activeIndex, onSelectCategory }: NavRailPr
               }}
               aria-current={idx === activeIndex ? "page" : undefined}
               title={cat.label}
-              className={`group relative flex w-full cursor-pointer items-center justify-center rounded-[10px] border px-0 outline-none transition-all duration-300 ease-out focus-visible:ring-1 focus-visible:ring-primary/40 active:scale-[0.97] md:rounded-xl ${
-                isActive
-                  ? "border-[color-mix(in_srgb,var(--primary)_38%,var(--nl))] bg-[var(--bg)] py-2.5 shadow-[var(--shadow-neu)]"
-                  : "border-transparent bg-transparent py-2.5 shadow-none"
-              }`}
+              className="group relative flex w-full cursor-pointer items-center justify-center rounded-[9px] px-0 py-1.5 outline-none transition-all duration-300 ease-out focus-visible:ring-1 focus-visible:ring-primary/40 active:scale-[0.97] md:rounded-[11px] md:py-2"
             >
+              {/* The card — ONE shared element (layoutId) living inside
+                  whichever item is active. On change it physically glides
+                  from the old item to the new one on a soft spring.
+                  Styled exactly like the site's raised cards: the glass
+                  recipe (bg + twin shadows), no border. */}
+              {isActive && (
+                <motion.span
+                  layoutId="nav-active-card"
+                  initial={false}
+                  transition={
+                    reduceMotion
+                      ? { duration: 0 }
+                      : {
+                          type: "spring",
+                          stiffness: 380,
+                          damping: 32,
+                          mass: 0.8,
+                        }
+                  }
+                  aria-hidden="true"
+                  className="glass pointer-events-none absolute inset-0 rounded-[9px] md:rounded-[11px]"
+                />
+              )}
               {/* Vertical label — the magnifying-glass read: the active
                   button's text grows past all the others. On idle items
                   hovering only shifts this label's colour — no surface. */}
               <span
                 className={`pointer-events-none relative whitespace-nowrap font-bold uppercase transition-all duration-300 ease-out ${
                   isActive
-                    ? "text-[12px] tracking-[1.8px] text-primary sm:text-[13px] md:text-[14px] md:tracking-[2px]"
-                    : "text-[9.5px] tracking-[1.4px] text-muted-foreground group-hover:text-foreground sm:text-[10.5px] md:text-[11px]"
+                    ? "text-[11px] tracking-[1.6px] text-primary sm:text-[12px] md:text-[13px] md:tracking-[1.8px]"
+                    : "text-[9px] tracking-[1.3px] text-muted-foreground group-hover:text-foreground sm:text-[10px] md:text-[10.5px]"
                 }`}
                 style={{ writingMode: "vertical-rl", rotate: "180deg" }}
               >
