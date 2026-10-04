@@ -1281,3 +1281,18 @@ Work Log:
 Stage Summary:
 - The journey is now the longest it has ever been on this site (7.2k desktop / 4.7k mobile) while keeping the pinned single-screen reel and all v79 polish.
 - Tagged v86; touched journey-section.tsx (REEL_SCROLL constant + comment).
+
+---
+Task ID: 87 (journey length lands on mobile)
+Agent: Main agent
+Task: User: "mobile a" — v86's long-form runway (1.9) measured 7193px on desktop but only 4674px on a phone: a narrow viewport travels a shorter horizontal reel, so even at the same multiplier each stop got ~547px of scroll vs ~899px on desktop. The length bump needed to apply on mobile too.
+
+Work Log:
+- Root cause: runway = 100svh + travel × multiplier, and travel is the horizontal reel distance — inherently ~40% shorter on a 390px viewport than on 1440px, so a fixed multiplier can never give phones the same per-stop scroll.
+- Fix as a CSS var, not JS state: #journey's --reel-mult declared in globals.css (1.9 default, 3.1 under max-width: 767.98px); journey-section.tsx's inline height became calc(100svh + travelpx * var(--reel-mult)). Correct from first paint — no post-hydration height jump, no useIsMobile hook, no re-measure needed (goToStop/nav landing already measure offsetHeight live).
+- Math check: mobile travel ≈ 2016px → 844 + 2016×3.1 = 7094px runway, (7094−844)/7 = 893px per stop ≈ desktop's (7193−900)/7 = 899px. Phones now get the same long-form cinematic pace.
+- Verified (fresh agent-browser sessions): mobile 390×844 — mult resolves 3.1, #journey = 7094px (was 4674), page 15161px; mid-runway screenshot shows coverflow glide between stops 01→02, 85% screenshot lands stop 06 "North Western University" with the 2028 peek, comet rail tracking; clicking the last rail dot glides to progress 1.0 exactly. Desktop 1440×900 — mult 1.9, #journey = 7193px, byte-identical to v86. accent=mono on both fresh loads (v85 default intact). Page errors 0 on both sessions; lint 0 errors; tsc clean in src; dev.log clean.
+
+Stage Summary:
+- The journey is now equally cinematic everywhere: ~900px of scroll per stop on desktop AND mobile — 7.2k desktop / 7.1k mobile runway — with the multiplier living in CSS so the height is right before React even hydrates.
+- Tagged v87; touched journey-section.tsx (calc height + comment) and globals.css (#journey --reel-mult + media query).

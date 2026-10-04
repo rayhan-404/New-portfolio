@@ -268,14 +268,17 @@ export function JourneySection() {
 
   const travel = Math.max(0, xRange[0] - xRange[1]);
 
-  /* Runway length = 100svh of pinned stage + REEL_SCROLL × travel of
+  /* Runway length = 100svh of pinned stage + travel × --reel-mult of
      scroll runway. 0.85 (v78) made the journey dramatically shorter
-     than the old vertical timeline; v85 restored the old scale at
-     1.35 (~5.4k px desktop), and the user asked for MORE — 1.9 gives
-     every stop ~1.1k px of scroll (≈7.2k desktop / ≈4.7k mobile), a
-     long-form cinematic pace. Dot-click/nav landing measure the
+     than the old vertical timeline; v85 restored the old scale (1.35),
+     v86 went long-form (1.9 ≈ 900px of scroll per stop on desktop),
+     and v87 brought mobile along: the multiplier lives in CSS
+     (#journey's --reel-mult, media-queried in globals.css) so a
+     phone — whose reel travel is inherently shorter — runs 3.1 and
+     every stop gets the same ~900px of scroll on mobile as on
+     desktop. As a CSS var the height is correct from first paint —
+     no post-hydration jump. Dot-click/nav landing measure the
      runway live, so nothing else needs to know. */
-  const REEL_SCROLL = 1.9;
 
   return (
     <section
@@ -284,7 +287,9 @@ export function JourneySection() {
       aria-label="My journey"
       className="relative"
       style={
-        pinned ? { height: `calc(100svh + ${Math.round(travel * REEL_SCROLL)}px)` } : undefined
+        pinned
+          ? { height: `calc(100svh + ${Math.round(travel)}px * var(--reel-mult))` }
+          : undefined
       }
     >
       {/* ── The pinned stage — one screen of cinema ─────────────── */}
