@@ -1329,3 +1329,20 @@ Work Log:
 Stage Summary:
 - Every interactive element on a phone now clears 40px (primary controls 44px), no viewport crops or overflows at 360/390, safe areas respected in footer + rail, section rhythm tightened, and the desktop experience is unchanged.
 - Tagged v89 (commit b889681), pushed to backup; origin still awaiting the new classic PAT (v83-v89 will go up together).
+
+---
+Task ID: 90 (GitHub-API projects + admin control room + rail-node icons)
+Agent: Main agent
+Task: User: "1. project section a github er project gulo api diye add hobe 2. ekta admin panel banaw, jekhan theke everything control kora jabe, design o customize kora jabe 3. full flexible admin panel 4. journey section er icon gulo card er upor theke soriye side a line er dot replace kore okhane daw"
+
+Work Log:
+- GitHub API: /api/github/repos identity now comes from the admin store (username + PAT, env fallback) with an identity-keyed memory cache whose last-good payload survives rate limits; the strip renders real repos — verified 25 live from @rayhan-404 with language dots, stars, forks, dates.
+- Admin panel (admin-panel.tsx, ~1300 lines): passcode-gated full-screen overlay opened by ?admin=1 / the new nav-rail gear button / Ctrl+Shift+A. First-run passcode "rayhan" (seeded as sha-256 on first verify, changeable in Design). Six tabs — Design (boot accent w/ 11 live-preview swatches, default theme, passcode), Hero (greeting/name/role + intro paragraphs with lead/body/closing styles, **bold**, emoji wrap, dropcap), Journey (full CRUD + reorder + icon select + current switch), Projects (hide/featured for curated cards and live repos), GitHub (username/token server-side, status probe), Messages (contact inbox + bookings).
+- Backend: Prisma models SiteSetting (JSON blobs) / JourneyStop (auto-seeded from static data) / ProjectFlag ("curated:<id>" + "repo:<name>"); public GET /api/journey + /api/site-settings + /api/project-flags; admin PUTs guarded by x-admin-key (401 verified wrong-key); /api/admin/verify + /api/admin/messages. Client hooks (use-site-data.tsx: useJourneyStops/useSiteContent/useProjectFlags) render static defaults until fetch and re-render live on saves via a window event. BootDefaults server component publishes DB defaults to the pre-paint scripts (visitor localStorage choice still wins).
+- Journey icons onto the rail: medallions left the cards and became the rail nodes — 44/48px icon buttons with edu/primary tint, muted future stops, glow + spinning halo + scale-110 when active, year tooltip, click glides (row top - 88 exact, counter flips).
+- Verified end-to-end: login → journey title edit → SAVED → live site updated → restore via API; purple accent saved → fresh load boots purple with the suit variant + DB hero content → restored mono; 25 live repo cards; empty messages inbox loads; mobile admin full-screen with scrollable tabs; journey 6 stops after restore; 0 page errors; lint 0; tsc clean.
+
+Stage Summary:
+- The portfolio is now self-serve: the owner can change the site's face (accent/theme), rewrite the hero, restructure the journey timeline, curate which case studies and which of his real GitHub repos appear, paste a PAT to lift rate limits, and read his inbox — all without touching code.
+- Journey rail reads as beads-on-a-wire: icons ON the line, dots gone.
+- Tagged v90 (commit ebfad7a), pushed to backup; origin still awaiting the new classic PAT (v83-v90 will go up together).
