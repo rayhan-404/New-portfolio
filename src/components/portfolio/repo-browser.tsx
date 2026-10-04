@@ -171,7 +171,7 @@ export function RepoBrowser() {
               setState({ phase: "loading" });
               setReloadKey((k) => k + 1);
             }}
-            className="glass-chip inline-flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-[12px] font-semibold text-foreground transition-transform duration-300 hover:scale-[1.03] active:scale-95"
+            className="glass-chip inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full px-4 py-2 text-[12px] font-semibold text-foreground transition-transform duration-300 hover:scale-[1.03] active:scale-95"
           >
             <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
             Retry

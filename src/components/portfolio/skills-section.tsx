@@ -14,7 +14,7 @@ export function SkillsSection() {
     <section
       id="skills"
       aria-label="Skills and expertise"
-      className="relative scroll-mt-20 overflow-hidden px-5 py-24 sm:px-8 md:px-10 lg:py-32"
+      className="relative scroll-mt-20 overflow-hidden px-5 py-16 sm:px-8 sm:py-24 md:px-10 lg:py-32"
     >
       {/* ghost numeral — 5% backward parallax */}
       <SectionNumber
@@ -80,7 +80,7 @@ export function SkillsSection() {
                   <StaggerItem key={chip}>
                     <button
                       onClick={() => playSound("tap")}
-                      className="glass-chip font-tag rounded-full px-3.5 py-2 text-[9.5px] text-foreground/75 transition-all duration-300 hover:text-primary active:scale-95"
+                      className="glass-chip font-tag min-h-10 rounded-full px-3.5 py-2 text-[9.5px] text-foreground/75 transition-all duration-300 hover:text-primary active:scale-95"
                     >
                       {chip}
                     </button>

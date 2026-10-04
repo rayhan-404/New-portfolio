@@ -80,7 +80,7 @@ export function ContactSection() {
     <section
       id="contact"
       aria-label="Contact"
-      className="relative scroll-mt-20 overflow-hidden px-5 py-24 sm:px-8 md:px-10 lg:py-32"
+      className="relative scroll-mt-20 overflow-hidden px-5 py-16 sm:px-8 sm:py-24 md:px-10 lg:py-32"
     >
       {/* ghost numeral — 5% backward parallax, same recipe as projects/skills */}
       <SectionNumber
@@ -197,7 +197,7 @@ export function ContactSection() {
                         playSound("tap");
                         setType(t);
                       }}
-                      className={`rounded-full px-4 py-2 text-[13px] font-semibold transition-all duration-300 active:scale-95 ${
+                      className={`min-h-10 rounded-full px-4 py-2 text-[13px] font-semibold transition-all duration-300 active:scale-95 ${
                         type === t
                           ? "bg-primary text-primary-foreground shadow-[0_10px_26px_-10px_rgba(var(--primary-rgb)/0.6)]"
                           : "glass-chip text-foreground/75 hover:text-primary"

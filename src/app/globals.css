@@ -969,3 +969,18 @@
   opacity: 0.9;
 }
 
+/* ============================================================
+   JOURNEY YEAR SIZE (v89 mobile)
+   The year pours are whitespace-nowrap ≥640px; on phones they may
+   wrap, and the desktop clamp (38px min) makes long years like
+   "2024 — Present" clip past the card column on a 360–430px screen.
+   Below 600px the size resolves through --year-size instead: scales
+   with the viewport (8.2vw) between 28–40px, so every year fits the
+   44px dot gutter layout without shrinking the desktop look.
+   ============================================================ */
+@media (max-width: 599.98px) {
+  #journey {
+    --year-size: clamp(28px, 8.2vw, 40px);
+  }
+}
+

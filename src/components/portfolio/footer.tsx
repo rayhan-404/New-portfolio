@@ -40,7 +40,7 @@ export function Footer() {
                     href={s.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="font-tag inline-flex items-center gap-2 text-[10px] text-muted-foreground transition-colors duration-300 hover:text-foreground"
+                    className="font-tag inline-flex min-h-11 items-center gap-2 text-[10px] text-muted-foreground transition-colors duration-300 hover:text-foreground"
                   >
                     <span
                       aria-hidden="true"

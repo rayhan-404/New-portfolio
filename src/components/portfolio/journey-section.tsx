@@ -196,7 +196,7 @@ export function JourneySection() {
       ref={sectionRef}
       id="journey"
       aria-label="My journey"
-      className="relative overflow-hidden pb-28 pt-14 sm:pt-20"
+      className="relative overflow-hidden pb-20 pt-10 sm:pb-28 sm:pt-20"
     >
       {/* Ambient depth blobs drifting against the scroll */}
       <motion.span
@@ -395,7 +395,7 @@ export function JourneySection() {
                     onClick={() => goToStop(idx)}
                     aria-label={`Go to stop ${chapter} — ${STOP_LABELS[idx]}`}
                     aria-current={isActive ? "true" : undefined}
-                    className="group mt-7 flex h-6 w-6 items-center justify-center rounded-full sm:mt-8"
+                    className="group mt-[18px] flex h-11 w-11 items-center justify-center rounded-full sm:mt-[22px]"
                   >
                     <span
                       className={`block h-2.5 w-2.5 rounded-full transition-all duration-500 ${
@@ -425,12 +425,12 @@ export function JourneySection() {
                     {/* Year — poured with the brand gradient; the active
                         stop's pour stretches 2× and sweeps a slow shimmer */}
                     <p
-                      className={`text-gold-gradient relative z-[1] mb-5 mt-3 whitespace-nowrap leading-[0.85] tracking-[-0.055em] tabular-nums ${
+                      className={`text-gold-gradient relative z-[1] mb-5 mt-3 whitespace-normal leading-[0.85] tracking-[-0.055em] tabular-nums sm:whitespace-nowrap ${
                         isActive && !reduce ? "year-shimmer" : ""
                       }`}
                       style={{
                         ...BLACK,
-                        fontSize: "clamp(38px, 4.2vw, 64px)",
+                        fontSize: "var(--year-size, clamp(38px, 4.2vw, 64px))",
                       }}
                     >
                       {era.period}
@@ -581,7 +581,7 @@ export function JourneySection() {
                 onClick={() => goToStop(journey.length)}
                 aria-label={`Go to stop ${String(STOPS).padStart(2, "0")} — ${journeyFuture.year}`}
                 aria-current={active === journey.length ? "true" : undefined}
-                className="group mt-7 flex h-6 w-6 items-center justify-center rounded-full sm:mt-8"
+                className="group mt-[18px] flex h-11 w-11 items-center justify-center rounded-full sm:mt-[22px]"
               >
                 <span
                   className={`block h-2.5 w-2.5 rounded-full transition-all duration-500 ${
@@ -599,12 +599,12 @@ export function JourneySection() {
             <div className="relative min-w-0">
               <Reveal y={36} className="max-w-[640px]">
                 <p
-                  className={`text-gold-gradient relative z-[1] mb-5 mt-3 whitespace-nowrap leading-[0.85] tracking-[-0.055em] tabular-nums ${
+                  className={`text-gold-gradient relative z-[1] mb-5 mt-3 whitespace-normal leading-[0.85] tracking-[-0.055em] tabular-nums sm:whitespace-nowrap ${
                     active === journey.length && !reduce ? "year-shimmer" : ""
                   }`}
                   style={{
                     ...BLACK,
-                    fontSize: "clamp(38px, 4.2vw, 64px)",
+                    fontSize: "var(--year-size, clamp(38px, 4.2vw, 64px))",
                   }}
                 >
                   {journeyFuture.year}

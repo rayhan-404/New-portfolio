@@ -37,7 +37,7 @@ export function ProjectsSection() {
     <section
       id="projects"
       aria-label="Featured projects"
-      className="relative scroll-mt-20 overflow-hidden px-5 py-24 sm:px-8 md:px-10 lg:py-32"
+      className="relative scroll-mt-20 overflow-hidden px-5 py-16 sm:px-8 sm:py-24 md:px-10 lg:py-32"
     >
       <SectionNumber
         index="03"
