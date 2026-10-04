@@ -4,10 +4,10 @@
  * Site-wide storm — the hero's procedural bolts, let loose across the
  * whole viewport. A fixed overlay (under the nav rail, above the page)
  * strikes wherever you are on the site: fresh geometry from a top
- * corner, the sky flash radiating from the bolt's own origin, and a
- * distance-aware thunder answer. Independent clock from the hero's
- * in-card storm, slightly offset so bursts alternate. Reduced motion
- * = clear skies.
+ * corner and the sky flash radiating from the bolt's own origin.
+ * Silent by design — the storm is visual only. Independent clock
+ * from the hero's in-card storm, slightly offset so bursts
+ * alternate. Reduced motion = clear skies.
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -19,7 +19,6 @@ import {
   genStrike,
   LightningBolt,
 } from "./hero-section";
-import { playThunder } from "@/lib/thunder-sound";
 
 /* bolt size relative to the viewport — smaller than the hero's
    in-card strikes (the whole page is the sky here, not one frame) */
@@ -73,11 +72,6 @@ export function GlobalThunder() {
         : null,
     [strike]
   );
-
-  /* the sound answers the light, trailing by distance */
-  useEffect(() => {
-    if (strike > 0 && strikes) playThunder(strikes.far ? "far" : "near");
-  }, [strike, strikes]);
 
   if (reduce) return null;
 

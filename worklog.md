@@ -1233,3 +1233,21 @@ Work Log:
 
 Stage Summary:
 - Everything is safely committed: v83 lives in local main + local backup remote. GitHub (origin) push remains the ONLY pending step and needs a fresh classic PAT (repo scope) from the user — then: git push origin main v83 (one command, nothing else pending).
+
+---
+Task ID: 84 (thunder sound removed + Black & White theme)
+Agent: Main agent
+Task: User: "ei thunder er sound remove koro and arekta kaj koro, ekta black & white version banaw" — strip the storm's audio (visuals stay), and add a monochrome theme to the accent pool.
+
+Work Log:
+- Sound removal: deleted the playThunder hooks from hero-section.tsx (strike effect) and global-thunder.tsx (strike effect), removed lib/thunder-sound.ts entirely and the four Mixkit mp3s in public/sounds/. Lightning bolts, flashes and both storm clocks untouched — the storm is now visual-only by design ("Silent by design" note in the overlay's header). The UI chime system (lib/sound.ts) and the nav sound toggle stay — they drive taps/notches across the whole site, thunder was a separate engine.
+- Black & White theme: new 11th ACCENT_POOL entry "mono" ("Black & White") — paper-and-ink light surfaces (bg #f5f5f5, ink #212121 accents, near-black bolt stroke = pencil-strike look) and silver-and-white dark surfaces (bg #0e0e0e, pure-white accent → white bolts + screen-blend flash = the classic storm photograph). All surfaces/text/borders/glows ride the existing --hue-* slot routing, so the whole site goes monochrome the moment the accent draws mono.
+- Hero photos: scripts/make-mono.mjs (new, deterministic sharp grayscale) generated m-rayhan-portrait-hd-mono.webp (desktop card) + m-rayhan-cutout-mono.webp (mobile, alpha preserved). Unlike the recolor-suit variants (suit-only recolor), the WHOLE photo is desaturated — a mono theme deserves a mono hero. "mono" added to HERO_ACCENT_IDS so the crossfade + idle prewarm pick it up automatically.
+- Last chroma out: a scoped [data-accent="mono"] block in globals.css turns the hardcoded flourishes graphite — the green .status-dot (now ink/silver via --primary) and --star/--star-ink (GitHub star icon + project tag chips → primary). Deliberately still colored: form error/success feedback (semantic) and the live project demos (they depict real apps, like photographs in a mono magazine). Placed after the token blocks to win the equal-specificity cascade on <html>.
+- Dev-env hiccup: globals.css hot-reload went stale (watcher missed the append; served chunk kept the old bytes even across reloads) — fixed by restarting the dev server; rule then applied and verified.
+- Verified end-to-end (fresh agent-browser session): 37s storm telemetry — hero 39 + global 32 bolt mutations, bolts visible mid-flight; ZERO /sounds/ network requests and ZERO AudioBufferSourceNode creations (thunder used buffers; UI chimes use oscillators and remain toggle-driven); both mono variants load + decode and crossfade over the navy fallbacks; accent cycle button walks 11 entries and lands on mono; screenshots — mono dark desktop with a white bolt caught mid-strike (top-left corner) + silver status dots, mono light desktop (paper/ink), mono light mobile (grayscale cutout full-width); page errors 0; lint 0 errors; tsc clean in src; dev.log clean. v71 bolt geometry, theme bootstrap, nav contracts untouched.
+
+Stage Summary:
+- The storm lost its voice on purpose: lightning still rakes the hero and the whole site, but silently — sound now means UI chimes only.
+- The pool gained its monochrome eleventh: Black & White runs every surface, bolt, glow and the hero photos themselves in grayscale, with the availability dots and star chips converted to ink/silver so nothing chroma survives the theme.
+- Tagged v84; touched hero-section.tsx, global-thunder.tsx, accent-pool.ts, hero-variants.ts, globals.css; added scripts/make-mono.mjs + 2 mono webps; deleted lib/thunder-sound.ts + public/sounds/.

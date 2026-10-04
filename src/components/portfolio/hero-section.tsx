@@ -20,7 +20,6 @@ import {
   portraitVariant,
 } from "@/lib/hero-variants";
 import { playSound } from "@/lib/sound";
-import { playThunder } from "@/lib/thunder-sound";
 import { scrollToSection } from "./nav";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -488,14 +487,6 @@ export function HeroSection() {
         : null,
     [strike]
   );
-
-  /* the sound answers the light — thunder trails the flash by the
-     strike's own distance (near cracks land fast; far rumbles lag) */
-  useEffect(() => {
-    if (!strike || !strikes) return;
-    const s = stage === "desktop" ? strikes.d : strikes.m;
-    playThunder(s.far ? "far" : "near");
-  }, [strike, strikes, stage]);
 
   /* Gentle parallax on the desktop portrait card */
   const mx = useMotionValue(0);

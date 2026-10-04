@@ -127,6 +127,18 @@ export const ACCENT_POOL: AccentHue[] = [
     light: ["#2196f3", "#42a5f5", "#448aff"],
     dark: ["#42a5f5", "#64b5f6", "#448aff"],
   },
+  {
+    /* Black & White — the monochrome eleventh: paper-and-ink light
+       (ink bolts read like pencil strikes on paper) and silver-and-
+       white dark (pure-white bolts + screen-blend flash = the classic
+       storm photograph). No chroma anywhere, surfaces included. */
+    id: "mono",
+    label: "Black & White",
+    surfaceL: { bg: "#f5f5f5", bg2: "#ededed", bg3: "#e3e3e3", nl: "#fdfdfd", nd: "#d4d4d4", text: "#171717", text2: "#5a5a5a", text3: "#8c8c8c" },
+    surfaceD: { bg: "#0e0e0e", bg2: "#181818", bg3: "#232323", nl: "#363636", nd: "#050505", text: "#f5f5f5", text2: "#cfcfcf", text3: "#969696" },
+    light: ["#212121", "#424242", "#1a1a1a"],
+    dark: ["#e0e0e0", "#bdbdbd", "#ffffff"],
+  },
 ];
 
 const hexToRgb = (hex: string): string => {

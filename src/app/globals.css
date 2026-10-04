@@ -905,3 +905,26 @@
     background-size: 100% 100%;
   }
 }
+
+/* ============================================================
+   BLACK & WHITE ACCENT — the last chroma out
+   The mono pool entry runs surfaces, text and accents through the
+   token system, but a few flourishes are hardcoded colors outside
+   the pool. Under [data-accent="mono"] those go graphite too.
+   Deliberately kept colored: form errors / success feedback
+   (semantic, survives every theme) and the live project demos
+   (they depict real apps, like photographs in a mono magazine).
+   Declared after the token blocks so it wins the equal-specificity
+   cascade on <html> (both .dark and data-accent live there).
+   ============================================================ */
+[data-accent="mono"] {
+  --star: var(--primary);
+  --star-ink: var(--primary);
+}
+[data-accent="mono"] .status-dot {
+  background: var(--primary);
+  box-shadow: 0 0 10px rgba(var(--primary-rgb) / 0.7);
+}
+[data-accent="mono"] .status-dot::after {
+  border-color: var(--primary);
+}
