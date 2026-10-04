@@ -969,19 +969,3 @@
   opacity: 0.9;
 }
 
-/* ============================================================
-   JOURNEY RUNWAY MULTIPLIER (v87)
-   Scroll pixels per pixel of horizontal reel travel. Desktop keeps
-   v86's 1.9; phones (<768px) travel an inherently shorter reel, so
-   their multiplier rises to 3.1 — every stop then gets the same
-   ~900px of scroll on a phone as on a desktop. Consumed by the
-   inline calc() height on #journey in journey-section.tsx.
-   ============================================================ */
-#journey {
-  --reel-mult: 1.9;
-}
-@media (max-width: 767.98px) {
-  #journey {
-    --reel-mult: 3.1;
-  }
-}
