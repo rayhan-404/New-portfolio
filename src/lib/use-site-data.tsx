@@ -3,10 +3,16 @@
 import { useCallback, useEffect, useState } from "react";
 import { journey, type Era } from "@/lib/portfolio-data";
 import {
+  DEFAULT_CONTACT,
   DEFAULT_HERO,
+  DEFAULT_PROJECTS,
+  DEFAULT_SKILLS,
   type BioParagraph,
+  type ContactContent,
+  type CustomProject,
   type DesignSettings,
   type HeroContent,
+  type SkillsContent,
 } from "@/lib/site-defaults";
 
 /* ═══════════════════════════════════════════════════════════════
@@ -90,11 +96,17 @@ export function useJourneyStops(): { stops: Stop[]; ready: boolean } {
 export interface SiteContent {
   design: DesignSettings;
   hero: HeroContent;
+  projects: CustomProject[];
+  contact: ContactContent;
+  skills: SkillsContent;
 }
 
 const FALLBACK: SiteContent = {
   design: { accent: "mono", theme: "dark" },
   hero: DEFAULT_HERO,
+  projects: DEFAULT_PROJECTS,
+  contact: DEFAULT_CONTACT,
+  skills: DEFAULT_SKILLS,
 };
 
 export function useSiteContent(): SiteContent {
@@ -105,19 +117,48 @@ export function useSiteContent(): SiteContent {
       const res = await fetch("/api/site-settings", { cache: "no-store" });
       if (!res.ok) return;
       const data = (await res.json()) as Partial<SiteContent>;
-      if (data.design || data.hero) {
-        setContent({
-          design: { ...FALLBACK.design, ...(data.design ?? {}) },
+      if (
+        data.design ||
+        data.hero ||
+        data.projects ||
+        data.contact ||
+        data.skills
+      ) {
+        setContent((prev) => ({
+          design: { ...prev.design, ...(data.design ?? {}) },
           hero: {
-            ...FALLBACK.hero,
+            ...prev.hero,
             ...(data.hero ?? {}),
             paragraphs:
               Array.isArray(data.hero?.paragraphs) &&
               data.hero!.paragraphs.length > 0
                 ? data.hero!.paragraphs
-                : FALLBACK.hero.paragraphs,
+                : prev.hero.paragraphs,
           },
-        });
+          projects: Array.isArray(data.projects) ? data.projects : prev.projects,
+          contact: data.contact
+            ? {
+                ...prev.contact,
+                ...data.contact,
+                socials:
+                  Array.isArray(data.contact.socials) &&
+                  data.contact.socials.length > 0
+                    ? data.contact.socials
+                    : prev.contact.socials,
+              }
+            : prev.contact,
+          skills: data.skills
+            ? {
+                meters:
+                  Array.isArray(data.skills.meters) && data.skills.meters.length > 0
+                    ? data.skills.meters
+                    : prev.skills.meters,
+                chips: Array.isArray(data.skills.chips)
+                  ? data.skills.chips
+                  : prev.skills.chips,
+              }
+            : prev.skills,
+        }));
       }
     } catch {
       /* keep current */

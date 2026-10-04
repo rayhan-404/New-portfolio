@@ -3,13 +3,19 @@ import { db } from "@/lib/db";
 import { journey } from "@/lib/portfolio-data";
 import {
   DEFAULT_ACCENT,
+  DEFAULT_CONTACT,
   DEFAULT_HERO,
   DEFAULT_PASSCODE,
+  DEFAULT_PROJECTS,
+  DEFAULT_SKILLS,
   DEFAULT_THEME,
   type BioParagraph,
+  type ContactContent,
+  type CustomProject,
   type DesignSettings,
   type GithubSettings,
   type HeroContent,
+  type SkillsContent,
 } from "@/lib/site-defaults";
 
 export * from "@/lib/site-defaults";
@@ -85,6 +91,49 @@ export async function setGithub(next: GithubSettings): Promise<void> {
     username: next.username.trim() || "rayhan-404",
     token: next.token.trim(),
   });
+}
+
+/* ── Projects / Contact / Skills (v91) ───────────────────────── */
+
+export async function getCustomProjects(): Promise<CustomProject[]> {
+  const saved = await readSetting<CustomProject[]>("projects");
+  return Array.isArray(saved) ? saved : DEFAULT_PROJECTS;
+}
+
+export async function setCustomProjects(list: CustomProject[]): Promise<void> {
+  await writeSetting("projects", list);
+}
+
+export async function getContact(): Promise<ContactContent> {
+  const saved = await readSetting<Partial<ContactContent>>("contact");
+  return {
+    email: saved?.email?.trim() || DEFAULT_CONTACT.email,
+    phone: saved?.phone ?? DEFAULT_CONTACT.phone,
+    location: saved?.location ?? DEFAULT_CONTACT.location,
+    socials:
+      Array.isArray(saved?.socials) && saved!.socials.length > 0
+        ? saved!.socials
+        : DEFAULT_CONTACT.socials,
+  };
+}
+
+export async function setContact(next: ContactContent): Promise<void> {
+  await writeSetting("contact", next);
+}
+
+export async function getSkills(): Promise<SkillsContent> {
+  const saved = await readSetting<Partial<SkillsContent>>("skills");
+  return {
+    meters:
+      Array.isArray(saved?.meters) && saved!.meters.length > 0
+        ? saved!.meters
+        : DEFAULT_SKILLS.meters,
+    chips: Array.isArray(saved?.chips) ? saved!.chips : DEFAULT_SKILLS.chips,
+  };
+}
+
+export async function setSkills(next: SkillsContent): Promise<void> {
+  await writeSetting("skills", next);
 }
 
 /* ── Admin passcode (stored as a sha-256 hash) ────────────────── */

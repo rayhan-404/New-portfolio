@@ -15,11 +15,13 @@ import {
   Lock,
   Map,
   Palette,
+  Phone,
   Plus,
   Save,
   Settings2,
   Trash2,
   UserRound,
+  Wrench,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,11 +31,13 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { playSound } from "@/lib/sound";
 import { ACCENT_POOL, applyAccent } from "@/lib/accent-pool";
-import { projects } from "@/lib/portfolio-data";
 import {
   DEFAULT_PASSCODE,
   type BioParagraph,
+  type ContactContent,
+  type CustomProject,
   type HeroContent,
+  type SkillsContent,
 } from "@/lib/site-defaults";
 import {
   emitSiteDataChanged,
@@ -53,13 +57,23 @@ import {
 const OPEN_EVENT = "mr-open-admin";
 const KEY_STORE = "mr-admin-key";
 
-type TabId = "design" | "hero" | "journey" | "projects" | "github" | "messages";
+type TabId =
+  | "design"
+  | "hero"
+  | "journey"
+  | "projects"
+  | "skills"
+  | "contact"
+  | "github"
+  | "messages";
 
 const TABS: { id: TabId; label: string; icon: typeof Palette }[] = [
   { id: "design", label: "Design", icon: Palette },
   { id: "hero", label: "Hero", icon: UserRound },
   { id: "journey", label: "Journey", icon: Map },
   { id: "projects", label: "Projects", icon: FolderKanban },
+  { id: "skills", label: "Skills", icon: Wrench },
+  { id: "contact", label: "Contact", icon: Phone },
   { id: "github", label: "GitHub", icon: Github },
   { id: "messages", label: "Messages", icon: Inbox },
 ];
@@ -391,6 +405,8 @@ function Shell({
           {tab === "hero" && <HeroTab adminKey={adminKey} onSaved={flash} />}
           {tab === "journey" && <JourneyTab adminKey={adminKey} onSaved={flash} />}
           {tab === "projects" && <ProjectsTab adminKey={adminKey} onSaved={flash} />}
+          {tab === "skills" && <SkillsTab adminKey={adminKey} onSaved={flash} />}
+          {tab === "contact" && <ContactTab adminKey={adminKey} onSaved={flash} />}
           {tab === "github" && <GithubTab adminKey={adminKey} onSaved={flash} />}
           {tab === "messages" && <MessagesTab adminKey={adminKey} />}
         </div>
@@ -840,9 +856,10 @@ function JourneyTab({ adminKey, onSaved }: { adminKey: string; onSaved: () => vo
 /* ═══════════════ Projects tab ═══════════════ */
 
 function ProjectsTab({ adminKey, onSaved }: { adminKey: string; onSaved: () => void }) {
+  const [custom, setCustom] = useState<CustomProject[] | null>(null);
   const [flags, setFlags] = useState<Flags>({});
   const [repos, setRepos] = useState<
-    { name: string; description: string | null; stars: number; error?: string }[]
+    { name: string; description: string | null; stars: number }[]
   >([]);
   const [repoError, setRepoError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -866,6 +883,13 @@ function ProjectsTab({ adminKey, onSaved }: { adminKey: string; onSaved: () => v
   useEffect(() => {
     (async () => {
       try {
+        const res = await fetch("/api/site-settings", { cache: "no-store" });
+        const data = (await res.json()) as { projects?: CustomProject[] };
+        setCustom(Array.isArray(data.projects) ? data.projects : []);
+      } catch {
+        setCustom([]);
+      }
+      try {
         const res = await fetch("/api/project-flags", { cache: "no-store" });
         const data = (await res.json()) as { flags?: Flags };
         if (data.flags) setFlags(data.flags);
@@ -876,6 +900,25 @@ function ProjectsTab({ adminKey, onSaved }: { adminKey: string; onSaved: () => v
     void loadRepos();
   }, [loadRepos]);
 
+  if (!custom) return <LoadingBlock />;
+
+  const setP = (i: number, patch: Partial<CustomProject>) =>
+    setCustom(custom.map((p, j) => (j === i ? { ...p, ...patch } : p)));
+  const moveP = (i: number, dir: -1 | 1) => {
+    const next = [...custom];
+    const j = i + dir;
+    if (j < 0 || j >= next.length) return;
+    [next[i], next[j]] = [next[j], next[i]];
+    setCustom(next);
+  };
+  const addP = () => {
+    const id = `cp_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+    setCustom([
+      ...custom,
+      { id, title: "New project", description: "", tech: [] },
+    ]);
+  };
+
   const toggle = (id: string, field: "hidden" | "featured") => {
     const cur = flags[id] ?? { hidden: false, featured: false };
     setFlags({ ...flags, [id]: { ...cur, [field]: !cur[field] } });
@@ -885,16 +928,21 @@ function ProjectsTab({ adminKey, onSaved }: { adminKey: string; onSaved: () => v
     setBusy(true);
     setError("");
     try {
-      const res = await adminFetch("/api/project-flags", adminKey, {
+      const res = await adminFetch("/api/site-settings", adminKey, {
+        method: "PUT",
+        body: JSON.stringify({ projects: custom }),
+      });
+      if (!res.ok) throw new Error();
+      const resFlags = await adminFetch("/api/project-flags", adminKey, {
         method: "PUT",
         body: JSON.stringify({ flags }),
       });
-      if (!res.ok) throw new Error();
+      if (!resFlags.ok) throw new Error();
       playSound("chime");
       onSaved();
       emitSiteDataChanged();
     } catch {
-      setError("Could not save the project flags.");
+      setError("Could not save the projects — check every project has a title.");
       playSound("pop");
     } finally {
       setBusy(false);
@@ -903,22 +951,111 @@ function ProjectsTab({ adminKey, onSaved }: { adminKey: string; onSaved: () => v
 
   return (
     <div className="flex max-w-2xl flex-col gap-7">
-      <Section title="Case studies" hint="The handcrafted project cards. Hidden ones disappear from the grid.">
-        <div className="flex flex-col gap-2">
-          {projects.map((p) => {
-            const f = flags[`curated:${p.id}`] ?? { hidden: false, featured: false };
-            return (
-              <FlagRow
-                key={p.id}
-                title={p.title}
-                subtitle={p.subtitle}
-                hidden={f.hidden}
-                featured={f.featured}
-                onToggle={(field) => toggle(`curated:${p.id}`, field)}
-                hideable
-              />
-            );
-          })}
+      <Section
+        title={`Hand-added projects (${custom.length})`}
+        hint="Cards you write yourself — they sit above the live GitHub repos. A link opens the project site; a repo name wires the card into the file browser."
+      >
+        <div className="flex flex-col gap-4">
+          {custom.map((p, i) => (
+            <div key={p.id} className="rounded-2xl border border-border bg-[var(--bg2)] p-4">
+              <div className="mb-3 flex items-center gap-2">
+                <span className="font-tag flex h-7 w-7 items-center justify-center rounded-full bg-[rgba(var(--primary-rgb)/0.12)] text-[9px] text-foreground">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <label className="font-tag flex cursor-pointer items-center gap-2 text-[9px] tracking-[0.15em] text-muted-foreground">
+                  ★ FEATURED
+                  <Switch
+                    checked={Boolean(p.featured)}
+                    onCheckedChange={(v) => setP(i, { featured: v })}
+                  />
+                </label>
+                <div className="ml-auto flex items-center gap-1">
+                  <MiniBtn label="Move up" onClick={() => moveP(i, -1)} disabled={i === 0}>
+                    <ArrowUp className="h-3.5 w-3.5" />
+                  </MiniBtn>
+                  <MiniBtn
+                    label="Move down"
+                    onClick={() => moveP(i, 1)}
+                    disabled={i === custom.length - 1}
+                  >
+                    <ArrowDown className="h-3.5 w-3.5" />
+                  </MiniBtn>
+                  <MiniBtn
+                    label="Delete project"
+                    danger
+                    onClick={() => setCustom(custom.filter((_, j) => j !== i))}
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </MiniBtn>
+                </div>
+              </div>
+              <div className="grid gap-2.5 sm:grid-cols-2">
+                <Field label="Title">
+                  <Input value={p.title} onChange={(e) => setP(i, { title: e.target.value })} className={FIELD} />
+                </Field>
+                <Field label="Tag chip (optional)">
+                  <Input
+                    value={p.tag ?? ""}
+                    onChange={(e) => setP(i, { tag: e.target.value || undefined })}
+                    placeholder="Production SaaS"
+                    className={FIELD}
+                  />
+                </Field>
+                <Field label="Link URL (optional)">
+                  <Input
+                    value={p.link ?? ""}
+                    onChange={(e) => setP(i, { link: e.target.value || undefined })}
+                    placeholder="https://…"
+                    className={FIELD}
+                  />
+                </Field>
+                <Field label="Repo name (optional)">
+                  <Input
+                    value={p.repo ?? ""}
+                    onChange={(e) => setP(i, { repo: e.target.value || undefined })}
+                    placeholder="exact GitHub repo name"
+                    className={FIELD}
+                  />
+                </Field>
+                <div className="sm:col-span-2">
+                  <Field label="Tech (comma separated)">
+                    <Input
+                      value={p.tech.join(", ")}
+                      onChange={(e) =>
+                        setP(i, {
+                          tech: e.target.value
+                            .split(",")
+                            .map((t) => t.trim())
+                            .filter(Boolean)
+                            .slice(0, 10),
+                        })
+                      }
+                      placeholder="Next.js, TypeScript, Tailwind CSS"
+                      className={FIELD}
+                    />
+                  </Field>
+                </div>
+                <div className="sm:col-span-2">
+                  <Field label="Description">
+                    <Textarea
+                      value={p.description}
+                      onChange={(e) => setP(i, { description: e.target.value })}
+                      rows={2}
+                      placeholder="What is it, what does it do…"
+                      className="resize-y border-border bg-[var(--bg)] text-[13px]"
+                    />
+                  </Field>
+                </div>
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addP}
+            className="font-tag flex min-h-11 items-center justify-center gap-2 rounded-xl border border-dashed border-border py-2.5 text-[10px] tracking-[0.2em] text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+          >
+            <Plus className="h-3.5 w-3.5" /> ADD PROJECT
+          </button>
         </div>
       </Section>
 
@@ -946,9 +1083,323 @@ function ProjectsTab({ adminKey, onSaved }: { adminKey: string; onSaved: () => v
               />
             );
           })}
-          {repos.length === 0 && !repoError && (
-            <LoadingBlock small />
-          )}
+          {repos.length === 0 && !repoError && <LoadingBlock small />}
+        </div>
+      </Section>
+
+      <SaveBar busy={busy} error={error} onSave={save} />
+    </div>
+  );
+}
+
+/* ═══════════════ Skills tab ═══════════════ */
+
+function SkillsTab({ adminKey, onSaved }: { adminKey: string; onSaved: () => void }) {
+  const [draft, setDraft] = useState<SkillsContent | null>(null);
+  const [chipDraft, setChipDraft] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("/api/site-settings", { cache: "no-store" });
+        const data = (await res.json()) as { skills?: SkillsContent };
+        if (data.skills) setDraft(data.skills);
+      } catch {
+        /* keep null */
+      }
+    })();
+  }, []);
+
+  if (!draft) return <LoadingBlock />;
+
+  const setMeter = (i: number, patch: Partial<{ name: string; level: number }>) =>
+    setDraft({ ...draft, meters: draft.meters.map((m, j) => (j === i ? { ...m, ...patch } : m)) });
+  const moveMeter = (i: number, dir: -1 | 1) => {
+    const next = [...draft.meters];
+    const j = i + dir;
+    if (j < 0 || j >= next.length) return;
+    [next[i], next[j]] = [next[j], next[i]];
+    setDraft({ ...draft, meters: next });
+  };
+  const addMeter = () =>
+    setDraft({ ...draft, meters: [...draft.meters, { name: "New skill", level: 50 }] });
+
+  const addChip = () => {
+    const c = chipDraft.trim();
+    if (!c || draft.chips.includes(c)) return;
+    setDraft({ ...draft, chips: [...draft.chips, c] });
+    setChipDraft("");
+  };
+
+  const save = async () => {
+    setBusy(true);
+    setError("");
+    try {
+      const res = await adminFetch("/api/site-settings", adminKey, {
+        method: "PUT",
+        body: JSON.stringify({ skills: draft }),
+      });
+      if (!res.ok) throw new Error();
+      playSound("chime");
+      onSaved();
+      emitSiteDataChanged();
+    } catch {
+      setError("Could not save the skills.");
+      playSound("pop");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="flex max-w-2xl flex-col gap-7">
+      <Section
+        title={`Proficiency meters (${draft.meters.length})`}
+        hint="The ledger rows in the Skills section. The first three also render as ring gauges. Level: 1–100."
+      >
+        <div className="flex flex-col gap-4">
+          {draft.meters.map((m, i) => (
+            <div
+              key={i}
+              className="grid items-end gap-2.5 rounded-2xl border border-border bg-[var(--bg2)] p-4 sm:grid-cols-[1fr_110px_auto]"
+            >
+              <Field label="Skill">
+                <Input value={m.name} onChange={(e) => setMeter(i, { name: e.target.value })} className={FIELD} />
+              </Field>
+              <Field label="Level %">
+                <Input
+                  type="number"
+                  min={1}
+                  max={100}
+                  value={m.level}
+                  onChange={(e) => setMeter(i, { level: Number(e.target.value) })}
+                  className={FIELD}
+                />
+              </Field>
+              <div className="flex items-center gap-1 pb-0.5">
+                <MiniBtn label="Move up" onClick={() => moveMeter(i, -1)} disabled={i === 0}>
+                  <ArrowUp className="h-3.5 w-3.5" />
+                </MiniBtn>
+                <MiniBtn
+                  label="Move down"
+                  onClick={() => moveMeter(i, 1)}
+                  disabled={i === draft.meters.length - 1}
+                >
+                  <ArrowDown className="h-3.5 w-3.5" />
+                </MiniBtn>
+                <MiniBtn
+                  label="Delete skill"
+                  danger
+                  disabled={draft.meters.length <= 1}
+                  onClick={() =>
+                    setDraft({ ...draft, meters: draft.meters.filter((_, j) => j !== i) })
+                  }
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </MiniBtn>
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addMeter}
+            className="font-tag flex min-h-11 items-center justify-center gap-2 rounded-xl border border-dashed border-border py-2.5 text-[10px] tracking-[0.2em] text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+          >
+            <Plus className="h-3.5 w-3.5" /> ADD SKILL
+          </button>
+        </div>
+      </Section>
+
+      <Section title={`Toolbox chips (${draft.chips.length})`} hint="The tool cloud under the meters.">
+        <div className="flex flex-wrap gap-2">
+          {draft.chips.map((c, i) => (
+            <span
+              key={`${c}-${i}`}
+              className="flex items-center gap-1.5 rounded-full border border-border bg-[var(--bg2)] py-1.5 pl-3 pr-1.5 text-[12px] text-foreground"
+            >
+              {c}
+              <button
+                type="button"
+                onClick={() =>
+                  setDraft({ ...draft, chips: draft.chips.filter((_, j) => j !== i) })
+                }
+                aria-label={`Remove ${c}`}
+                className="flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-(--err)/10 hover:text-(--err)"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </span>
+          ))}
+        </div>
+        <div className="mt-3 flex gap-2">
+          <Input
+            value={chipDraft}
+            onChange={(e) => setChipDraft(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                addChip();
+              }
+            }}
+            placeholder="Add a tool…"
+            className="h-11 rounded-xl border-border bg-[var(--bg2)]"
+          />
+          <Button
+            type="button"
+            variant="outline"
+            onClick={addChip}
+            className="h-11 gap-2 rounded-xl"
+          >
+            <Plus className="h-4 w-4" /> Add
+          </Button>
+        </div>
+      </Section>
+
+      <SaveBar busy={busy} error={error} onSave={save} />
+    </div>
+  );
+}
+
+/* ═══════════════ Contact tab ═══════════════ */
+
+function ContactTab({ adminKey, onSaved }: { adminKey: string; onSaved: () => void }) {
+  const [draft, setDraft] = useState<ContactContent | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("/api/site-settings", { cache: "no-store" });
+        const data = (await res.json()) as { contact?: ContactContent };
+        if (data.contact) setDraft(data.contact);
+      } catch {
+        /* keep null */
+      }
+    })();
+  }, []);
+
+  if (!draft) return <LoadingBlock />;
+
+  const setSocial = (i: number, patch: Partial<{ label: string; href: string }>) =>
+    setDraft({
+      ...draft,
+      socials: draft.socials.map((s, j) => (j === i ? { ...s, ...patch } : s)),
+    });
+  const moveSocial = (i: number, dir: -1 | 1) => {
+    const next = [...draft.socials];
+    const j = i + dir;
+    if (j < 0 || j >= next.length) return;
+    [next[i], next[j]] = [next[j], next[i]];
+    setDraft({ ...draft, socials: next });
+  };
+
+  const save = async () => {
+    setBusy(true);
+    setError("");
+    try {
+      const res = await adminFetch("/api/site-settings", adminKey, {
+        method: "PUT",
+        body: JSON.stringify({ contact: draft }),
+      });
+      if (!res.ok) throw new Error();
+      playSound("chime");
+      onSaved();
+      emitSiteDataChanged();
+    } catch {
+      setError("Could not save the contact info.");
+      playSound("pop");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="flex max-w-2xl flex-col gap-7">
+      <Section title="Direct channels" hint="The email and phone cards in the Reach me section.">
+        <div className="grid gap-3">
+          <Field label="Email">
+            <Input
+              type="email"
+              value={draft.email}
+              onChange={(e) => setDraft({ ...draft, email: e.target.value })}
+              className={FIELD}
+            />
+          </Field>
+          <Field label="Phone (shown exactly as typed)">
+            <Input
+              value={draft.phone}
+              onChange={(e) => setDraft({ ...draft, phone: e.target.value })}
+              placeholder="+880 1XXX-XXXXXX"
+              className={FIELD}
+            />
+          </Field>
+          <Field label="Location line">
+            <Input
+              value={draft.location}
+              onChange={(e) => setDraft({ ...draft, location: e.target.value })}
+              className={FIELD}
+            />
+          </Field>
+        </div>
+      </Section>
+
+      <Section
+        title={`Social links (${draft.socials.length})`}
+        hint="The brand tiles under the email/phone cards. Label picks the icon: GitHub, LinkedIn, X/Twitter, Dribbble, Facebook, Instagram, YouTube…"
+      >
+        <div className="flex flex-col gap-2.5">
+          {draft.socials.map((s, i) => (
+            <div key={i} className="grid items-end gap-2 rounded-2xl border border-border bg-[var(--bg2)] p-3 sm:grid-cols-[150px_1fr_auto]">
+              <Field label="Label">
+                <Input
+                  value={s.label}
+                  onChange={(e) => setSocial(i, { label: e.target.value })}
+                  className={FIELD}
+                />
+              </Field>
+              <Field label="URL">
+                <Input
+                  value={s.href}
+                  onChange={(e) => setSocial(i, { href: e.target.value })}
+                  className={FIELD}
+                />
+              </Field>
+              <div className="flex items-center gap-1 pb-0.5">
+                <MiniBtn label="Move up" onClick={() => moveSocial(i, -1)} disabled={i === 0}>
+                  <ArrowUp className="h-3.5 w-3.5" />
+                </MiniBtn>
+                <MiniBtn
+                  label="Move down"
+                  onClick={() => moveSocial(i, 1)}
+                  disabled={i === draft.socials.length - 1}
+                >
+                  <ArrowDown className="h-3.5 w-3.5" />
+                </MiniBtn>
+                <MiniBtn
+                  label="Delete social"
+                  danger
+                  disabled={draft.socials.length <= 1}
+                  onClick={() =>
+                    setDraft({ ...draft, socials: draft.socials.filter((_, j) => j !== i) })
+                  }
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                </MiniBtn>
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() =>
+              setDraft({ ...draft, socials: [...draft.socials, { label: "New link", href: "https://" }] })
+            }
+            className="font-tag flex min-h-11 items-center justify-center gap-2 rounded-xl border border-dashed border-border py-2.5 text-[10px] tracking-[0.2em] text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+          >
+            <Plus className="h-3.5 w-3.5" /> ADD SOCIAL LINK
+          </button>
         </div>
       </Section>
 
@@ -964,7 +1415,6 @@ function FlagRow({
   hidden,
   featured,
   onToggle,
-  hideable = true,
 }: {
   title: string;
   subtitle?: string;
@@ -972,7 +1422,6 @@ function FlagRow({
   hidden: boolean;
   featured: boolean;
   onToggle: (field: "hidden" | "featured") => void;
-  hideable?: boolean;
 }) {
   return (
     <div
@@ -991,12 +1440,10 @@ function FlagRow({
           ★ {stars}
         </span>
       )}
-      {hideable && (
-        <label className="font-tag flex shrink-0 cursor-pointer items-center gap-1.5 text-[9px] tracking-[0.15em] text-muted-foreground">
-          <Eye className="h-3 w-3" aria-hidden="true" />
-          <Switch checked={!hidden} onCheckedChange={() => onToggle("hidden")} />
-        </label>
-      )}
+      <label className="font-tag flex shrink-0 cursor-pointer items-center gap-1.5 text-[9px] tracking-[0.15em] text-muted-foreground">
+        <Eye className="h-3 w-3" aria-hidden="true" />
+        <Switch checked={!hidden} onCheckedChange={() => onToggle("hidden")} />
+      </label>
       <label className="font-tag flex shrink-0 cursor-pointer items-center gap-1.5 text-[9px] tracking-[0.15em] text-muted-foreground">
         ★
         <Switch checked={featured} onCheckedChange={() => onToggle("featured")} />
