@@ -361,7 +361,7 @@ function IntroBio({ className = "" }: { className?: string }) {
           how everything works, from my cell, brain, everything surrounding me,
           to the universe, and what&apos;s going on behind the screen
         </strong>{" "}
-        🤔 If I find something interesting, there&apos;s a pretty good chance
+        <span className="emoji-mono">🤔</span> If I find something interesting, there&apos;s a pretty good chance
         I&apos;ll spend hours trying to figure it out and understand how it
         works.
       </p>
@@ -375,14 +375,14 @@ function IntroBio({ className = "" }: { className?: string }) {
       <p className="font-book text-left text-[15px] leading-[1.72] text-foreground/80 sm:text-[16px]">
         Sometimes I build something useful. Sometimes I build something
         completely unnecessary. And sometimes I break something and then spend
-        the next few hours figuring out how it actually works. 🧐
+        the next few hours figuring out how it actually works. <span className="emoji-mono">🧐</span>
       </p>
       <p className="font-book text-left text-[15px] leading-[1.72] text-foreground/80 sm:text-[16px]">
         If you ask,{" "}
         <strong className="font-semibold text-foreground">
           what is this guy interested in?
         </strong>{" "}
-        🤨 Then I&apos;m interested in{" "}
+        <span className="emoji-mono">🤨</span> Then I&apos;m interested in{" "}
         <strong className="font-semibold text-foreground">
           Artificial Intelligence, Robotics, Electronics, new gadgets and
           technologies

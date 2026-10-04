@@ -154,6 +154,10 @@
   --fb-1: #1877f2;
   --fb-2: #4267b2;
 
+  /* Footer social dots not in the reference palette (read on both) */
+  --linkedin: #0a66c2;
+  --dribbble: #ea4c89;
+
   /* Social brand dots — GitHub/X flip per theme for contrast
      (LinkedIn #0a66c2 / Dribbble #ea4c89 read on both) */
   --gh: #24292e;
@@ -918,8 +922,37 @@
    cascade on <html> (both .dark and data-accent live there).
    ============================================================ */
 [data-accent="mono"] {
+  /* GitHub star + project tag chips */
   --star: var(--primary);
   --star-ink: var(--primary);
+  /* Education tints (journey cards) */
+  --edu: var(--text2);
+  --edu-2: var(--text3);
+  /* Contact brand gradients + footer social dots */
+  --gmail-1: var(--text2);
+  --gmail-2: var(--text3);
+  --wa-1: var(--text2);
+  --wa-2: var(--text3);
+  --fb-1: var(--text2);
+  --fb-2: var(--text3);
+  --linkedin: var(--text2);
+  --dribbble: var(--text3);
+  /* warm-brown code well → neutral charcoal */
+  --code-bg: var(--bg3);
+  /* Apple system accents inside the live demo widgets */
+  --apple-green: var(--text2);
+  --apple-mint: var(--text3);
+  --apple-orange: var(--text2);
+  --apple-rose: var(--text3);
+  /* Semantic status → tonal grays: a mono display encoded state in
+     shade, not hue — max-contrast ink for errors, mid grays for the
+     softer signals. Theme-correct automatically (ink ↔ silver). */
+  --success: var(--primary);
+  --success-text: var(--text2);
+  --warn: var(--text2);
+  --info: var(--text2);
+  --err: var(--text);
+  --destructive: var(--text);
 }
 [data-accent="mono"] .status-dot {
   background: var(--primary);
@@ -927,4 +960,11 @@
 }
 [data-accent="mono"] .status-dot::after {
   border-color: var(--primary);
+}
+/* Emojis in copy — font glyphs CSS can't recolor, so the hero wraps
+   them; under mono they drop to graphite like everything else */
+[data-accent="mono"] .emoji-mono {
+  display: inline-block;
+  filter: grayscale(1);
+  opacity: 0.9;
 }

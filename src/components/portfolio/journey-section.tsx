@@ -268,6 +268,15 @@ export function JourneySection() {
 
   const travel = Math.max(0, xRange[0] - xRange[1]);
 
+  /* Runway length = 100svh of pinned stage + REEL_SCROLL × travel of
+     scroll runway. 0.85 (v78) made the journey dramatically shorter
+     than the old vertical timeline; 1.35 gives every stop back its
+     leisurely scroll — the section spans ~4.7k px desktop / ~3.6k
+     mobile again, like the pre-cinema journey, while keeping the
+     single-screen reel. Dot-click/nav landing measure the runway
+     live, so nothing else needs to know. */
+  const REEL_SCROLL = 1.35;
+
   return (
     <section
       ref={runwayRef}
@@ -275,7 +284,7 @@ export function JourneySection() {
       aria-label="My journey"
       className="relative"
       style={
-        pinned ? { height: `calc(100svh + ${Math.round(travel * 0.85)}px)` } : undefined
+        pinned ? { height: `calc(100svh + ${Math.round(travel * REEL_SCROLL)}px)` } : undefined
       }
     >
       {/* ── The pinned stage — one screen of cinema ─────────────── */}
@@ -432,7 +441,7 @@ export function JourneySection() {
             const chapter = String(idx + 1).padStart(2, "0");
             const isActive = !pinned || active === idx;
             const medallionTint = isEdu
-              ? "text-[#4267B2] shadow-[0_0_0_5px_rgba(66,103,178,0.13),0_0_24px_rgba(66,103,178,0.4),var(--shadow-neu-sm)]"
+              ? "text-(--edu) shadow-[0_0_0_5px_color-mix(in_srgb,var(--edu)_13%,transparent),0_0_24px_color-mix(in_srgb,var(--edu)_40%,transparent),var(--shadow-neu-sm)]"
               : "text-primary shadow-[0_0_0_5px_rgba(var(--primary-rgb)/0.13),0_0_24px_rgba(var(--accent-rgb)/0.4),var(--shadow-neu-sm)]";
             return (
               <ReelStop
@@ -531,11 +540,11 @@ export function JourneySection() {
                       <>
                         <span
                           aria-hidden="true"
-                          className="pointer-events-none absolute -right-7 -top-7 h-[110px] w-[110px] rounded-full bg-[linear-gradient(135deg,#4267B2,#898F9C)] opacity-[0.08] blur-[2px]"
+                          className="pointer-events-none absolute -right-7 -top-7 h-[110px] w-[110px] rounded-full bg-[linear-gradient(135deg,var(--edu),var(--edu-2))] opacity-[0.08] blur-[2px]"
                         />
                         <span
                           aria-hidden="true"
-                          className="pointer-events-none absolute -bottom-5 -left-5 h-[72px] w-[72px] rounded-full bg-[linear-gradient(135deg,#4267B2,#898F9C)] opacity-[0.06] blur-[2px]"
+                          className="pointer-events-none absolute -bottom-5 -left-5 h-[72px] w-[72px] rounded-full bg-[linear-gradient(135deg,var(--edu),var(--edu-2))] opacity-[0.06] blur-[2px]"
                         />
                       </>
                     )}
@@ -570,7 +579,7 @@ export function JourneySection() {
 
                     <p
                       className={`mt-2 text-[15px] font-semibold ${
-                        isEdu ? "text-[#4267B2]" : "text-foreground/85"
+                        isEdu ? "text-(--edu)" : "text-foreground/85"
                       }`}
                     >
                       {era.place}
@@ -586,7 +595,7 @@ export function JourneySection() {
                       <div
                         className={`mt-3.5 border-l-2 px-3.5 py-2.5 font-mono text-[11px] leading-[1.5] text-foreground/90 ${
                           isEdu
-                            ? "border-[#4267B2]/60 bg-[#4267B2]/[0.06]"
+                            ? "border-(--edu)/60 bg-(--edu)/[0.06]"
                             : "border-primary/60 bg-primary/[0.06]"
                         }`}
                       >

@@ -6,12 +6,13 @@ import { playSound } from "@/lib/sound";
 import { scrollToSection } from "./nav";
 
 /* Brand-colored dots before each social link — the reference's
-   brand-identity pattern (GitHub/X hues flip per theme for contrast). */
+   brand-identity pattern (GitHub/X hues flip per theme for contrast;
+   LinkedIn/Dribbble are CSS vars so the mono theme can graphite them). */
 const SOCIAL_DOT: Record<string, string> = {
   GitHub: "var(--gh)",
-  LinkedIn: "#0A66C2",
+  LinkedIn: "var(--linkedin)",
   "X / Twitter": "var(--x)",
-  Dribbble: "#EA4C89",
+  Dribbble: "var(--dribbble)",
 };
 
 export function Footer() {

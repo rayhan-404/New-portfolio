@@ -118,7 +118,7 @@ export function ContactSection() {
                   <span className="font-tag block text-[9.5px] text-muted-foreground">Email</span>
                   <span className="block truncate text-sm font-semibold">{person.email}</span>
                 </span>
-                <Copy className="relative z-[1] h-4 w-4 shrink-0 text-muted-foreground transition-colors duration-300 group-hover:text-[#EA4335]" />
+                <Copy className="relative z-[1] h-4 w-4 shrink-0 text-muted-foreground transition-colors duration-300 group-hover:text-(--gmail-1)" />
               </button>
             </Reveal>
 

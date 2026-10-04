@@ -1251,3 +1251,20 @@ Stage Summary:
 - The storm lost its voice on purpose: lightning still rakes the hero and the whole site, but silently — sound now means UI chimes only.
 - The pool gained its monochrome eleventh: Black & White runs every surface, bolt, glow and the hero photos themselves in grayscale, with the availability dots and star chips converted to ink/silver so nothing chroma survives the theme.
 - Tagged v84; touched hero-section.tsx, global-thunder.tsx, accent-pool.ts, hero-variants.ts, globals.css; added scripts/make-mono.mjs + 2 mono webps; deleted lib/thunder-sound.ts + public/sounds/.
+
+---
+Task ID: 85 (Black & White as the default face — colors kept one click away; journey length restored)
+Agent: Main agent
+Task: User: "colour gulo remove koris na, ager moto suit + colour gulo o thakbe / b & w ta default thakbe, and bw ta aro polish koro" + "journey section ager moto lomba koro" — keep the full 10-hue pool and suits, make mono the boot default, polish the mono theme's remaining chroma, and give the journey section back its pre-v78 length.
+
+Work Log:
+- Boot default: ACCENT_BOOT_SCRIPT no longer rolls the dice — every refresh draws the mono entry (id-filtered, not index). The pool and the cycle button keep all 11 hues with their suit variants; colors are now a deliberate click away, never a surprise on load.
+- Mono polish — the last chroma out, scoped to [data-accent="mono"] only: the hardcoded hex classes became var-driven so the existing override reaches them — journey's edu blue (#4267B2 ×5: text, active ring shadow via color-mix, chip border/bg, corner blob gradients → text-(--edu)/color-mix/var gradients), contact's gmail-red copy hover (→ --gmail-1). Footer's inline LinkedIn #0A66C2 / Dribbble #EA4C89 moved into --linkedin/--dribbble vars. The mono block now also neutralizes: Apple system accents in the live demo widgets (→ --text2/--text3 tonal grays), semantic status colors (success/warn/info/err/destructive → primary/text/text2 — a mono display encoded state in shade, errors keep max contrast), warm-brown --code-bg (→ --bg3), and hero emoji glyphs (wrapped in .emoji-mono spans, grayscale filter under mono only). Verified none of this touches color themes: purple draw still renders edu blue rgb(66,103,178), Apple green #30d158, green status dot, colored emojis, blue/pink footer dots.
+- Journey length: the runway multiplier went 0.85 → REEL_SCROLL 1.35 — section spans 5371px desktop (was 3337 in v78, ~4700+ pre-cinema) and 3566px mobile 390 (was 2568, ~3800 pre-cinema): every stop gets back its leisurely scroll while the single-screen reel, focus pulling, dot-click glide and nav landing all measure the runway live and needed zero changes.
+- Fixed a self-inflicted JSX syntax error from the emoji edit (stray `}` on line 385 → 500 on compile) immediately after restart; page back to 200.
+- Verified (fresh agent-browser session, after dev-server restart to dodge the stale-CSS watcher): fresh load → accent=mono with NO clicks (dark persisted separately); emoji filter grayscale(1); status dot ink/silver; journey edu sample gray rgb(90,90,90) with 0 blue elements, 17 var-driven nodes; purple click → suits + green dot + edu blue all return; footer dots gray; --apple-green resolves #5a5a5a mono vs #30d158 purple; journey 5371/3566px; mono mobile hero screenshot (grayscale cutout, paper surfaces); page errors 0; lint 0 errors; tsc clean in src; dev.log clean. v71 bolt geometry, theme bootstrap contract (slots unchanged), nav contracts untouched.
+
+Stage Summary:
+- The site now opens in Black & White every time — surfaces, bolts, photos, widgets, dots, chips and even the emojis read as one grayscale system — while the full color wardrobe (10 hues + suits) stays one palette-click away.
+- The journey got its length back: same pinned cinema, ~2× the scroll runway, old-scale page height.
+- Tagged v85; touched accent-pool.ts (boot script), globals.css (mono block + brand vars + emoji rule), journey-section.tsx (var-driven edu + runway), contact-section.tsx (hover var), footer.tsx (social dot vars), hero-section.tsx (emoji spans).
