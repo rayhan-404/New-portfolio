@@ -1312,3 +1312,20 @@ Work Log:
 Stage Summary:
 - The journey is finally what was asked: cards scroll DOWN the page like the classic timeline — 3498px desktop / 3502px mobile — while keeping every drop of the cinema's polish (counter, comet rail, shimmer, medallions).
 - Tagged v88 (commit 1e01510), pushed to backup; origin still awaiting the new classic PAT (v83-v88 will go up together).
+
+---
+Task ID: 89 (mobile perfection pass)
+Agent: Main agent
+Task: User: "make everything parfect for mobile" — full-site audit at 390x844 + 360x800, fix every mobile defect.
+
+Work Log:
+- Audit: no horizontal scroll anywhere (scrollW == clientW at 390 and 360; all 87 "overflowing" rects were clipped decorative absolutes); screenshots of hero x3, journey x2, projects x2, skills x2, contact, footer.
+- Touch targets: nav-rail accent-cycle + sound toggles 36 -> 44px on phones (h-11 sm:h-9, desktop keeps 36); journey rail dots 24 -> 44px hit buttons with dot centers preserved (mt-[18px] / sm:mt-[22px] so the year alignment is identical); footer social links min-h-11 tap rows; contact quick-select chips + skills toolbox chips min-h-10; repo-browser Retry min-h-11. Send Message was already h-12.
+- Real bug found: footer bottom padding class was corrupted — "pb-ax(2rem,env(safe-area-inset-bottom))]" (dead class, zero padding). Restored pb-[max(2rem,env(safe-area-inset-bottom))]. Nav-rail gained pb-[max(0.75rem,env(safe-area-inset-bottom))] so its bottom toggles clear the iOS home indicator.
+- Journey years clipped on phones ("2024 — Present" ran past the card column at the 38px desktop minimum). Below 600px the pour now resolves --year-size: clamp(28px, 8.2vw, 40px) (globals #journey media query; inline style uses var with the old clamp as fallback so desktop is untouched), and wrap allowed below sm as last resort.
+- Rhythm: projects/skills/contact py-24 -> py-16 on phones (sm:py-24 lg:py-32 kept); journey pt-14/pb-28 -> pt-10/pb-20 — removes the 200-370px dead air between sections.
+- Verified: 390 + 360 scrollW == clientW; year overflow 0; accent/sound/dots 44x44; mobile dot-click lands row top - 88 exactly + counter flips; footer rows breathe with safe-area; journey 3418 (390) / 3604 (360) / 3498 (1440 — byte-identical to v88); desktop rail buttons still 36px; page errors 0; lint 0; tsc clean; dev.log clean.
+
+Stage Summary:
+- Every interactive element on a phone now clears 40px (primary controls 44px), no viewport crops or overflows at 360/390, safe areas respected in footer + rail, section rhythm tightened, and the desktop experience is unchanged.
+- Tagged v89 (commit b889681), pushed to backup; origin still awaiting the new classic PAT (v83-v89 will go up together).
