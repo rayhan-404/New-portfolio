@@ -1296,3 +1296,19 @@ Work Log:
 Stage Summary:
 - The journey is now equally cinematic everywhere: ~900px of scroll per stop on desktop AND mobile — 7.2k desktop / 7.1k mobile runway — with the multiplier living in CSS so the height is right before React even hydrates.
 - Tagged v87; touched journey-section.tsx (calc height + comment) and globals.css (#journey --reel-mult + media query).
+
+---
+Task ID: 88 (journey scrolls DOWN — vertical timeline replaces the side reel)
+Agent: Main agent
+Task: User (angry correction): "ami bolchi journey section er card gulo side by side scroll na hoye nicher dike scroll hobe" — the v85-v87 "lomba" requests had been misread as "longer horizontal runway"; they meant the cards must NOT scroll side-by-side at all, they must scroll DOWNWARD. v88 removes the pinned cinema entirely.
+
+Work Log:
+- journey-section.tsx rewritten (~590 lines removed, 450 added): no pin, no sticky stage, no coverflow/ReelStop, no runway height math. Seven stops stack vertically in a grid [44/64px dot-gutter | card column]; each stop's content wraps in Reveal (y=36) and scrolls in naturally; content capped at max-w-[640px] (the reel's card width) so chapters read tall again; row spacing pb-28 / sm:pb-36.
+- Vertical rail: measured box first-dot-centre -> last-dot-centre (dot buttons live OUTSIDE the reveal wrappers so the measurement is transform-immune; signature-guarded, re-measured on resize/fonts/RO; --dot-x 22px mobile / 32px sm consumed by the rail's calc left). Contains hairline track, grad-fill scaleY driven by useScroll(list, ["start 0.8","end 0.6"]), breathing comet head.
+- Active stop = row nearest viewport centre (rAF-throttled scroll probe) -> flips the header flip-counter, spins the active medallion's dashed halo, sweeps the year shimmer, fills the rail dots. Dot click = playSound(tap) + window.scrollTo(row.top - 88) smooth — verified pixel-exact (landed row3.top-88).
+- Kept verbatim: all copy, medallion discs + float loops, edu --edu/--edu-2 var routing (mono-safe), corner blobs, degree wells, "Currently here" pulse, ghost chapter indexes, gold swash, backdrop "MY JOURNEY" word (now vertical parallax), ambient blobs (vertical drift). Removed the v87 --reel-mult block from globals.css.
+- Verified (fresh session, mono default): desktop 1440x900 #journey = 3498px / page 8471; mobile 390x844 #journey = 3502px / page 11569; screenshots top + mid-journey both viewports show stacked cards, rail fill + comet tracking, dots aligned to years; dot-click glide + counter flip to "Stop 04" confirmed; accent=mono on both loads; 7 dots rendered; page errors 0 (one benign framer static-position console warning, offsets verified correct); lint 0; tsc clean; dev.log clean. v71 bolt geometry, theme bootstrap, nav contracts untouched.
+
+Stage Summary:
+- The journey is finally what was asked: cards scroll DOWN the page like the classic timeline — 3498px desktop / 3502px mobile — while keeping every drop of the cinema's polish (counter, comet rail, shimmer, medallions).
+- Tagged v88 (commit 1e01510), pushed to backup; origin still awaiting the new classic PAT (v83-v88 will go up together).
