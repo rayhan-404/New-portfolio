@@ -6,6 +6,7 @@ import { ArrowUpRight, Github, GitFork, Globe, RefreshCw, Star } from "lucide-re
 import { playSound } from "@/lib/sound";
 import { Reveal } from "./reveal";
 import { RepoDialog } from "./repo-dialog";
+import type { Flags } from "@/lib/use-site-data";
 import type { GithubRepo, ReposPayload } from "@/app/api/github/repos/route";
 
 /**
@@ -63,12 +64,22 @@ function shortDate(iso: string | null) {
   }
 }
 
-export function RepoBrowser() {
+export function RepoBrowser({ flags = {} }: { flags?: Flags }) {
   const reduce = useReducedMotion();
   const [state, setState] = useState<LoadState>({ phase: "loading" });
   const [selected, setSelected] = useState<{ repo: GithubRepo; serial: string } | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
+
+  /* Admin curation: hidden repos drop out, featured ones pin to the
+     front and wear a star badge. */
+  const applyFlags = (repos: GithubRepo[]): GithubRepo[] => {
+    const shown = repos.filter((r) => !flags[`repo:${r.name}`]?.hidden);
+    return [
+      ...shown.filter((r) => flags[`repo:${r.name}`]?.featured),
+      ...shown.filter((r) => !flags[`repo:${r.name}`]?.featured),
+    ];
+  };
 
   /* Fetch on mount and whenever the retry button bumps reloadKey.
      setState only runs in the async continuation / event handlers —
@@ -124,7 +135,7 @@ export function RepoBrowser() {
               <Github className="h-3.5 w-3.5" aria-hidden="true" />
               @{state.payload.login}
               <span aria-hidden="true">·</span>
-              {state.payload.repos.length} public repos
+              {applyFlags(state.payload.repos).length} public repos
             </a>
           )}
         </div>
@@ -160,7 +171,8 @@ export function RepoBrowser() {
               </p>
               <p className="mt-1 text-[12.5px] leading-relaxed text-muted-foreground">
                 {state.message} — the cards return automatically once GitHub
-                answers again.
+                answers again. A personal access token can be pasted in
+                Admin → GitHub to lift the rate limit.
               </p>
             </div>
           </div>
@@ -180,16 +192,17 @@ export function RepoBrowser() {
       )}
 
       {/* repo cards */}
-      {state.phase === "done" && state.payload.repos.length > 0 && (
+      {state.phase === "done" && applyFlags(state.payload.repos).length > 0 && (
         <motion.div
           className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
           initial={reduce ? false : { opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
-          {state.payload.repos.map((repo, i) => {
+          {applyFlags(state.payload.repos).map((repo, i) => {
             const updated = shortDate(repo.updated_at);
             const serial = serialOf(i);
+            const featured = Boolean(flags[`repo:${repo.name}`]?.featured);
             return (
               <div
                 key={repo.name}
@@ -230,8 +243,16 @@ export function RepoBrowser() {
                 />
 
                 <div className="flex items-center justify-between gap-3">
-                  <span className="font-tag glass-chip shrink-0 rounded-full px-3 py-1 text-[9.5px] text-muted-foreground">
-                    {serial}
+                  <span className="flex min-w-0 items-center gap-2">
+                    <span className="font-tag glass-chip shrink-0 rounded-full px-3 py-1 text-[9.5px] text-muted-foreground">
+                      {serial}
+                    </span>
+                    {featured && (
+                      <span className="font-tag flex shrink-0 items-center gap-1 rounded-full border border-star-ink/45 bg-star-ink/10 px-2.5 py-1 text-[9.5px] text-star-ink">
+                        <Star className="h-3 w-3" aria-hidden="true" />
+                        Featured
+                      </span>
+                    )}
                   </span>
                   <span
                     className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border transition-all duration-300 group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground"

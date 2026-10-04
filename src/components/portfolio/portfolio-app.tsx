@@ -7,6 +7,7 @@ import { NavRail, type NavCategory } from "./nav-rail";
 import { SideRailRight } from "./side-rails";
 import { playSound } from "@/lib/sound";
 import { SlideSection } from "./slide-section";
+import { AdminPanel } from "./admin-panel";
 import { HeroSection } from "./hero-section";
 import { JourneySection } from "./journey-section";
 import { ProjectsSection } from "./projects-section";
@@ -45,6 +46,9 @@ export function PortfolioApp() {
 
       {/* site-wide storm — bolts + room flash over every section */}
       <GlobalThunder />
+
+      {/* control room — passcode-gated admin overlay (?admin=1 / gear / Ctrl+Shift+A) */}
+      <AdminPanel />
 
       {/* Content column: left pad = notch sidebar width, right pad = rail */}
       <div className="flex min-h-svh flex-col pl-[54px] sm:pl-[62px] md:pl-[74px] md:pr-[88px]">

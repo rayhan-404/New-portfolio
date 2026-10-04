@@ -13,6 +13,7 @@ import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import { person } from "@/lib/portfolio-data";
 import { ACCENT_BOOT_SCRIPT } from "@/lib/accent-pool";
+import BootDefaults from "@/components/boot-defaults";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -151,11 +152,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Theme bootstrap — runs before paint (default: dark; a saved
-            "light" choice is the only way to stay light) */}
+        {/* Admin-configured defaults, read from the DB before paint */}
+        <BootDefaults />
+        {/* Theme bootstrap — runs before paint. A visitor's own saved
+            "mr-theme" choice always wins; otherwise the admin panel's
+            default theme applies (dark when unset). */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{if(localStorage.getItem('mr-theme')!=='light')document.documentElement.classList.add('dark')}catch(e){document.documentElement.classList.add('dark')}var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',document.documentElement.classList.contains('dark')?'#160d08':'#faf3ea')`,
+            __html: `try{var s=localStorage.getItem('mr-theme');var d=window.__MR_DEFAULT_THEME==='light'?'light':'dark';var light=s?s==='light':d==='light';if(light){document.documentElement.classList.remove('dark')}else{document.documentElement.classList.add('dark')}}catch(e){document.documentElement.classList.add('dark')}var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',document.documentElement.classList.contains('dark')?'#160d08':'#faf3ea')`,
           }}
         />
         {/* Accent bootstrap — the reference's "Material Colors — Random on

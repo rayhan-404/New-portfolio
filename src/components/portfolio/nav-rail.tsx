@@ -2,9 +2,11 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
-import { Palette, Volume2, VolumeX } from "lucide-react";
+import { Palette, Settings2, Volume2, VolumeX } from "lucide-react";
 import { useSoundEngine } from "./nav";
+
 import { cycleAccent, type AccentHue } from "@/lib/accent-pool";
+import { openAdminPanel } from "./admin-panel";
 import { playSound } from "@/lib/sound";
 
 export interface NavCategory {
@@ -206,6 +208,20 @@ export function NavRail({ categories, activeIndex, onSelectCategory }: NavRailPr
           className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-[var(--nl)] bg-[var(--bg)] text-muted-foreground shadow-[var(--shadow-neu-sm)] transition-all duration-300 hover:text-primary active:scale-90 active:shadow-[var(--shadow-neu-in)] sm:h-9 sm:w-9"
         >
           {soundOn ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+        </button>
+        {/* Control room — passcode-gated site admin */}
+        <button
+          id="admin-open-btn"
+          type="button"
+          aria-label="Open admin panel"
+          title="Admin panel"
+          onClick={() => {
+            playSound("tap");
+            openAdminPanel();
+          }}
+          className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-[var(--nl)] bg-[var(--bg)] text-muted-foreground shadow-[var(--shadow-neu-sm)] transition-all duration-300 hover:text-primary active:scale-90 active:shadow-[var(--shadow-neu-in)] sm:h-9 sm:w-9"
+        >
+          <Settings2 className="h-4 w-4" />
         </button>
       </div>
     </motion.aside>

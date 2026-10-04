@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getGithub } from "@/lib/site-store";
 
 /**
  * GitHub repositories — server-side proxy for the portfolio's
@@ -31,7 +32,7 @@ export interface GithubRepo {
 /* ── Local memory cache (single dev server process) ─────────── */
 
 const CACHE_TTL_MS = 10 * 60 * 1000;
-let cache: { at: number; payload: ReposPayload } | null = null;
+let cache: { at: number; payload: ReposPayload; key: string } | null = null;
 
 export interface ReposPayload {
   source: "github" | "mock" | "empty";
@@ -111,8 +112,7 @@ interface RawRepo {
   archived: boolean;
 }
 
-async function fetchRepos(login: string): Promise<GithubRepo[]> {
-  const token = process.env.GITHUB_TOKEN?.trim();
+async function fetchRepos(login: string, token: string): Promise<GithubRepo[]> {
   const headers: Record<string, string> = {
     Accept: "application/vnd.github+json",
     "User-Agent": "m-rayhan-portfolio",
@@ -128,7 +128,11 @@ async function fetchRepos(login: string): Promise<GithubRepo[]> {
     throw new Error(`GitHub user "${login}" not found`);
   }
   if (res.status === 403 && res.headers.get("x-ratelimit-remaining") === "0") {
-    throw new Error("GitHub rate limit reached — add GITHUB_TOKEN to .env");
+    throw new Error(
+      token
+        ? "GitHub rate limit reached even for the stored token"
+        : "GitHub rate limit reached — add a token in Admin → GitHub"
+    );
   }
   if (!res.ok) {
     throw new Error(`GitHub API responded ${res.status}`);
@@ -159,8 +163,15 @@ async function fetchRepos(login: string): Promise<GithubRepo[]> {
 /* ── GET /api/github/repos ──────────────────────────────────── */
 
 export async function GET() {
-  const login = process.env.GITHUB_USERNAME?.trim() || "rayhan-404";
   const mock = process.env.GITHUB_MOCK?.trim() === "1";
+
+  /* Identity comes from the admin panel's store first (Admin →
+     GitHub), falling back to .env — so the token can be pasted at
+     runtime without a redeploy. The cache key includes the identity
+     hash, changing settings automatically invalidates it. */
+  const gh = await getGithub();
+  const login = gh.username || "rayhan-404";
+  const identity = `${login}|${gh.token ? "tok" : "anon"}`;
 
   const payload: ReposPayload = {
     source: mock ? "mock" : "github",
@@ -174,19 +185,19 @@ export async function GET() {
     return NextResponse.json(payload);
   }
 
-  if (cache && Date.now() - cache.at < CACHE_TTL_MS) {
+  if (cache && cache.key === identity && Date.now() - cache.at < CACHE_TTL_MS) {
     return NextResponse.json({ ...cache.payload, cached: true });
   }
 
   try {
-    payload.repos = await fetchRepos(login);
-    cache = { at: Date.now(), payload };
+    payload.repos = await fetchRepos(login, gh.token);
+    cache = { at: Date.now(), payload, key: identity };
     return NextResponse.json(payload);
   } catch (err) {
     const message = err instanceof Error ? err.message : "GitHub request failed";
-    // Serve stale cache if we have one, else a soft-empty payload the
-    // browser can render a graceful fallback from.
-    if (cache) {
+    // Serve the last good payload (even past TTL) so a rate limit
+    // never blanks the section once it has worked; else soft-empty.
+    if (cache && cache.payload.repos.length > 0) {
       return NextResponse.json({ ...cache.payload, cached: true, error: message });
     }
     return NextResponse.json({ ...payload, error: message }, { status: 200 });

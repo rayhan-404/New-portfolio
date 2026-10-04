@@ -11,7 +11,8 @@ import {
   useTransform,
 } from "framer-motion";
 import { ChevronDown, GraduationCap, Telescope } from "lucide-react";
-import { person } from "@/lib/portfolio-data";
+import { RichBio, useSiteContent } from "@/lib/use-site-data";
+import type { HeroContent } from "@/lib/site-defaults";
 import {
   CUTOUT_BASE,
   HERO_ACCENT_IDS,
@@ -341,59 +342,38 @@ export function LightningBolt({ strike: s }: { strike: Strike }) {
   );
 }
 
-/* ── Personal intro copy ─────────────────────────────────────── */
+/* ── Personal intro copy — admin-editable (Admin → Hero) ─────── */
 
-function IntroBio({ className = "" }: { className?: string }) {
+function IntroBio({
+  hero,
+  className = "",
+}: {
+  hero: HeroContent;
+  className?: string;
+}) {
+  /* the first body paragraph after the lead wears the dropcap */
+  const dropcapIndex = hero.paragraphs.findIndex(
+    (p, i) => i > 0 && p.style === "body"
+  );
   return (
     <div className={`flex flex-col gap-3.5 ${className}`}>
-      {/* Lead deck — Fraunces italic, pairs with the greeting above */}
-      <p className="font-fraunces text-[1.35rem] italic leading-[1.4] tracking-[-0.01em] text-foreground/85 sm:text-[1.55rem]">
-        I&apos;m a CSE student at{" "}
-        <span className="font-medium text-foreground">
-          North Western University, Khulna
-        </span>
-        , and originally from{" "}
-        <span className="font-medium text-foreground">Shyamnagar, Satkhira, Bangladesh</span>.
-      </p>
-      <p className="font-book text-left text-[15px] leading-[1.72] text-foreground/80 sm:text-[16px]">
-        <span className="dropcap">I</span>&apos;m basically a boring and curious guy who wants to know{" "}
-        <strong className="font-semibold text-foreground">
-          how everything works, from my cell, brain, everything surrounding me,
-          to the universe, and what&apos;s going on behind the screen
-        </strong>{" "}
-        <span className="emoji-mono">🤔</span> If I find something interesting, there&apos;s a pretty good chance
-        I&apos;ll spend hours trying to figure it out and understand how it
-        works.
-      </p>
-      <p className="font-book text-left text-[15px] leading-[1.72] text-foreground/80 sm:text-[16px]">
-        I like learning new things, trying random ideas, and building stuff
-        just to see if I can actually make it work. I&apos;ve already built a
-        few small projects because of this habit, and honestly, I enjoy the
-        process more than the final result, and it satisfies me more than
-        anything.
-      </p>
-      <p className="font-book text-left text-[15px] leading-[1.72] text-foreground/80 sm:text-[16px]">
-        Sometimes I build something useful. Sometimes I build something
-        completely unnecessary. And sometimes I break something and then spend
-        the next few hours figuring out how it actually works. <span className="emoji-mono">🧐</span>
-      </p>
-      <p className="font-book text-left text-[15px] leading-[1.72] text-foreground/80 sm:text-[16px]">
-        If you ask,{" "}
-        <strong className="font-semibold text-foreground">
-          what is this guy interested in?
-        </strong>{" "}
-        <span className="emoji-mono">🤨</span> Then I&apos;m interested in{" "}
-        <strong className="font-semibold text-foreground">
-          Artificial Intelligence, Robotics, Electronics, new gadgets and
-          technologies
-        </strong>
-        . I don&apos;t know where this curiosity will take me yet, but I&apos;m
-        having fun finding out.
-      </p>
-      <p className="font-book text-left text-[15px] font-semibold leading-[1.72] text-foreground sm:text-[16px]">
-        I&apos;m curious about almost everything, and I love building things
-        just to see what happens.
-      </p>
+      {hero.paragraphs.map((p, i) => {
+        const isDropcap = i === dropcapIndex;
+        return (
+          <p
+            key={i}
+            className={
+              p.style === "lead"
+                ? "font-fraunces text-[1.35rem] italic leading-[1.4] tracking-[-0.01em] text-foreground/85 sm:text-[1.55rem]"
+                : p.style === "closing"
+                  ? "font-book text-left text-[15px] font-semibold leading-[1.72] text-foreground sm:text-[16px]"
+                  : "font-book text-left text-[15px] leading-[1.72] text-foreground/80 sm:text-[16px]"
+            }
+          >
+            <RichBio paragraph={p} dropcap={isDropcap} />
+          </p>
+        );
+      })}
     </div>
   );
 }
@@ -401,6 +381,12 @@ function IntroBio({ className = "" }: { className?: string }) {
 export function HeroSection() {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLElement>(null);
+  const { hero } = useSiteContent();
+
+  /* Greeting — trailing dots get the gold-gradient treatment */
+  const greetMatch = hero.greeting.match(/^(.*?)(\.{1,3})\s*$/);
+  const greetMain = greetMatch ? greetMatch[1] : hero.greeting;
+  const greetDots = greetMatch ? greetMatch[2] : "";
 
   /* ── suit follows the theme ──
      `stage` gates which of the two photos' variants to decode (the
@@ -544,7 +530,8 @@ export function HeroSection() {
               className="text-glow absolute left-4 top-0 z-10 sm:left-8"
             >
               <span className="font-fraunces block text-[3.5rem] font-semibold italic leading-[0.95] tracking-[-0.01em] text-foreground sm:text-[4rem]">
-                Hello<span className="text-gold-gradient">..</span>
+                {greetMain}
+                <span className="text-gold-gradient">{greetDots}</span>
               </span>
               <motion.svg
                 viewBox="0 0 140 14"
@@ -760,10 +747,10 @@ export function HeroSection() {
               </p>
 
               <h1 className="font-script text-glow mt-1 text-[4.25rem] leading-[1.08] text-foreground sm:text-[5rem]">
-                M Rayhan
+                {hero.name}
               </h1>
 
-              <IntroBio className="mt-6" />
+              <IntroBio hero={hero} className="mt-6" />
             </motion.div>
           </div>
         </motion.div>
@@ -783,7 +770,8 @@ export function HeroSection() {
               className="text-glow"
             >
               <p className="font-fraunces text-[3.75rem] font-semibold italic leading-[0.95] tracking-[-0.01em] text-foreground xl:text-[4.25rem]">
-                Hello<span className="text-gold-gradient">..</span>
+                {greetMain}
+                <span className="text-gold-gradient">{greetDots}</span>
               </p>
               <svg
                 viewBox="0 0 140 14"
@@ -823,7 +811,7 @@ export function HeroSection() {
               transition={{ duration: 0.85, delay: 0.32, ease: EASE }}
               className="font-script text-glow mt-2 text-[6.25rem] leading-[1.05] text-foreground xl:text-[7rem]"
             >
-              M Rayhan
+              {hero.name}
             </motion.h1>
 
             <motion.div
@@ -832,7 +820,7 @@ export function HeroSection() {
               transition={{ duration: 0.85, delay: 0.44, ease: EASE }}
               className="mt-7 max-w-[33rem]"
             >
-              <IntroBio />
+              <IntroBio hero={hero} />
             </motion.div>
           </div>
 
@@ -900,7 +888,7 @@ export function HeroSection() {
                 >
                     <Image
                       src="/generated/m-rayhan-portrait-hd.webp"
-                      alt={`Portrait of ${person.name}`}
+                      alt={`Portrait of ${hero.name}`}
                       fill
                       priority
                       loading="eager"
@@ -1036,10 +1024,10 @@ export function HeroSection() {
                 <div className="glass-strong absolute bottom-3.5 left-3.5 right-3.5 flex items-center justify-between gap-3 rounded-2xl px-4 py-3">
                   <div className="min-w-0">
                     <p className="truncate text-[15px] font-semibold leading-tight text-foreground">
-                      {person.name}
+                      {hero.name}
                     </p>
                     <p className="font-tag mt-0.5 truncate text-[9.5px] text-muted-foreground">
-                      {person.role}
+                      {hero.role}
                     </p>
                   </div>
                   <span className="status-dot shrink-0" aria-hidden="true" />

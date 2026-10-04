@@ -28,3 +28,42 @@ model BookingRequest {
 
   @@index([createdAt])
 }
+
+/* ── Admin panel (v90) — everything on the site is editable ────── */
+
+/// Singleton-ish JSON blobs keyed by name: "design" (accent/theme),
+/// "hero" (identity + bio paragraphs), "github" (username/token),
+/// "admin" (passcode).
+model SiteSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+/// Journey timeline stops — the site renders these; edits, adds,
+/// deletes and reorders happen from the admin panel.
+model JourneyStop {
+  id          String  @id @default(cuid())
+  period      String
+  title       String
+  icon        String  @default("rocket")
+  place       String
+  location    String?
+  description String
+  tag         String
+  degree      String?
+  current     Boolean @default(false)
+  order       Int
+
+  @@index([order])
+}
+
+/// Per-project visibility / pinning overrides. `id` is either
+/// "curated:<projectId>" (hardcoded case studies) or
+/// "repo:<owner>/<name>" (live GitHub repositories).
+model ProjectFlag {
+  id       String  @id
+  hidden   Boolean @default(false)
+  featured Boolean @default(false)
+  order    Int?
+}

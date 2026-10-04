@@ -20,12 +20,13 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { journey, journeyFuture } from "@/lib/portfolio-data";
 import { playSound } from "@/lib/sound";
+import { useJourneyStops, type Stop } from "@/lib/use-site-data";
 import { Reveal } from "./reveal";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-/* Line icons for the chapter medallions — each era's glyph lives in a
-   raised neumorphic disc riding on top of its card. */
+/* Line icons for the rail nodes — each era's glyph rides the
+   timeline line itself. The icon key is admin-editable. */
 const TITLE_ICONS: Record<string, LucideIcon> = {
   baby: Baby,
   home: Home,
@@ -46,12 +47,6 @@ const BLACK = {
 /* Education chapters wear the reference's edu-card blue (#4267B2 family);
    life chapters stay on the rotating primary. */
 const EDU_ICONS = new Set(["shapes", "school", "book", "gradcap"]);
-
-/* 6 chapters + the 2028 "Loading…" future stop */
-const STOPS = journey.length + 1;
-
-/* Year labels for the rail dots (hover) */
-const STOP_LABELS = [...journey.map((e) => e.period), journeyFuture.year];
 
 /* Medallion geometry */
 const MEDALLION = {
@@ -79,6 +74,11 @@ const MEDALLION = {
  */
 export function JourneySection() {
   const reduce = useReducedMotion();
+  /* DB-backed stops (admin-editable); falls back to the static
+     defaults until the fetch lands or if the API is down. */
+  const { stops } = useJourneyStops();
+  const STOPS = stops.length + 1;
+  const STOP_LABELS = [...stops.map((e) => e.period), journeyFuture.year];
 
   const sectionRef = useRef<HTMLElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -162,7 +162,7 @@ export function JourneySection() {
       ro?.disconnect();
       window.removeEventListener("resize", measure);
     };
-  }, []);
+  }, [stops.length]);
 
   /* Rail fill — grows as the timeline scrolls through the viewport. */
   const railScroll = useScroll({
@@ -369,23 +369,28 @@ export function JourneySection() {
             </div>
           )}
 
-          {journey.map((era, idx) => {
+          {stops.map((era, idx) => {
             const EraIcon = TITLE_ICONS[era.icon];
             const isEdu = EDU_ICONS.has(era.icon);
             const chapter = String(idx + 1).padStart(2, "0");
             const isActive = active === idx;
-            const medallionTint = isEdu
-              ? "text-(--edu) shadow-[0_0_0_5px_color-mix(in_srgb,var(--edu)_13%,transparent),0_0_24px_color-mix(in_srgb,var(--edu)_40%,transparent),var(--shadow-neu-sm)]"
-              : "text-primary shadow-[0_0_0_5px_rgba(var(--primary-rgb)/0.13),0_0_24px_rgba(var(--accent-rgb)/0.4),var(--shadow-neu-sm)]";
+            /* Rail nodes wear the era's tint — edu blue or rotating
+               primary. Future stops sit muted until the scroll passes
+               them; the active node gains the glow + spinning halo. */
+            const nodeTone = isEdu ? "text-(--edu)" : "text-primary";
+            const nodeActive = isEdu
+              ? "shadow-[0_0_0_5px_color-mix(in_srgb,var(--edu)_13%,transparent),0_0_24px_color-mix(in_srgb,var(--edu)_40%,transparent),var(--shadow-neu-sm)]"
+              : "shadow-[0_0_0_5px_rgba(var(--primary-rgb)/0.13),0_0_24px_rgba(var(--accent-rgb)/0.4),var(--shadow-neu-sm)]";
             return (
               <div
-                key={era.period}
+                key={era.id ?? era.period}
                 ref={(el) => {
                   rowRefs.current[idx] = el;
                 }}
                 className="relative grid grid-cols-[44px_minmax(0,1fr)] gap-x-3 pb-28 last:pb-0 sm:grid-cols-[64px_minmax(0,1fr)] sm:gap-x-5 sm:pb-36"
               >
-                {/* Rail dot — clickable, glides the stop into view */}
+                {/* Rail node — the era's medallion rides the line,
+                    replacing the old dot: click it to glide here */}
                 <div className="relative z-[2] flex justify-center pt-1">
                   <button
                     ref={(el) => {
@@ -395,16 +400,25 @@ export function JourneySection() {
                     onClick={() => goToStop(idx)}
                     aria-label={`Go to stop ${chapter} — ${STOP_LABELS[idx]}`}
                     aria-current={isActive ? "true" : undefined}
-                    className="group mt-[18px] flex h-11 w-11 items-center justify-center rounded-full sm:mt-[22px]"
+                    className={`group relative mt-[18px] flex ${MEDALLION.disc} items-center justify-center rounded-full bg-[var(--bg2)] shadow-[var(--shadow-neu-sm)] transition-all duration-500 sm:mt-[20px] ${
+                      idx <= active ? nodeTone : "text-muted-foreground/50"
+                    } ${isActive ? `scale-110 ${nodeActive}` : "hover:scale-105"}`}
                   >
-                    <span
-                      className={`block h-2.5 w-2.5 rounded-full transition-all duration-500 ${
-                        idx <= active
-                          ? "bg-primary shadow-[0_0_0_3px_rgba(var(--primary-rgb)/0.18),0_0_10px_rgba(var(--accent-rgb)/0.7)]"
-                          : "bg-primary/25"
-                      } ${isActive ? "!scale-125" : ""}`}
-                    />
-                    <span className="font-tag pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-border bg-[var(--bg)] px-2 py-0.5 text-[8px] tracking-[0.18em] text-accent-ink opacity-0 shadow-[var(--shadow-neu-sm)] transition-opacity duration-300 group-hover:opacity-100">
+                    {!reduce && (
+                      <span
+                        className={`absolute -inset-[5px] rounded-full border border-dashed border-primary/45 animate-spin [animation-duration:9s] transition-opacity duration-500 ${
+                          isActive ? "opacity-100" : "opacity-0"
+                        }`}
+                      />
+                    )}
+                    {EraIcon && (
+                      <EraIcon
+                        aria-hidden="true"
+                        strokeWidth={2.25}
+                        className={MEDALLION.icon}
+                      />
+                    )}
+                    <span className="font-tag pointer-events-none absolute -top-9 left-1/2 z-[3] -translate-x-1/2 whitespace-nowrap rounded-full border border-border bg-[var(--bg)] px-2 py-0.5 text-[8px] tracking-[0.18em] text-accent-ink opacity-0 shadow-[var(--shadow-neu-sm)] transition-opacity duration-300 group-hover:opacity-100">
                       {STOP_LABELS[idx]}
                     </span>
                   </button>
@@ -437,39 +451,6 @@ export function JourneySection() {
                     </p>
 
                     <div className="relative z-[1]">
-                      {/* Medallion — idles on a slow float, wears a
-                          spinning dashed halo while its stop is active */}
-                      <span
-                        aria-hidden="true"
-                        className={`absolute -top-8 left-6 z-[2] flex items-center justify-center rounded-full bg-[var(--bg2)] ${MEDALLION.disc} ${medallionTint}`}
-                      >
-                        {!reduce && (
-                          <span
-                            className={`absolute -inset-[5px] rounded-full border border-dashed border-primary/45 animate-spin [animation-duration:9s] transition-opacity duration-500 ${
-                              isActive ? "opacity-100" : "opacity-0"
-                            }`}
-                          />
-                        )}
-                        <motion.span
-                          animate={reduce ? undefined : { y: [0, -5, 0] }}
-                          transition={{
-                            duration: 4.6,
-                            repeat: Infinity,
-                            delay: idx * 0.4,
-                            ease: "easeInOut",
-                          }}
-                          className="flex"
-                        >
-                          {EraIcon && (
-                            <EraIcon
-                              aria-hidden="true"
-                              strokeWidth={2.25}
-                              className={MEDALLION.icon}
-                            />
-                          )}
-                        </motion.span>
-                      </span>
-
                       {/* Card — the site's journey-card recipe */}
                       <div
                         className={`journey-card relative w-full overflow-hidden rounded-2xl p-5 text-left sm:p-6 md:rounded-[22px] ${
@@ -568,29 +549,40 @@ export function JourneySection() {
           {/* ── Stop 07 — 2028 · Loading… ────────────────────────── */}
           <div
             ref={(el) => {
-              rowRefs.current[journey.length] = el;
+              rowRefs.current[stops.length] = el;
             }}
             className="relative grid grid-cols-[44px_minmax(0,1fr)] gap-x-3 pb-28 last:pb-0 sm:grid-cols-[64px_minmax(0,1fr)] sm:gap-x-5 sm:pb-36"
           >
             <div className="relative z-[2] flex justify-center pt-1">
               <button
                 ref={(el) => {
-                  dotRefs.current[journey.length] = el;
+                  dotRefs.current[stops.length] = el;
                 }}
                 type="button"
-                onClick={() => goToStop(journey.length)}
+                onClick={() => goToStop(stops.length)}
                 aria-label={`Go to stop ${String(STOPS).padStart(2, "0")} — ${journeyFuture.year}`}
-                aria-current={active === journey.length ? "true" : undefined}
-                className="group mt-[18px] flex h-11 w-11 items-center justify-center rounded-full sm:mt-[22px]"
+                aria-current={active === stops.length ? "true" : undefined}
+                className={`group relative mt-[18px] flex ${MEDALLION.disc} items-center justify-center rounded-full bg-[var(--bg2)] shadow-[var(--shadow-neu-sm)] transition-all duration-500 sm:mt-[20px] ${
+                  stops.length <= active ? "text-primary" : "text-muted-foreground/50"
+                } ${
+                  active === stops.length
+                    ? "scale-110 shadow-[0_0_0_5px_rgba(var(--primary-rgb)/0.13),0_0_24px_rgba(var(--accent-rgb)/0.4),var(--shadow-neu-sm)]"
+                    : "hover:scale-105"
+                }`}
               >
-                <span
-                  className={`block h-2.5 w-2.5 rounded-full transition-all duration-500 ${
-                    journey.length <= active
-                      ? "bg-primary shadow-[0_0_0_3px_rgba(var(--primary-rgb)/0.18),0_0_10px_rgba(var(--accent-rgb)/0.7)]"
-                      : "bg-primary/25"
-                  } ${active === journey.length ? "!scale-125" : ""}`}
+                {!reduce && (
+                  <span
+                    className={`absolute -inset-[5px] rounded-full border border-dashed border-primary/45 animate-spin [animation-duration:9s] transition-opacity duration-500 ${
+                      active === stops.length ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
+                )}
+                <Rocket
+                  aria-hidden="true"
+                  strokeWidth={2.25}
+                  className={`${MEDALLION.icon} -rotate-12`}
                 />
-                <span className="font-tag pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-border bg-[var(--bg)] px-2 py-0.5 text-[8px] tracking-[0.18em] text-accent-ink opacity-0 shadow-[var(--shadow-neu-sm)] transition-opacity duration-300 group-hover:opacity-100">
+                <span className="font-tag pointer-events-none absolute -top-9 left-1/2 z-[3] -translate-x-1/2 whitespace-nowrap rounded-full border border-border bg-[var(--bg)] px-2 py-0.5 text-[8px] tracking-[0.18em] text-accent-ink opacity-0 shadow-[var(--shadow-neu-sm)] transition-opacity duration-300 group-hover:opacity-100">
                   {journeyFuture.year}
                 </span>
               </button>
@@ -600,7 +592,7 @@ export function JourneySection() {
               <Reveal y={36} className="max-w-[640px]">
                 <p
                   className={`text-gold-gradient relative z-[1] mb-5 mt-3 whitespace-normal leading-[0.85] tracking-[-0.055em] tabular-nums sm:whitespace-nowrap ${
-                    active === journey.length && !reduce ? "year-shimmer" : ""
+                    active === stops.length && !reduce ? "year-shimmer" : ""
                   }`}
                   style={{
                     ...BLACK,
@@ -611,34 +603,6 @@ export function JourneySection() {
                 </p>
 
                 <div className="relative z-[1]">
-                  <span
-                    aria-hidden="true"
-                    className={`absolute -top-8 left-6 z-[2] flex items-center justify-center rounded-full bg-[var(--bg2)] text-primary shadow-[0_0_0_5px_rgba(var(--primary-rgb)/0.13),0_0_24px_rgba(var(--accent-rgb)/0.4),var(--shadow-neu-sm)] ${MEDALLION.disc}`}
-                  >
-                    {!reduce && (
-                      <span
-                        className={`absolute -inset-[5px] rounded-full border border-dashed border-primary/45 animate-spin [animation-duration:9s] transition-opacity duration-500 ${
-                          active === journey.length ? "opacity-100" : "opacity-0"
-                        }`}
-                      />
-                    )}
-                    <motion.span
-                      animate={reduce ? undefined : { y: [0, -6, 0] }}
-                      transition={{
-                        duration: 3.8,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                      className="flex"
-                    >
-                      <Rocket
-                        aria-hidden="true"
-                        strokeWidth={2.25}
-                        className={`${MEDALLION.icon} -rotate-12`}
-                      />
-                    </motion.span>
-                  </span>
-
                   <div className="journey-card relative w-full overflow-hidden rounded-2xl p-5 text-left sm:p-6 md:rounded-[22px]">
                     <span
                       aria-hidden="true"

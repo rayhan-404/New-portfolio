@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { projects, TECH_LANG_COLORS, TECH_LANG_DEFAULT, type Project, type ProjectCategory } from "@/lib/portfolio-data";
 import { playSound } from "@/lib/sound";
+import { useProjectFlags } from "@/lib/use-site-data";
 import { Reveal } from "./reveal";
 import { ProjectDialog } from "./project-dialog";
 import { RepoBrowser } from "./repo-browser";
@@ -21,10 +22,18 @@ export function ProjectsSection() {
   const [filter, setFilter] = useState<ProjectCategory>("all");
   const [selected, setSelected] = useState<Project | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  /* Admin-controlled visibility: "curated:<id>" flags hide case
+     studies, "repo:<owner>/<name>" flags feed the live browser. */
+  const flags = useProjectFlags();
+
+  const curated = useMemo(
+    () => projects.filter((p) => !flags[`curated:${p.id}`]?.hidden),
+    [flags]
+  );
 
   const visible = useMemo(
-    () => (filter === "all" ? projects : projects.filter((p) => p.category === filter)),
-    [filter]
+    () => (filter === "all" ? curated : curated.filter((p) => p.category === filter)),
+    [filter, curated]
   );
 
   const open = (p: Project) => {
@@ -53,7 +62,7 @@ export function ProjectsSection() {
           />
           <Reveal delay={0.15}>
             <p className="font-tag hidden text-[10px] tabular-nums text-muted-foreground lg:block">
-              {projects.length} case studies — 2021 / {new Date().getFullYear()}
+              {curated.length} case studies — 2021 / {new Date().getFullYear()}
             </p>
           </Reveal>
         </div>
@@ -190,8 +199,8 @@ export function ProjectsSection() {
           </AnimatePresence>
         </motion.div>
 
-        {/* Live GitHub repositories — server-proxied, serial-numbered */}
-        <RepoBrowser />
+        {/* Live GitHub repositories — API-fed, admin-curated */}
+        <RepoBrowser flags={flags} />
       </div>
 
       <ProjectDialog project={selected} open={dialogOpen} onOpenChange={setDialogOpen} />

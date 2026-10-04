@@ -212,13 +212,14 @@ export function cycleAccent(): AccentHue {
   return applyAccent((cur + 1 + ACCENT_POOL.length) % ACCENT_POOL.length);
 }
 
-/* Pre-paint boot script for <head> — Black & White is the site's
-   resting face: every refresh draws the mono entry, no dice roll.
-   The pool (and the cycle button) keeps all 11 hues — colors are one
-   deliberate click away, they just never surprise you on load.
-   Self-contained (no imports), fails silently. Sets the same --hue-*
-   slot map as applyAccent so the cycle button continues from the
-   drawn hue. */
+/* Pre-paint boot script for <head> — honours the admin panel's
+   default accent (window.__MR_DEFAULT_ACCENT, injected by the
+   BootDefaults server component), otherwise Black & White is the
+   site's resting face. The pool (and the cycle button) keeps all 11
+   hues — colors are one deliberate click away, they just never
+   surprise you on load. Self-contained (no imports), fails silently.
+   Sets the same --hue-* slot map as applyAccent so the cycle button
+   continues from the drawn hue. */
 export const ACCENT_BOOT_SCRIPT = `(function(){try{var P=${JSON.stringify(
   ACCENT_POOL.map((h) => ({ id: h.id, ...slotsFor(h) }))
-)};var e=P.filter(function(p){return p.id==='mono'})[0]||P[0];var s=document.documentElement.style;for(var k in e){if(k!=='id'){s.setProperty('--'+k,e[k]);}}document.documentElement.dataset.accent=e.id;}catch(err){}})();`;
+)};var def=(typeof window!=='undefined'&&window.__MR_DEFAULT_ACCENT)||'mono';var e=P.filter(function(p){return p.id===def})[0]||P.filter(function(p){return p.id==='mono'})[0]||P[0];var s=document.documentElement.style;for(var k in e){if(k!=='id'){s.setProperty('--'+k,e[k]);}}document.documentElement.dataset.accent=e.id;}catch(err){}})();`;
