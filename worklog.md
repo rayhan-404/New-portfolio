@@ -1369,3 +1369,17 @@ Stage Summary:
 - Skills is a redesigned ledger + ring gauges + toolbox cloud, fully admin-editable.
 - ~2.3k lines of dead demo code removed; one fetch now drives every editable section.
 - Tagged v91, pushed to backup; origin still awaiting the new classic PAT (v83–v91 will go up together).
+
+---
+Task ID: push-v83-v91 (origin sync)
+Agent: Main agent
+Task: User supplied a fresh classic GitHub PAT after the container reset wiped the old credential; push the long-blocked batch to origin.
+
+Work Log:
+- Updated origin remote URL with the new PAT; `git push origin main --tags` succeeded: main 0ca166f..6a0dc38, new tags v83-v91 (9 tags).
+- `git ls-remote origin` confirms HEAD == 6a0dc38 (v91) on both sides; `git status -sb` shows main...origin/main clean (0 ahead / 0 behind). GitHub is now fully in sync through v91.
+- Post-resume sanity check (fresh agent-browser session at 1440x900): page title "M Rayhan — CSE Student & Curious Builder", 0 console errors, hero renders in mono default, Projects shows the v91 "03 · Projects / Built, shipped, public." unified grid, Contact shows the v91 "Reach me." bento heading. Dev server log clean (all API routes 200).
+
+Stage Summary:
+- The origin push blockade (v83-v91 + tags, ~9 versions) is fully cleared; GitHub github.com/rayhan-404/New-portfolio is current with backup and local.
+- No code changes in this task; HEAD remains v91 (6a0dc38).
