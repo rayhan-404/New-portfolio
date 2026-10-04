@@ -270,12 +270,12 @@ export function JourneySection() {
 
   /* Runway length = 100svh of pinned stage + REEL_SCROLL × travel of
      scroll runway. 0.85 (v78) made the journey dramatically shorter
-     than the old vertical timeline; 1.35 gives every stop back its
-     leisurely scroll — the section spans ~4.7k px desktop / ~3.6k
-     mobile again, like the pre-cinema journey, while keeping the
-     single-screen reel. Dot-click/nav landing measure the runway
-     live, so nothing else needs to know. */
-  const REEL_SCROLL = 1.35;
+     than the old vertical timeline; v85 restored the old scale at
+     1.35 (~5.4k px desktop), and the user asked for MORE — 1.9 gives
+     every stop ~1.1k px of scroll (≈7.2k desktop / ≈4.7k mobile), a
+     long-form cinematic pace. Dot-click/nav landing measure the
+     runway live, so nothing else needs to know. */
+  const REEL_SCROLL = 1.9;
 
   return (
     <section

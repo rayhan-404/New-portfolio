@@ -1268,3 +1268,16 @@ Stage Summary:
 - The site now opens in Black & White every time — surfaces, bolts, photos, widgets, dots, chips and even the emojis read as one grayscale system — while the full color wardrobe (10 hues + suits) stays one palette-click away.
 - The journey got its length back: same pinned cinema, ~2× the scroll runway, old-scale page height.
 - Tagged v85; touched accent-pool.ts (boot script), globals.css (mono block + brand vars + emoji rule), journey-section.tsx (var-driven edu + runway), contact-section.tsx (hover var), footer.tsx (social dot vars), hero-section.tsx (emoji spans).
+
+---
+Task ID: 86 (journey even longer)
+Agent: Main agent
+Task: User: "journey section lomba kor" — v85's 1.35 multiplier restored the old scale, but the user wanted MORE length.
+
+Work Log:
+- REEL_SCROLL 1.35 → 1.9 in journey-section.tsx: runway now 7193px desktop 1440×900 (v85: 5371, v78: 3337) and 4674px mobile 390×844 (v85: 3566, v78: 2568) — every stop gets ~1.1k px of scroll, a long-form cinematic pace.
+- Verified: measured heights both viewports; mid-runway screenshot (mono dark, stop 03 focused, comet rail + counter correct — dot-click/nav landing measure the runway live so nothing else moved); lint 0 errors.
+
+Stage Summary:
+- The journey is now the longest it has ever been on this site (7.2k desktop / 4.7k mobile) while keeping the pinned single-screen reel and all v79 polish.
+- Tagged v86; touched journey-section.tsx (REEL_SCROLL constant + comment).
