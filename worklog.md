@@ -1383,3 +1383,22 @@ Work Log:
 Stage Summary:
 - The origin push blockade (v83-v91 + tags, ~9 versions) is fully cleared; GitHub github.com/rayhan-404/New-portfolio is current with backup and local.
 - No code changes in this task; HEAD remains v91 (6a0dc38).
+
+---
+Task ID: 92 (Noir Editorial full-design upgrade)
+Agent: Main agent
+Task: User: "Full Design aro improve koro, ei design valo lagche na." — full design transformation, keeping the accent-pool/boot-slot architecture, nav contract, thunder geometry and the v88 journey mechanics untouched.
+
+Work Log:
+- Diagnosis: headings rode Nunito 800 (soft/template feel), dark cards were bg==page with shadows invisible on dark (flat slabs), 6-font soup with no hierarchy anchor, empty dark atmosphere.
+- Typography consolidation (globals utilities, site-wide cascade): font-display Nunito 800 -> Syne 800 tracking -0.025em (every heading, ghost numeral, card title, wordmark, journey year); font-tag Nunito 700 -> Geist Mono 500 tracking 0.22em (every eyebrow/label/marquee/counter); body copy stays Nunito; serif italic accents (Fraunces) + Bonheur Royale script unchanged as brand moments.
+- Surface system "hairline + lift": glass/glass-strong/glass-chip/glass-ember/glass-rail-neu now carry an inset 1px edge color-mixed from the theme's own ink (auto-correct for all 11 hue families and both themes) + a subtle top sheen gradient; .journey-card same recipe centrally + richer hover glow; neu-decor blobs dimmed/softened; btn-light gained a machined top highlight; scrollbar thumb ink-mixed.
+- Spotlight (new spotlight.tsx): <Spotlight /> wash + one SpotlightDriver document listener feeding --mx/--my to .spot-host cards (pointer-fine only); wired into both repo card types, skills ledger/rings/ember panels, contact email/phone/social tiles; CSS fallback rests the wash at a fixed position.
+- Atmosphere: app-background rebuilt with longhand layers — hue washes + editorial vertical column grid (1/6 viewport, 1/3 on phones) color-mixed from ink; grain unchanged.
+- Chrome: viewport themeColor now per-scheme (#f5f5f5/#0e0e0e); theme bootstrap dark literal #160d08 -> #0e0e0e, light #faf3ea -> #f5f5f5 (mechanism untouched).
+- Verified: lint 0, tsc clean in src; desktop 1440x900 — hero/projects/skills/contact/journey/footer screenshots all rendering with Syne+mono+hairlines, spotlight hover confirmed on a repo card (lift + wash); light theme crisp; indigo accent cycles correctly through the new surfaces (surfaces ride the hue families); journey vertical timeline mechanics byte-intact; mobile 390x844 — hOverflow false, hero/projects/contact stack full-width; admin gate + panel render with new tokens; 0 console errors.
+- NOTE: container reset wiped /home/z/backups — recreated the bare repo and re-pushed full history + all tags.
+
+Stage Summary:
+- The site reads as a 2025 editorial-techno portfolio: chiseled Syne display against technical mono labels, cards with visible hairline definition and a cursor-tracking sheen, an ambient column grid giving the dark ground designed structure. Accent pool, boot slots, nav, thunder, journey scroll behavior: all untouched.
+- Tagged v92 (commit 2120db2), pushed to origin (GitHub current) and to the recreated backup; worklog current.
