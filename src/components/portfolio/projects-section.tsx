@@ -1,6 +1,7 @@
 "use client";
 
 import { useSiteContent } from "@/lib/use-site-data";
+import { GithubActivity } from "./github-activity";
 import { Reveal } from "./reveal";
 import { RepoBrowser } from "./repo-browser";
 import { SectionHeading } from "./section-heading";
@@ -11,6 +12,10 @@ import { SectionNumber } from "./section-number";
  * The grid is now the real thing: hand-added projects from the
  * admin panel on top, live GitHub repositories underneath —
  * everything the owner actually ships.
+ *
+ * (v94) The section closes with the GitHub activity panel —
+ * commit counters + the real contribution calendar, turning the
+ * "synced with GitHub" claim into verifiable evidence.
  */
 export function ProjectsSection() {
   const { projects: custom } = useSiteContent();
@@ -41,6 +46,11 @@ export function ProjectsSection() {
 
         {/* Unified grid — admin projects + live GitHub repositories */}
         <RepoBrowser custom={custom} />
+
+        {/* The receipts — commits, repos, stars + the contribution calendar */}
+        <div className="mt-10 sm:mt-14">
+          <GithubActivity />
+        </div>
       </div>
     </section>
   );

@@ -1104,7 +1104,10 @@ function ProjectsTab({ adminKey, onSaved }: { adminKey: string; onSaved: () => v
 
 function SkillsTab({ adminKey, onSaved }: { adminKey: string; onSaved: () => void }) {
   const [draft, setDraft] = useState<SkillsContent | null>(null);
-  const [chipDraft, setChipDraft] = useState("");
+  /* raw text buffers for comma-separated inputs (trailing commas
+     survive typing; the stored arrays stay clean) */
+  const [rawItems, setRawItems] = useState<Record<number, string>>({});
+  const [rawLearning, setRawLearning] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -1122,23 +1125,24 @@ function SkillsTab({ adminKey, onSaved }: { adminKey: string; onSaved: () => voi
 
   if (!draft) return <LoadingBlock />;
 
-  const setMeter = (i: number, patch: Partial<{ name: string; level: number }>) =>
-    setDraft({ ...draft, meters: draft.meters.map((m, j) => (j === i ? { ...m, ...patch } : m)) });
-  const moveMeter = (i: number, dir: -1 | 1) => {
-    const next = [...draft.meters];
+  const setFocusRow = (i: number, patch: Partial<{ name: string; blurb: string }>) =>
+    setDraft({ ...draft, focus: draft.focus.map((f, j) => (j === i ? { ...f, ...patch } : f)) });
+  const moveFocus = (i: number, dir: -1 | 1) => {
+    const next = [...draft.focus];
     const j = i + dir;
     if (j < 0 || j >= next.length) return;
     [next[i], next[j]] = [next[j], next[i]];
-    setDraft({ ...draft, meters: next });
+    setDraft({ ...draft, focus: next });
   };
-  const addMeter = () =>
-    setDraft({ ...draft, meters: [...draft.meters, { name: "New skill", level: 50 }] });
 
-  const addChip = () => {
-    const c = chipDraft.trim();
-    if (!c || draft.chips.includes(c)) return;
-    setDraft({ ...draft, chips: [...draft.chips, c] });
-    setChipDraft("");
+  const setGroupRow = (i: number, patch: Partial<{ label: string; items: string[] }>) =>
+    setDraft({ ...draft, groups: draft.groups.map((g, j) => (j === i ? { ...g, ...patch } : g)) });
+  const moveGroup = (i: number, dir: -1 | 1) => {
+    const next = [...draft.groups];
+    const j = i + dir;
+    if (j < 0 || j >= next.length) return;
+    [next[i], next[j]] = [next[j], next[i]];
+    setDraft({ ...draft, groups: next });
   };
 
   const save = async () => {
@@ -1164,55 +1168,64 @@ function SkillsTab({ adminKey, onSaved }: { adminKey: string; onSaved: () => voi
   return (
     <div className="flex max-w-2xl flex-col gap-7">
       <Section
-        title={`Proficiency meters (${draft.meters.length})`}
-        hint="The ledger rows in the Skills section. The first three also render as ring gauges. Level: 1–100."
+        title={`Headline skills (${draft.focus.length})`}
+        hint="The big rows in the Skills section. Name + one honest line — what you actually build with it. No percentages."
       >
         <div className="flex flex-col gap-4">
-          {draft.meters.map((m, i) => (
+          {draft.focus.map((f, i) => (
             <div
               key={i}
-              className="grid items-end gap-2.5 rounded-2xl border border-border bg-[var(--bg2)] p-4 sm:grid-cols-[1fr_110px_auto]"
+              className="flex flex-col gap-2.5 rounded-2xl border border-border bg-[var(--bg2)] p-4"
             >
-              <Field label="Skill">
-                <Input value={m.name} onChange={(e) => setMeter(i, { name: e.target.value })} className={FIELD} />
-              </Field>
-              <Field label="Level %">
+              <div className="flex items-end gap-2">
+                <Field label="Skill">
+                  <Input
+                    value={f.name}
+                    onChange={(e) => setFocusRow(i, { name: e.target.value })}
+                    className={FIELD}
+                  />
+                </Field>
+                <div className="flex items-center gap-1 pb-0.5">
+                  <MiniBtn label="Move up" onClick={() => moveFocus(i, -1)} disabled={i === 0}>
+                    <ArrowUp className="h-3.5 w-3.5" />
+                  </MiniBtn>
+                  <MiniBtn
+                    label="Move down"
+                    onClick={() => moveFocus(i, 1)}
+                    disabled={i === draft.focus.length - 1}
+                  >
+                    <ArrowDown className="h-3.5 w-3.5" />
+                  </MiniBtn>
+                  <MiniBtn
+                    label="Delete skill"
+                    danger
+                    disabled={draft.focus.length <= 1}
+                    onClick={() =>
+                      setDraft({ ...draft, focus: draft.focus.filter((_, j) => j !== i) })
+                    }
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </MiniBtn>
+                </div>
+              </div>
+              <Field label="One-liner">
                 <Input
-                  type="number"
-                  min={1}
-                  max={100}
-                  value={m.level}
-                  onChange={(e) => setMeter(i, { level: Number(e.target.value) })}
+                  value={f.blurb}
+                  onChange={(e) => setFocusRow(i, { blurb: e.target.value })}
+                  placeholder="What do you actually build with it?"
                   className={FIELD}
                 />
               </Field>
-              <div className="flex items-center gap-1 pb-0.5">
-                <MiniBtn label="Move up" onClick={() => moveMeter(i, -1)} disabled={i === 0}>
-                  <ArrowUp className="h-3.5 w-3.5" />
-                </MiniBtn>
-                <MiniBtn
-                  label="Move down"
-                  onClick={() => moveMeter(i, 1)}
-                  disabled={i === draft.meters.length - 1}
-                >
-                  <ArrowDown className="h-3.5 w-3.5" />
-                </MiniBtn>
-                <MiniBtn
-                  label="Delete skill"
-                  danger
-                  disabled={draft.meters.length <= 1}
-                  onClick={() =>
-                    setDraft({ ...draft, meters: draft.meters.filter((_, j) => j !== i) })
-                  }
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                </MiniBtn>
-              </div>
             </div>
           ))}
           <button
             type="button"
-            onClick={addMeter}
+            onClick={() =>
+              setDraft({
+                ...draft,
+                focus: [...draft.focus, { name: "New skill", blurb: "" }],
+              })
+            }
             className="font-tag flex min-h-11 items-center justify-center gap-2 rounded-xl border border-dashed border-border py-2.5 text-[10px] tracking-[0.2em] text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
           >
             <Plus className="h-3.5 w-3.5" /> ADD SKILL
@@ -1220,49 +1233,99 @@ function SkillsTab({ adminKey, onSaved }: { adminKey: string; onSaved: () => voi
         </div>
       </Section>
 
-      <Section title={`Toolbox chips (${draft.chips.length})`} hint="The tool cloud under the meters.">
-        <div className="flex flex-wrap gap-2">
-          {draft.chips.map((c, i) => (
-            <span
-              key={`${c}-${i}`}
-              className="flex items-center gap-1.5 rounded-full border border-border bg-[var(--bg2)] py-1.5 pl-3 pr-1.5 text-[12px] text-foreground"
+      <Section
+        title={`Stack groups (${draft.groups.length})`}
+        hint="The grouped columns (Core / Frontend / Backend / …). Items are comma-separated."
+      >
+        <div className="flex flex-col gap-4">
+          {draft.groups.map((g, i) => (
+            <div
+              key={i}
+              className="flex flex-col gap-2.5 rounded-2xl border border-border bg-[var(--bg2)] p-4"
             >
-              {c}
-              <button
-                type="button"
-                onClick={() =>
-                  setDraft({ ...draft, chips: draft.chips.filter((_, j) => j !== i) })
-                }
-                aria-label={`Remove ${c}`}
-                className="flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-(--err)/10 hover:text-(--err)"
-              >
-                <X className="h-3 w-3" />
-              </button>
-            </span>
+              <div className="flex items-end gap-2">
+                <Field label="Group label">
+                  <Input
+                    value={g.label}
+                    onChange={(e) => setGroupRow(i, { label: e.target.value })}
+                    className={FIELD}
+                  />
+                </Field>
+                <div className="flex items-center gap-1 pb-0.5">
+                  <MiniBtn label="Move up" onClick={() => moveGroup(i, -1)} disabled={i === 0}>
+                    <ArrowUp className="h-3.5 w-3.5" />
+                  </MiniBtn>
+                  <MiniBtn
+                    label="Move down"
+                    onClick={() => moveGroup(i, 1)}
+                    disabled={i === draft.groups.length - 1}
+                  >
+                    <ArrowDown className="h-3.5 w-3.5" />
+                  </MiniBtn>
+                  <MiniBtn
+                    label="Delete group"
+                    danger
+                    disabled={draft.groups.length <= 1}
+                    onClick={() =>
+                      setDraft({ ...draft, groups: draft.groups.filter((_, j) => j !== i) })
+                    }
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </MiniBtn>
+                </div>
+              </div>
+              <Field label="Items (comma-separated)">
+                <Input
+                  value={rawItems[i] ?? g.items.join(", ")}
+                  onChange={(e) => {
+                    setRawItems({ ...rawItems, [i]: e.target.value });
+                    setGroupRow(i, {
+                      items: e.target.value
+                        .split(",")
+                        .map((s) => s.trim())
+                        .filter(Boolean),
+                    });
+                  }}
+                  placeholder="Python, C++, JavaScript"
+                  className={FIELD}
+                />
+              </Field>
+            </div>
           ))}
-        </div>
-        <div className="mt-3 flex gap-2">
-          <Input
-            value={chipDraft}
-            onChange={(e) => setChipDraft(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                addChip();
-              }
-            }}
-            placeholder="Add a tool…"
-            className="h-11 rounded-xl border-border bg-[var(--bg2)]"
-          />
-          <Button
+          <button
             type="button"
-            variant="outline"
-            onClick={addChip}
-            className="h-11 gap-2 rounded-xl"
+            onClick={() =>
+              setDraft({
+                ...draft,
+                groups: [...draft.groups, { label: "New group", items: [] }],
+              })
+            }
+            className="font-tag flex min-h-11 items-center justify-center gap-2 rounded-xl border border-dashed border-border py-2.5 text-[10px] tracking-[0.2em] text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
           >
-            <Plus className="h-4 w-4" /> Add
-          </Button>
+            <Plus className="h-3.5 w-3.5" /> ADD GROUP
+          </button>
         </div>
+      </Section>
+
+      <Section
+        title="Currently learning"
+        hint="The strip under the stack columns — ambition stated honestly."
+      >
+        <Input
+          value={rawLearning ?? draft.learning.join(", ")}
+          onChange={(e) => {
+            setRawLearning(e.target.value);
+            setDraft({
+              ...draft,
+              learning: e.target.value
+                .split(",")
+                .map((s) => s.trim())
+                .filter(Boolean),
+            });
+          }}
+          placeholder="Machine Learning, TensorFlow, Linux"
+          className={FIELD}
+        />
       </Section>
 
       <SaveBar busy={busy} error={error} onSave={save} />

@@ -65,7 +65,7 @@ export function PortfolioApp() {
     <>
       <AppBackground />
 
-      {/* Neumorphic button rail with border progress — mobile (54px) too */}
+      {/* Neumorphic button rail with border progress — mobile (46px) too */}
       <NavRail
         categories={CATEGORIES}
         activeIndex={activeIndex}
@@ -90,7 +90,7 @@ export function PortfolioApp() {
       {adminMounted && <AdminPanel />}
 
       {/* Content column: left pad = notch sidebar width, right pad = rail */}
-      <div className="flex min-h-svh flex-col pl-[54px] sm:pl-[62px] md:pl-[74px] md:pr-[88px]">
+      <div className="flex min-h-svh flex-col pl-[46px] sm:pl-[62px] md:pl-[74px] md:pr-[88px]">
         <main className="flex-1">
           <SlideSection id="home">
             <HeroSection />

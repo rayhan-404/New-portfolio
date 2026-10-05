@@ -82,7 +82,7 @@ export function NavRail({ categories, activeIndex, onSelectCategory }: NavRailPr
       initial={reduceMotion ? false : { x: -28, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-      className="fixed inset-y-0 left-0 z-30 flex w-[54px] shrink-0 select-none flex-col items-center pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 sm:w-[62px] md:w-[74px] md:py-4"
+      className="fixed inset-y-0 left-0 z-30 flex w-[46px] shrink-0 select-none flex-col items-center pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 sm:w-[62px] md:w-[74px] md:py-4"
       aria-label="Primary navigation"
     >
       {/* Depth shadow twin — wide material elevation + tight contact */}
@@ -188,7 +188,7 @@ export function NavRail({ categories, activeIndex, onSelectCategory }: NavRailPr
             setHue(next);
             playSound("pop");
           }}
-          className="group relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-[var(--nl)] bg-[var(--bg)] text-muted-foreground shadow-[var(--shadow-neu-sm)] transition-all duration-300 hover:text-primary active:scale-90 active:shadow-[var(--shadow-neu-in)] sm:h-9 sm:w-9"
+          className="group relative flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[var(--nl)] bg-[var(--bg)] text-muted-foreground shadow-[var(--shadow-neu-sm)] transition-all duration-300 hover:text-primary active:scale-90 active:shadow-[var(--shadow-neu-in)] sm:h-9 sm:w-9"
         >
           <Palette className="h-4 w-4" />
           <span
@@ -205,7 +205,7 @@ export function NavRail({ categories, activeIndex, onSelectCategory }: NavRailPr
           aria-label={soundOn ? "Mute sounds" : "Unmute sounds"}
           aria-pressed={soundOn}
           onClick={toggle}
-          className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-[var(--nl)] bg-[var(--bg)] text-muted-foreground shadow-[var(--shadow-neu-sm)] transition-all duration-300 hover:text-primary active:scale-90 active:shadow-[var(--shadow-neu-in)] sm:h-9 sm:w-9"
+          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[var(--nl)] bg-[var(--bg)] text-muted-foreground shadow-[var(--shadow-neu-sm)] transition-all duration-300 hover:text-primary active:scale-90 active:shadow-[var(--shadow-neu-in)] sm:h-9 sm:w-9"
         >
           {soundOn ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
         </button>
@@ -219,7 +219,7 @@ export function NavRail({ categories, activeIndex, onSelectCategory }: NavRailPr
             playSound("tap");
             openAdminPanel();
           }}
-          className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-[var(--nl)] bg-[var(--bg)] text-muted-foreground shadow-[var(--shadow-neu-sm)] transition-all duration-300 hover:text-primary active:scale-90 active:shadow-[var(--shadow-neu-in)] sm:h-9 sm:w-9"
+          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[var(--nl)] bg-[var(--bg)] text-muted-foreground shadow-[var(--shadow-neu-sm)] transition-all duration-300 hover:text-primary active:scale-90 active:shadow-[var(--shadow-neu-in)] sm:h-9 sm:w-9"
         >
           <Settings2 className="h-4 w-4" />
         </button>

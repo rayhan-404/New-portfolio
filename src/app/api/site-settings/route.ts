@@ -17,7 +17,8 @@ import {
   type BioParagraph,
   type ContactSocial,
   type DesignSettings,
-  type SkillMeterDef,
+  type SkillFocusDef,
+  type SkillGroupDef,
 } from "@/lib/site-store";
 
 export const dynamic = "force-dynamic";
@@ -71,7 +72,11 @@ export async function PUT(req: Request) {
         location?: string;
         socials?: ContactSocial[];
       };
-      skills?: { meters?: SkillMeterDef[]; chips?: string[] };
+      skills?: {
+        focus?: SkillFocusDef[];
+        groups?: SkillGroupDef[];
+        learning?: string[];
+      };
       github?: { username?: string; token?: string };
       passcode?: string;
     };
@@ -136,17 +141,27 @@ export async function PUT(req: Request) {
     if (body.skills) {
       const current = await getSkills();
       await setSkills({
-        meters: Array.isArray(body.skills.meters)
-          ? body.skills.meters
-              .map((m) => ({
-                name: String(m.name ?? "").slice(0, 60),
-                level: Math.max(1, Math.min(100, Math.round(Number(m.level) || 0))),
+        focus: Array.isArray(body.skills.focus)
+          ? body.skills.focus
+              .map((f) => ({
+                name: String(f?.name ?? "").trim().slice(0, 60),
+                blurb: String(f?.blurb ?? "").trim().slice(0, 200),
               }))
-              .filter((m) => m.name)
-          : current.meters,
-        chips: Array.isArray(body.skills.chips)
-          ? body.skills.chips.map((c) => String(c).slice(0, 40)).filter(Boolean)
-          : current.chips,
+              .filter((f) => f.name)
+          : current.focus,
+        groups: Array.isArray(body.skills.groups)
+          ? body.skills.groups
+              .map((g) => ({
+                label: String(g?.label ?? "").trim().slice(0, 40),
+                items: Array.isArray(g?.items)
+                  ? g.items.map((i) => String(i).trim().slice(0, 40)).filter(Boolean).slice(0, 20)
+                  : [],
+              }))
+              .filter((g) => g.label && g.items.length > 0)
+          : current.groups,
+        learning: Array.isArray(body.skills.learning)
+          ? body.skills.learning.map((l) => String(l).trim().slice(0, 40)).filter(Boolean).slice(0, 12)
+          : current.learning,
       });
     }
     if (body.github) {

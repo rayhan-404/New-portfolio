@@ -16,6 +16,8 @@ import {
   type GithubSettings,
   type HeroContent,
   type SkillsContent,
+  type SkillFocusDef,
+  type SkillGroupDef,
 } from "@/lib/site-defaults";
 
 export * from "@/lib/site-defaults";
@@ -121,14 +123,43 @@ export async function setContact(next: ContactContent): Promise<void> {
   await writeSetting("contact", next);
 }
 
+/* ── Skills (v94) — focus blurbs + grouped stack, admin-editable.
+   Legacy {meters, chips} blobs (v91) fail the new shape checks and
+   fall back to the honest defaults instead of re-appearing. ───── */
+
+function validFocus(list: unknown): SkillFocusDef[] | null {
+  if (!Array.isArray(list) || list.length === 0) return null;
+  const focus = list
+    .map((f) => ({
+      name: String((f as SkillFocusDef)?.name ?? "").trim(),
+      blurb: String((f as SkillFocusDef)?.blurb ?? "").trim(),
+    }))
+    .filter((f) => f.name);
+  return focus.length > 0 ? focus : null;
+}
+
+function validGroups(list: unknown): SkillGroupDef[] | null {
+  if (!Array.isArray(list) || list.length === 0) return null;
+  const groups = list
+    .map((g) => ({
+      label: String((g as SkillGroupDef)?.label ?? "").trim(),
+      items: Array.isArray((g as SkillGroupDef)?.items)
+        ? (g as SkillGroupDef).items.map((i) => String(i).trim()).filter(Boolean)
+        : [],
+    }))
+    .filter((g) => g.label && g.items.length > 0);
+  return groups.length > 0 ? groups : null;
+}
+
 export async function getSkills(): Promise<SkillsContent> {
   const saved = await readSetting<Partial<SkillsContent>>("skills");
   return {
-    meters:
-      Array.isArray(saved?.meters) && saved!.meters.length > 0
-        ? saved!.meters
-        : DEFAULT_SKILLS.meters,
-    chips: Array.isArray(saved?.chips) ? saved!.chips : DEFAULT_SKILLS.chips,
+    focus: validFocus(saved?.focus) ?? DEFAULT_SKILLS.focus,
+    groups: validGroups(saved?.groups) ?? DEFAULT_SKILLS.groups,
+    learning:
+      Array.isArray(saved?.learning)
+        ? saved!.learning.map((l) => String(l).trim()).filter(Boolean)
+        : DEFAULT_SKILLS.learning,
   };
 }
 

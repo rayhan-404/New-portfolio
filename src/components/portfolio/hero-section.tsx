@@ -10,7 +10,7 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { ChevronDown, GraduationCap, Telescope } from "lucide-react";
+import { ArrowDown, ChevronDown, Download, GraduationCap, Telescope } from "lucide-react";
 import { RichBio, useSiteContent } from "@/lib/use-site-data";
 import type { HeroContent } from "@/lib/site-defaults";
 import {
@@ -339,6 +339,41 @@ export function LightningBolt({ strike: s }: { strike: Strike }) {
         </g>
       </g>
     </motion.svg>
+  );
+}
+
+/* ── Hero CTAs — [ View Projects ] [ Download Résumé ] ────── */
+
+function HeroCtas({ delay }: { delay: number }) {
+  const reduce = useReducedMotion();
+  return (
+    <motion.div
+      initial={reduce ? false : { opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.85, delay, ease: EASE }}
+      className="mt-8 flex flex-wrap items-center gap-3"
+    >
+      <button
+        type="button"
+        onClick={() => {
+          playSound("notch");
+          scrollToSection("projects");
+        }}
+        className="btn-light font-tag group inline-flex min-h-11 cursor-pointer items-center gap-2.5 rounded-full px-6 py-3 text-[10.5px] tracking-[0.18em]"
+      >
+        View Projects
+        <ArrowDown className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-0.5" />
+      </button>
+      <a
+        href="/resume.pdf"
+        download="M-Rayhan-Resume.pdf"
+        onClick={() => playSound("tap")}
+        className="glass-chip font-tag inline-flex min-h-11 items-center gap-2.5 rounded-full px-6 py-3 text-[10.5px] tracking-[0.18em] text-foreground transition-all duration-300 hover:text-primary hover:shadow-[var(--shadow-neu)] active:scale-95"
+      >
+        <Download className="h-3.5 w-3.5" />
+        Download Résumé
+      </a>
+    </motion.div>
   );
 }
 
@@ -751,6 +786,7 @@ export function HeroSection() {
               </h1>
 
               <IntroBio hero={hero} className="mt-6" />
+              <HeroCtas delay={0.5} />
             </motion.div>
           </div>
         </motion.div>
@@ -821,6 +857,7 @@ export function HeroSection() {
               className="mt-7 max-w-[33rem]"
             >
               <IntroBio hero={hero} />
+              <HeroCtas delay={0.55} />
             </motion.div>
           </div>
 

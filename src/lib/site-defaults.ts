@@ -64,17 +64,27 @@ export interface ContactContent {
   socials: ContactSocial[];
 }
 
-/* ── Skills (v91) — the arsenal, admin-editable ───────────────── */
+/* ── Skills (v94) — honest stack, admin-editable.
+   No percentages, no ratings: headline skills carry a one-line
+   "what I actually do with it" blurb, the rest is grouped lists. ── */
 
-export interface SkillMeterDef {
+export interface SkillFocusDef {
   name: string;
-  /** 0–100 */
-  level: number;
+  /** one credible line — what the skill is used for, not a score */
+  blurb: string;
+}
+
+export interface SkillGroupDef {
+  /** mono label, e.g. "CORE" */
+  label: string;
+  items: string[];
 }
 
 export interface SkillsContent {
-  meters: SkillMeterDef[];
-  chips: string[];
+  focus: SkillFocusDef[];
+  groups: SkillGroupDef[];
+  /** e.g. ["Machine Learning", "TensorFlow", "Linux"] */
+  learning: string[];
 }
 
 export const DEFAULT_CONTACT: ContactContent = {
@@ -91,19 +101,31 @@ export const DEFAULT_CONTACT: ContactContent = {
 };
 
 export const DEFAULT_SKILLS: SkillsContent = {
-  meters: [
-    { name: "React & Next.js", level: 92 },
-    { name: "TypeScript", level: 90 },
-    { name: "Tailwind CSS", level: 94 },
-    { name: "Node.js & Express", level: 82 },
-    { name: "MongoDB & SQL", level: 78 },
-    { name: "UI/UX & Figma", level: 85 },
+  focus: [
+    {
+      name: "React & Next.js",
+      blurb:
+        "Building production-ready web applications with App Router, TypeScript and modern UI systems.",
+    },
+    {
+      name: "TypeScript",
+      blurb:
+        "The default language for everything I ship — typed from the data model to the last pixel.",
+    },
+    {
+      name: "Node.js & Express",
+      blurb:
+        "REST APIs and server-side logic for the projects that need a backend.",
+    },
   ],
-  chips: [
-    "Git & GitHub", "Docker", "Vercel", "REST APIs",
-    "Prisma", "Firebase", "Framer Motion", "Zustand",
-    "Socket.io", "Linux", "Postman", "Accessibility",
+  groups: [
+    { label: "Core", items: ["Python", "C++", "JavaScript", "TypeScript"] },
+    { label: "Frontend", items: ["React", "Next.js", "Tailwind CSS"] },
+    { label: "Backend", items: ["Node.js", "Express", "REST APIs"] },
+    { label: "Database", items: ["MongoDB", "SQL"] },
+    { label: "Tools", items: ["Git", "GitHub", "Figma", "Postman", "Docker"] },
   ],
+  learning: ["Machine Learning", "TensorFlow", "Linux"],
 };
 
 export const DEFAULT_PROJECTS: CustomProject[] = [];

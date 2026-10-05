@@ -149,13 +149,17 @@ export function useSiteContent(): SiteContent {
             : prev.contact,
           skills: data.skills
             ? {
-                meters:
-                  Array.isArray(data.skills.meters) && data.skills.meters.length > 0
-                    ? data.skills.meters
-                    : prev.skills.meters,
-                chips: Array.isArray(data.skills.chips)
-                  ? data.skills.chips
-                  : prev.skills.chips,
+                focus:
+                  Array.isArray(data.skills.focus) && data.skills.focus.length > 0
+                    ? data.skills.focus
+                    : prev.skills.focus,
+                groups:
+                  Array.isArray(data.skills.groups) && data.skills.groups.length > 0
+                    ? data.skills.groups
+                    : prev.skills.groups,
+                learning: Array.isArray(data.skills.learning)
+                  ? data.skills.learning
+                  : prev.skills.learning,
               }
             : prev.skills,
         }));

@@ -31,10 +31,13 @@ export const socials = [
   { label: "Dribbble", handle: "@rayhan404", href: "https://dribbble.com/rayhan404" },
 ] as const;
 
+/* (v94) The marquee is the honest stack — same list as the Skills
+   section. Version-numbered and aspirational entries were removed:
+   nothing appears here that the projects don't actually use. */
 export const marqueeStack = [
-  "TypeScript", "React 19", "Next.js 15", "Tailwind CSS", "Node.js", "PostgreSQL",
-  "Prisma", "GraphQL", "Framer Motion", "Docker", "Figma", "Vitest",
-  "Zustand", "Redis", "WebSocket", "CI/CD",
+  "TypeScript", "React", "Next.js", "Tailwind CSS", "Node.js", "Express",
+  "MongoDB", "SQL", "Python", "C++", "Git", "GitHub",
+  "Figma", "Postman", "Docker",
 ] as const;
 
 /* ── Journey — the life story timeline ─────────────────────────── */
