@@ -23,6 +23,7 @@ import { playSound } from "@/lib/sound";
 import { useSiteContent } from "@/lib/use-site-data";
 import { Reveal } from "./reveal";
 import { SectionNumber } from "./section-number";
+import { Spotlight } from "./spotlight";
 
 /**
  * Contact (v91) — "Reach me".
@@ -116,9 +117,10 @@ export function ContactSection() {
             <a
               href={`mailto:${contact.email}`}
               onClick={() => playSound("chime")}
-              className="glass neu-decor group relative flex h-full min-h-[210px] flex-col justify-between overflow-hidden rounded-2xl p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-neu-lg)] sm:min-h-[230px] sm:p-8 md:rounded-3xl"
+              className="glass neu-decor group spot-host relative flex h-full min-h-[210px] flex-col justify-between overflow-hidden rounded-2xl p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-neu-lg)] sm:min-h-[230px] sm:p-8 md:rounded-3xl"
               aria-label={`Email ${contact.email}`}
             >
+              <Spotlight />
               {/* gmail wash — var-driven so mono de-chromes it */}
               <span
                 aria-hidden="true"
@@ -173,9 +175,10 @@ export function ContactSection() {
             <a
               href={telHref}
               onClick={() => playSound("chime")}
-              className="glass neu-decor group relative flex h-full min-h-[210px] flex-col justify-between overflow-hidden rounded-2xl p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-neu-lg)] sm:min-h-[230px] sm:p-8 md:rounded-3xl"
+              className="glass neu-decor group spot-host relative flex h-full min-h-[210px] flex-col justify-between overflow-hidden rounded-2xl p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-neu-lg)] sm:min-h-[230px] sm:p-8 md:rounded-3xl"
               aria-label={`Call ${contact.phone}`}
             >
+              <Spotlight />
               <span
                 aria-hidden="true"
                 className="pointer-events-none absolute -right-20 -bottom-20 h-52 w-52 rounded-full bg-[radial-gradient(circle,rgba(var(--accent-rgb)/0.2),transparent_70%)] opacity-0 blur-2xl transition-opacity duration-700 group-hover:opacity-100"
@@ -230,9 +233,10 @@ export function ContactSection() {
                     rel="noopener noreferrer"
                     onClick={() => playSound("tap")}
                     whileTap={{ scale: 0.97 }}
-                    className="glass neu-decor group relative flex h-full min-h-[104px] items-center justify-between gap-3 overflow-hidden rounded-2xl p-5 transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-neu-lg)]"
+                    className="glass neu-decor group spot-host relative flex h-full min-h-[104px] items-center justify-between gap-3 overflow-hidden rounded-2xl p-5 transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-neu-lg)]"
                     aria-label={`${s.label} — opens in a new tab`}
                   >
+                    <Spotlight />
                     {/* brand wash */}
                     <span
                       aria-hidden="true"

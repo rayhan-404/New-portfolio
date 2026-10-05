@@ -9,6 +9,7 @@ import type { SkillMeterDef } from "@/lib/site-defaults";
 import { CountUp, Reveal } from "./reveal";
 import { SectionHeading } from "./section-heading";
 import { SectionNumber } from "./section-number";
+import { Spotlight } from "./spotlight";
 
 /**
  * Skills (v91) — full redesign.
@@ -128,7 +129,8 @@ export function SkillsSection() {
         <div className="mt-14 grid gap-4 lg:grid-cols-12">
           {/* ── Core proficiency — the ledger ───────────────────── */}
           <Reveal className="lg:col-span-7">
-            <div className="glass neu-decor h-full rounded-2xl md:rounded-3xl p-6 sm:p-8">
+            <div className="glass neu-decor group spot-host relative h-full overflow-hidden rounded-2xl md:rounded-3xl p-6 sm:p-8">
+              <Spotlight />
               <div className="flex items-center justify-between gap-3">
                 <p className="font-tag text-[10px] text-accent-ink">Core proficiency</p>
                 <span className="glass-chip font-tag rounded-full px-3 py-1 text-[9px] tabular-nums text-muted-foreground">
@@ -201,7 +203,8 @@ export function SkillsSection() {
           <div className="flex flex-col gap-4 lg:col-span-5">
             {topThree.length > 0 && (
               <Reveal>
-                <div className="glass neu-decor rounded-2xl md:rounded-3xl p-6 sm:p-8">
+                <div className="glass neu-decor group spot-host relative overflow-hidden rounded-2xl md:rounded-3xl p-6 sm:p-8">
+                  <Spotlight />
                   <p className="font-tag text-[10px] text-accent-ink">Top of the stack</p>
                   <div className="mt-6 flex flex-wrap items-start justify-around gap-6">
                     {topThree.map((m, i) => (
@@ -213,7 +216,8 @@ export function SkillsSection() {
             )}
 
             <Reveal delay={0.1}>
-              <div className="glass-ember relative flex-1 overflow-hidden rounded-2xl md:rounded-3xl p-6 sm:p-8">
+              <div className="glass-ember group spot-host relative flex-1 overflow-hidden rounded-2xl md:rounded-3xl p-6 sm:p-8">
+                <Spotlight />
                 <span
                   aria-hidden="true"
                   className="glass-chip orb-float-slow absolute right-6 top-6 rounded-full px-3 py-1.5 text-[10px] font-semibold text-foreground"

@@ -6,6 +6,7 @@ import { ArrowUpRight, Github, GitFork, Globe, RefreshCw, Star } from "lucide-re
 import { playSound } from "@/lib/sound";
 import { Reveal } from "./reveal";
 import { RepoDialog } from "./repo-dialog";
+import { Spotlight } from "./spotlight";
 import type { CustomProject } from "@/lib/site-defaults";
 import type { Flags } from "@/lib/use-site-data";
 import type { GithubRepo, ReposPayload } from "@/app/api/github/repos/route";
@@ -261,12 +262,13 @@ export function RepoBrowser({
                     openCustom(p);
                   }
                 }}
-                className="glass neu-decor group relative flex h-full flex-col overflow-hidden rounded-2xl md:rounded-3xl p-6 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[var(--shadow-neu-lg)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/40 data-[clickable]:cursor-pointer"
+                className="glass neu-decor group spot-host relative flex h-full flex-col overflow-hidden rounded-2xl md:rounded-3xl p-6 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[var(--shadow-neu-lg)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/40 data-[clickable]:cursor-pointer"
                 data-clickable={p.link || p.repo ? "" : undefined}
                 aria-label={
                   p.link ? `Open ${p.title} in a new tab` : `${p.title} — project card`
                 }
               >
+                <Spotlight />
                 {/* hover aura */}
                 <div
                   aria-hidden="true"
@@ -362,9 +364,10 @@ export function RepoBrowser({
                     openRepo(repo, ghost);
                   }
                 }}
-                className="glass neu-decor group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl md:rounded-3xl p-6 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[var(--shadow-neu-lg)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/40"
+                className="glass neu-decor group spot-host relative flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl md:rounded-3xl p-6 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[var(--shadow-neu-lg)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary/40"
                 aria-label={`Browse ${repo.name} — opens the repository browser`}
               >
+                <Spotlight />
                 {/* hover aura */}
                 <div
                   aria-hidden="true"

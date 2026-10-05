@@ -358,7 +358,9 @@
 
 /* ============================================================
    AMBIENT BACKGROUND — flat neumorphic field + the reference's
-   two fixed radial blobs (deep orange top-right, amber bottom-left)
+   two fixed radial blobs + the v92 editorial column grid: faint
+   vertical hairlines every 1/6 viewport (1/3 on phones) give the
+   dark ground a designed structure instead of empty black.
    ============================================================ */
 
 .app-background {
@@ -368,7 +370,8 @@
   overflow: hidden;
   /* Layered warm field: flat base + two wide corner washes so the
      neumorphic surfaces sit on something alive, never flat/muddy */
-  background:
+  background-color: var(--bg);
+  background-image:
     radial-gradient(
       1100px 760px at 88% -12%,
       rgba(var(--primary-rgb) / 0.1),
@@ -379,13 +382,18 @@
       rgba(var(--accent-rgb) / 0.09),
       transparent 60%
     ),
-    var(--bg);
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--text) 4%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: auto, auto, calc(100% / 6) 100%;
 }
 
 /* Dark theme gets a touch more luminosity — deep charcoal stays
    rich and eye-catching instead of flat brown */
 .dark .app-background {
-  background:
+  background-image:
     radial-gradient(
       1150px 800px at 88% -12%,
       rgba(var(--primary-rgb) / 0.17),
@@ -406,7 +414,22 @@
       rgba(var(--primary-rgb) / 0.06),
       transparent 65%
     ),
-    var(--bg);
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--text) 4.5%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: auto, auto, auto, auto, calc(100% / 6) 100%;
+}
+
+@media (max-width: 639.98px) {
+  .app-background,
+  .dark .app-background {
+    background-size: auto, auto, calc(100% / 3) 100%;
+  }
+  .dark .app-background {
+    background-size: auto, auto, auto, auto, calc(100% / 3) 100%;
+  }
 }
 
 .app-background::before {
@@ -453,27 +476,38 @@
 }
 
 /* ============================================================
-   NEUMORPHIC SURFACES — the core reference recipe.
-   Card background == page background; depth comes entirely
-   from the dual light/dark shadow pair.
+   SURFACES — v92 "Noir Editorial": the neumorphic depth pair now
+   rides with a hairline edge (color-mixed from the theme's own ink,
+   so every hue family and both themes get the right contrast
+   automatically). On the dark ground the hairline is what gives
+   cards definition; on light paper it crisps the soft raise.
    ============================================================ */
 
 /* Standard raised card */
 @utility glass {
-  background: var(--bg);
-  box-shadow: var(--shadow-neu);
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--text) 2.5%, transparent), transparent 46%),
+    var(--bg);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--text) 7%, transparent),
+    var(--shadow-neu);
 }
 
 /* Heavier raised card — nameplates, dialogs, featured panels */
 @utility glass-strong {
-  background: var(--bg);
-  box-shadow: var(--shadow-neu-lg);
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--text) 3%, transparent), transparent 52%),
+    var(--bg);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--text) 8%, transparent),
+    var(--shadow-neu-lg);
 }
 
 /* Raised neumorphic rail — full-height navigation surfaces use the
    card recipe: solid bg2 tone, depth carried by the twin shadows */
 @utility glass-rail-neu {
   background: var(--bg2);
+  box-shadow: inset 1px 0 0 color-mix(in oklab, var(--text) 6%, transparent);
 }
 
 /* Hide scrollbars while keeping scroll (slim rails) */
@@ -507,8 +541,12 @@
 
 /* Small pill chips */
 @utility glass-chip {
-  background: var(--bg2);
-  box-shadow: var(--shadow-neu-sm);
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--text) 3%, transparent), transparent 60%),
+    var(--bg2);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--text) 8%, transparent),
+    var(--shadow-neu-sm);
 }
 
 /* Accent-tinted emphasized panel — highlighted feature cards */
@@ -520,8 +558,9 @@
     ),
     var(--bg);
   box-shadow:
-    var(--shadow-neu),
-    inset 0 0 0 1.5px rgba(var(--primary-rgb) / 0.22);
+    inset 0 0 0 1px color-mix(in oklab, var(--text) 8%, transparent),
+    inset 0 0 44px rgba(var(--primary-rgb) / 0.05),
+    var(--shadow-neu);
 }
 
 /* Hairline divider between rows */
@@ -541,7 +580,10 @@
   background: linear-gradient(160deg, var(--primary2-ref), var(--primary-ref) 62%);
   color: var(--primary-foreground);
   border: none;
-  box-shadow: 0 4px 16px rgba(var(--primary-rgb) / 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 4px 16px rgba(var(--primary-rgb) / 0.35);
   transition:
     transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.25s ease,
@@ -549,7 +591,10 @@
 }
 .btn-light:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(var(--primary-rgb) / 0.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 8px 22px rgba(var(--primary-rgb) / 0.45);
   filter: brightness(1.05);
 }
 .btn-light:active {
@@ -611,7 +656,8 @@
 }
 
 /* Decorative corner blobs — the reference's signature card ornament.
-   Add alongside .glass on big cards. */
+   Add alongside .glass on big cards. v92: dimmer + softer so the
+   hairline edge stays the crispest thing on the card. */
 .neu-decor {
   position: relative;
 }
@@ -622,10 +668,10 @@
   height: 110px;
   border-radius: 50%;
   background: var(--primary);
-  opacity: 0.06;
+  opacity: 0.05;
   top: -28px;
   right: -28px;
-  filter: blur(1px);
+  filter: blur(6px);
   pointer-events: none;
 }
 .neu-decor::after {
@@ -635,29 +681,33 @@
   height: 64px;
   border-radius: 50%;
   background: var(--accent-ref);
-  opacity: 0.05;
+  opacity: 0.04;
   bottom: -18px;
   left: -18px;
-  filter: blur(1px);
+  filter: blur(6px);
   pointer-events: none;
 }
 
 /* ============================================================
-   TYPOGRAPHY — Nunito body, Syne display (reference fonts)
+   TYPOGRAPHY — v92 "Noir Editorial" consolidation.
+   Display = Syne 800 (the site's own geometric grotesque): every
+   heading, ghost numeral and wordmark picks up its wide, chiseled
+   letterforms from this one utility. Labels = Geist Mono: technical
+   precision for the eyebrow/mono layer. Body copy stays Nunito.
    ============================================================ */
 
 @utility font-display {
-  font-family: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-syne), var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
   font-weight: 800;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.025em;
 }
 
-/* Uppercase labels — Nunito bold, reference-style */
+/* Uppercase labels — Geist Mono, reference-style technical tags */
 @utility font-tag {
-  font-family: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
-  letter-spacing: 0.14em;
+  font-family: var(--font-geist-mono), ui-monospace, "SF Mono", monospace;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 /* Body copy — Nunito (reference body font) */
@@ -665,11 +715,12 @@
   font-family: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
 }
 
-/* Stylish geometric display — headings/numbers (reference heading font) */
+/* Stylish geometric display — headings/numbers (kept for legacy
+   call sites; same face as font-display) */
 @utility font-name {
   font-family: var(--font-syne), var(--font-nunito), ui-sans-serif, sans-serif;
   font-weight: 800;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
 }
 
 /* Elegant signature script — the "M Rayhan" name mark.
@@ -805,7 +856,7 @@
   mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
 }
 
-/* Custom scrollbar — reference recipe */
+/* Custom scrollbar — v92: ink-mixed thumb rides every theme/hue */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -814,11 +865,24 @@
   background: var(--bg2);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--nd);
+  background: color-mix(in oklab, var(--text) 22%, transparent);
   border-radius: 8px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text3);
+  background: color-mix(in oklab, var(--text) 38%, transparent);
+}
+
+/* ============================================================
+   SPOTLIGHT (v92) — the cursor-tracking sheen inside .spot-host
+   cards. <Spotlight /> renders the wash; SpotlightDriver feeds
+   --mx/--my. Without a driver the wash rests at a fixed position.
+   ============================================================ */
+.spot-light {
+  background: radial-gradient(
+    300px circle at var(--mx, 50%) var(--my, 24%),
+    rgba(var(--primary-rgb) / 0.1),
+    transparent 65%
+  );
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -843,15 +907,22 @@
    ============================================================ */
 
 .journey-card {
-  background: var(--bg);
-  box-shadow: var(--shadow-neu);
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--text) 2.5%, transparent), transparent 46%),
+    var(--bg);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--text) 7%, transparent),
+    var(--shadow-neu);
   transition:
     transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.45s ease;
 }
 .journey-card:hover {
   transform: translateY(-8px);
-  box-shadow: var(--shadow-neu-lg);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--text) 10%, transparent),
+    var(--shadow-neu-lg),
+    0 18px 44px rgba(var(--primary-rgb) / 0.1);
 }
 
 /* "Currently here" — focus ring rides the rotating primary */

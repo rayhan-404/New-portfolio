@@ -125,7 +125,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#faf3ea",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f5f5f5" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e0e0e" },
+  ],
 };
 
 const jsonLd = {
@@ -159,7 +162,7 @@ export default function RootLayout({
             default theme applies (dark when unset). */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var s=localStorage.getItem('mr-theme');var d=window.__MR_DEFAULT_THEME==='light'?'light':'dark';var light=s?s==='light':d==='light';if(light){document.documentElement.classList.remove('dark')}else{document.documentElement.classList.add('dark')}}catch(e){document.documentElement.classList.add('dark')}var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',document.documentElement.classList.contains('dark')?'#160d08':'#faf3ea')`,
+            __html: `try{var s=localStorage.getItem('mr-theme');var d=window.__MR_DEFAULT_THEME==='light'?'light':'dark';var light=s?s==='light':d==='light';if(light){document.documentElement.classList.remove('dark')}else{document.documentElement.classList.add('dark')}}catch(e){document.documentElement.classList.add('dark')}var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',document.documentElement.classList.contains('dark')?'#0e0e0e':'#f5f5f5')`,
           }}
         />
         {/* Accent bootstrap — the reference's "Material Colors — Random on

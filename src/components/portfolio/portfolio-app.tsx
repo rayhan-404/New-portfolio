@@ -2,6 +2,7 @@
 
 import { AppBackground } from "./app-background";
 import { GlobalThunder } from "./global-thunder";
+import { SpotlightDriver } from "./spotlight";
 import { NAV_ITEMS, scrollToSection, useActiveSection } from "./nav";
 import { NavRail, type NavCategory } from "./nav-rail";
 import { SideRailRight } from "./side-rails";
@@ -46,6 +47,10 @@ export function PortfolioApp() {
 
       {/* site-wide storm — bolts + room flash over every section */}
       <GlobalThunder />
+
+      {/* v92 spotlight driver — one listener feeds --mx/--my to every
+          .spot-host card under the cursor (pointer-fine devices only) */}
+      <SpotlightDriver />
 
       {/* control room — passcode-gated admin overlay (?admin=1 / gear / Ctrl+Shift+A) */}
       <AdminPanel />
