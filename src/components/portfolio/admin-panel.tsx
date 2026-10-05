@@ -1,5 +1,6 @@
 "use client";
 
+import { ADMIN_OPEN_EVENT, consumePendingOpen } from "./admin-open";
 import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -54,8 +55,10 @@ import {
    fires SITE_DATA_EVENT so the live site re-renders immediately.
    ═══════════════════════════════════════════════════════════════ */
 
-const OPEN_EVENT = "mr-open-admin";
 const KEY_STORE = "mr-admin-key";
+/* open channel lives in the tiny admin-open module so the nav rail
+   never statically imports this whole panel (v93 chunk split) */
+const OPEN_EVENT = ADMIN_OPEN_EVENT;
 
 type TabId =
   | "design"
@@ -117,9 +120,14 @@ export function AdminPanel() {
   const [checkingKey, setCheckingKey] = useState(true);
   const [tab, setTab] = useState<TabId>("design");
 
-  /* open triggers: ?admin=1, gear button event, Ctrl+Shift+A */
+  /* open triggers: ?admin=1, gear button event, Ctrl+Shift+A.
+     v93: the panel now mounts lazily, so an open dispatch may land
+     BEFORE this effect runs — consumePendingOpen() catches that. */
   useEffect(() => {
-    if (new URLSearchParams(window.location.search).get("admin") === "1") {
+    if (
+      new URLSearchParams(window.location.search).get("admin") === "1" ||
+      consumePendingOpen()
+    ) {
       queueMicrotask(() => setOpen(true));
     }
     const onOpen = () => setOpen(true);
@@ -1751,7 +1759,4 @@ function Empty({ text }: { text: string }) {
   );
 }
 
-/** Nav-rail hook: dispatch this to open the panel from anywhere. */
-export function openAdminPanel(): void {
-  window.dispatchEvent(new Event(OPEN_EVENT));
-}
+

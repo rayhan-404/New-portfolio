@@ -4,6 +4,7 @@ import { ArrowUp } from "lucide-react";
 import { person, socials } from "@/lib/portfolio-data";
 import { playSound } from "@/lib/sound";
 import { scrollToSection } from "./nav";
+import { Magnetic } from "./magnetic";
 
 /* Brand-colored dots before each social link — the reference's
    brand-identity pattern (GitHub/X hues flip per theme for contrast;
@@ -54,22 +55,25 @@ export function Footer() {
             </ul>
           </nav>
 
-          <button
-            onClick={() => {
-              playSound("tap");
-              scrollToSection("home");
-            }}
-            aria-label="Back to top"
-            className="glass-chip group flex h-11 w-11 items-center justify-center rounded-full text-primary transition-all duration-300 hover:shadow-[var(--shadow-neu)] active:scale-95"
-          >
-            <ArrowUp className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
-          </button>
+          <Magnetic strength={0.4}>
+            <button
+              onClick={() => {
+                playSound("tap");
+                scrollToSection("home");
+              }}
+              aria-label="Back to top"
+              className="glass-chip group flex h-11 w-11 items-center justify-center rounded-full text-primary transition-all duration-300 hover:shadow-[var(--shadow-neu)] active:scale-95"
+            >
+              <ArrowUp className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
+            </button>
+          </Magnetic>
         </div>
 
-        {/* Giant sign-off */}
+        {/* Giant sign-off — v93: a slow light pass drifts across the
+            letters every few seconds (pure background-position CSS) */}
         <p
           aria-hidden="true"
-          className="font-display select-none text-center text-[clamp(3.4rem,13vw,10rem)] leading-[0.85] tracking-tight text-foreground/[0.05]"
+          className="signoff-sheen font-display select-none text-center text-[clamp(3.4rem,13vw,10rem)] leading-[0.85] tracking-tight text-foreground/[0.05]"
         >
           M RAYHAN
         </p>

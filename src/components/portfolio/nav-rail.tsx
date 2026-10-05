@@ -6,7 +6,7 @@ import { Palette, Settings2, Volume2, VolumeX } from "lucide-react";
 import { useSoundEngine } from "./nav";
 
 import { cycleAccent, type AccentHue } from "@/lib/accent-pool";
-import { openAdminPanel } from "./admin-panel";
+import { openAdminPanel } from "./admin-open";
 import { playSound } from "@/lib/sound";
 
 export interface NavCategory {

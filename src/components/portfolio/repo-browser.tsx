@@ -1,15 +1,23 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Github, GitFork, Globe, RefreshCw, Star } from "lucide-react";
 import { playSound } from "@/lib/sound";
 import { Reveal } from "./reveal";
-import { RepoDialog } from "./repo-dialog";
 import { Spotlight } from "./spotlight";
 import type { CustomProject } from "@/lib/site-defaults";
 import type { Flags } from "@/lib/use-site-data";
 import type { GithubRepo, ReposPayload } from "@/app/api/github/repos/route";
+
+/* v93: the 440-line "inside of a repo" dialog ships as an on-demand
+   chunk — fetched at the first card click, then kept mounted so the
+   closing animation still plays. */
+const RepoDialog = dynamic(
+  () => import("./repo-dialog").then((m) => m.RepoDialog),
+  { ssr: false }
+);
 
 /**
  * RepoBrowser (v91) — the project grid itself.
@@ -83,6 +91,7 @@ export function RepoBrowser({
     null
   );
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogMounted, setDialogMounted] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
 
   /* Admin curation: hidden repos drop out, featured ones pin to the
@@ -104,6 +113,7 @@ export function RepoBrowser({
   const openRepo = (repo: GithubRepo, serial: string) => {
     playSound("chime");
     setSelected({ repo, serial });
+    setDialogMounted(true);
     setDialogOpen(true);
   };
 
@@ -189,7 +199,9 @@ export function RepoBrowser({
         </div>
       </Reveal>
 
-      {/* loading skeletons */}
+      {/* loading skeletons — v93: shaped like the real cards (header
+          row, body lines, footer chips) with a single transform-only
+          shimmer, so the swap-in is seamless instead of a box swap */}
       {state.phase === "loading" && (
         <div
           className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
@@ -199,9 +211,26 @@ export function RepoBrowser({
           {[0, 1, 2].map((i) => (
             <div
               key={i}
-              className="glass neu-decor h-[168px] animate-pulse rounded-2xl md:rounded-3xl p-6"
+              className="glass neu-decor relative h-[168px] overflow-hidden rounded-2xl p-6 md:rounded-3xl"
               aria-hidden="true"
-            />
+            >
+              <span className="skeleton-shimmer pointer-events-none absolute inset-0" />
+              <div className="flex items-start justify-between">
+                <div className="h-3 w-24 rounded-full bg-border/70" />
+                <div className="h-6 w-9 rounded-md bg-border/50" />
+              </div>
+              <div className="mt-5 space-y-2.5">
+                <div className="h-3.5 w-3/4 rounded-full bg-border/60" />
+                <div className="h-3.5 w-2/3 rounded-full bg-border/45" />
+              </div>
+              <div className="absolute inset-x-6 bottom-6 flex items-center justify-between">
+                <div className="h-3 w-16 rounded-full bg-border/45" />
+                <div className="flex gap-2">
+                  <div className="h-5 w-14 rounded-full bg-border/40" />
+                  <div className="h-5 w-10 rounded-full bg-border/40" />
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       )}
@@ -460,13 +489,16 @@ export function RepoBrowser({
         </div>
       )}
 
-      {/* GitHub-style inside view — file tree + README, site-themed */}
-      <RepoDialog
-        repo={selected?.repo ?? null}
-        serial={selected?.serial ?? ""}
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-      />
+      {/* GitHub-style inside view — file tree + README, site-themed.
+          v93: mounted lazily at the first open; stays mounted after. */}
+      {dialogMounted && (
+        <RepoDialog
+          repo={selected?.repo ?? null}
+          serial={selected?.serial ?? ""}
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+        />
+      )}
     </div>
   );
 }

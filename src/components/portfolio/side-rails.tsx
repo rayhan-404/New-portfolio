@@ -12,6 +12,7 @@ import {
 import { socials } from "@/lib/portfolio-data";
 import { playSound } from "@/lib/sound";
 import { scrollToSection } from "./nav";
+import { Magnetic } from "./magnetic";
 import { ThemeToggle } from "./theme-toggle";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -155,17 +156,19 @@ export function SideRailRight() {
         >
           M Rayhan
         </p>
-        <button
-          onClick={() => {
-            playSound("notch");
-            scrollToSection("contact");
-          }}
-          aria-label="Start a project — go to contact"
-          className="btn-light group relative flex h-10 w-10 items-center justify-center rounded-full"
-        >
-          <Mail className="h-4 w-4" strokeWidth={2} />
-          <RailTip label="Start a project" side="left" />
-        </button>
+        <Magnetic strength={0.45}>
+          <button
+            onClick={() => {
+              playSound("notch");
+              scrollToSection("contact");
+            }}
+            aria-label="Start a project — go to contact"
+            className="btn-light group relative flex h-10 w-10 items-center justify-center rounded-full"
+          >
+            <Mail className="h-4 w-4" strokeWidth={2} />
+            <RailTip label="Start a project" side="left" />
+          </button>
+        </Magnetic>
       </div>
     </motion.aside>
   );

@@ -27,11 +27,12 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-/* Rounded friendly sans — the reference design's body font */
+/* Rounded friendly sans — the reference design's body font.
+   v93: variable build — ONE woff2 covers 200–1000 instead of five
+   static instances, so fewer requests and no weight gaps. */
 const nunito = Nunito({
   variable: "--font-nunito",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -44,20 +45,20 @@ const instrumentSerif = Instrument_Serif({
   display: "swap",
 });
 
-/* Professional reading serif — the long-form bio text */
+/* Professional reading serif — the long-form bio text.
+   v93: variable wght axis (400–600 used); italic keeps its own file. */
 const sourceSerif = Source_Serif_4({
   variable: "--font-source-serif",
   subsets: ["latin"],
-  weight: ["400", "600"],
   style: ["normal", "italic"],
   display: "swap",
 });
 
-/* Stylish geometric display — secondary name weight */
+/* Stylish geometric display — the v92 heading voice.
+   v93: variable build (one file spans 400–800). */
 const syne = Syne({
   variable: "--font-syne",
   subsets: ["latin"],
-  weight: ["700", "800"],
   display: "swap",
 });
 

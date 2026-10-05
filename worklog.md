@@ -1420,3 +1420,23 @@ Stage Summary:
 - v92 (Noir Editorial) is live again; all three ends (local main / origin / backup) point at 231273d — consistent without any history rewrite.
 - v93 newspaper draft preserved at wip/v93-newspaper (0f49949) in case it is ever wanted back.
 - Container quirk documented: long-lived processes must be double-fork daemons (reparent to PID 1) to survive tool-call boundaries.
+
+---
+Task ID: v93
+Agent: Main agent
+Task: User: "now, improve overall project, animation, layout, speed etc" — global polish pass on top of v92 Noir Editorial: code-splitting for speed, motion micro-polish, structured skeletons; no design language change, all red lines intact.
+
+Work Log:
+- Speed — chunk splitting: AdminPanel (1,757 lines) no longer ships in the main bundle. New 37-line admin-open.ts owns the open channel (event "mr-open-admin" kept, plus sticky pendingOpen flag + consumePendingOpen() so a summon fired before the lazy panel mounts is never lost); portfolio-app.tsx mounts it via next/dynamic (ssr:false) behind an adminMounted gate (gear event / Ctrl+Shift+A routed through openAdminPanel() / ?admin=1 lazy state initializer); nav-rail imports the tiny module instead of the panel. RepoDialog (440 lines) also dynamic, mounted on first card click, kept mounted after so its exit animation plays.
+- Speed — fonts: Nunito (5 static weights → 1 variable woff2), Syne (2 → 1), Source Serif 4 (4 → 2, italic separate) in layout.tsx; any weight now available without adding static files.
+- Speed — assets: deleted 7 unreferenced legacy images from public/generated (~6 MB repo weight): cutout-lossless.png, cutout.png, portrait.png, headshot-cutout.png/.webp, cutout-mask.webp (v1), headshot.webp. Verified zero refs in src/ and scripts/ first.
+- Animation — Magnetic (new magnetic.tsx): pointer-fine-only magnetic hover (transform-only springs, reduce-motion passthrough); applied to footer back-to-top and side-rail "Start a project" CTA.
+- Animation — SectionHeading: eyebrow rule now DRAWS in (scaleX 0→1, once, -60px margin) instead of fading; reduce-motion safe. Rides the shared component so projects/skills headings both get it.
+- Animation — footer giant "M RAYHAN" sign-off: slow diagonal sheen pass (background-position-only CSS, 9s duty cycle, prefers-reduced-motion off switch). Skills/RepoBrowser skeletons replaced the grey pulse boxes with card-shaped placeholders + one transform-only skeleton-shimmer sweep.
+- Verified: lint 0; tsc clean in src (examples/skills folders pre-existing only); fresh session 1440×900 — first load ships ZERO admin-panel and ZERO repo-dialog bytes (resource-timing verified), then gear click → chunk fetched → control room opens on FIRST click (sticky-open fix proven), rayhan login OK, all tabs render, close OK; repo card click → dialog chunk → file-tree dialog opens; ?admin=1 deep link opens the gate directly; magnetic hover measured transform matrix(1,0,0,1,2.4,-1.6) toward cursor and sprang home to none (pointer:fine forced in test env — headless reports coarse); journey VERTICAL timeline untouched (screenshot-verified); light theme crisp; mobile 390×844 — no h-overflow (390==390), hero cutout/bio, projects, Reach me stack correctly, nav tap lands flush (top 0); footer sheen visible; 0 console errors all flows; dev.log clean.
+- Metrics (dev-mode, first load): JS 25 chunks/1158 KB → 20 chunks/916 KB (−21%); admin+dialog payloads moved out of the critical path entirely; fonts 13 woff2/418 KB (variable builds include latin-ext subsets — net +59 KB one-time, complete weight coverage).
+
+Stage Summary:
+- v93 = "invisible upgrade": the site looks the same v92 Noir Editorial but boots ~21% lighter JS, loads the control room and repo dialog only when summoned, uses 3 variable font builds, carries 6 MB less dead weight, and feels more finished (drawing rules, magnetic CTAs, living footer sign-off, shaped skeletons).
+- Admin behavior contract preserved exactly: ?admin=1, gear, Ctrl+Shift+A all still open the passcode-gated panel; passcode default "rayhan" unchanged.
+- Tagged v93, pushed to origin (GitHub) and backup; ls-remote verified both ends.

@@ -856,6 +856,63 @@
   mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
 }
 
+/* ── v93 polish ────────────────────────────────────────────────────
+   Footer sign-off sheen: a slow diagonal light pass across the giant
+   "M RAYHAN" ghost text. Paint-only (background-position), runs on a
+   long duty cycle so it reads as ambient, not busy. */
+.signoff-sheen {
+  background-image: linear-gradient(
+    115deg,
+    transparent 42%,
+    rgba(var(--primary-rgb) / 0.16) 50%,
+    rgba(var(--accent-rgb) / 0.14) 54%,
+    transparent 63%
+  );
+  background-size: 240% 100%;
+  background-position: 120% 0;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: signoff-pass 9s ease-in-out infinite;
+}
+@keyframes signoff-pass {
+  0%,
+  55% {
+    background-position: 120% 0;
+  }
+  85%,
+  100% {
+    background-position: -60% 0;
+  }
+}
+
+/* Structured card skeleton — one transform-only shimmer sweeping the
+   whole placeholder (no per-child animation, no paint churn). */
+.skeleton-shimmer {
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(var(--primary-rgb) / 0.07) 50%,
+    transparent 70%
+  );
+  background-size: 220% 100%;
+  animation: skeleton-pass 1.6s ease-in-out infinite;
+}
+@keyframes skeleton-pass {
+  from {
+    background-position: 130% 0;
+  }
+  to {
+    background-position: -70% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .signoff-sheen,
+  .skeleton-shimmer {
+    animation: none;
+  }
+}
+
 /* Custom scrollbar — v92: ink-mixed thumb rides every theme/hue */
 ::-webkit-scrollbar {
   width: 8px;
