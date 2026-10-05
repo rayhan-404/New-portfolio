@@ -1402,3 +1402,21 @@ Work Log:
 Stage Summary:
 - The site reads as a 2025 editorial-techno portfolio: chiseled Syne display against technical mono labels, cards with visible hairline definition and a cursor-tracking sheen, an ambient column grid giving the dark ground designed structure. Accent pool, boot slots, nav, thunder, journey scroll behavior: all untouched.
 - Tagged v92 (commit 2120db2), pushed to origin (GitHub current) and to the recreated backup; worklog current.
+
+---
+Task ID: v92-restore (revert to v92)
+Agent: Main agent
+Task: User: "v92 back koro" — the v93 newspaper redesign draft (unpushed commit d2b8627 + uncommitted drift on globals.css/hero-section/portfolio-app.tsx) had reached the site; user wants v92 (Noir Editorial) back.
+
+Work Log:
+- Investigated state: v92 tag (2120db2) + worklog commit (231273d) were already on origin AND backup (remotes main == 231273d); local HEAD was d2b8627 — an unpushed v93 newspaper draft (16 files, -2540 lines: hero/journey/skills/contact all rewritten) plus uncommitted changes on top.
+- Preserved the v93 draft on local branch wip/v93-newspaper (commit 0f49949, includes the uncommitted globals.css/hero/portfolio-app drift). Local-only safety copy, not pushed anywhere.
+- git checkout main && git reset --hard 231273d — main is now exactly v92's tree (231273d differs from the v92 tag only by worklog.md). Local main == origin/main == backup/main, so no push or force-push was needed for the restore itself.
+- Dev server: discovered background processes spawned from a tool call die when the call ends in this container; a python double-fork daemon (setsid + second fork + stdio to /dev/null, reparent to PID 1) survives — bun run dev is persistent again (next-server PID 8360), port 3000 HTTP 200 across tool calls.
+- Verified (fresh agent-browser session v92restore): desktop 1440x900 — title correct, hero/projects/contact screenshots show the Noir Editorial v92 design (Syne display, Geist Mono labels, hairline cards, ghost numerals, editorial column grid, mono default, grayscale hero photo); Projects = unified GitHub grid ("LIVE FROM GITHUB", @RAYHAN-404, 25 public repos, ghost serials); Contact = "Reach me." bento (email/phone mega-cards + 4 social tiles); mobile 390x844 — scrollWidth 390 == clientWidth 390 (no h-overflow), hero stacks correctly; 0 console errors; lint 0 errors; dev.log clean (all API 200).
+- No code changes: the restore is a pure git operation; site content/settings untouched.
+
+Stage Summary:
+- v92 (Noir Editorial) is live again; all three ends (local main / origin / backup) point at 231273d — consistent without any history rewrite.
+- v93 newspaper draft preserved at wip/v93-newspaper (0f49949) in case it is ever wanted back.
+- Container quirk documented: long-lived processes must be double-fork daemons (reparent to PID 1) to survive tool-call boundaries.
